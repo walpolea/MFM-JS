@@ -1,20 +1,14 @@
 import { Site } from "./Site";
 import { GridCoord } from "../interfaces/IGridCoord";
-import { MFMUtils } from "../utils/utils";
 
 export class Tile {
-  gridPos: GridCoord;
   width: number;
   height: number;
-  id: string;
+  sites: Site[];
 
-  sites: Map<GridCoord, Site>;
-
-  constructor(_pos: GridCoord, _width: number = 50, _height: number = 50) {
-    this.gridPos = _pos;
+  constructor(_width: number = 1, _height: number = 1) {
     this.width = _width;
     this.height = _height;
-    this.id = MFMUtils.CtoID(this.gridPos);
 
     this.create();
   }
@@ -24,14 +18,13 @@ export class Tile {
   }
 
   create() {
-    this.sites = new Map<GridCoord, Site>();
+    this.sites = new Array<Site>();
 
     for (let i: number = 0; i < this.width; i++) {
       //across columns
       for (let j: number = 0; j < this.height; j++) {
         //down rows
-        let gc: GridCoord = { row: j, col: i };
-        this.sites.set(gc, new Site(this, gc));
+        this.sites.push(new Site({ row: j, col: i }));
       }
     }
   }
