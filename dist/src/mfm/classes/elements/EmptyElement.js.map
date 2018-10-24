@@ -1,0 +1,1 @@
+{"version":3,"file":"EmptyElement.js","sourceRoot":"","sources":["../../../../../src/mfm/classes/elements/EmptyElement.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,IAAI,EAAE,MAAM,SAAS,CAAC;AAE/B,MAAM,OAAO,OAAQ,SAAQ,IAAI;IAC/B;QACE,KAAK,CAAC,OAAO,EAAE,GAAG,CAAC,CAAC;IACtB,CAAC;IACD,IAAI,CAAC,EAAe;QAClB,KAAK,CAAC,IAAI,CAAC,EAAE,CAAC,CAAC;IACjB,CAAC;CACF"}
