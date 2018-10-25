@@ -21,7 +21,7 @@ var sketch = (p: any) => {
   p.preload = () => {};
 
   p.setup = () => {
-    p.createCanvas(800, 800);
+    p.createCanvas(600, 600);
   };
 
   //   p.windowResized = () => {
@@ -50,10 +50,9 @@ var sketch = (p: any) => {
   };
 
   let run = () => {
-    let speed = 1000;
+    let speed = 2500;
     for (var i = 0; i < speed; i++) {
       let ew = MFMUtils.GenerateEventWindow(g, g.width, g.height);
-      //console.log(ew);
       ew.origin.atom.exec(ew);
     }
   };

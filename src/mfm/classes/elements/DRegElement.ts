@@ -4,6 +4,7 @@ import { ElementTypes } from "../ElementTypes";
 import { Site } from "../Site";
 import { EmptyElement } from "./EmptyElement";
 import { ResElement } from "./ResElement";
+import { Atom } from "../Atom";
 
 export class DRegElement extends Elem {
   pDREG_CREATE: number;
@@ -23,34 +24,42 @@ export class DRegElement extends Elem {
   }
 
   exec(ew: EventWindow) {
-    const createDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_CREATE;
-    const createRes: boolean = Math.random() * this.pTOTAL_CHANCE < this.pRES_CREATE;
-    const destroyDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_DESTROY;
-    const destroyAny: boolean = Math.random() * this.pTOTAL_CHANCE < this.pANY_DESTROY;
-
+    //get a random NESW site
     const availableSite: Site = ew.getAdjacent4Way();
 
-    if (createDReg) {
-      availableSite.atom.elem = new DRegElement();
-      console.log("DREG CREATED", availableSite);
-    } else if (createRes) {
-      //make res
-      if (availableSite.atom.type === ElementTypes.EMPTY) {
-        availableSite.atom.elem = new ResElement();
-        console.log("RES CREATED", availableSite);
-      }
-    } else if (destroyDReg) {
-      if (availableSite.atom.type === ElementTypes.DREG) {
-        availableSite.atom.elem = new EmptyElement();
-        console.log("DREG DESTROYED", availableSite);
-      }
-    } else if (destroyAny) {
-      availableSite.atom.elem = new EmptyElement();
-      console.log("ANY DESTROYED", availableSite);
-    }
+    //CREATION
+    if (availableSite.atom.type === ElementTypes.EMPTY) {
+      const createDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_CREATE;
+      const createRes: boolean = Math.random() * this.pTOTAL_CHANCE < this.pRES_CREATE;
 
-    //move to random empty
-    ew.origin.swapAtoms(ew.getRandom(ElementTypes.EMPTY));
+      if (createDReg) {
+        availableSite.atom = new Atom(ElementTypes.DREG);
+        console.log("DREG CREATED");
+      } else if (createRes) {
+        //make res
+        availableSite.atom = new Atom(ElementTypes.RES);
+        console.log("RES CREATED");
+      }
+
+      ew.origin.swapAtoms(availableSite);
+    } else if (availableSite.atom.type === ElementTypes.DREG) {
+      const destroyDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_DESTROY;
+
+      if (destroyDReg) {
+        availableSite.atom = new Atom(ElementTypes.EMPTY);
+        console.log("DREG DESTROYED");
+        ew.origin.swapAtoms(availableSite);
+      }
+    } else {
+      //it's something else
+      const destroyAny: boolean = Math.random() * this.pTOTAL_CHANCE < this.pANY_DESTROY;
+
+      if (destroyAny) {
+        console.log(availableSite.atom.type.name + " DESTROYED");
+        availableSite.atom = new Atom(ElementTypes.EMPTY);
+        ew.origin.swapAtoms(availableSite);
+      }
+    }
 
     super.exec(ew);
   }

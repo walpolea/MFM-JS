@@ -75,15 +75,16 @@ export class EventWindow {
     this.window = new Map<string, Site>();
     this.origin = this.tile.getSiteByCoord(origin);
 
-    this.window.set(MFMUtils.CtoID(origin), this.origin);
+    this.window.set(this.origin.id, this.origin);
 
     let windowArray = EventWindow.WINDOW_ORDER_OFFSETS.map((offset: GridCoord) => {
       return this.OffsetFromOrigin(origin, offset.row, offset.col);
     });
 
     windowArray.forEach((tileCoord: GridCoord) => {
-      if (tile.getSiteByCoord(tileCoord)) {
-        this.window.set(MFMUtils.CtoID(tileCoord), tile.getSiteByCoord(tileCoord));
+      let site = tile.getSiteByCoord(tileCoord);
+      if (site) {
+        this.window.set(site.id, site);
       }
     });
   }
@@ -125,7 +126,7 @@ export class EventWindow {
     return this.getDirection(EventWindow.EW_SOUTHEAST);
   }
 
-  getAdjacent4Way(specificType: IElementType = undefined, randomize: boolean = true): Site {
+  getAdjacent4Way(randomize: boolean = true, specificType: IElementType = undefined): Site {
     return this.getSiteFromCandidates(
       [this.getWest(), this.getNorth(), this.getSouth(), this.getEast()],
       randomize,
@@ -169,9 +170,7 @@ export class EventWindow {
     });
 
     //no sites! yikes! possible!?! probably only when using specificType and looking for a rare element
-    console.log("yikes", candidateSites);
     if (candidateSites.length < 1) {
-      console.log("yikes", candidateSites);
       return undefined;
     }
 
