@@ -6,7 +6,7 @@ import { DRegElement } from "./mfm/classes/elements/DRegElement";
 
 declare var p5: any;
 
-let g: Tile = new Tile(20, 20);
+let g: Tile = new Tile(30, 30);
 
 console.log(g);
 console.log(g.getRandomSite());
@@ -21,12 +21,12 @@ var sketch = (p: any) => {
   p.preload = () => {};
 
   p.setup = () => {
-    p.createCanvas(p.windowWidth - 50, p.windowHeight - 50);
+    p.createCanvas(800, 800);
   };
 
-  p.windowResized = () => {
-    p.resizeCanvas(p.windowWidth - 50, p.windowHeight - 50);
-  };
+  //   p.windowResized = () => {
+  //     p.resizeCanvas(p.windowWidth - 50, p.windowHeight - 50);
+  //   };
 
   let drawGrid = (p: any, t: Tile) => {
     p.push();
@@ -34,10 +34,13 @@ var sketch = (p: any) => {
     t.sites.forEach((site: Site) => {
       switch (site.atom.elem.type) {
         case ElementTypes.EMPTY.type:
-          p.fill(244);
+          p.fill(32);
           break;
         case ElementTypes.DREG.type:
           p.fill(255, 32, 32);
+          break;
+        case ElementTypes.RES.type:
+          p.fill(32, 255, 64);
           break;
       }
       p.stroke(0);
@@ -47,7 +50,8 @@ var sketch = (p: any) => {
   };
 
   let run = () => {
-    for (var i = 0; i < 100; i++) {
+    let speed = 1500;
+    for (var i = 0; i < speed; i++) {
       let ew = MFMUtils.GenerateEventWindow(g, g.width, g.height);
       //console.log(ew);
       ew.origin.atom.exec(ew);

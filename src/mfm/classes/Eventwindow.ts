@@ -92,14 +92,28 @@ export class EventWindow {
     return { row: origin.row + rowOffset, col: origin.col + colOffset };
   }
 
-  getRandom(): Site {
-    let items = Array.from(this.window.values());
+  getRandom(specificType: IElementType = undefined): Site {
+    let items;
+    if (!specificType) {
+      items = Array.from(this.window.values());
+    } else {
+      items = Array.from(this.window.values()).filter(site => {
+        if (site.atom && site.atom.elem.type === specificType.type) {
+          return site;
+        }
+      });
+    }
+
+    if (items.length === 0) {
+      return undefined;
+    }
+
     let ri: number = Math.floor(Math.random() * items.length);
     return items[ri];
   }
 
   //easy way to get a neighbor that is there
-  getAvailableNeighbor(specificType: IElementType = undefined): Site {
+  getAdjacent(specificType: IElementType = undefined): Site {
     if (!specificType) {
       if (this.getWest()) return this.getWest();
       if (this.getNorth()) return this.getNorth();
