@@ -93,85 +93,11 @@ export class EventWindow {
   }
 
   getRandom(specificType: IElementType = undefined): Site {
-    let items;
-    if (!specificType) {
-      items = Array.from(this.window.values());
-    } else {
-      items = Array.from(this.window.values()).filter(site => {
-        if (site.atom && site.atom.elem.type === specificType.type) {
-          return site;
-        }
-      });
-    }
-
-    if (items.length === 0) {
-      return undefined;
-    }
-
-    let ri: number = Math.floor(Math.random() * items.length);
-    return items[ri];
+    return this.getSiteFromCandidates(Array.from(this.window.values()), true, specificType);
   }
 
-  //easy way to get a neighbor that is there
-  getAdjacent(specificType: IElementType = undefined): Site {
-    if (!specificType) {
-      if (this.getWest()) return this.getWest();
-      if (this.getNorth()) return this.getNorth();
-      if (this.getSouth()) return this.getSouth();
-      if (this.getEast()) return this.getEast();
-      if (this.getNorthWest()) return this.getNorthWest();
-      if (this.getSouthWest()) return this.getSouthWest();
-      if (this.getNorthEast()) return this.getNorthEast();
-      if (this.getSouthEast()) return this.getSouthEast();
-    } else {
-      const check = (s: Site, specificType: IElementType) => {
-        if (s && s.atom && s.atom.type == specificType) {
-          return s;
-        }
-        return undefined;
-      };
-
-      let s: Site = this.getWest();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getNorth();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getSouth();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getEast();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getNorthWest();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getSouthWest();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getNorthEast();
-      if (check(s, specificType)) {
-        return s;
-      }
-
-      s = this.getSouthEast();
-      if (check(s, specificType)) {
-        return s;
-      }
-    }
-    return undefined;
+  getNearest(specificType: IElementType = undefined): Site {
+    return this.getSiteFromCandidates(Array.from(this.window.values()), false, specificType);
   }
 
   getEast(): Site {
@@ -197,6 +123,65 @@ export class EventWindow {
   }
   getSouthEast(): Site {
     return this.getDirection(EventWindow.EW_SOUTHEAST);
+  }
+
+  getAdjacent4Way(specificType: IElementType = undefined, randomize: boolean = true): Site {
+    return this.getSiteFromCandidates(
+      [this.getWest(), this.getNorth(), this.getSouth(), this.getEast()],
+      randomize,
+      specificType
+    );
+  }
+
+  getAdjacent8Way(randomize: boolean = true, specificType: IElementType = undefined): Site {
+    return this.getSiteFromCandidates(
+      [
+        this.getWest(),
+        this.getNorth(),
+        this.getSouth(),
+        this.getEast(),
+        this.getNorthWest(),
+        this.getSouthWest(),
+        this.getNorthEast(),
+        this.getSouthEast()
+      ],
+      randomize,
+      specificType
+    );
+  }
+
+  //Given an array of candidate sites (symmetries in the future I hope), give me back one, random by default, not filtered by type by default
+  getSiteFromCandidates(
+    candidateSites: Array<Site>,
+    randomize: boolean = true,
+    specificType: IElementType = undefined
+  ): Site {
+    candidateSites = candidateSites.filter(site => {
+      if (!site) return false;
+
+      if (!specificType) {
+        return site;
+      } else if (specificType && site.atom.type === specificType) {
+        return site;
+      }
+
+      return false;
+    });
+
+    //no sites! yikes! possible!?! probably only when using specificType and looking for a rare element
+    console.log("yikes", candidateSites);
+    if (candidateSites.length < 1) {
+      console.log("yikes", candidateSites);
+      return undefined;
+    }
+
+    //return random
+    if (randomize) {
+      return candidateSites[Math.floor(Math.random() * candidateSites.length)];
+    }
+
+    //return first matching
+    return candidateSites[0];
   }
 
   getDirection(direction: GridCoord): Site {

@@ -28,7 +28,7 @@ export class DRegElement extends Elem {
     const destroyDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_DESTROY;
     const destroyAny: boolean = Math.random() * this.pTOTAL_CHANCE < this.pANY_DESTROY;
 
-    const availableSite: Site = ew.getRandom();
+    const availableSite: Site = ew.getAdjacent4Way();
 
     if (createDReg) {
       availableSite.atom.elem = new DRegElement();
@@ -49,50 +49,9 @@ export class DRegElement extends Elem {
       console.log("ANY DESTROYED", availableSite);
     }
 
-    //Move random
-    let dir = Math.floor(Math.random() * 8);
+    //move to random empty
+    ew.origin.swapAtoms(ew.getRandom(ElementTypes.EMPTY));
 
-    switch (dir) {
-      case 0:
-        if (ew.getWest()) {
-          ew.origin.swapAtoms(ew.getWest());
-        }
-        break;
-      case 1:
-        if (ew.getEast()) {
-          ew.origin.swapAtoms(ew.getEast());
-        }
-        break;
-      case 2:
-        if (ew.getNorth()) {
-          ew.origin.swapAtoms(ew.getNorth());
-        }
-        break;
-      case 3:
-        if (ew.getSouth()) {
-          ew.origin.swapAtoms(ew.getSouth());
-        }
-        break;
-    }
-
-    let n: number = Math.random() * 10;
-
-    // switch(n) {
-    // case 0:
-    // case 1:
-    // case 2:
-    //     if( ew.r && ew.r.atom.type == 0 ) {
-    //     ew.r.atom.setType(2);
-    //     }
-    // break;
-
-    // default:
-    //     if( ew.r && ew.r.atom.type != 4) {
-    //     ew.r.atom.setType(0);
-    //     }
-    //     break;
-
-    // }
     super.exec(ew);
   }
 }

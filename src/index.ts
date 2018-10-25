@@ -50,7 +50,7 @@ var sketch = (p: any) => {
   };
 
   let run = () => {
-    let speed = 1500;
+    let speed = 1000;
     for (var i = 0; i < speed; i++) {
       let ew = MFMUtils.GenerateEventWindow(g, g.width, g.height);
       //console.log(ew);

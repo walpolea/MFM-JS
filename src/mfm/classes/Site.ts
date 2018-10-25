@@ -16,9 +16,7 @@ export class Site {
   }
 
   swapAtoms(targetSite: Site) {
-    let temp: Atom = this.atom;
-    this.atom = targetSite.atom;
-    targetSite.atom = temp;
+    [this.atom, targetSite.atom] = [targetSite.atom, this.atom];
   }
 
   create() {
