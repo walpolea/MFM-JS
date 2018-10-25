@@ -1,9 +1,10 @@
 import { Tile } from "./mfm/classes/Tile";
-import * as p5 from "p5";
 import { Site } from "./mfm/classes/Site";
 import { ElementTypes } from "./mfm/classes/ElementTypes";
 import { MFMUtils } from "./mfm/utils/utils";
 import { DRegElement } from "./mfm/classes/elements/DRegElement";
+
+declare var p5: any;
 
 let g: Tile = new Tile(20, 20);
 
@@ -14,7 +15,7 @@ g.getRandomSite().atom.elem = new DRegElement();
 g.getRandomSite().atom.elem = new DRegElement();
 g.getRandomSite().atom.elem = new DRegElement();
 
-var sketch = (p: p5) => {
+var sketch = (p: any) => {
   let siteSize = 12;
 
   p.preload = () => {};
@@ -27,7 +28,7 @@ var sketch = (p: p5) => {
     p.resizeCanvas(p.windowWidth - 50, p.windowHeight - 50);
   };
 
-  let drawGrid = (p: p5, t: Tile) => {
+  let drawGrid = (p: any, t: Tile) => {
     p.push();
     p.translate(50, 50);
     t.sites.forEach((site: Site) => {
@@ -61,4 +62,4 @@ var sketch = (p: p5) => {
   };
 };
 
-let sketchP: p5 = new p5(sketch);
+let sketchP: any = new p5(sketch);
