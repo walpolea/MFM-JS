@@ -3,7 +3,7 @@ import { Atom } from "./Atom";
 import { Tile } from "./Tile";
 import { MFMUtils } from "../utils/utils";
 import { Site } from "./Site";
-import { IElementType } from "./ElementTypes";
+import { IElementType, ElementTypes } from "./ElementTypes";
 
 //Event window as describbed here: http://robust.cs.unm.edu/lib/exe/fetch.php?w=300&tok=4c8f49&media=dev:event-window-10.png
 //Collection of sites which contain atoms, built from an origin (center) site
@@ -74,6 +74,9 @@ export class EventWindow {
   private makeWindow(tile: Tile, origin: GridCoord) {
     this.window = new Map<string, Site>();
     this.origin = this.tile.getSiteByCoord(origin);
+
+    //if the origin is EMPTY Element, let's save some cycles (good, bad?)
+    if (this.origin.atom.type === ElementTypes.EMPTY) return;
 
     this.window.set(this.origin.id, this.origin);
 
