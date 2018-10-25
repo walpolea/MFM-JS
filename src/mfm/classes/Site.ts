@@ -4,23 +4,21 @@ import { Atom } from "./Atom";
 
 export class Site {
   tilePos: GridCoord;
-  width: number;
-  height: number;
   id: string;
 
   atom: Atom;
 
-  constructor(_pos: GridCoord, _width: number = 15, _height: number = 15) {
+  constructor(_pos: GridCoord) {
     this.tilePos = _pos;
-    this.width = _width;
-    this.height = _height;
     this.id = MFMUtils.CtoID(this.tilePos);
 
     this.create();
   }
 
-  getAtomByCoord(c: GridCoord): Atom {
-    return;
+  swapAtoms(targetSite: Site) {
+    let temp: Atom = this.atom;
+    this.atom = targetSite.atom;
+    targetSite.atom = temp;
   }
 
   create() {

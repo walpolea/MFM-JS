@@ -1,30 +1,36 @@
 import { Site } from "./Site";
 import { GridCoord } from "../interfaces/IGridCoord";
+import { MFMUtils } from "../utils/utils";
 
 export class Tile {
   width: number;
   height: number;
-  sites: Site[];
+  sites: Map<string, Site>;
 
   constructor(_width: number = 1, _height: number = 1) {
     this.width = _width;
     this.height = _height;
-
     this.create();
   }
 
   getSiteByCoord(c: GridCoord): Site {
-    return;
+    return this.sites.get(MFMUtils.CtoID(c));
+  }
+
+  getRandomSite(): Site {
+    let rr = Math.floor(Math.random() * this.height);
+    let rc = Math.floor(Math.random() * this.width);
+    return this.sites.get(`${rr}:${rc}`);
   }
 
   create() {
-    this.sites = new Array<Site>();
+    this.sites = new Map<string, Site>();
 
     for (let i: number = 0; i < this.width; i++) {
       //across columns
       for (let j: number = 0; j < this.height; j++) {
         //down rows
-        this.sites.push(new Site({ row: j, col: i }));
+        this.sites.set(`${j}:${i}`, new Site({ row: j, col: i }));
       }
     }
   }

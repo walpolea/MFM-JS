@@ -1,5 +1,6 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
+import { ElementTypes } from "../ElementTypes";
 
 export class DRegEl extends Elem {
   pDREG_CREATE: number;
@@ -8,7 +9,7 @@ export class DRegEl extends Elem {
   pANY_DESTROY: number;
 
   constructor() {
-    super("D_REG", "D");
+    super(ElementTypes.D_REG.name, ElementTypes.D_REG.type);
 
     this.pDREG_CREATE = 1000;
     this.pRES_CREATE = 200;
@@ -21,6 +22,33 @@ export class DRegEl extends Elem {
 
     if (createDReg) {
       //ew.
+
+      ew.getEast().elem = new DRegEl();
+    }
+
+    let dir = Math.floor(Math.random() * 4);
+
+    switch (dir) {
+      case 0:
+        if (ew.getWest()) {
+          ew.origin.site.swapAtoms(ew.getWest().site);
+        }
+        break;
+      case 1:
+        if (ew.getEast()) {
+          ew.origin.site.swapAtoms(ew.getEast().site);
+        }
+        break;
+      case 2:
+        if (ew.getNorth()) {
+          ew.origin.site.swapAtoms(ew.getNorth().site);
+        }
+        break;
+      case 3:
+        if (ew.getSouth()) {
+          ew.origin.site.swapAtoms(ew.getSouth().site);
+        }
+        break;
     }
 
     let n: number = Math.random() * 10;
