@@ -3,16 +3,16 @@ import * as p5 from "p5";
 import { Site } from "./mfm/classes/Site";
 import { ElementTypes } from "./mfm/classes/ElementTypes";
 import { MFMUtils } from "./mfm/utils/utils";
-import { DRegEl } from "./mfm/classes/elements/DRegElement";
+import { DRegElement } from "./mfm/classes/elements/DRegElement";
 
 let g: Tile = new Tile(20, 20);
 
 console.log(g);
 console.log(g.getRandomSite());
-g.getRandomSite().atom.elem = new DRegEl();
-g.getRandomSite().atom.elem = new DRegEl();
-g.getRandomSite().atom.elem = new DRegEl();
-g.getRandomSite().atom.elem = new DRegEl();
+g.getRandomSite().atom.elem = new DRegElement();
+g.getRandomSite().atom.elem = new DRegElement();
+g.getRandomSite().atom.elem = new DRegElement();
+g.getRandomSite().atom.elem = new DRegElement();
 
 var sketch = (p: p5) => {
   let siteSize = 12;
@@ -35,7 +35,7 @@ var sketch = (p: p5) => {
         case ElementTypes.EMPTY.type:
           p.fill(244);
           break;
-        case ElementTypes.D_REG.type:
+        case ElementTypes.DREG.type:
           p.fill(255, 32, 32);
           break;
       }
@@ -49,7 +49,7 @@ var sketch = (p: p5) => {
     for (var i = 0; i < 100; i++) {
       let ew = MFMUtils.GenerateEventWindow(g, g.width, g.height);
       //console.log(ew);
-      ew.origin.exec(ew);
+      ew.origin.atom.exec(ew);
     }
   };
 

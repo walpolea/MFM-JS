@@ -2,7 +2,11 @@ import { GridCoord } from "../interfaces/IGridCoord";
 import { Atom } from "./Atom";
 import { Tile } from "./Tile";
 import { MFMUtils } from "../utils/utils";
+import { Site } from "./Site";
+import { IElementType } from "./ElementTypes";
 
+//Event window as describbed here: http://robust.cs.unm.edu/lib/exe/fetch.php?w=300&tok=4c8f49&media=dev:event-window-10.png
+//Collection of sites which contain atoms, built from an origin (center) site
 export class EventWindow {
   static WINDOW_ORDER_OFFSETS: Array<GridCoord> = [
     { col: 0, row: 0 },
@@ -48,15 +52,19 @@ export class EventWindow {
     { col: 4, row: 0 }
   ];
 
+  //because, lazy
   static EW_WEST: GridCoord = { col: -1, row: 0 };
   static EW_EAST: GridCoord = { col: 1, row: 0 };
   static EW_NORTH: GridCoord = { col: 0, row: -1 };
   static EW_SOUTH: GridCoord = { col: 0, row: 1 };
+  static EW_NORTHWEST: GridCoord = { col: -1, row: -1 };
+  static EW_SOUTHWEST: GridCoord = { col: -1, row: 1 };
+  static EW_NORTHEAST: GridCoord = { col: 1, row: -1 };
+  static EW_SOUTHEAST: GridCoord = { col: 1, row: 1 };
 
   tile: Tile;
-  origin: Atom;
-  window: Map<string, Atom>;
-  windowArray: Atom[] = new Array<Atom>(24);
+  origin: Site;
+  window: Map<string, Site>;
 
   constructor(_tile: Tile, _origin: GridCoord) {
     this.tile = _tile;
@@ -64,8 +72,8 @@ export class EventWindow {
   }
 
   private makeWindow(tile: Tile, origin: GridCoord) {
-    this.window = new Map<string, Atom>();
-    this.origin = this.tile.getSiteByCoord(origin).atom;
+    this.window = new Map<string, Site>();
+    this.origin = this.tile.getSiteByCoord(origin);
 
     this.window.set(MFMUtils.CtoID(origin), this.origin);
 
@@ -75,7 +83,7 @@ export class EventWindow {
 
     windowArray.forEach((tileCoord: GridCoord) => {
       if (tile.getSiteByCoord(tileCoord)) {
-        this.window.set(MFMUtils.CtoID(tileCoord), tile.getSiteByCoord(tileCoord).atom);
+        this.window.set(MFMUtils.CtoID(tileCoord), tile.getSiteByCoord(tileCoord));
       }
     });
   }
@@ -84,35 +92,106 @@ export class EventWindow {
     return { row: origin.row + rowOffset, col: origin.col + colOffset };
   }
 
-  getRandom(): Atom {
+  getRandom(): Site {
     let items = Array.from(this.window.values());
     let ri: number = Math.floor(Math.random() * items.length);
     return items[ri];
   }
 
-  getEast(): Atom {
+  //easy way to get a neighbor that is there
+  getAvailableNeighbor(specificType: IElementType = undefined): Site {
+    if (!specificType) {
+      if (this.getWest()) return this.getWest();
+      if (this.getNorth()) return this.getNorth();
+      if (this.getSouth()) return this.getSouth();
+      if (this.getEast()) return this.getEast();
+      if (this.getNorthWest()) return this.getNorthWest();
+      if (this.getSouthWest()) return this.getSouthWest();
+      if (this.getNorthEast()) return this.getNorthEast();
+      if (this.getSouthEast()) return this.getSouthEast();
+    } else {
+      const check = (s: Site, specificType: IElementType) => {
+        if (s && s.atom && s.atom.type == specificType) {
+          return s;
+        }
+        return undefined;
+      };
+
+      let s: Site = this.getWest();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getNorth();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getSouth();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getEast();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getNorthWest();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getSouthWest();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getNorthEast();
+      if (check(s, specificType)) {
+        return s;
+      }
+
+      s = this.getSouthEast();
+      if (check(s, specificType)) {
+        return s;
+      }
+    }
+    return undefined;
+  }
+
+  getEast(): Site {
     return this.getDirection(EventWindow.EW_EAST);
   }
-
-  getWest(): Atom {
+  getWest(): Site {
     return this.getDirection(EventWindow.EW_WEST);
   }
-
-  getNorth(): Atom {
+  getNorth(): Site {
     return this.getDirection(EventWindow.EW_NORTH);
   }
-
-  getSouth(): Atom {
+  getSouth(): Site {
     return this.getDirection(EventWindow.EW_SOUTH);
   }
+  getNorthWest(): Site {
+    return this.getDirection(EventWindow.EW_NORTHWEST);
+  }
+  getSouthWest(): Site {
+    return this.getDirection(EventWindow.EW_SOUTHWEST);
+  }
+  getNorthEast(): Site {
+    return this.getDirection(EventWindow.EW_NORTHEAST);
+  }
+  getSouthEast(): Site {
+    return this.getDirection(EventWindow.EW_SOUTHEAST);
+  }
 
-  getDirection(direction: GridCoord) {
+  getDirection(direction: GridCoord): Site {
     let site = this.tile.sites.get(
-      MFMUtils.CtoID(this.OffsetFromOrigin(this.origin.sitePos, direction.row, direction.col))
+      MFMUtils.CtoID(this.OffsetFromOrigin(this.origin.tilePos, direction.row, direction.col))
     );
 
     if (site) {
-      return site.atom;
+      return site;
     }
 
     return undefined;

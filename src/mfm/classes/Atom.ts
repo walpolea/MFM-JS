@@ -1,22 +1,14 @@
-import { MFMUtils } from "../utils/utils";
-import { GridCoord } from "../interfaces/IGridCoord";
 import { Elem } from "./Elem";
-import { Site } from "./Site";
-import { EmptyEl } from "./elements/EmptyElement";
 import { EventWindow } from "./Eventwindow";
+import { ElementTypes, IElementType } from "./ElementTypes";
 
 export class Atom {
-  site: Site;
-  id: string;
-  sitePos: GridCoord;
+  type: IElementType;
   elem: Elem;
 
-  constructor(_site: Site, _pos: GridCoord) {
-    this.site = _site;
-    this.sitePos = _pos;
-    this.id = MFMUtils.CtoID(this.sitePos);
-
-    this.elem = new EmptyEl();
+  constructor(_type: IElementType = ElementTypes.EMPTY) {
+    this.type = _type;
+    this.elem = new this.type.class();
   }
 
   exec(ew: EventWindow) {

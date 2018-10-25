@@ -22,6 +22,6 @@ export class Site {
   }
 
   create() {
-    this.atom = new Atom(this, this.tilePos);
+    this.atom = new Atom();
   }
 }

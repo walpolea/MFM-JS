@@ -1,15 +1,17 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes } from "../ElementTypes";
+import { Site } from "../Site";
+import { EmptyElement } from "./EmptyElement";
 
-export class DRegEl extends Elem {
+export class DRegElement extends Elem {
   pDREG_CREATE: number;
   pRES_CREATE: number;
   pDREG_DESTROY: number;
   pANY_DESTROY: number;
 
   constructor() {
-    super(ElementTypes.D_REG.name, ElementTypes.D_REG.type);
+    super(ElementTypes.DREG.name, ElementTypes.DREG.type);
 
     this.pDREG_CREATE = 1000;
     this.pRES_CREATE = 200;
@@ -18,35 +20,51 @@ export class DRegEl extends Elem {
   }
 
   exec(ew: EventWindow) {
-    let createDReg: boolean = !(Math.ceil(Math.random() * this.pDREG_CREATE) % this.pDREG_CREATE);
+    const createDReg: boolean = !(Math.ceil(Math.random() * this.pDREG_CREATE) % this.pDREG_CREATE);
+    const createRes: boolean = !(Math.ceil(Math.random() * this.pRES_CREATE) % this.pRES_CREATE);
+    const destroyDReg: boolean = !(Math.ceil(Math.random() * this.pDREG_DESTROY) % this.pDREG_DESTROY);
+    const destroyAny: boolean = !(Math.ceil(Math.random() * this.pANY_DESTROY) % this.pANY_DESTROY);
+
+    const availableSite: Site = ew.getAvailableNeighbor();
 
     if (createDReg) {
-      //ew.
-
-      ew.getEast().elem = new DRegEl();
+      availableSite.atom.elem = new DRegElement();
+      console.log("DREG CREATED", availableSite);
+    } else if (createRes) {
+      //make res
+      console.log("RES CREATED", availableSite);
+    } else if (destroyDReg) {
+      if (availableSite.atom.type === ElementTypes.DREG) {
+        availableSite.atom.elem = new EmptyElement();
+        console.log("DREG DESTROYED", availableSite);
+      }
+    } else if (destroyAny) {
+      availableSite.atom.elem = new EmptyElement();
+      console.log("ANY DESTROYED", availableSite);
     }
 
-    let dir = Math.floor(Math.random() * 4);
+    //Move random
+    let dir = Math.floor(Math.random() * 8);
 
     switch (dir) {
       case 0:
         if (ew.getWest()) {
-          ew.origin.site.swapAtoms(ew.getWest().site);
+          ew.origin.swapAtoms(ew.getWest());
         }
         break;
       case 1:
         if (ew.getEast()) {
-          ew.origin.site.swapAtoms(ew.getEast().site);
+          ew.origin.swapAtoms(ew.getEast());
         }
         break;
       case 2:
         if (ew.getNorth()) {
-          ew.origin.site.swapAtoms(ew.getNorth().site);
+          ew.origin.swapAtoms(ew.getNorth());
         }
         break;
       case 3:
         if (ew.getSouth()) {
-          ew.origin.site.swapAtoms(ew.getSouth().site);
+          ew.origin.swapAtoms(ew.getSouth());
         }
         break;
     }
