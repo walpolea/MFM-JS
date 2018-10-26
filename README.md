@@ -8,7 +8,7 @@ The idea here is not to port MFM to JavaScript, but instead simulate it enough a
 
 ---
 
-Prequisites
+Prerequisites
 
 - nodejs 8.10.0+ (_I use nvm to easily manage and upgrade node versions_) (https://nodejs.org)
 - an IDE like VS Code (https://code.visualstudio.com/)
