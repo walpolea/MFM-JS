@@ -79,16 +79,33 @@ var sketch = (p: any) => {
     run();
   };
 
-  p.mouseClicked = () => {
+  let handleClick = () => {
     let site: Site = getSiteFromCanvasXY(p.mouseX, p.mouseY);
     if (site) {
       if (p.keyIsPressed) {
-        site.atom = new Atom(ElementTypes.MASON);
+        console.log("key", p.key, p.keyCode);
+
+        switch (p.keyCode) {
+          case 114: //r
+            site.atom = new Atom(ElementTypes.RES);
+            break;
+          case 119: //w
+            site.atom = new Atom(ElementTypes.WALL);
+            break;
+          case 113: //q
+            site.atom = new Atom(ElementTypes.MASON);
+            break;
+          case 101: //e
+            site.atom = new Atom(ElementTypes.EMPTY);
+            break;
+        }
       } else {
         site.atom = new Atom(ElementTypes.DREG);
       }
     }
   };
+  p.mouseDragged = handleClick;
+  p.mouseClicked = handleClick;
 };
 
 let sketchP: any = new p5(sketch);

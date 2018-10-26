@@ -6,8 +6,10 @@ import { Atom } from "../Atom";
 
 export class MasonElement extends Elem {
   path: string[] = [];
+  curIndex: number = 0;
+
   constructor(_path: string = "EEEENNNNWWWWSSSS") {
-    super(ElementTypes.MASON.name, ElementTypes.MASON.type, 100, 10);
+    super(ElementTypes.MASON.name, ElementTypes.MASON.type, 100, 100);
     _path = this.boxPath();
     this.path = _path.toUpperCase().split("");
   }
@@ -30,6 +32,7 @@ export class MasonElement extends Elem {
     return path;
   }
 
+  //make a box path
   boxPath(sideLength: number = 5) {
     let path: string = "";
     const choices: string[] = ["E", "N", "W", "S"];
@@ -40,44 +43,80 @@ export class MasonElement extends Elem {
         path = path.concat(dir);
       }
     }
-
     return path;
   }
 
   exec(ew: EventWindow) {
-    if (this.path.length) {
-      let availableSite: Site;
-      let dir: string = this.path.shift();
-      switch (dir) {
-        case "E":
-          availableSite = ew.getEast();
-          break;
-        case "N":
-          availableSite = ew.getNorth();
-          break;
-        case "S":
-          availableSite = ew.getSouth();
-          break;
-        case "W":
-          availableSite = ew.getWest();
-          break;
-      }
-
-      if (
-        availableSite &&
-        (availableSite.atom.type === ElementTypes.RES || availableSite.atom.type === ElementTypes.EMPTY)
-      ) {
-        ew.origin.moveAtom(availableSite, new Atom(ElementTypes.WALL));
-      } else if (availableSite && availableSite.atom.type === ElementTypes.WALL) {
-        //ew.origin.killSelf(new Atom(ElementTypes.WALL));
-      }
-
-      if (!availableSite) {
-        //ew.origin.killSelf(new Atom(ElementTypes.WALL));
-      }
-    } else {
-      ew.origin.killSelf(new Atom(ElementTypes.WALL));
+    if (this.curIndex >= this.path.length) {
+      this.curIndex = 0;
     }
+
+    let lastdir: string = this.curIndex === 0 ? this.path[this.path.length - 1] : this.path[this.curIndex - 1];
+    let dir: string = this.path[this.curIndex];
+
+    this.curIndex++;
+
+    let blueprints: any = {
+      E: {
+        moveSite() {
+          return ew.getEast();
+        },
+        buildSite() {
+          return ew.getSouth();
+        }
+      },
+      N: {
+        moveSite() {
+          return ew.getNorth();
+        },
+        buildSite() {
+          return ew.getEast();
+        }
+      },
+      S: {
+        moveSite() {
+          return ew.getSouth();
+        },
+        buildSite() {
+          return ew.getWest();
+        }
+      },
+      W: {
+        moveSite() {
+          return ew.getWest();
+        },
+        buildSite() {
+          return ew.getNorth();
+        }
+      }
+    };
+
+    const moveSite: Site = blueprints[dir].moveSite();
+    const buildSite: Site = blueprints[dir].buildSite();
+
+    //for changing directions
+    if (lastdir !== dir) {
+      const lastBuildSite: Site = blueprints[lastdir].buildSite();
+      if (lastBuildSite) {
+        ew.origin.mutateSite(lastBuildSite, new Atom(ElementTypes.WALL));
+      }
+    }
+
+    //build the wall
+    if (buildSite) {
+      if (buildSite.atom.type === ElementTypes.RES || buildSite.atom.type === ElementTypes.EMPTY) {
+        ew.origin.mutateSite(buildSite, new Atom(ElementTypes.WALL));
+        if (lastdir !== dir) {
+          ew.origin.mutateSite(buildSite, new Atom(ElementTypes.WALL));
+        }
+      }
+    }
+
+    //move to next site
+    if (moveSite) {
+      ew.origin.moveAtom(moveSite);
+    }
+
     super.exec(ew);
   }
 }

@@ -19,24 +19,7 @@
   ],
   "author": "Andrew Walpole <walpolea@gmail.com> (https://andrewwalpole.com)",
   "contributors": [
-    {
-      "name": "Dave Ackley",
-      "email": null,
-      "url": "https://github.com/DaveAckley",
-      "contributions": 3,
-      "additions": 9,
-      "deletions": 10,
-      "hireable": null
-    },
-    {
-      "name": "Andrew Walpole",
-      "email": "walpolea@gmail.com",
-      "url": "https://github.com/walpolea",
-      "contributions": 16,
-      "additions": 6540,
-      "deletions": 486,
-      "hireable": null
-    }
+    "Dave Ackley"
   ],
   "license": "ISC",
   "devDependencies": {

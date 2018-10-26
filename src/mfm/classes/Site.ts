@@ -21,7 +21,7 @@ export class Site {
   //if targetSite is killable
   //kill its atom (replace with empty)
   killAtom(targetSite: Site) {
-    let kill: boolean = Math.random() * 100 < targetSite.atom.elem.killability;
+    let kill: boolean = Math.random() * 100 < targetSite.atom.elem.destroyability;
     if (kill) {
       targetSite.atom = new Atom(ElementTypes.EMPTY);
     }
@@ -34,23 +34,31 @@ export class Site {
   //if target site is killable
   //move this atom to targetSite, and leave behind leavingAtom, which by default is empty
   moveAtom(targetSite: Site, leavingAtom: Atom = new Atom(ElementTypes.EMPTY)) {
-    if (targetSite) {
-      let kill: boolean = Math.random() * 100 < targetSite.atom.elem.killability;
-      if (kill) {
-        [this.atom, targetSite.atom] = [leavingAtom, this.atom];
-      }
+    if (targetSite && targetSite.canDestroy()) {
+      [this.atom, targetSite.atom] = [leavingAtom, this.atom];
     }
   }
 
   //if targetSite is moveable
   //swap atoms with this one
   swapAtoms(targetSite: Site) {
-    if (targetSite) {
-      let move: boolean = Math.random() * 100 < targetSite.atom.elem.moveability;
-      if (move) {
-        [this.atom, targetSite.atom] = [targetSite.atom, this.atom];
-      }
+    if (targetSite && targetSite.canMove()) {
+      [this.atom, targetSite.atom] = [targetSite.atom, this.atom];
     }
+  }
+
+  mutateSite(targetSite: Site, newAtom: Atom) {
+    if (targetSite && targetSite.canDestroy()) {
+      targetSite.atom = newAtom;
+    }
+  }
+
+  canDestroy(): boolean {
+    return Math.random() * 100 < this.atom.elem.destroyability;
+  }
+
+  canMove(): boolean {
+    return Math.random() * 100 < this.atom.elem.moveability;
   }
 
   create() {
