@@ -17,11 +17,11 @@ export class MasonElement extends Elem {
   //make a random wall path
   randomPath(): string {
     let path: string = "";
-    const r: number = Math.floor(Math.random() * 8) + 6;
+    const r: number = (Math.random() * 8 + 6) >> 0;
     const choices: string[] = ["E", "N", "S", "W"];
     for (var i = 0; i < r; i++) {
-      const d: number = Math.floor(Math.random() * choices.length);
-      const l: number = Math.floor(Math.random() * 3) + 3;
+      const d: number = (Math.random() * choices.length) >> 0;
+      const l: number = (Math.random() * 3 + 3) >> 0;
       const dir: string = choices[d];
 
       for (var j = 0; j < l; j++) {

@@ -18,8 +18,8 @@ export class Tile {
   }
 
   getRandomSite(): Site {
-    let rr = Math.floor(Math.random() * this.height);
-    let rc = Math.floor(Math.random() * this.width);
+    let rr = (Math.random() * this.height) >> 0;
+    let rc = (Math.random() * this.width) >> 0;
     return this.sites.get(`${rr}:${rc}`);
   }
 

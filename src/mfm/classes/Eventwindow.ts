@@ -179,7 +179,7 @@ export class EventWindow {
 
     //return random
     if (randomize) {
-      return candidateSites[Math.floor(Math.random() * candidateSites.length)];
+      return candidateSites[(Math.random() * candidateSites.length) >> 0];
     }
 
     //return first matching

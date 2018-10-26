@@ -6,11 +6,11 @@ import { Atom } from "./mfm/classes/Atom";
 
 declare var p5: any;
 
-let g: Tile = new Tile(64, 64);
+let g: Tile = new Tile(48, 48);
 
 var sketch = (p: any) => {
-  let siteSize = 10;
-  let gridOffset = 25;
+  let siteSize = 14;
+  let gridOffset = 20;
 
   p.preload = () => {};
 
@@ -55,7 +55,7 @@ var sketch = (p: any) => {
   };
 
   let run = () => {
-    let speed = 4000;
+    let speed = 1000;
     for (var i = 0; i < speed; i++) {
       let ew = MFMUtils.GenerateEventWindow(g, g.width, g.height);
       ew.origin.atom.exec(ew);
@@ -66,8 +66,8 @@ var sketch = (p: any) => {
     x = x - gridOffset + siteSize * 0.5;
     y = y - gridOffset + siteSize * 0.5;
 
-    x = Math.floor(x / siteSize);
-    y = Math.floor(y / siteSize);
+    x = (x / siteSize) >> 0;
+    y = (y / siteSize) >> 0;
 
     return g.getSiteByCoord({ row: y, col: x });
   };
