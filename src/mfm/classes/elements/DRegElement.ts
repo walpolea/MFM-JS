@@ -16,11 +16,10 @@ export class DRegElement extends Elem {
   constructor() {
     super(ElementTypes.DREG.name, ElementTypes.DREG.type);
 
-    this.pTOTAL_CHANCE = 100;
-    this.pDREG_CREATE = 0.1;
-    this.pRES_CREATE = 0.5;
+    this.pDREG_CREATE = 1000;
+    this.pRES_CREATE = 300;
     this.pDREG_DESTROY = 10;
-    this.pANY_DESTROY = 1;
+    this.pANY_DESTROY = 100;
   }
 
   exec(ew: EventWindow) {
@@ -29,8 +28,8 @@ export class DRegElement extends Elem {
 
     //CREATION
     if (availableSite.atom.type === ElementTypes.EMPTY) {
-      const createDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_CREATE;
-      const createRes: boolean = Math.random() * this.pTOTAL_CHANCE < this.pRES_CREATE;
+      const createDReg: boolean = Math.random() * this.pDREG_CREATE < 1;
+      const createRes: boolean = Math.random() * this.pRES_CREATE < 1;
 
       if (createDReg) {
         ew.origin.moveAtom(availableSite, new Atom(ElementTypes.DREG));
@@ -42,7 +41,7 @@ export class DRegElement extends Elem {
         ew.origin.swapAtoms(availableSite);
       }
     } else if (availableSite.atom.type === ElementTypes.DREG) {
-      const destroyDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_DESTROY;
+      const destroyDReg: boolean = Math.random() * this.pDREG_DESTROY < 1;
 
       if (destroyDReg) {
         console.log("DREG DESTROYED");
@@ -50,7 +49,7 @@ export class DRegElement extends Elem {
       }
     } else {
       //it's something else
-      const destroyAny: boolean = Math.random() * this.pTOTAL_CHANCE < this.pANY_DESTROY;
+      const destroyAny: boolean = Math.random() * this.pANY_DESTROY < 1;
 
       if (destroyAny) {
         console.log(availableSite.atom.type.name + " DESTROYED");
