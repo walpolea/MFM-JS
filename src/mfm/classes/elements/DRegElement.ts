@@ -33,22 +33,22 @@ export class DRegElement extends Elem {
       const createRes: boolean = Math.random() * this.pTOTAL_CHANCE < this.pRES_CREATE;
 
       if (createDReg) {
-        availableSite.atom = new Atom(ElementTypes.DREG);
+        ew.origin.moveAtom(availableSite, new Atom(ElementTypes.DREG));
         console.log("DREG CREATED");
       } else if (createRes) {
-        //make res
-        availableSite.atom = new Atom(ElementTypes.RES);
+        ew.origin.moveAtom(availableSite, new Atom(ElementTypes.RES));
         console.log("RES CREATED");
+      } else {
+        ew.origin.swapAtoms(availableSite);
       }
-
-      ew.origin.swapAtoms(availableSite);
     } else if (availableSite.atom.type === ElementTypes.DREG) {
       const destroyDReg: boolean = Math.random() * this.pTOTAL_CHANCE < this.pDREG_DESTROY;
 
       if (destroyDReg) {
-        availableSite.atom = new Atom(ElementTypes.EMPTY);
+        //ew.origin.killAtom(availableSite);
+        //availableSite.atom = new Atom(ElementTypes.EMPTY);
         console.log("DREG DESTROYED");
-        ew.origin.swapAtoms(availableSite);
+        ew.origin.moveAtom(availableSite);
       }
     } else {
       //it's something else
@@ -56,8 +56,8 @@ export class DRegElement extends Elem {
 
       if (destroyAny) {
         console.log(availableSite.atom.type.name + " DESTROYED");
-        availableSite.atom = new Atom(ElementTypes.EMPTY);
-        ew.origin.swapAtoms(availableSite);
+        //availableSite.atom = new Atom(ElementTypes.EMPTY);
+        ew.origin.moveAtom(availableSite);
       }
     }
 

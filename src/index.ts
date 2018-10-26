@@ -2,7 +2,6 @@ import { Tile } from "./mfm/classes/Tile";
 import { Site } from "./mfm/classes/Site";
 import { ElementTypes } from "./mfm/classes/ElementTypes";
 import { MFMUtils } from "./mfm/utils/utils";
-import { DRegElement } from "./mfm/classes/elements/DRegElement";
 import { Atom } from "./mfm/classes/Atom";
 
 declare var p5: any;
@@ -40,6 +39,10 @@ var sketch = (p: any) => {
           p.stroke(0, 0, 0, 127);
           p.fill(32, 255, 64);
           break;
+        case ElementTypes.WALL.type:
+          p.stroke(0, 0, 0, 127);
+          p.fill(32, 32, 255);
+          break;
       }
 
       p.ellipse(site.tilePos.col * siteSize, site.tilePos.row * siteSize, siteSize, siteSize);
@@ -74,7 +77,13 @@ var sketch = (p: any) => {
 
   p.mouseClicked = () => {
     let site: Site = getSiteFromCanvasXY(p.mouseX, p.mouseY);
-    if (site) site.atom = new Atom(ElementTypes.DREG);
+    if (site) {
+      if (p.keyIsPressed) {
+        site.atom = new Atom(ElementTypes.WALL);
+      } else {
+        site.atom = new Atom(ElementTypes.DREG);
+      }
+    }
   };
 };
 
