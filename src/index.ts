@@ -83,8 +83,6 @@ var sketch = (p: any) => {
     let site: Site = getSiteFromCanvasXY(p.mouseX, p.mouseY);
     if (site) {
       if (p.keyIsPressed) {
-        console.log("key", p.key, p.keyCode);
-
         switch (p.keyCode) {
           case 114: //r
             site.atom = new Atom(ElementTypes.RES);
