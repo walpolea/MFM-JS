@@ -2,6 +2,7 @@ import { EmptyElement } from "./elements/EmptyElement";
 import { DRegElement } from "./elements/DRegElement";
 import { ResElement } from "./elements/ResElement";
 import { WallElement } from "./elements/WallElement";
+import { MasonElement } from "./elements/MasonElement";
 
 export interface IElementType {
   name: string;
@@ -14,12 +15,14 @@ export class ElementTypes {
   static DREG: IElementType = { name: "DREG", type: "D", class: DRegElement };
   static RES: IElementType = { name: "RES", type: "R", class: ResElement };
   static WALL: IElementType = { name: "WALL", type: "W", class: WallElement };
+  static MASON: IElementType = { name: "MASON", type: "Ma", class: MasonElement };
 
   static TYPES_ARRAY: Array<IElementType> = [
     ElementTypes.EMPTY,
     ElementTypes.DREG,
     ElementTypes.RES,
-    ElementTypes.WALL
+    ElementTypes.WALL,
+    ElementTypes.MASON
   ];
 
   static registerType(name: string, type: string, c: any) {

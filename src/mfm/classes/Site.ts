@@ -27,6 +27,10 @@ export class Site {
     }
   }
 
+  killSelf(leavingAtom: Atom = new Atom(ElementTypes.EMPTY)) {
+    this.atom = leavingAtom;
+  }
+
   //if target site is killable
   //move this atom to targetSite, and leave behind leavingAtom, which by default is empty
   moveAtom(targetSite: Site, leavingAtom: Atom = new Atom(ElementTypes.EMPTY)) {

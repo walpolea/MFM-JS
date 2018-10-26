@@ -43,6 +43,10 @@ var sketch = (p: any) => {
           p.stroke(0, 0, 0, 127);
           p.fill(32, 32, 255);
           break;
+        case ElementTypes.MASON.type:
+          p.stroke(0, 0, 0, 127);
+          p.fill(32, 255, 255);
+          break;
       }
 
       p.ellipse(site.tilePos.col * siteSize, site.tilePos.row * siteSize, siteSize, siteSize);
@@ -79,7 +83,7 @@ var sketch = (p: any) => {
     let site: Site = getSiteFromCanvasXY(p.mouseX, p.mouseY);
     if (site) {
       if (p.keyIsPressed) {
-        site.atom = new Atom(ElementTypes.WALL);
+        site.atom = new Atom(ElementTypes.MASON);
       } else {
         site.atom = new Atom(ElementTypes.DREG);
       }
