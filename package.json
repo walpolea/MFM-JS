@@ -1,14 +1,23 @@
 {
-  "name": "MFM-simulator",
+  "name": "MFM-JS",
   "version": "1.0.0",
-  "description": "",
+  "description": "A web-based simulator for Dr. Dave Ackley's Moveable Feast Machine",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
-  "keywords": [],
-  "author": "",
+  "homepage": "https://mfm.rocks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/walpolea/MFM-JS.git"
+  },
+  "keywords": [
+    "robust-first",
+    "moveable feast machine",
+    "MFM"
+  ],
+  "author": "Andrew Walpole <walpolea@gmail.com> (https://andrewwalpole.com)",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.1.2",

@@ -8,11 +8,17 @@ The idea here is not to port MFM to JavaScript, but instead simulate it enough a
 
 ---
 
-uhhh...
+Prequisites
+
+- nodejs 8.10.0+ (_I use nvm to easily manage and upgrade node versions_) (https://nodejs.org)
+- an IDE like VS Code (https://code.visualstudio.com/)
+
+Install
 
 - git clone https://github.com/walpolea/MFM-JS.git
-- npm install
-- cross fingers
-- npm run build
-- cross toes
+- `cd MFM-JS`
+- `npm install`
+- `npm run build`
 - serve up index.html to view in browser
+  - you can `npm install -g http-server`
+  - and then `http-server ./dist`
