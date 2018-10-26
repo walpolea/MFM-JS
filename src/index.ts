@@ -1,6 +1,6 @@
 import { Tile } from "./mfm/classes/Tile";
 import { Site } from "./mfm/classes/Site";
-import { ElementTypes } from "./mfm/classes/ElementTypes";
+import { ElementTypes, IElementType } from "./mfm/classes/ElementTypes";
 import { MFMUtils } from "./mfm/utils/utils";
 import { Atom } from "./mfm/classes/Atom";
 
@@ -22,33 +22,21 @@ var sketch = (p: any) => {
   //     p.resizeCanvas(p.windowWidth - 50, p.windowHeight - 50);
   //   };
 
+  //Establish the elment colors here
+  let colors: Map<IElementType, any> = new Map<IElementType, any>();
+  colors.set(ElementTypes.EMPTY, p.color(32, 32, 32, 127));
+  colors.set(ElementTypes.DREG, p.color(255, 32, 32));
+  colors.set(ElementTypes.RES, p.color(32, 255, 64));
+  colors.set(ElementTypes.WALL, p.color(32, 32, 255));
+  colors.set(ElementTypes.MASON, p.color(32, 255, 255));
+  colors.set(ElementTypes.FORK_BOMB, p.color(170, 32, 32));
+
   let drawGrid = (p: any, t: Tile) => {
     p.push();
     p.translate(gridOffset, gridOffset);
     t.sites.forEach((site: Site) => {
-      switch (site.atom.elem.type) {
-        case ElementTypes.EMPTY.type:
-          p.stroke(0, 0, 0, 0);
-          p.fill(32, 32, 32, 127);
-          break;
-        case ElementTypes.DREG.type:
-          p.stroke(0, 0, 0, 127);
-          p.fill(255, 32, 32);
-          break;
-        case ElementTypes.RES.type:
-          p.stroke(0, 0, 0, 127);
-          p.fill(32, 255, 64);
-          break;
-        case ElementTypes.WALL.type:
-          p.stroke(0, 0, 0, 127);
-          p.fill(32, 32, 255);
-          break;
-        case ElementTypes.MASON.type:
-          p.stroke(0, 0, 0, 127);
-          p.fill(32, 255, 255);
-          break;
-      }
-
+      p.stroke(0, 0, 0, 0);
+      p.fill(colors.get(site.atom.type));
       p.ellipse(site.tilePos.col * siteSize, site.tilePos.row * siteSize, siteSize, siteSize);
     });
     p.pop();
@@ -95,6 +83,9 @@ var sketch = (p: any) => {
             break;
           case 101: //e
             site.atom = new Atom(ElementTypes.EMPTY);
+            break;
+          case 98: //b
+            site.atom = new Atom(ElementTypes.FORK_BOMB);
             break;
         }
       } else {

@@ -1,5 +1,4 @@
 import { GridCoord } from "../interfaces/IGridCoord";
-import { Atom } from "./Atom";
 import { Tile } from "./Tile";
 import { MFMUtils } from "../utils/utils";
 import { Site } from "./Site";
@@ -100,6 +99,8 @@ export class EventWindow {
     return this.getSiteFromCandidates(Array.from(this.window.values()), true, specificType);
   }
 
+  //most useful when using specificType
+  //traverses the window until it comes across what you're looking for
   getNearest(specificType: IElementType = undefined): Site {
     return this.getSiteFromCandidates(Array.from(this.window.values()), false, specificType);
   }
@@ -154,7 +155,8 @@ export class EventWindow {
     );
   }
 
-  //Given an array of candidate sites (symmetries in the future I hope), give me back one, random by default, not filtered by type by default
+  //Given an array of candidate sites (symmetries in the future I hope),
+  //give me back one, random by default, not filtered by type by default
   getSiteFromCandidates(
     candidateSites: Array<Site>,
     randomize: boolean = true,
