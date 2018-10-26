@@ -13,8 +13,8 @@ export class MFMUtils {
   }
 
   static GenerateEventWindow(tile: Tile, w: number, h: number): EventWindow {
-    let rc = Math.floor(Math.random() * w);
-    let rr = Math.floor(Math.random() * h);
+    let rc = (Math.random() * w) >> 0;
+    let rr = (Math.random() * h) >> 0;
 
     return new EventWindow(tile, { row: rr, col: rc });
   }

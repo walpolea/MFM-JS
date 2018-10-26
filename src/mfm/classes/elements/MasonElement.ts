@@ -33,7 +33,7 @@ export class MasonElement extends Elem {
   }
 
   //make a box path
-  boxPath(sideLength: number = 5) {
+  boxPath(sideLength: number = 7) {
     let path: string = "";
     const choices: string[] = ["E", "N", "W", "S"];
     while (choices.length) {
@@ -61,60 +61,77 @@ export class MasonElement extends Elem {
         moveSite() {
           return ew.getEast();
         },
-        buildSite() {
+        outerBuildSite() {
           return ew.getSouth();
+        },
+        innerBuildSite() {
+          return ew.getNorth();
         }
       },
       N: {
         moveSite() {
           return ew.getNorth();
         },
-        buildSite() {
+        outerBuildSite() {
           return ew.getEast();
+        },
+        innerBuildSite() {
+          return ew.getWest();
         }
       },
       S: {
         moveSite() {
           return ew.getSouth();
         },
-        buildSite() {
+        outerBuildSite() {
           return ew.getWest();
+        },
+        innerBuildSite() {
+          return ew.getEast();
         }
       },
       W: {
         moveSite() {
           return ew.getWest();
         },
-        buildSite() {
+        outerBuildSite() {
           return ew.getNorth();
+        },
+        innerBuildSite() {
+          return ew.getSouth();
         }
       }
     };
 
     const moveSite: Site = blueprints[dir].moveSite();
-    const buildSite: Site = blueprints[dir].buildSite();
+    const outerBuildSite: Site = blueprints[dir].outerBuildSite();
+    const innerBuildSite: Site = blueprints[dir].innerBuildSite();
 
     //for changing directions
     if (lastdir !== dir) {
-      const lastBuildSite: Site = blueprints[lastdir].buildSite();
-      if (lastBuildSite) {
-        ew.origin.mutateSite(lastBuildSite, new Atom(ElementTypes.WALL));
+      const lastOuterBuildSite: Site = blueprints[lastdir].outerBuildSite();
+      if (lastOuterBuildSite) {
+        ew.origin.mutateSite(lastOuterBuildSite, new Atom(ElementTypes.WALL));
       }
     }
 
-    //build the wall
-    if (buildSite) {
-      if (buildSite.atom.type === ElementTypes.RES || buildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(buildSite, new Atom(ElementTypes.WALL));
-        if (lastdir !== dir) {
-          ew.origin.mutateSite(buildSite, new Atom(ElementTypes.WALL));
-        }
+    //build the outer wall
+    if (outerBuildSite) {
+      if (outerBuildSite.atom.type === ElementTypes.RES || outerBuildSite.atom.type === ElementTypes.EMPTY) {
+        ew.origin.mutateSite(outerBuildSite, new Atom(ElementTypes.WALL));
+      }
+    }
+
+    //build the inner wall
+    if (innerBuildSite) {
+      if (innerBuildSite.atom.type === ElementTypes.RES || innerBuildSite.atom.type === ElementTypes.EMPTY) {
+        ew.origin.mutateSite(innerBuildSite, new Atom(ElementTypes.WALL));
       }
     }
 
     //move to next site
     if (moveSite) {
-      ew.origin.moveAtom(moveSite);
+      ew.origin.moveAtom(moveSite, new Atom(ElementTypes.WALL));
     }
 
     super.exec(ew);
