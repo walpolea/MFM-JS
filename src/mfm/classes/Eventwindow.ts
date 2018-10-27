@@ -95,6 +95,15 @@ export class EventWindow {
     return { row: origin.row + rowOffset, col: origin.col + colOffset };
   }
 
+  getSiteByIndex(index: number): Site {
+    let wa: Array<Site> = Array.from(this.window.values());
+    if (index >= wa.length || index < 0) {
+      return undefined;
+    }
+
+    return wa[index];
+  }
+
   getRandom(specificType: IElementType = undefined): Site {
     return this.getSiteFromCandidates(Array.from(this.window.values()), true, specificType);
   }

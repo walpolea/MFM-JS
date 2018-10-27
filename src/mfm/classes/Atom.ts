@@ -6,9 +6,13 @@ export class Atom {
   type: IElementType;
   elem: Elem;
 
-  constructor(_type: IElementType = ElementTypes.EMPTY) {
+  constructor(_type: IElementType = ElementTypes.EMPTY, params?: any[]) {
     this.type = _type;
-    this.elem = new this.type.class();
+    if (params) {
+      this.elem = new this.type.class(...params);
+    } else {
+      this.elem = new this.type.class();
+    }
   }
 
   exec(ew: EventWindow) {

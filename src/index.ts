@@ -30,6 +30,7 @@ var sketch = (p: any) => {
   colors.set(ElementTypes.WALL, p.color(32, 32, 255));
   colors.set(ElementTypes.MASON, p.color(32, 255, 255));
   colors.set(ElementTypes.FORK_BOMB, p.color(170, 32, 32));
+  colors.set(ElementTypes.ANTI_FORK_BOMB, p.color(127, 127, 32));
 
   let drawGrid = (p: any, t: Tile) => {
     p.push();
@@ -69,6 +70,7 @@ var sketch = (p: any) => {
 
   let handleClick = () => {
     let site: Site = getSiteFromCanvasXY(p.mouseX, p.mouseY);
+
     if (site) {
       if (p.keyIsPressed) {
         switch (p.keyCode) {
@@ -86,6 +88,9 @@ var sketch = (p: any) => {
             break;
           case 98: //b
             site.atom = new Atom(ElementTypes.FORK_BOMB);
+            break;
+          case 97: //a
+            site.atom = new Atom(ElementTypes.ANTI_FORK_BOMB);
             break;
         }
       } else {
