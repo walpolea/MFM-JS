@@ -31,6 +31,7 @@ var sketch = (p: any) => {
   colors.set(ElementTypes.MASON, p.color(32, 255, 255));
   colors.set(ElementTypes.FORK_BOMB, p.color(170, 32, 32));
   colors.set(ElementTypes.ANTI_FORK_BOMB, p.color(127, 127, 32));
+  colors.set(ElementTypes.SENTRY, p.color(127, 127, 255));
 
   let drawGrid = (p: any, t: Tile) => {
     p.push();
@@ -91,6 +92,9 @@ var sketch = (p: any) => {
             break;
           case 97: //a
             site.atom = new Atom(ElementTypes.ANTI_FORK_BOMB);
+            break;
+          case 115: //s
+            site.atom = new Atom(ElementTypes.SENTRY);
             break;
         }
       } else {

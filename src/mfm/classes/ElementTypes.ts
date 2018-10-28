@@ -5,6 +5,7 @@ import { WallElement } from "./elements/WallElement";
 import { MasonElement } from "./elements/MasonElement";
 import { ForkBombElement } from "./elements/ForkBombElement";
 import { AntiForkBombElement } from "./elements/AntiForkBombElement";
+import { SentryElement } from "./elements/SentryElement";
 
 export interface IElementType {
   name: string;
@@ -20,6 +21,7 @@ export class ElementTypes {
   static MASON: IElementType = { name: "MASON", type: "Ma", class: MasonElement };
   static FORK_BOMB: IElementType = { name: "FORK BOMB", type: "Fb", class: ForkBombElement };
   static ANTI_FORK_BOMB: IElementType = { name: "ANTI FORK BOMB", type: "Af", class: AntiForkBombElement };
+  static SENTRY: IElementType = { name: "SENTRY", type: "Se", class: SentryElement };
 
   static TYPES_ARRAY: Array<IElementType> = [
     ElementTypes.EMPTY,
@@ -28,7 +30,8 @@ export class ElementTypes {
     ElementTypes.WALL,
     ElementTypes.MASON,
     ElementTypes.FORK_BOMB,
-    ElementTypes.ANTI_FORK_BOMB
+    ElementTypes.ANTI_FORK_BOMB,
+    ElementTypes.SENTRY
   ];
 
   static registerType(name: string, type: string, c: any) {

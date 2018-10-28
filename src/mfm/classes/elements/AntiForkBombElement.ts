@@ -14,19 +14,19 @@ export class AntiForkBombElement extends Elem {
   exec(ew: EventWindow) {
     let fb: Site = ew.getNearest(ElementTypes.FORK_BOMB);
 
+    //randomly die if no fork bombs around
     if (!fb && Math.random() < 0.2) {
       ew.origin.killSelf();
       return;
     }
 
-    //while there are forkbombs present, destroy them
+    //while there are forkbombs present, destroy them!
     while (fb) {
       ew.origin.mutateSite(fb, new Atom(ElementTypes.EMPTY));
       fb = ew.getNearest(ElementTypes.FORK_BOMB);
     }
 
-    //make new anti fork bombs
-
+    //RED ALERT! Make new anti fork bombs in all directions
     if (!this.birthedIndex) {
       //this is the first
       [
@@ -60,14 +60,14 @@ export class AntiForkBombElement extends Elem {
         40
       ].forEach(index => {
         let site = ew.getSiteByIndex(index);
-        if (site) {
+        if (site && site.atom.type === ElementTypes.EMPTY) {
           ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB, [index]));
         }
       });
     } else {
       //this is a child, just continue that way
       [ew.getSiteByIndex(this.birthedIndex)].forEach(site => {
-        if (site) {
+        if (site && site.atom.type === ElementTypes.EMPTY) {
           if (Math.random() < 0.02) {
             ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB));
           } else {

@@ -95,6 +95,22 @@ export class EventWindow {
     return { row: origin.row + rowOffset, col: origin.col + colOffset };
   }
 
+  getAll(specificType: IElementType = undefined): Site[] {
+    let wa: Array<Site> = Array.from(this.window.values());
+
+    if (specificType) {
+      wa = wa.filter(site => {
+        if (site.atom.type === specificType) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+
+    return wa;
+  }
+
   getSiteByIndex(index: number): Site {
     let wa: Array<Site> = Array.from(this.window.values());
     if (index >= wa.length || index < 0) {
