@@ -8,10 +8,11 @@ export class MasonElement extends Elem {
   path: string[] = [];
   curIndex: number = 0;
 
-  constructor(_path: string = "EEEENNNNWWWWSSSS") {
+  constructor(_path: string = "EEEENNNNWWWWSSSS", _curIndex: number = 0) {
     super(ElementTypes.MASON.name, ElementTypes.MASON.type, 100, 100);
     _path = this.boxPath();
     this.path = _path.toUpperCase().split("");
+    this.curIndex = _curIndex;
   }
 
   //make a random wall path
@@ -53,8 +54,6 @@ export class MasonElement extends Elem {
 
     let lastdir: string = this.curIndex === 0 ? this.path[this.path.length - 1] : this.path[this.curIndex - 1];
     let dir: string = this.path[this.curIndex];
-
-    this.curIndex++;
 
     let blueprints: any = {
       E: {
@@ -129,10 +128,12 @@ export class MasonElement extends Elem {
       }
     }
 
-    //move to next site
+    //move to next site and leave another mason to help
     if (moveSite) {
-      ew.origin.moveAtom(moveSite, new Atom(ElementTypes.WALL));
+      ew.origin.moveAtom(moveSite, new Atom(ElementTypes.MASON, [this.path, this.curIndex]));
     }
+
+    this.curIndex++;
 
     super.exec(ew);
   }

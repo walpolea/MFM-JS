@@ -27,26 +27,29 @@ export class SentryElement extends Elem {
       this.onHighAlert = true;
     }
 
-    //Fire!!!
-    if (this.onHighAlert) {
-      var e: Site = ew.getNearest(ElementTypes.EMPTY);
-      ew.origin.mutateSite(e, new Atom(ElementTypes.ANTI_FORK_BOMB));
-
-      this.onHighAlert = false;
-    }
-
     let totalNearbySentry: number = ew.getAll(ElementTypes.SENTRY).length;
 
-    //Requesting honorable discharge, sir!
-    if (totalNearbySentry > 2) {
+    //Kinda boring and crowded around here, requesting honorable discharge, sir!
+    if (!this.onHighAlert && totalNearbySentry > 2) {
       ew.origin.killSelf(new Atom(ElementTypes.RES));
     }
 
     //Res nearby? Maybe recruit someone for the cause
     var res: Site = ew.getAdjacent8Way(true, ElementTypes.RES);
 
-    if (res && Math.random() * this.pSENTRY_CREATE < 1) {
-      ew.origin.mutateSite(res, new Atom(ElementTypes.SENTRY));
+    if (res) {
+      //if high alert, definitely recruit, otherwise, maybe
+      if (this.onHighAlert || Math.random() * this.pSENTRY_CREATE < 1) {
+        ew.origin.mutateSite(res, new Atom(ElementTypes.SENTRY));
+      }
+    }
+
+    //Fire!!!
+    if (this.onHighAlert) {
+      var e: Site = ew.getNearest(ElementTypes.EMPTY);
+      ew.origin.mutateSite(e, new Atom(ElementTypes.ANTI_FORK_BOMB));
+
+      this.onHighAlert = false;
     }
 
     //patrol
