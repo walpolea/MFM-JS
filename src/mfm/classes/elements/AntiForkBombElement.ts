@@ -6,6 +6,8 @@ import { Atom } from "../Atom";
 
 export class AntiForkBombElement extends Elem {
   birthedIndex: number;
+  pDIE: number = 1.33; //~75% chance to die
+  pEXPLODE: number = 5; //20% chance to explode
   constructor(_birthedIndex: number = undefined) {
     super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
 
@@ -15,7 +17,7 @@ export class AntiForkBombElement extends Elem {
     let fb: Site = ew.getNearest(ElementTypes.FORK_BOMB);
 
     //randomly die if no fork bombs around
-    if (!fb && Math.random() < 0.2) {
+    if (!fb && Math.random() * this.pDIE < 1) {
       ew.origin.killSelf();
       return;
     }
@@ -26,39 +28,10 @@ export class AntiForkBombElement extends Elem {
       fb = ew.getNearest(ElementTypes.FORK_BOMB);
     }
 
-    //RED ALERT! Make new anti fork bombs in all directions
+    //RED ALERT! Make new anti fork bombs in all EMPTY directions
     if (!this.birthedIndex) {
       //this is the first
-      [
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40
-      ].forEach(index => {
+      [...Array(40).keys()].forEach(index => {
         let site = ew.getSiteByIndex(index);
         if (site && site.atom.type === ElementTypes.EMPTY) {
           ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB, [index]));
@@ -68,8 +41,8 @@ export class AntiForkBombElement extends Elem {
       //this is a child, just continue that way
       [ew.getSiteByIndex(this.birthedIndex)].forEach(site => {
         if (site && site.atom.type === ElementTypes.EMPTY) {
-          if (Math.random() < 0.02) {
-            ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB));
+          if (Math.random() * this.pEXPLODE < 1) {
+            ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB)); //explode
           } else {
             ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB, [this.birthedIndex]));
           }
