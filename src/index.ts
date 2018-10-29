@@ -82,6 +82,9 @@ var sketch = (p: any) => {
           case 119: //w
             site.atom = new Atom(ElementTypes.WALL);
             break;
+          case 90: //Z
+            site.atom = new Atom(ElementTypes.MASON, [MasonElement.boxPath(24)]);
+            break;
           case 122: //z
             site.atom = new Atom(ElementTypes.MASON, [MasonElement.boxPath(12)]);
             break;
