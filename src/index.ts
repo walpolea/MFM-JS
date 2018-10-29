@@ -3,6 +3,7 @@ import { Site } from "./mfm/classes/Site";
 import { ElementTypes, IElementType } from "./mfm/classes/ElementTypes";
 import { MFMUtils } from "./mfm/utils/utils";
 import { Atom } from "./mfm/classes/Atom";
+import { MasonElement } from "./mfm/classes/elements/MasonElement";
 
 declare var p5: any;
 
@@ -81,8 +82,14 @@ var sketch = (p: any) => {
           case 119: //w
             site.atom = new Atom(ElementTypes.WALL);
             break;
-          case 113: //q
-            site.atom = new Atom(ElementTypes.MASON);
+          case 122: //z
+            site.atom = new Atom(ElementTypes.MASON, [MasonElement.boxPath(12)]);
+            break;
+          case 120: //x
+            site.atom = new Atom(ElementTypes.MASON, [MasonElement.linePath(48, "E")]);
+            break;
+          case 99: //c
+            site.atom = new Atom(ElementTypes.MASON, [MasonElement.linePath(48, "S")]);
             break;
           case 101: //e
             site.atom = new Atom(ElementTypes.EMPTY);
