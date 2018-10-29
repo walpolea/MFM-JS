@@ -7,6 +7,8 @@ import { Atom } from "../Atom";
 export class SentryElement extends Elem {
   onHighAlert: boolean = false;
   pSENTRY_CREATE: number = 20;
+  pRES_CREATE: number = 1000;
+
   constructor() {
     super(ElementTypes.SENTRY.name, ElementTypes.SENTRY.type);
   }
@@ -41,6 +43,12 @@ export class SentryElement extends Elem {
       //if high alert, definitely recruit, otherwise, maybe
       if (this.onHighAlert || Math.random() * this.pSENTRY_CREATE < 1) {
         ew.origin.mutateSite(res, new Atom(ElementTypes.SENTRY));
+      }
+      //no res nearby, maybe we should make one.
+    } else if (Math.random() * this.pRES_CREATE < 1) {
+      let nearEmpty: Site = ew.getNearest(ElementTypes.EMPTY);
+      if (nearEmpty) {
+        ew.origin.mutateSite(nearEmpty, new Atom(ElementTypes.RES));
       }
     }
 

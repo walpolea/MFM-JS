@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
     <style>
         body {
@@ -20,6 +21,10 @@
 </head>
 
 <body>
+    <div id="app">
+        <div>Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000"> event windows per render cycle</div>
+        <div id="mfm"></div>
+    </div>
     <h1>MFM JS - just a simulator</h1>
     <p>Right now this is just a single tile simulation, with a few DRegs to seed the fun. Things are moving fast
         because 1000 event windows are happening every cycle.</p>
