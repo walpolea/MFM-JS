@@ -74,20 +74,20 @@ export class EventWindow {
     this.window = new Map<string, Site>();
     this.origin = this.tile.getSiteByCoord(origin);
 
-    //if the origin is EMPTY Element, let's save some cycles (good, bad?)
+    //if the origin is EMPTY Element, let's save some cycles (good, bad?) - bad if you want empty's age.
     if (this.origin.atom.type === ElementTypes.EMPTY) return;
 
     this.window.set(this.origin.id, this.origin);
 
-    let windowArray = EventWindow.WINDOW_ORDER_OFFSETS.map((offset: GridCoord) => {
-      return this.OffsetFromOrigin(origin, offset.row, offset.col);
-    });
-
-    windowArray.forEach((tileCoord: GridCoord) => {
-      let site = tile.getSiteByCoord(tileCoord);
-      if (site) {
-        this.window.set(site.id, site);
+    //use event window template offsets to build the rest of the event window
+    EventWindow.WINDOW_ORDER_OFFSETS.forEach((offset: GridCoord) => {
+      let tileCoord: GridCoord = this.OffsetFromOrigin(origin, offset.row, offset.col);
+      let site: Site = tile.getSiteByCoord(tileCoord);
+      if (!site) {
+        return false;
       }
+
+      this.window.set(site.id, site);
     });
   }
 

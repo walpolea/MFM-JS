@@ -4,6 +4,7 @@ import { ElementTypes, IElementType } from "./mfm/classes/ElementTypes";
 import { MFMUtils } from "./mfm/utils/utils";
 import { Atom } from "./mfm/classes/Atom";
 import { MasonElement } from "./mfm/classes/elements/MasonElement";
+import { EventWindow } from "./mfm/classes/Eventwindow";
 
 declare var p5: any;
 declare var Vue: any;
@@ -12,7 +13,7 @@ let app = new Vue({
   el: "#app",
   data: function() {
     return {
-      timeSpeed: 1000 as number,
+      timeSpeed: 2304 as number,
       gridOffset: 20 as number,
       siteSize: 14 as number,
       colors: undefined as Map<IElementType, any>,
@@ -29,7 +30,7 @@ let app = new Vue({
     initMFM(p: any) {
       this.p = p;
       this.colors = new Map<IElementType, any>();
-      this.colors.set(ElementTypes.EMPTY, p.color(32, 32, 32, 127));
+      this.colors.set(ElementTypes.EMPTY, p.color(64, 64, 64));
       this.colors.set(ElementTypes.DREG, p.color(255, 32, 32));
       this.colors.set(ElementTypes.RES, p.color(32, 255, 64));
       this.colors.set(ElementTypes.WALL, p.color(32, 32, 255));
@@ -45,10 +46,10 @@ let app = new Vue({
       };
 
       this.p.draw = () => {
-        this.p.background(100);
-        this.drawGrid(this.g);
+        this.p.background(50);
 
         this.run();
+        this.drawGrid(this.g);
       };
 
       this.p.mouseDragged = this.handleClick;
@@ -56,25 +57,30 @@ let app = new Vue({
     },
 
     run() {
+      let ew: EventWindow;
       for (var i = 0; i < this.timeSpeed; i++) {
-        let ew = MFMUtils.GenerateEventWindow(this.g, this.g.width, this.g.height);
+        ew = MFMUtils.GenerateEventWindow(this.g, this.g.width, this.g.height);
         ew.origin.atom.exec(ew);
       }
     },
     drawGrid(t: Tile) {
-      this.p.push();
-      this.p.translate(this.gridOffset, this.gridOffset);
-      t.sites.forEach((site: Site) => {
-        this.p.stroke(0, 0, 0, 0);
+      //this.p.push();
+      //this.p.translate(this.gridOffset, this.gridOffset);
+      let sitesArray: Site[] = Array.from(t.sites.values());
+      let siteLen: number = sitesArray.length;
+      let site: Site;
+      for (let i = 0; i < siteLen; i++) {
+        site = sitesArray[i];
+        this.p.noStroke();
         this.p.fill(this.colors.get(site.atom.type));
+
         this.p.ellipse(
-          site.tilePos.col * this.siteSize,
-          site.tilePos.row * this.siteSize,
+          site.tilePos.col * this.siteSize + this.gridOffset,
+          site.tilePos.row * this.siteSize + this.gridOffset,
           this.siteSize,
           this.siteSize
         );
-      });
-      this.p.pop();
+      }
     },
     getSiteFromCanvasXY(x: number, y: number): Site {
       x = x - this.gridOffset + this.siteSize * 0.5;

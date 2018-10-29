@@ -1,6 +1,6 @@
 # MFM-JS
 
-### Moveable Feast Machine simulator built in JavaScript
+### Movable Feast Machine simulator built in JavaScript
 
 ---
 
