@@ -17,12 +17,10 @@ let app = new Vue({
     this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"));
   },
   methods: {},
+  computed: {},
   watch: {
     timeSpeed(val: number) {
       this.mfmRenderer.timeSpeed = val;
     }
   }
 });
-
-//let sketchP: any = new p5(app.sketch, document.querySelector("#mfm"));
-//document.querySelector("#mfm").appendChild(app.pixiapp.view);

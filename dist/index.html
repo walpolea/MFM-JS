@@ -1,52 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
 
-        h3 {
-            color: Tomato;
-        }
+      h3 {
+        color: Tomato;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <div>Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000"> event windows per render cycle</div>
-        <div id="mfm"></div>
+      <div>
+        Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
+      </div>
+      <div id="mfm"></div>
     </div>
     <h1>MFM JS - just a simulator</h1>
-    <p>Right now this is just a single tile simulation, with a few DRegs to seed the fun. Things are moving fast
-        because 1000 event windows are happening every cycle.</p>
+    <p>
+      Right now this is just a single tile simulation, with a few DRegs to seed the fun. Things are moving fast because
+      1000 event windows are happening every cycle.
+    </p>
     <h3>Click and drag mouse to modify sites</h3>
     <ul>
-        <li>No keys held - DREG</li>
-        <li>hold "e" - EMPTY</li>
-        <li>hold "w" - WALL</li>
-        <li>hold "r" - RES</li>
-        <li>MASON (wall builder)
-            <ul>
-                <li>hold "z" - build a 12x12 box</li>
-                <li>hold "Z (shift+z)" - build a 24x24 box</li>
-                <li>hold "x" - build wall going east (48 wide)</li>
-                <li>hold "c" - build wall going south (48 tall)</li>
-            </ul>
-        </li>
-        <li>hold "b" - Fork Bomb (use with care)</li>
-        <li>hold "a" - Anti Fork Bomb (not perfect, but it sure is cool)</li>
-        <li>hold "s" - Sentry, he patrols and protects you from the Fork Bomb</li>
+      <li>No keys held - DREG</li>
+      <li>hold "e" - EMPTY</li>
+      <li>hold "w" - WALL</li>
+      <li>hold "r" - RES</li>
+      <li>
+        MASON (wall builder)
+        <ul>
+          <li>hold "z" - build a 12x12 box</li>
+          <li>hold "Z (shift+z)" - build a 24x24 box</li>
+          <li>hold "x" - build wall going east (48 wide)</li>
+          <li>hold "c" - build wall going south (48 tall)</li>
+        </ul>
+      </li>
+      <li>hold "b" - Fork Bomb (use with care)</li>
+      <li>hold "a" - Anti Fork Bomb (not perfect, but it sure is cool)</li>
+      <li>hold "s" - Sentry, he patrols and protects you from the Fork Bomb</li>
+      <li>hold "p" - Create a seeker that tries to get to a location (0,0) non-destructively</li>
+      <li>hold "d" - Data Element, whose data is randomly an integer between 1 and 10</li>
+      <li>hold "t" - Reducer Element, looks for data, eats them up and carries the sum total of its corpses</li>
+      <li>hold "u" - Uber Element, looks for data elements and "drives" them to a location (0,0)</li>
     </ul>
     <script src="./mfm.js"></script>
-</body>
-
+  </body>
 </html>

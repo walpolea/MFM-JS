@@ -53,6 +53,39 @@ export class Site {
     }
   }
 
+  coordToward(dest: GridCoord): GridCoord {
+    let current: GridCoord = this.tilePos;
+    let colDist: number = dest.col - current.col;
+    let rowDist: number = dest.row - current.row;
+
+    //we made it!
+    if (colDist == 0 && rowDist == 0) {
+      return undefined;
+    }
+
+    let targetCol: number;
+
+    if (colDist < 0) {
+      targetCol = -1;
+    } else if (colDist > 0) {
+      targetCol = 1;
+    } else {
+      targetCol = 0;
+    }
+
+    let targetRow: number;
+
+    if (rowDist < 0) {
+      targetRow = -1;
+    } else if (rowDist > 0) {
+      targetRow = 1;
+    } else {
+      targetRow = 0;
+    }
+
+    return { row: targetRow, col: targetCol };
+  }
+
   canDestroy(): boolean {
     return Math.random() * 100 < this.atom.elem.destroyability;
   }

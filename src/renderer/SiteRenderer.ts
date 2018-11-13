@@ -4,31 +4,24 @@ import * as PIXI from "pixi.js";
 export class SiteRenderer {
   site: Site;
   siteSize: number;
+  siteSpacing: number;
   visual: PIXI.Sprite;
-  graphics: PIXI.Graphics;
 
-  constructor(_site: Site, _siteSize: number) {
+  constructor(_site: Site, _siteSize: number, _siteSpacing: number) {
     this.site = _site;
     this.siteSize = _siteSize;
+    this.siteSpacing = _siteSpacing;
     this.init();
   }
 
   init() {
     this.visual = PIXI.Sprite.fromImage("/resources/element.png");
     this.visual.interactive = true;
-    this.visual.x = this.site.tilePos.col * this.siteSize;
-    this.visual.y = this.site.tilePos.row * this.siteSize;
-    // this.graphics = new PIXI.Graphics();
+    this.visual.scale = new PIXI.Point(this.siteSize / 14, this.siteSize / 14);
+    this.visual.x = this.site.tilePos.col * (this.siteSize + this.siteSpacing);
+    this.visual.y = this.site.tilePos.row * (this.siteSize + this.siteSpacing);
 
-    // this.graphics.beginFill(this.site.atom.type.color);
-    // this.graphics.drawCircle(
-    //   this.site.tilePos.col * this.siteSize,
-    //   this.site.tilePos.row * this.siteSize,
-    //   this.siteSize * 0.5
-    // );
-    // this.graphics.endFill();
-
-    // this.visual.addChild(this.graphics);
+    this.update();
   }
 
   update() {

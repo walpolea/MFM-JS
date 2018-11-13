@@ -11,11 +11,14 @@ import { Atom } from "../mfm/classes/Atom";
 import { MasonElement } from "../mfm/classes/elements/MasonElement";
 
 export class MFMRenderer {
+  selectedSite: Site;
   timeSpeed: Number = 5000;
-  siteSize: number = 14;
+  siteSize: number = 16;
+  siteSpacing: number = 0;
   gridOffset: number = 14;
   srContainer: PIXI.Container = new PIXI.Container();
   siteRenderers: Map<PIXI.Sprite, SiteRenderer> = new Map<PIXI.Sprite, SiteRenderer>();
+  rendererMap: Map<Site, SiteRenderer> = new Map<Site, SiteRenderer>();
   container: Element;
   keysHeld: Set<string>;
   pointerDown: boolean = false;
@@ -35,8 +38,8 @@ export class MFMRenderer {
     this.keysHeld = new Set<string>();
 
     this.pixiapp = new PIXI.Application({
-      width: 700,
-      height: 700,
+      width: 800,
+      height: 800,
       antialias: false,
       transparent: false,
       resolution: 1
@@ -66,7 +69,7 @@ export class MFMRenderer {
 
     for (let i = 0; i < siteLen; i++) {
       site = sitesArray[i];
-      let sr: SiteRenderer = new SiteRenderer(site, this.siteSize);
+      let sr: SiteRenderer = new SiteRenderer(site, this.siteSize, this.siteSpacing);
       sr.visual.on(
         "click",
         (e: PIXI.interaction.InteractionEvent) => {
@@ -87,16 +90,24 @@ export class MFMRenderer {
       sr.visual.on("pointermove", this.handleClick, this);
       this.srContainer.addChild(sr.visual);
       this.siteRenderers.set(sr.visual, sr);
+      this.rendererMap.set(site, sr);
     }
   }
 
-  //getSiteRendererById(id:string):SiteRenderer
-
   gameLoop(delta: number) {
     let ew: EventWindow;
+
     for (var i = 0; i < this.timeSpeed; i++) {
       ew = MFMUtils.GenerateEventWindow(this.tile, this.tile.width, this.tile.height);
-      ew.origin.atom.exec(ew);
+
+      if (ew.window) {
+        ew.origin.atom.exec(ew);
+
+        //ends up being slower as elements populate the board
+        // ew.getAll().forEach(site => {
+        //   this.rendererMap.get(site).update();
+        // });
+      }
     }
 
     Array.from(this.siteRenderers.values()).forEach(sr => {
@@ -106,7 +117,6 @@ export class MFMRenderer {
 
   onKeyDown(key: any) {
     this.keysHeld.add(key.key);
-    console.log("kd", key);
   }
 
   onKeyUp(key: any) {
@@ -115,9 +125,9 @@ export class MFMRenderer {
 
   handleClick(e: PIXI.interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
-      let site: Site = this.siteRenderers.get(e.target as PIXI.Sprite).site;
-
-      //console.log("SITE CLICK", site);
+      let sr: SiteRenderer = this.siteRenderers.get(e.target as PIXI.Sprite);
+      let site: Site = sr.site;
+      this.selectedSite = site;
 
       if (site) {
         if (this.keysHeld.has("r")) {
@@ -140,10 +150,22 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.ANTI_FORK_BOMB);
         } else if (this.keysHeld.has("s")) {
           site.atom = new Atom(ElementTypes.SENTRY);
+        } else if (this.keysHeld.has("p")) {
+          site.atom = new Atom(ElementTypes.SEEKER, [{ row: 0, col: 0 }]);
+        } else if (this.keysHeld.has("d")) {
+          site.atom = new Atom(ElementTypes.DATA, undefined, {
+            value: (Math.random() * 10) >> 0
+          });
+        } else if (this.keysHeld.has("u")) {
+          site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 40, col: 40 }]);
+        } else if (this.keysHeld.has("t")) {
+          site.atom = new Atom(ElementTypes.REDUCER);
         } else {
           site.atom = new Atom(ElementTypes.DREG);
         }
       }
+
+      sr.update();
     }
   }
 }

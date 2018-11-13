@@ -66,21 +66,29 @@ export class EventWindow {
   window: Map<string, Site>;
 
   constructor(_tile: Tile, _origin: GridCoord) {
-    this.tile = _tile;
     this.makeWindow(_tile, _origin);
   }
 
   private makeWindow(tile: Tile, origin: GridCoord) {
-    this.window = new Map<string, Site>();
-    this.origin = this.tile.getSiteByCoord(origin);
-
+    this.origin = tile.getSiteByCoord(origin);
     //if the origin is EMPTY Element, let's save some cycles (good, bad?) - bad if you want empty's age.
-    if (this.origin.atom.type === ElementTypes.EMPTY) return;
+    if (this.origin.atom.type === ElementTypes.EMPTY) {
+      return;
+    }
+
+    this.window = new Map<string, Site>();
+    this.tile = tile;
 
     this.window.set(this.origin.id, this.origin);
 
     //use event window template offsets to build the rest of the event window
-    EventWindow.WINDOW_ORDER_OFFSETS.forEach((offset: GridCoord) => {
+
+    let offset: GridCoord;
+    let site: Site;
+    let tileCoord: GridCoord;
+
+    for (let i = 0; i < EventWindow.WINDOW_ORDER_OFFSETS.length; i++) {
+      offset = EventWindow.WINDOW_ORDER_OFFSETS[i];
       let tileCoord: GridCoord = this.OffsetFromOrigin(origin, offset.row, offset.col);
       let site: Site = tile.getSiteByCoord(tileCoord);
       if (!site) {
@@ -88,7 +96,7 @@ export class EventWindow {
       }
 
       this.window.set(site.id, site);
-    });
+    }
   }
 
   private OffsetFromOrigin(origin: GridCoord, rowOffset: number, colOffset: number): GridCoord {
@@ -96,7 +104,7 @@ export class EventWindow {
   }
 
   getAll(specificType: IElementType = undefined): Site[] {
-    let wa: Array<Site> = Array.from(this.window.values());
+    let wa: Site[] = Array.from(this.window.values());
 
     if (specificType) {
       wa = wa.filter(site => {

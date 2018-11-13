@@ -9,7 +9,7 @@ export class MFMUtils {
 
   static IDtoC(id: string): GridCoord {
     let rca: string[] = id.split(":");
-    return { row: parseInt(rca[0]), col: parseInt(rca[1]) };
+    return { row: +rca[0], col: +rca[1] };
   }
 
   static GenerateEventWindow(tile: Tile, w: number, h: number): EventWindow {

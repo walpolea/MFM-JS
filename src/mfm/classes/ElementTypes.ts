@@ -6,6 +6,10 @@ import { MasonElement } from "./elements/MasonElement";
 import { ForkBombElement } from "./elements/ForkBombElement";
 import { AntiForkBombElement } from "./elements/AntiForkBombElement";
 import { SentryElement } from "./elements/SentryElement";
+import { SeekerElement } from "./elements/SeekerElement";
+import { UberElement } from "./elements/UberElement";
+import { DataElement } from "./elements/DataElement";
+import { ReducerElement } from "./elements/ReducerElement";
 
 export interface IElementType {
   name: string;
@@ -21,26 +25,21 @@ export class ElementTypes {
   static WALL: IElementType = { name: "WALL", type: "W", class: WallElement, color: 0x2020ff };
   static MASON: IElementType = { name: "MASON", type: "Ma", class: MasonElement, color: 0x20ffff };
   static FORK_BOMB: IElementType = { name: "FORK BOMB", type: "Fb", class: ForkBombElement, color: 0xaa2020 };
+  static UBER: IElementType = { name: "UBER", type: "Ub", class: UberElement, color: 0xffff00 };
+  static DATA: IElementType = { name: "DATA", type: "Da", class: DataElement, color: 0xcccccc };
+  static REDUCER: IElementType = { name: "REDUCER", type: "Re", class: ReducerElement, color: 0x00ffff };
   static ANTI_FORK_BOMB: IElementType = {
     name: "ANTI FORK BOMB",
     type: "Af",
     class: AntiForkBombElement,
     color: 0x7f7f20
   };
+  static SEEKER: IElementType = { name: "SEEKER", type: "Sk", class: SeekerElement, color: 0x999933 };
   static SENTRY: IElementType = { name: "SENTRY", type: "Se", class: SentryElement, color: 0x7f7fff };
 
-  static TYPES_ARRAY: Array<IElementType> = [
-    ElementTypes.EMPTY,
-    ElementTypes.DREG,
-    ElementTypes.RES,
-    ElementTypes.WALL,
-    ElementTypes.MASON,
-    ElementTypes.FORK_BOMB,
-    ElementTypes.ANTI_FORK_BOMB,
-    ElementTypes.SENTRY
-  ];
+  static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>();
 
   static registerType(name: string, type: string, c: any, color?: number) {
-    this.TYPES_ARRAY.push({ name, type, class: c, color });
+    this.TYPES_MAP.set(name, { name, type, class: c, color });
   }
 }
