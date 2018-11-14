@@ -69,7 +69,7 @@ export class UberElement extends Elem {
       ew.origin.moveAtom(optimalMove);
     } else {
       //optimal is taken, go another way?
-      let random8way: Site = ew.getAdjacent8Way(true, ElementTypes.EMPTY);
+      let random8way: Site = ew.getAdjacent8Way(true);
       if (random8way) {
         ew.origin.swapAtoms(random8way);
       }

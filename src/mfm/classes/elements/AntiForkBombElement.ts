@@ -6,8 +6,8 @@ import { Atom } from "../Atom";
 
 export class AntiForkBombElement extends Elem {
   birthedIndex: number;
-  pDIE: number = 1.33; //~75% chance to die
-  pEXPLODE: number = 5; //20% chance to explode
+  pDIE: number = 1.2; //~75% chance to die
+  pEXPLODE: number = 1.33; //75% chance to explode
   constructor(_birthedIndex: number = undefined) {
     super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
 
@@ -24,7 +24,7 @@ export class AntiForkBombElement extends Elem {
 
     //while there are forkbombs present, destroy them!
     while (fb) {
-      ew.origin.mutateSite(fb, new Atom(ElementTypes.EMPTY));
+      ew.origin.mutateSite(fb, new Atom(ElementTypes.ANTI_FORK_BOMB));
       fb = ew.getNearest(ElementTypes.FORK_BOMB);
     }
 

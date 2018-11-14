@@ -10,9 +10,18 @@ export class ForkBombElement extends Elem {
   }
   exec(ew: EventWindow) {
     let nextVictim: Site = ew.getAdjacent8Way();
+
     if (nextVictim) {
       ew.origin.mutateSite(nextVictim, new Atom(ElementTypes.FORK_BOMB));
     }
+
+    //SUPER FORKBOMB
+    // ew.getAll().forEach(nextVictim => {
+    //   if (nextVictim) {
+    //     ew.origin.mutateSite(nextVictim, new Atom(ElementTypes.FORK_BOMB));
+    //   }
+    // });
+
     super.exec(ew);
   }
 }

@@ -42,6 +42,7 @@ export class MFMRenderer {
       height: 800,
       antialias: false,
       transparent: false,
+      backgroundColor: 0x222222,
       resolution: 1
     });
 
@@ -157,7 +158,7 @@ export class MFMRenderer {
             value: (Math.random() * 10) >> 0
           });
         } else if (this.keysHeld.has("u")) {
-          site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 40, col: 40 }]);
+          site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 46, col: 46 }]);
         } else if (this.keysHeld.has("t")) {
           site.atom = new Atom(ElementTypes.REDUCER);
         } else {

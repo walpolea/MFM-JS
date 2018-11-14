@@ -5,55 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
     <style>
       body {
         font-family: Arial, Helvetica, sans-serif;
+        background-color: #222;
+        color: #eee;
       }
 
       h3 {
-        color: Tomato;
+        color: #e1325e;
+      }
+
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      #instructions {
+        display: block;
+        margin-left: 20px;
+      }
+
+      #instructions ul {
+        display: block;
+        margin-left: 20px;
+      }
+
+      #instructions li {
+        text-align: left;
+        margin: 5px 0;
+      }
+
+      ul li {
+        flex: 1;
+        text-align: center;
+      }
+
+      ul li img {
+        text-align: center;
+        max-width: 395px;
+      }
+
+      a {
+        color: #e1325e;
+      }
+
+      footer,
+      header {
+        margin: 100px 0;
+        color: #aaa;
       }
     </style>
   </head>
 
   <body>
-    <div id="app">
-      <div>
-        Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
+    <main>
+      <header>
+        <img src="resources/mfmrocks-logo.png" alt="" width="800px" />
+        <nav>
+          <ul>
+            <li><a target="_blank" href="https://github.com/walpolea/MFM-JS?ref=mfmrocks">MFM-JS Github</a></li>
+            <li>
+              <a target="_blank" href="http://robust.cs.unm.edu/doku.php">Robust-First Wiki (what is all this?)</a>
+            </li>
+            <li>
+              <a target="_blank" href="https://www.youtube.com/channel/UC1M91QuLZfCzHjBMEKvIc-A?ref=mfmrocks"
+                >T2Tile Project Youtube</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <div id="app">
+        <h1>The Simulator</h1>
+        <p>
+          Have fun playing with the following simulator. But before you get started, understand that this is not meant
+          to be a perfect copy of Dr. Dave Ackley's Movable Feast Machine. Instead, this project is intended to expose
+          you to what robust-first living computation is like. Also, the simulator currently only emulates a single
+          tile, and is not built in a way to grow indefinitely.
+        </p>
+        <div>
+          Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
+        </div>
+        <div id="mfm"></div>
       </div>
-      <div id="mfm"></div>
-    </div>
-    <h1>MFM JS - just a simulator</h1>
-    <p>
-      Right now this is just a single tile simulation, with a few DRegs to seed the fun. Things are moving fast because
-      1000 event windows are happening every cycle.
-    </p>
-    <h3>Click and drag mouse to modify sites</h3>
-    <ul>
-      <li>No keys held - DREG</li>
-      <li>hold "e" - EMPTY</li>
-      <li>hold "w" - WALL</li>
-      <li>hold "r" - RES</li>
-      <li>
-        MASON (wall builder)
+      <h3>Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
+      <ul id="instructions">
+        <li>No keys held - DREG</li>
+        <li>hold "e" - EMPTY</li>
+        <li>hold "w" - WALL</li>
+        <li>hold "r" - RES</li>
+        <li>
+          MASON (wall builder)
+          <ul>
+            <li>hold "z" - build a 12x12 box</li>
+            <li>hold "Z (shift+z)" - build a 24x24 box</li>
+            <li>hold "x" - build wall going east (48 wide)</li>
+            <li>hold "c" - build wall going south (48 tall)</li>
+          </ul>
+        </li>
+        <li>hold "b" - Fork Bomb (use with care)</li>
+        <li>hold "a" - Anti Fork Bomb (not perfect, but it sure is cool)</li>
+        <li>hold "s" - Sentry, he patrols and protects you from the Fork Bomb</li>
+        <li>hold "p" - Create a seeker that tries to get to a location (0,0) non-destructively</li>
+        <li>hold "d" - Data Element, whose data is randomly an integer between 1 and 10</li>
+        <li>hold "t" - Reducer Element, looks for data, eats them up and carries the sum total of its corpses</li>
+        <li>hold "u" - Uber Element, looks for data elements and "drives" them to a location (0,0)</li>
+      </ul>
+      <section id="extras">
+        <h1>Extras</h1>
+        <h3>Here's some mfm.rocks propaganda</h3>
         <ul>
-          <li>hold "z" - build a 12x12 box</li>
-          <li>hold "Z (shift+z)" - build a 24x24 box</li>
-          <li>hold "x" - build wall going east (48 wide)</li>
-          <li>hold "c" - build wall going south (48 tall)</li>
+          <li><img src="resources/art/mfm-carpeeventwindow-web.jpg" alt="" /></li>
+          <li><img src="resources/art/mfm-compute-web.jpg" alt="" /></li>
+          <li><img src="resources/art/mfm-compute2-web.jpg" alt="" /></li>
+          <li><img src="resources/art/mfm-dregres-web.jpg" alt="" /></li>
+          <li><img src="resources/art/mfm-mason-web.jpg" alt="" /></li>
+          <li><img src="resources/art/mfm-forkbomb-web.jpg" alt="" /></li>
         </ul>
-      </li>
-      <li>hold "b" - Fork Bomb (use with care)</li>
-      <li>hold "a" - Anti Fork Bomb (not perfect, but it sure is cool)</li>
-      <li>hold "s" - Sentry, he patrols and protects you from the Fork Bomb</li>
-      <li>hold "p" - Create a seeker that tries to get to a location (0,0) non-destructively</li>
-      <li>hold "d" - Data Element, whose data is randomly an integer between 1 and 10</li>
-      <li>hold "t" - Reducer Element, looks for data, eats them up and carries the sum total of its corpses</li>
-      <li>hold "u" - Uber Element, looks for data elements and "drives" them to a location (0,0)</li>
-    </ul>
+      </section>
+      <footer>
+        <nav>
+          <ul>
+            <li>Created by <a target="_blank" href="https://www.twitter.com/walpolea">Andrew Walpole</a></li>
+            <li>This project is open source, and contributors are welcomed!</li>
+          </ul>
+        </nav>
+      </footer>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <script src="./mfm.js"></script>
   </body>
 </html>
