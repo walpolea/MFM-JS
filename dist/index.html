@@ -94,6 +94,14 @@
           tile, and is not built in a way to grow indefinitely.
         </p>
         <div>
+          Grid Size:
+          <select v-model="gridSize">
+            <option value="32x32">32x32</option>
+            <option value="48x48" selected>48x48</option>
+            <option value="64x64">64x64</option>
+            <option value="96x96">96x96</option>
+            <option value="128x128">128x128</option>
+          </select>
           Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
         </div>
         <div id="mfm"></div>

@@ -36,6 +36,11 @@ export class MFMRenderer {
     this.init();
   }
 
+  deconstruct() {
+    this.pixiapp.stop();
+    this.pixiapp.destroy(true);
+  }
+
   init() {
     this.keysHeld = new Set<string>();
 
@@ -57,20 +62,21 @@ export class MFMRenderer {
     this.clickArea.interactive = true;
     this.pixiapp.stage.addChild(this.clickArea);
 
-    this.clickArea.on(
-      "click",
-      (e: PIXI.interaction.InteractionEvent) => {
-        this.pointerDown = true;
-        this.handleClick(e);
-        this.pointerDown = false;
-      },
-      this
-    );
-    this.clickArea.on("pointerdown", () => {
+    // this.clickArea.on(
+    //   "click",
+    //   (e: PIXI.interaction.InteractionEvent) => {
+    //     this.pointerDown = true;
+    //     this.handleClick(e);
+    //     this.pointerDown = false;
+    //   },
+    //   this
+    // );
+    this.clickArea.on("pointerdown", (e: PIXI.interaction.InteractionEvent) => {
       this.pointerDown = true;
+      this.handleClick(e);
     });
 
-    this.clickArea.on("pointerup", () => {
+    this.clickArea.on("pointerup", (e: PIXI.interaction.InteractionEvent) => {
       this.pointerDown = false;
     });
 
