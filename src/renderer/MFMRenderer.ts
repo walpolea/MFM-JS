@@ -11,6 +11,8 @@ import { Atom } from "../mfm/classes/Atom";
 import { MasonElement } from "../mfm/classes/elements/MasonElement";
 
 export class MFMRenderer {
+  appX: number = 800;
+  appY: number = 800;
   selectedSite: Site;
   timeSpeed: Number = 5000;
   siteSize: number = 8;
@@ -32,6 +34,7 @@ export class MFMRenderer {
   constructor(_tile: Tile, _container: Element) {
     this.tile = _tile;
     this.container = _container;
+    this.siteSize = Math.floor(this.appX / this.tile.width);
 
     this.init();
   }
@@ -45,8 +48,8 @@ export class MFMRenderer {
     this.keysHeld = new Set<string>();
 
     this.pixiapp = new PIXI.Application({
-      width: 800,
-      height: 800,
+      width: this.appX,
+      height: this.appY,
       antialias: false,
       transparent: false,
       backgroundColor: 0x222222,
