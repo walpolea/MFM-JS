@@ -13,7 +13,7 @@ let app = new Vue({
     };
   },
   mounted() {
-    this.g = new Tile(48, 48);
+    this.g = new Tile(96, 96);
     this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"));
   },
   methods: {},

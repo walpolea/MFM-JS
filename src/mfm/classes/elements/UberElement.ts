@@ -1,16 +1,17 @@
 import { EventWindow } from "../Eventwindow";
-import { Elem } from "../Elem";
+import { SpacialElement } from "./SpacialElement";
 import { ElementTypes } from "../ElementTypes";
 import { GridCoord } from "../../interfaces/IGridCoord";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
 
-export class UberElement extends Elem {
+export class UberElement extends SpacialElement {
   homeBase: GridCoord;
   goHome: boolean = false;
   destination: GridCoord;
   passengerValidator: Function;
   passenger: any;
+  pGoHome: number = 100;
 
   constructor(_destination: GridCoord = undefined, _homeBase: GridCoord = undefined, _validator?: Function) {
     super(ElementTypes.UBER.name, ElementTypes.UBER.type);
@@ -45,6 +46,11 @@ export class UberElement extends Elem {
         } else {
           //patrol for passenger
           ew.origin.swapAtoms(ew.getAdjacent4Way(true, ElementTypes.EMPTY));
+
+          //small chance to chack back in with home
+          if (Math.random() * this.pGoHome < 1) {
+            this.goHome = true;
+          }
         }
       }
     } else {
@@ -65,13 +71,13 @@ export class UberElement extends Elem {
   moveToward(direction: GridCoord, ew: EventWindow) {
     let optimalMove: Site = ew.getDirection(direction);
 
-    if (optimalMove.atom.type === ElementTypes.EMPTY) {
+    if (optimalMove.atom.type === ElementTypes.EMPTY || optimalMove.atom.type === ElementTypes.RES) {
       ew.origin.moveAtom(optimalMove);
     } else {
       //optimal is taken, go another way?
       let random8way: Site = ew.getAdjacent8Way(true);
-      if (random8way) {
-        ew.origin.swapAtoms(random8way);
+      if (random8way && (random8way.atom.type === ElementTypes.EMPTY || random8way.atom.type === ElementTypes.RES)) {
+        ew.origin.moveAtom(random8way);
       }
     }
   }

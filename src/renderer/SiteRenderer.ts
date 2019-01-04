@@ -7,15 +7,16 @@ export class SiteRenderer {
   siteSpacing: number;
   visual: PIXI.Sprite;
 
-  constructor(_site: Site, _siteSize: number, _siteSpacing: number) {
+  constructor(_site: Site, _siteSize: number, _siteSpacing: number, _texture: PIXI.Texture) {
     this.site = _site;
     this.siteSize = _siteSize;
     this.siteSpacing = _siteSpacing;
+    this.visual = new PIXI.Sprite(_texture);
     this.init();
   }
 
   init() {
-    this.visual = PIXI.Sprite.fromImage("/resources/element.png");
+    //this.visual = PIXI.Sprite.fromImage("/resources/element.png");
     this.visual.interactive = true;
     this.visual.scale = new PIXI.Point(this.siteSize / 14, this.siteSize / 14);
     this.visual.x = this.site.tilePos.col * (this.siteSize + this.siteSpacing);

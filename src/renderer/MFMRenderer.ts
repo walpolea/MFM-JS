@@ -13,15 +13,17 @@ import { MasonElement } from "../mfm/classes/elements/MasonElement";
 export class MFMRenderer {
   selectedSite: Site;
   timeSpeed: Number = 5000;
-  siteSize: number = 16;
+  siteSize: number = 8;
   siteSpacing: number = 0;
-  gridOffset: number = 14;
-  srContainer: PIXI.Container = new PIXI.Container();
+  gridOffset: number = 10;
+  srContainer: PIXI.particles.ParticleContainer = new PIXI.particles.ParticleContainer(200000, { tint: true });
   siteRenderers: Map<PIXI.Sprite, SiteRenderer> = new Map<PIXI.Sprite, SiteRenderer>();
   rendererMap: Map<Site, SiteRenderer> = new Map<Site, SiteRenderer>();
   container: Element;
   keysHeld: Set<string>;
   pointerDown: boolean = false;
+  siteTexture: PIXI.Texture = PIXI.Texture.fromImage("/resources/element.png");
+  clickArea: PIXI.DisplayObject;
 
   tile: Tile;
 
@@ -50,6 +52,30 @@ export class MFMRenderer {
     this.srContainer.y = this.gridOffset;
     this.pixiapp.stage.addChild(this.srContainer);
 
+    this.clickArea = new PIXI.DisplayObject();
+    this.clickArea.hitArea = new PIXI.Rectangle(0, 0, 800, 800);
+    this.clickArea.interactive = true;
+    this.pixiapp.stage.addChild(this.clickArea);
+
+    this.clickArea.on(
+      "click",
+      (e: PIXI.interaction.InteractionEvent) => {
+        this.pointerDown = true;
+        this.handleClick(e);
+        this.pointerDown = false;
+      },
+      this
+    );
+    this.clickArea.on("pointerdown", () => {
+      this.pointerDown = true;
+    });
+
+    this.clickArea.on("pointerup", () => {
+      this.pointerDown = false;
+    });
+
+    this.clickArea.on("pointermove", this.handleClick, this);
+
     document.addEventListener("keydown", (key: any) => {
       this.onKeyDown(key);
     });
@@ -70,25 +96,8 @@ export class MFMRenderer {
 
     for (let i = 0; i < siteLen; i++) {
       site = sitesArray[i];
-      let sr: SiteRenderer = new SiteRenderer(site, this.siteSize, this.siteSpacing);
-      sr.visual.on(
-        "click",
-        (e: PIXI.interaction.InteractionEvent) => {
-          this.pointerDown = true;
-          this.handleClick(e);
-          this.pointerDown = false;
-        },
-        this
-      );
-      sr.visual.on("pointerdown", () => {
-        this.pointerDown = true;
-      });
+      let sr: SiteRenderer = new SiteRenderer(site, this.siteSize, this.siteSpacing, this.siteTexture);
 
-      sr.visual.on("pointerup", () => {
-        this.pointerDown = false;
-      });
-
-      sr.visual.on("pointermove", this.handleClick, this);
       this.srContainer.addChild(sr.visual);
       this.siteRenderers.set(sr.visual, sr);
       this.rendererMap.set(site, sr);
@@ -124,10 +133,23 @@ export class MFMRenderer {
     this.keysHeld.delete(key.key);
   }
 
+  getSiteFromCanvasXY(x: number, y: number): Site {
+    x = x - this.gridOffset; //+ this.siteSize * 0.5;
+    y = y - this.gridOffset; //+ this.siteSize * 0.5;
+
+    x = (x / this.siteSize) >> 0;
+    y = (y / this.siteSize) >> 0;
+
+    return this.tile.getSiteByCoord({ row: y, col: x });
+  }
+
   handleClick(e: PIXI.interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
-      let sr: SiteRenderer = this.siteRenderers.get(e.target as PIXI.Sprite);
-      let site: Site = sr.site;
+      console.log(e);
+      let p: PIXI.Point = e.data.getLocalPosition(this.pixiapp.stage);
+      console.log(p.x, p.y);
+      let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as PIXI.Sprite);
+      //let site: Site = sr.site;
       this.selectedSite = site;
 
       if (site) {
@@ -147,6 +169,8 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.EMPTY);
         } else if (this.keysHeld.has("b")) {
           site.atom = new Atom(ElementTypes.FORK_BOMB);
+        } else if (this.keysHeld.has("B")) {
+          site.atom = new Atom(ElementTypes.SUPER_FORK_BOMB);
         } else if (this.keysHeld.has("a")) {
           site.atom = new Atom(ElementTypes.ANTI_FORK_BOMB);
         } else if (this.keysHeld.has("s")) {
@@ -158,7 +182,7 @@ export class MFMRenderer {
             value: (Math.random() * 10) >> 0
           });
         } else if (this.keysHeld.has("u")) {
-          site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 46, col: 46 }]);
+          site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 92, col: 92 }]);
         } else if (this.keysHeld.has("t")) {
           site.atom = new Atom(ElementTypes.REDUCER);
         } else {
@@ -166,7 +190,7 @@ export class MFMRenderer {
         }
       }
 
-      sr.update();
+      this.rendererMap.get(site).update();
     }
   }
 }

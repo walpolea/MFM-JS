@@ -10,6 +10,8 @@ import { SeekerElement } from "./elements/SeekerElement";
 import { UberElement } from "./elements/UberElement";
 import { DataElement } from "./elements/DataElement";
 import { ReducerElement } from "./elements/ReducerElement";
+import { SuperMasonElement } from "./elements/SuperMasonElement";
+import { SuperForkBombElement } from "./elements/SuperForkBomb";
 
 export interface IElementType {
   name: string;
@@ -24,7 +26,14 @@ export class ElementTypes {
   static RES: IElementType = { name: "RES", type: "R", class: ResElement, color: 0x20ff40 };
   static WALL: IElementType = { name: "WALL", type: "W", class: WallElement, color: 0x2020ff };
   static MASON: IElementType = { name: "MASON", type: "Ma", class: MasonElement, color: 0x20ffff };
+  static SUPER_MASON: IElementType = { name: "SUPER MASON", type: "SMa", class: SuperMasonElement, color: 0x20cccc };
   static FORK_BOMB: IElementType = { name: "FORK BOMB", type: "Fb", class: ForkBombElement, color: 0xaa2020 };
+  static SUPER_FORK_BOMB: IElementType = {
+    name: "SUPER FORK BOMB",
+    type: "SFb",
+    class: SuperForkBombElement,
+    color: 0xaa0000
+  };
   static UBER: IElementType = { name: "UBER", type: "Ub", class: UberElement, color: 0xffff00 };
   static DATA: IElementType = { name: "DATA", type: "Da", class: DataElement, color: 0xcccccc };
   static REDUCER: IElementType = { name: "REDUCER", type: "Re", class: ReducerElement, color: 0x00ffff };
