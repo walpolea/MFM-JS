@@ -24,11 +24,11 @@ export class UberElement extends SpacialElement {
   }
 
   exec(ew: EventWindow) {
-    ew.getAdjacent4Way(true, ElementTypes.DATA);
+    ew.getAdjacent4Way(ElementTypes.DATA);
 
     //look for a passenger
     if (!this.passenger) {
-      let potentialPassenger: Site = ew.getAdjacent8Way(true);
+      let potentialPassenger: Site = ew.getAdjacent8Way();
 
       if (potentialPassenger && this.passengerValidator(potentialPassenger)) {
         this.loadPassenger(potentialPassenger);
@@ -45,7 +45,7 @@ export class UberElement extends SpacialElement {
           }
         } else {
           //patrol for passenger
-          ew.origin.swapAtoms(ew.getAdjacent4Way(true, ElementTypes.EMPTY));
+          ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
 
           //small chance to chack back in with home
           if (Math.random() * this.pGoHome < 1) {
@@ -75,7 +75,7 @@ export class UberElement extends SpacialElement {
       ew.origin.moveAtom(optimalMove);
     } else {
       //optimal is taken, go another way?
-      let random8way: Site = ew.getAdjacent8Way(true);
+      let random8way: Site = ew.getAdjacent8Way();
       if (random8way && (random8way.atom.type === ElementTypes.EMPTY || random8way.atom.type === ElementTypes.RES)) {
         ew.origin.moveAtom(random8way);
       }
@@ -105,7 +105,7 @@ export class UberElement extends SpacialElement {
   unloadPassenger(ew: EventWindow) {
     console.log("unloading", this.passenger);
     ew.origin.moveAtom(
-      ew.getAdjacent8Way(true, ElementTypes.EMPTY),
+      ew.getAdjacent8Way(ElementTypes.EMPTY),
       new Atom(this.passenger["type"], undefined, this.passenger["data"])
     );
 

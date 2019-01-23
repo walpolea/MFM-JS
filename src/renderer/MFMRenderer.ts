@@ -11,6 +11,8 @@ import { Atom } from "../mfm/classes/Atom";
 import { MasonElement } from "../mfm/classes/elements/MasonElement";
 
 export class MFMRenderer {
+  appX: number = 800;
+  appY: number = 800;
   selectedSite: Site;
   timeSpeed: Number = 5000;
   siteSize: number = 8;
@@ -25,6 +27,8 @@ export class MFMRenderer {
   siteTexture: PIXI.Texture = PIXI.Texture.fromImage("/resources/element.png");
   clickArea: PIXI.DisplayObject;
 
+  customSequence: string;
+
   tile: Tile;
 
   pixiapp: PIXI.Application;
@@ -32,16 +36,22 @@ export class MFMRenderer {
   constructor(_tile: Tile, _container: Element) {
     this.tile = _tile;
     this.container = _container;
+    this.siteSize = Math.floor(this.appX / this.tile.width);
 
     this.init();
+  }
+
+  deconstruct() {
+    this.pixiapp.stop();
+    this.pixiapp.destroy(true);
   }
 
   init() {
     this.keysHeld = new Set<string>();
 
     this.pixiapp = new PIXI.Application({
-      width: 800,
-      height: 800,
+      width: this.appX,
+      height: this.appY,
       antialias: false,
       transparent: false,
       backgroundColor: 0x222222,
@@ -57,20 +67,21 @@ export class MFMRenderer {
     this.clickArea.interactive = true;
     this.pixiapp.stage.addChild(this.clickArea);
 
-    this.clickArea.on(
-      "click",
-      (e: PIXI.interaction.InteractionEvent) => {
-        this.pointerDown = true;
-        this.handleClick(e);
-        this.pointerDown = false;
-      },
-      this
-    );
-    this.clickArea.on("pointerdown", () => {
+    // this.clickArea.on(
+    //   "click",
+    //   (e: PIXI.interaction.InteractionEvent) => {
+    //     this.pointerDown = true;
+    //     this.handleClick(e);
+    //     this.pointerDown = false;
+    //   },
+    //   this
+    // );
+    this.clickArea.on("pointerdown", (e: PIXI.interaction.InteractionEvent) => {
       this.pointerDown = true;
+      this.handleClick(e);
     });
 
-    this.clickArea.on("pointerup", () => {
+    this.clickArea.on("pointerup", (e: PIXI.interaction.InteractionEvent) => {
       this.pointerDown = false;
     });
 
@@ -145,15 +156,16 @@ export class MFMRenderer {
 
   handleClick(e: PIXI.interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
-      console.log(e);
+      //console.log(e);
       let p: PIXI.Point = e.data.getLocalPosition(this.pixiapp.stage);
-      console.log(p.x, p.y);
+      //console.log(p.x, p.y);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as PIXI.Sprite);
       //let site: Site = sr.site;
       this.selectedSite = site;
 
       if (site) {
-        if (this.keysHeld.has("r")) {
+        if (this.keysHeld.has("m")) {
+        } else if (this.keysHeld.has("r")) {
           site.atom = new Atom(ElementTypes.RES);
         } else if (this.keysHeld.has("w")) {
           site.atom = new Atom(ElementTypes.WALL);

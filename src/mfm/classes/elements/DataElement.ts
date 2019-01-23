@@ -12,7 +12,7 @@ export class DataElement extends Elem {
   exec(ew: EventWindow) {
     //patrol
     if (Math.random() * this.pPATROL < 1) {
-      ew.origin.swapAtoms(ew.getAdjacent4Way(true, ElementTypes.EMPTY));
+      ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
     }
 
     super.exec(ew);

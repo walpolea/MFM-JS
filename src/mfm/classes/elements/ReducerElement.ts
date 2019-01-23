@@ -8,7 +8,7 @@ export class ReducerElement extends Elem {
     super(ElementTypes.REDUCER.name, ElementTypes.REDUCER.type);
   }
   exec(ew: EventWindow) {
-    let nearbyData: Site = ew.getAdjacent4Way(true, ElementTypes.DATA);
+    let nearbyData: Site = ew.getAdjacent4Way(ElementTypes.DATA);
     if (nearbyData) {
       this.reduce(nearbyData, ew);
     }
