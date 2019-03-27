@@ -86,9 +86,32 @@ export class SuperSwapWormElement extends Elem {
       if( this.segmentType === "HEAD" ) {
 
         
-        const choices: number[] = EventWindow.ALL;
-        const dir:number = choices[Math.random() * choices.length >> 0];
-        const goSite:Site = this.getSiteDirection(ew, dir);
+        let choices: number[] = EventWindow.LAYER1;
+        let dir:number = choices[Math.random() * choices.length >> 0];
+        let goSite:Site = this.getSiteDirection(ew, dir);
+
+        if(goSite && goSite.atom.type !== ElementTypes.EMPTY) {
+          console.log("checking all");
+          choices = EventWindow.LAYER2;
+          dir = choices[Math.random() * choices.length >> 0];
+          goSite = this.getSiteDirection(ew, dir);
+        }
+
+        if(goSite && goSite.atom.type !== ElementTypes.EMPTY) {
+
+          choices = EventWindow.LAYER3;
+          dir = choices[Math.random() * choices.length >> 0];
+          goSite = this.getSiteDirection(ew, dir);
+        
+        }
+
+        if(goSite && goSite.atom.type !== ElementTypes.EMPTY) {
+
+          choices = EventWindow.ALL;
+          dir = choices[Math.random() * choices.length >> 0];
+          goSite = this.getSiteDirection(ew, dir);
+        
+        }
 
         //if the site chosen exists and is empty...
         if( goSite && goSite.atom.type === ElementTypes.EMPTY ) {
