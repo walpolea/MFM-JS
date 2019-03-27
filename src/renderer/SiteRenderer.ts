@@ -34,13 +34,13 @@ export class SiteRenderer {
       
       switch( (this.site.atom.elem as SwapWormElement).segmentType ) {
         case "SWAPPER":
-          this.visual.tint = 0xff2020;
+          this.visual.tint = 0xfe7f9c;
         break;
         case "HEAD":
-          this.visual.tint = 0x00ff00;
+          this.visual.tint = 0xccffff;
           break;
         case "END":
-          this.visual.tint = 0x0000ff;
+          this.visual.tint = 0xff33ff;
         break;
         default:
           this.visual.tint = this.site.atom.type.color;
@@ -50,13 +50,13 @@ export class SiteRenderer {
       
       switch( (this.site.atom.elem as SuperSwapWormElement).segmentType ) {
         case "SWAPPER":
-          this.visual.tint = 0xff2020;
+          this.visual.tint = 0xfe7f9c;
         break;
         case "HEAD":
-          this.visual.tint = 0x00ff00;
+          this.visual.tint = 0xccffff;
           break;
         case "END":
-          this.visual.tint = 0x0000ff;
+          this.visual.tint = 0xff33ff;
         break;
         default:
           this.visual.tint = this.site.atom.type.color;

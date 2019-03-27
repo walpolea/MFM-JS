@@ -47,8 +47,8 @@ export class ElementTypes {
   };
   static SEEKER: IElementType = { name: "SEEKER", type: "Sk", class: SeekerElement, color: 0x999933 };
   static SENTRY: IElementType = { name: "SENTRY", type: "Se", class: SentryElement, color: 0x7f7fff };
-  static SWAPWORM: IElementType = { name:"SWAPWORM", type:"Sw", class:SwapWormElement, color:0x551f22};
-  static SUPERSWAPWORM: IElementType = { name:"SUPERSWAPWORM", type:"SSw", class:SuperSwapWormElement, color:0x992ff9};
+  static SWAPWORM: IElementType = { name:"SWAPWORM", type:"Sw", class:SwapWormElement, color:0xcc0066};
+  static SUPERSWAPWORM: IElementType = { name:"SUPERSWAPWORM", type:"SSw", class:SuperSwapWormElement, color:0xcc00cc};
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>();
 
   static registerType(name: string, type: string, c: any, color?: number) {

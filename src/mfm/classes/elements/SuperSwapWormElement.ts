@@ -91,7 +91,14 @@ export class SuperSwapWormElement extends Elem {
         let goSite:Site = this.getSiteDirection(ew, dir);
 
         if(goSite && goSite.atom.type !== ElementTypes.EMPTY) {
-          console.log("checking all");
+
+          choices = EventWindow.LAYER1;
+          dir = choices[Math.random() * choices.length >> 0];
+          goSite = this.getSiteDirection(ew, dir);
+        }
+
+        if(goSite && goSite.atom.type !== ElementTypes.EMPTY) {
+
           choices = EventWindow.LAYER2;
           dir = choices[Math.random() * choices.length >> 0];
           goSite = this.getSiteDirection(ew, dir);
@@ -129,9 +136,20 @@ export class SuperSwapWormElement extends Elem {
             this.birthCount--;
 
           } else {
-            console.log("leaving swapper");
-            leavingType = "SWAPPER";
+            
+
+            //there's already a swapper next to head, let's wait for the body to catch up a little
+            if( this.next && this.getSiteDirection(ew, this.next) && this.atomIsType( this.getSiteDirection(ew, this.next).atom, "SWAPPER" ) ) {
+              return;
+
+            } else {
+              console.log("leaving swapper");
+              leavingType = "SWAPPER";
+
+            }
           }
+
+          
 
           const leavingAtom:Atom = new Atom(ElementTypes.SUPERSWAPWORM, [0, leavingType, dir, this.next]);
           //move to empty site and leave either a middle (if being born) or swapper (if already born)
