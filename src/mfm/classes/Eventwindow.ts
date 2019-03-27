@@ -166,6 +166,10 @@ export class EventWindow {
     40
   ];
 
+  static OPPOSITES: number[] = [
+    0,4,3,2,1,8,7,6,5,12,11,10,9,20,19,18,17,16,15,14,13,24,23,22,21,28,27,26,25,36,35,34,33,32,31,30,29,40,39,38,37
+  ]
+
   static SUBSETS: Map<string, number[]> = new Map<string, number[]>()
     .set("4way", EventWindow.ADJACENT4WAY)
     .set("8way", EventWindow.ADJACENT8WAY)

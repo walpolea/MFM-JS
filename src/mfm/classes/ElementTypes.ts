@@ -13,6 +13,7 @@ import { ReducerElement } from "./elements/ReducerElement";
 import { SuperMasonElement } from "./elements/SuperMasonElement";
 import { SuperForkBombElement } from "./elements/SuperForkBomb";
 import { SwapWormElement } from "./elements/SwapWormElement";
+import { SuperSwapWormElement } from "./elements/SuperSwapWormElement";
 
 export interface IElementType {
   name: string;
@@ -47,6 +48,7 @@ export class ElementTypes {
   static SEEKER: IElementType = { name: "SEEKER", type: "Sk", class: SeekerElement, color: 0x999933 };
   static SENTRY: IElementType = { name: "SENTRY", type: "Se", class: SentryElement, color: 0x7f7fff };
   static SWAPWORM: IElementType = { name:"SWAPWORM", type:"Sw", class:SwapWormElement, color:0x551f22};
+  static SUPERSWAPWORM: IElementType = { name:"SUPERSWAPWORM", type:"SSw", class:SuperSwapWormElement, color:0x992ff9};
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>();
 
   static registerType(name: string, type: string, c: any, color?: number) {

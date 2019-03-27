@@ -88,7 +88,7 @@ export class MasonElement extends Elem {
     const outerBuildSite: Site = blueprints[dir].outerBuildSite();
     const innerBuildSite: Site = blueprints[dir].innerBuildSite();
 
-    console.log(dir, moveSite, lastSite, outerBuildSite, innerBuildSite);
+    //console.log(dir, moveSite, lastSite, outerBuildSite, innerBuildSite);
 
     //for changing directions
     if (lastdir !== dir) {
