@@ -197,6 +197,10 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 92, col: 92 }]);
         } else if (this.keysHeld.has("t")) {
           site.atom = new Atom(ElementTypes.REDUCER);
+        } else if (this.keysHeld.has("n")) {
+          site.atom = new Atom(ElementTypes.SWAPWORM, [7]);
+        } else if (this.keysHeld.has("N")) {
+          site.atom = new Atom(ElementTypes.SWAPWORM, [16]);
         } else {
           site.atom = new Atom(ElementTypes.DREG);
         }
