@@ -23,6 +23,7 @@ export class AntiForkBombElement extends Elem {
     }
 
     //while there are forkbombs present, destroy them!
+
     while (fb) {
       ew.origin.mutateSite(fb, new Atom(ElementTypes.ANTI_FORK_BOMB));
       fb = ew.getNearest(ElementTypes.FORK_BOMB);
@@ -51,6 +52,7 @@ export class AntiForkBombElement extends Elem {
     }
 
     ew.origin.killSelf();
+
     super.exec(ew);
   }
 }

@@ -27,6 +27,8 @@ export class MFMRenderer {
   siteTexture: PIXI.Texture = PIXI.Texture.fromImage("/resources/element.png");
   clickArea: PIXI.DisplayObject;
 
+  customSequence: string;
+
   tile: Tile;
 
   pixiapp: PIXI.Application;
@@ -154,15 +156,16 @@ export class MFMRenderer {
 
   handleClick(e: PIXI.interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
-      console.log(e);
+      //console.log(e);
       let p: PIXI.Point = e.data.getLocalPosition(this.pixiapp.stage);
-      console.log(p.x, p.y);
+      //console.log(p.x, p.y);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as PIXI.Sprite);
       //let site: Site = sr.site;
       this.selectedSite = site;
 
       if (site) {
-        if (this.keysHeld.has("r")) {
+        if (this.keysHeld.has("m")) {
+        } else if (this.keysHeld.has("r")) {
           site.atom = new Atom(ElementTypes.RES);
         } else if (this.keysHeld.has("w")) {
           site.atom = new Atom(ElementTypes.WALL);
@@ -194,6 +197,10 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 92, col: 92 }]);
         } else if (this.keysHeld.has("t")) {
           site.atom = new Atom(ElementTypes.REDUCER);
+        } else if (this.keysHeld.has("n")) {
+          site.atom = new Atom(ElementTypes.SWAPWORM, [7]);
+        } else if (this.keysHeld.has("N")) {
+          site.atom = new Atom(ElementTypes.SWAPWORM, [16]);
         } else {
           site.atom = new Atom(ElementTypes.DREG);
         }

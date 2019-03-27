@@ -10,7 +10,8 @@ let app = new Vue({
       gridSize: "48x48" as string,
       timeSpeed: 5000 as number,
       g: undefined as Tile,
-      mfmRenderer: MFMRenderer
+      mfmRenderer: MFMRenderer,
+      customSequence: "" as string
     };
   },
   mounted() {
@@ -37,6 +38,9 @@ let app = new Vue({
     gridSize(val: string) {
       this.mfmRenderer.deconstruct();
       this.initTile();
+    },
+    customSequence(val: string) {
+      this.mfmRenderer.customSequence = this.customSequence;
     }
   }
 });

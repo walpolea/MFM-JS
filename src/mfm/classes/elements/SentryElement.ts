@@ -37,7 +37,7 @@ export class SentryElement extends Elem {
     }
 
     //Res nearby? Maybe recruit someone for the cause
-    var res: Site = ew.getAdjacent8Way(true, ElementTypes.RES);
+    var res: Site = ew.getAdjacent8Way(ElementTypes.RES);
 
     if (res) {
       //if high alert, definitely recruit, otherwise, maybe
@@ -61,6 +61,6 @@ export class SentryElement extends Elem {
     }
 
     //patrol
-    ew.origin.swapAtoms(ew.getAdjacent4Way(true, ElementTypes.EMPTY));
+    ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
   }
 }

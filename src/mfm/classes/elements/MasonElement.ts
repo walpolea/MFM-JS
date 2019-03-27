@@ -88,6 +88,8 @@ export class MasonElement extends Elem {
     const outerBuildSite: Site = blueprints[dir].outerBuildSite();
     const innerBuildSite: Site = blueprints[dir].innerBuildSite();
 
+    console.log(dir, moveSite, lastSite, outerBuildSite, innerBuildSite);
+
     //for changing directions
     if (lastdir !== dir) {
       const lastOuterBuildSite: Site = blueprints[lastdir].outerBuildSite();
@@ -119,10 +121,10 @@ export class MasonElement extends Elem {
     }
 
     if (lastSite) {
-      ew.origin.mutateSite(
-        lastSite,
-        new Atom(ElementTypes.MASON, [MasonElement.pathToString(this.path), this.curIndex - 1])
-      );
+      // ew.origin.mutateSite(
+      //   lastSite,
+      //   new Atom(ElementTypes.MASON, [MasonElement.pathToString(this.path), this.curIndex - 1])
+      // );
     }
 
     super.exec(ew);
