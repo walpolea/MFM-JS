@@ -164,11 +164,6 @@ export class SwapWormElement extends Elem {
         this.reversing = false;
       }
 
-      // if(!this.next ) {
-      //   console.log( "done reversing" );
-      //   this.reversing = false;
-      // }
-
     } else {
     
       if( this.segmentType === "HEAD" ) {
@@ -211,9 +206,6 @@ export class SwapWormElement extends Elem {
           
         }
 
-
-
-        
       }
 
       if( this.segmentType === "MIDDLE" || this.segmentType === "END" ) {
@@ -230,9 +222,7 @@ export class SwapWormElement extends Elem {
 
         }
         
-
       }
-    
 
   }
 
