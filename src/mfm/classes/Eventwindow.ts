@@ -167,7 +167,7 @@ export class EventWindow {
   ];
 
   static OPPOSITES: number[] = [
-    0,4,3,2,1,8,7,6,5,12,11,10,9,20,19,18,17,16,15,14,13,24,23,22,21,28,27,26,25,36,35,34,33,32,31,30,29,40,39,38,37
+    0, 4, 3, 2, 1, 8, 7, 6, 5, 12, 11, 10, 9, 20, 19, 18, 17, 16, 15, 14, 13, 24, 23, 22, 21, 28, 27, 26, 25, 36, 35, 34, 33, 32, 31, 30, 29, 40, 39, 38, 37
   ]
 
   static SUBSETS: Map<string, number[]> = new Map<string, number[]>()
@@ -216,6 +216,40 @@ export class EventWindow {
   getSiteByIndex(index: number): Site {
     return index >= this.windowArray.length || index < 0 ? undefined : this.windowArray[index];
   }
+
+  getIndexByOffset(offset: GridCoord): number {
+    //console.log(offset);
+    return EventWindow.WINDOW_ORDER_OFFSETS.findIndex(gc => {
+      return (gc.col === offset.col && gc.row === offset.row);
+    });
+  }
+
+  ////////////////////
+  //When you have the need to tell a non-origin site what it's offset to another non-origin site is.
+  //Like, if origin (who has the EW) needs to tell its index 7 where its index 3 is relative to 7's position
+  //useful for linked-list manipulation, hopefully other things too.
+  getRelativeIndexFromSiteToSite(fromSite: number, toSite: number): number {
+
+    const fromOffset: GridCoord = EventWindow.WINDOW_ORDER_OFFSETS[fromSite];
+    const toOffset: GridCoord = EventWindow.WINDOW_ORDER_OFFSETS[toSite];
+
+    if (!fromOffset || !toOffset) {
+      return undefined;
+    }
+    //may return -1 if the fromSite is too far from the toSite (outside of its possible Event Window scope)
+    const newIndex: number = this.getIndexByOffset(this.getRelativeOffsetFromSiteToSite(fromOffset, toOffset));
+
+    //console.log(fromSite, toSite, newIndex);
+    return newIndex === -1 ? undefined : newIndex;
+  }
+
+  getRelativeOffsetFromSiteToSite(fromSiteOffset: GridCoord, toSiteOffset: GridCoord): GridCoord {
+    const xdist: number = toSiteOffset.col - fromSiteOffset.col;
+    const ydist: number = toSiteOffset.row - fromSiteOffset.row;
+
+    return { col: xdist, row: ydist };
+  }
+  ////////////////////
 
   //return all window sites (of type)
   getAll(specificType: IElementType = undefined): Site[] {

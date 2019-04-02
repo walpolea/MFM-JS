@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { ElementTypes } from "../mfm/classes/ElementTypes";
 import { SwapWormElement } from "../mfm/classes/elements/SwapWormElement";
 import { SuperSwapWormElement } from "../mfm/classes/elements/SuperSwapWormElement";
+import { LinkedListElement } from "../mfm/classes/elements/LinkedListElement";
 
 export class SiteRenderer {
   site: Site;
@@ -30,43 +31,43 @@ export class SiteRenderer {
 
   update() {
 
-    if( this.site.atom.type === ElementTypes.SWAPWORM ) {
-      
-      switch( (this.site.atom.elem as SwapWormElement).segmentType ) {
+    if (this.site.atom.type === ElementTypes.TENTACLE) {
+
+      switch ((this.site.atom.elem as LinkedListElement).linkType) {
         case "SWAPPER":
           this.visual.tint = 0xfe7f9c;
-        break;
+          break;
         case "HEAD":
           this.visual.tint = 0xccffff;
           break;
-        case "END":
+        case "TAIL":
           this.visual.tint = 0xff33ff;
-        break;
+          break;
         default:
           this.visual.tint = this.site.atom.type.color;
-        break;
+          break;
       }
-    } else if( this.site.atom.type === ElementTypes.SUPERSWAPWORM ) {
-      
-      switch( (this.site.atom.elem as SuperSwapWormElement).segmentType ) {
+    } else if (this.site.atom.type === ElementTypes.SUPERSWAPWORM) {
+
+      switch ((this.site.atom.elem as SuperSwapWormElement).segmentType) {
         case "SWAPPER":
           this.visual.tint = 0xfe7f9c;
-        break;
+          break;
         case "HEAD":
           this.visual.tint = 0xccffff;
           break;
         case "END":
           this.visual.tint = 0xff33ff;
-        break;
+          break;
         default:
           this.visual.tint = this.site.atom.type.color;
-        break;
+          break;
       }
     } else {
 
       this.visual.tint = this.site.atom.type.color;
 
     }
-    
+
   }
 }
