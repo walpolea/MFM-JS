@@ -201,6 +201,8 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.SWAPWORM, [7]);
         } else if (this.keysHeld.has("N")) {
           site.atom = new Atom(ElementTypes.SUPERSWAPWORM, [16]);
+        } else if (this.keysHeld.has("l")) {
+          site.atom = new Atom(ElementTypes.TENTACLE, [14]);
         } else {
           site.atom = new Atom(ElementTypes.DREG);
         }

@@ -6,17 +6,17 @@ import { EmptyElement } from "./EmptyElement";
 import { Atom } from "../Atom";
 
 export class SwapWormElement extends Elem {
-  
-    pCHANCESWAPPER:number = 100;
-    WORMSIZE:number;
-    birthCount:number;
-    segmentType:string;
-    next:string;
-    prev:string;
-    lastDirection:string;
-    reversing:boolean;
 
-  constructor( size:number = 4, segType:string = "HEAD", prev:string = undefined, next:string = undefined ) {
+  pCHANCESWAPPER: number = 100;
+  WORMSIZE: number;
+  birthCount: number;
+  segmentType: string;
+  next: string;
+  prev: string;
+  lastDirection: string;
+  reversing: boolean;
+
+  constructor(size: number = 4, segType: string = "HEAD", prev: string = undefined, next: string = undefined) {
     super(ElementTypes.SWAPWORM.name, ElementTypes.SWAPWORM.type);
 
     this.birthCount = this.WORMSIZE = size;
@@ -25,80 +25,80 @@ export class SwapWormElement extends Elem {
     this.next = next;
 
     this.reversing = false;
-    
+
   }
 
-  getSiteDirection(ew:EventWindow, dir:String):Site {
-    switch(dir) {
+  getSiteDirection(ew: EventWindow, dir: String): Site {
+    switch (dir) {
       case "N":
         return ew.getNorth();
-      break;
+        break;
       case "S":
         return ew.getSouth();
-      break;
+        break;
       case "E":
         return ew.getEast();
-      break;
+        break;
       case "W":
       default:
         return ew.getWest();
-      break;
+        break;
       case "NE":
         return ew.getNorthEast();
-      break;
+        break;
       case "SE":
         return ew.getSouthEast();
-      break;
+        break;
       case "NW":
         return ew.getNorthWest();
-      break;
+        break;
       case "SW":
         return ew.getSouthWest();
-      break;
+        break;
     }
   }
 
-  oppositeDirection( dir:String ):string {
-    switch(dir) {
+  oppositeDirection(dir: String): string {
+    switch (dir) {
       case "N":
         return "S";
-      break;
+        break;
       case "S":
         return "N";
-      break;
+        break;
       case "E":
         return "W";
-      break;
+        break;
       case "W":
       default:
         return "E";
-      break;
+        break;
       case "NE":
         return "SW";
-      break;
+        break;
       case "SE":
         return "NW";
-      break;
+        break;
       case "NW":
         return "SE";
-      break;
+        break;
       case "SW":
         return "NE";
-      break;
+        break;
     }
   }
 
-  toSwapWorm( el:Elem ):SwapWormElement {
+  toSwapWorm(el: Elem): SwapWormElement {
     return el as SwapWormElement;
   }
 
-  atomIsType(atom:Atom, type:string ):boolean {
+  atomIsType(atom: Atom, type: string): boolean {
 
-    if( atom.type !== ElementTypes.SWAPWORM ) {
+    if (atom.type !== ElementTypes.SWAPWORM) {
       return false;
     }
 
-    if( this.toSwapWorm(atom.elem).segmentType === type ) {
+    if (this.toSwapWorm(atom.elem).segmentType === type) {
       return true;
     }
 
@@ -106,29 +106,29 @@ export class SwapWormElement extends Elem {
 
   }
 
-  swapPrev( ew:EventWindow ) {
-    const prevSite:Site = this.getSiteDirection(ew, this.prev);
-    if( prevSite ) {
+  swapPrev(ew: EventWindow) {
+    const prevSite: Site = this.getSiteDirection(ew, this.prev);
+    if (prevSite) {
       const swapper = this.toSwapWorm(prevSite.atom.elem);
-    //swap links
-    [this.next, swapper.next, this.prev, swapper.prev] = [swapper.next, this.next, swapper.prev, this.prev];
-    ew.origin.swapAtoms( prevSite );
+      //swap links
+      [this.next, swapper.next, this.prev, swapper.prev] = [swapper.next, this.next, swapper.prev, this.prev];
+      ew.origin.swapAtoms(prevSite);
     }
-    
+
   }
 
-  swapNext( ew:EventWindow ) {
-    const nextSite:Site = this.getSiteDirection(ew, this.next);
-    if( nextSite ) {
+  swapNext(ew: EventWindow) {
+    const nextSite: Site = this.getSiteDirection(ew, this.next);
+    if (nextSite) {
       const swapper = this.toSwapWorm(nextSite.atom.elem);
       //swap links
       [this.next, swapper.next, this.prev, swapper.prev] = [swapper.next, this.next, swapper.prev, this.prev];
-      ew.origin.swapAtoms( nextSite );
+      ew.origin.swapAtoms(nextSite);
     }
-    
+
   }
 
-  reverseLinks(elem:SwapWormElement) {
+  reverseLinks(elem: SwapWormElement) {
     [elem.prev, elem.next] = [elem.next, elem.prev];
   }
 
@@ -136,51 +136,51 @@ export class SwapWormElement extends Elem {
 
   exec(ew: EventWindow) {
 
-    if( this.reversing ) {
+    if (this.reversing) {
 
       console.log("reversing");
 
-      const nextSite:Site = this.getSiteDirection(ew, this.next);
+      const nextSite: Site = this.getSiteDirection(ew, this.next);
 
-      let state:string = "REVERSE";
+      let state: string = "REVERSE";
 
       //found the end, finish reversing
-      if( nextSite && this.atomIsType(nextSite.atom, "END") ) {
+      if (nextSite && this.atomIsType(nextSite.atom, "END")) {
         state = "END";
-        console.log( "found the end");
-        console.log( "END", nextSite );
+        console.log("found the end");
+        console.log("END", nextSite);
         this.toSwapWorm(nextSite.atom.elem).segmentType = "MIDDLE";
 
-      } else if( nextSite && !this.prev ) { //first reverse needs to get next to "END"
+      } else if (nextSite && !this.prev) { //first reverse needs to get next to "END"
         state = "FIRST";
         this.toSwapWorm(nextSite.atom.elem).segmentType = "END";
       }
 
       this.swapNext(ew);
-      this.reverseLinks( this.toSwapWorm(ew.origin.atom.elem) );
+      this.reverseLinks(this.toSwapWorm(ew.origin.atom.elem));
 
-      if( state === "END" ) {
+      if (state === "END") {
         console.log(this);
         this.reversing = false;
       }
 
     } else {
-    
-      if( this.segmentType === "HEAD" ) {
+
+      if (this.segmentType === "HEAD") {
 
         //choose a direction to go in
         const choices: string[] = ["E", "N", "S", "W", "NW", "SW", "NE", "SE"];
-        const dir:string = choices[Math.random() * choices.length >> 0];
-        const goSite:Site = this.getSiteDirection(ew, dir);
+        const dir: string = choices[Math.random() * choices.length >> 0];
+        const goSite: Site = this.getSiteDirection(ew, dir);
 
         //if the site chosen exists and is empty...
-        if( goSite && goSite.atom.type === ElementTypes.EMPTY ) {
+        if (goSite && goSite.atom.type === ElementTypes.EMPTY) {
 
-          let leavingType:string;
+          let leavingType: string;
 
-          if( this.birthCount > 0 ) { //grow the worm - be born
+          if (this.birthCount > 0) { //grow the worm - be born
 
-            if( this.birthCount === this.WORMSIZE ) {
+            if (this.birthCount === this.WORMSIZE) {
               leavingType = "END"
             } else {
               leavingType = "MIDDLE";
@@ -192,41 +192,39 @@ export class SwapWormElement extends Elem {
             leavingType = "SWAPPER";
           }
 
-          const leavingAtom:Atom = new Atom(ElementTypes.SWAPWORM, [0, leavingType, dir, this.next]);
+          const leavingAtom: Atom = new Atom(ElementTypes.SWAPWORM, [0, leavingType, dir, this.next]);
           //move to empty site and leave either a middle (if being born) or swapper (if already born)
-          ew.origin.moveAtom( goSite, leavingAtom);
+          ew.origin.moveAtom(goSite, leavingAtom);
           this.next = this.oppositeDirection(dir);
 
 
           //check if we're stuck and maybe do some magic
           const availableEmpty = ew.getAdjacent8Way(ElementTypes.EMPTY);
-          if( !availableEmpty ) {
+          if (!availableEmpty) {
             //this.reversing = true;
           }
-          
+
         }
-        
+
       }
 
-      if( this.segmentType === "MIDDLE" || this.segmentType === "END" ) {
+      if (this.segmentType === "MIDDLE" || this.segmentType === "END") {
 
-        const prevSite:Site = this.getSiteDirection(ew, this.prev);
+        const prevSite: Site = this.getSiteDirection(ew, this.prev);
 
-        if( this.atomIsType(prevSite.atom, "SWAPPER") ) {
-          
+        if (this.atomIsType(prevSite.atom, "SWAPPER")) {
+
           this.swapPrev(ew);
 
-          if( this.segmentType === "END" ) {
+          if (this.segmentType === "END") {
             ew.origin.killSelf();
           }
 
         }
-        
 
       }
-    
 
-  }
+    }
 
     super.exec(ew);
   }
