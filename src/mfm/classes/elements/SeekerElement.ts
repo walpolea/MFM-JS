@@ -6,7 +6,7 @@ import { Site } from "../Site";
 
 export class SeekerElement extends Elem {
   seekPos: GridCoord;
-  constructor(_seekPos: GridCoord) {
+  constructor(_seekPos: GridCoord = { row: 0, col: 0 }) {
     ElementTypes.registerType("SEEKER", "Sk", SeekerElement, 0x999933);
     super(ElementTypes.TYPES_MAP.get("SEEKER").name, ElementTypes.TYPES_MAP.get("SEEKER").type);
 
@@ -28,7 +28,7 @@ export class SeekerElement extends Elem {
       ew.origin.swapAtoms(optimalSite);
     } else {
       //optimal is taken, go another way?
-      let random8way: Site = ew.getAdjacent8Way(ElementTypes.EMPTY);
+      let random8way: Site = ew.getAdjacent4Way(ElementTypes.EMPTY);
       if (random8way) {
         ew.origin.swapAtoms(random8way);
       }

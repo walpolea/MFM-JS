@@ -14,7 +14,7 @@ import { SuperMasonElement } from "./elements/SuperMasonElement";
 import { SuperForkBombElement } from "./elements/SuperForkBomb";
 import { SwapWormElement } from "./elements/SwapWormElement";
 import { SuperSwapWormElement } from "./elements/SuperSwapWormElement";
-import { TentacleElement } from "./elements/TentacleElement";
+import { LoopWormElement } from "./elements/LoopWormElement";
 
 export interface IElementType {
   name: string;
@@ -50,8 +50,18 @@ export class ElementTypes {
   static SENTRY: IElementType = { name: "SENTRY", type: "Se", class: SentryElement, color: 0x7f7fff };
   static SWAPWORM: IElementType = { name: "SWAPWORM", type: "Sw", class: SwapWormElement, color: 0xcc0066 };
   static SUPERSWAPWORM: IElementType = { name: "SUPERSWAPWORM", type: "SSw", class: SuperSwapWormElement, color: 0xcc00cc };
-  static TENTACLE: IElementType = { name: "TENTACLE", type: "Tw", class: TentacleElement, color: 0xcc00cc };
-  static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>();
+  static LOOPWORM: IElementType = { name: "LOOPWORM", type: "Tw", class: LoopWormElement, color: 0xcc00cc };
+  static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>()
+    .set(ElementTypes.EMPTY.name, ElementTypes.EMPTY)
+    .set(ElementTypes.DREG.name, ElementTypes.DREG)
+    .set(ElementTypes.RES.name, ElementTypes.RES)
+    .set(ElementTypes.WALL.name, ElementTypes.WALL)
+    .set(ElementTypes.MASON.name, ElementTypes.MASON)
+    .set(ElementTypes.SUPER_MASON.name, ElementTypes.SUPER_MASON)
+    .set(ElementTypes.FORK_BOMB.name, ElementTypes.FORK_BOMB)
+    .set(ElementTypes.LOOPWORM.name, ElementTypes.LOOPWORM)
+    .set(ElementTypes.SWAPWORM.name, ElementTypes.SWAPWORM)
+    .set(ElementTypes.SUPERSWAPWORM.name, ElementTypes.SUPERSWAPWORM)
 
   static registerType(name: string, type: string, c: any, color?: number) {
     this.TYPES_MAP.set(name, { name, type, class: c, color });

@@ -18,6 +18,12 @@ export class Atom {
     }
   }
 
+  setElement(e: Elem) {
+    console.log("setting atom", e)
+    this.elem = e;
+    this.type = ElementTypes.TYPES_MAP.get(e.name);
+  }
+
   exec(ew: EventWindow) {
     this.elem.exec(ew);
   }

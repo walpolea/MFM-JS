@@ -71,7 +71,8 @@ export class UberElement extends SpacialElement {
   moveToward(direction: GridCoord, ew: EventWindow) {
     let optimalMove: Site = ew.getDirection(direction);
 
-    if (optimalMove.atom.type === ElementTypes.EMPTY || optimalMove.atom.type === ElementTypes.RES) {
+    if (optimalMove && (optimalMove.atom.type === ElementTypes.EMPTY || optimalMove.atom.type === ElementTypes.RES)) {
+      console.log("optimal");
       ew.origin.moveAtom(optimalMove);
     } else {
       //optimal is taken, go another way?

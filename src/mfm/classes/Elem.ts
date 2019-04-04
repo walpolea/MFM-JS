@@ -1,4 +1,5 @@
 import { EventWindow } from "./Eventwindow";
+import { ElementTypes } from "./ElementTypes";
 
 export abstract class Elem {
   name: string;
@@ -12,6 +13,7 @@ export abstract class Elem {
     this.type = _type;
     this.moveability = _moveability;
     this.destroyability = _destroyability;
+
   }
 
   exec(ew: EventWindow) {

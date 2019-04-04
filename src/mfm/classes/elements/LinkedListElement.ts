@@ -12,8 +12,9 @@ export class LinkedListElement extends Elem {
   isSwapping: boolean;
   swapDirection: number; //0 = toward head (prev), 1 = toward tail (next)
   linkType: string;
+  shouldDie: boolean = false;
 
-  constructor(elementType: IElementType, prev: number = undefined, next: number = undefined) {
+  constructor(elementType: IElementType, prev?: number, next?: number) {
     super(elementType.name, elementType.type);
 
     this.prev = prev;
@@ -101,6 +102,7 @@ export class LinkedListElement extends Elem {
       ew.origin.swapAtoms(nextSite);
     }
 
+
   }
 
   //swap next/prev links with another LinkedListElement
@@ -116,13 +118,16 @@ export class LinkedListElement extends Elem {
   //remove self from the linked list, but don't let it fall apart
   unlink(ew: EventWindow) {
 
+
     const nextEl: LinkedListElement = this.getNextElement(ew);
     const prevEl: LinkedListElement = this.getPrevElement(ew);
     if (nextEl && prevEl) {
       //we're unlinking from the middle, close the gap
+
       nextEl.prev = ew.getRelativeIndexFromSiteToSite(this.next, this.prev); //this.next
       prevEl.next = ew.getRelativeIndexFromSiteToSite(this.prev, this.next); //this.prev
     } else if (prevEl) {
+
       //if there's a prev but no next, then we're at the tail and the prev needs to clear its next reference.
       prevEl.next = undefined;
     }
@@ -133,64 +138,119 @@ export class LinkedListElement extends Elem {
 
   }
 
+  die(ew: EventWindow) {
+
+    const nextEl: LinkedListElement = this.getNextElement(ew);
+
+    if (nextEl) {
+      nextEl.shouldDie = true;
+    }
+
+    this.next = undefined;
+    this.prev = undefined;
+  }
+
   //get the opposite direction of any index
   oppositeDirection(dir: number): number {
     const index: number = EventWindow.ALL.indexOf(dir);
     return EventWindow.OPPOSITES[index];
   }
 
-  moveTo(ew: EventWindow, relativeIndexToGoTo: number) {
+  moveTo(ew: EventWindow, relativeIndexToGoTo: number, leavingAtom?: Atom, maxIndex?: number): boolean {
 
+    if (!maxIndex) {
+      maxIndex = 8;
+    }
 
     let goSite: Site = this.getSiteDirection(ew, relativeIndexToGoTo);
+    let earShotIndexToNext: number;
+    let earShotIndexToPrev: number;
 
     //if it's an empty site
     if (goSite && goSite.atom.type === ElementTypes.EMPTY) {
 
-      let earShotIndexToNext: number;
-      let earShotIndexToPrev: number;
+      //if we're adding a link
+      if (leavingAtom) {
 
-      //if  moving there allows our links to stay in within ear-shot in event window (don't pull apart and lose each other)
-      if (this.next) {
-        earShotIndexToNext = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.next);
-        if (!earShotIndexToNext || earShotIndexToNext > 8) return; //no go
+
+
+        //if this has a prev, it needs to stay within bounds
+        if (this.prev) {
+          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
+          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) return false; //no go
+          this.prev = earShotIndexToPrev;
+        }
+
+        ew.origin.moveAtom(goSite, leavingAtom);
+        this.next = this.oppositeDirection(relativeIndexToGoTo);
+
+        return true;
+
+
+
+      } else {
+
+        //if  moving there allows our links to stay in within ear-shot in event window (don't pull apart and lose each other)
+        if (this.next) {
+          earShotIndexToNext = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.next);
+          if (!earShotIndexToNext || earShotIndexToNext > maxIndex) return false; //no go
+        }
+        if (this.prev) {
+          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
+          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) return false; //no go
+        }
+
+        if (this.getNextElement(ew)) {
+
+          //found that sometimes we want to link up with empty, oops!
+          if (!(this.getNextElement(ew) instanceof LinkedListElement)) return false;
+
+          this.getNextElement(ew).prev = ew.getRelativeIndexFromSiteToSite(this.next, relativeIndexToGoTo);
+
+        }
+
+        if (this.getPrevElement(ew)) {
+
+          if (!(this.getPrevElement(ew) instanceof LinkedListElement)) return false;
+
+          this.getPrevElement(ew).next = ew.getRelativeIndexFromSiteToSite(this.prev, relativeIndexToGoTo);
+
+          if (!this.getPrevElement(ew).prev || !this.getPrevElement(ew).next) {
+            console.log("prev has undefined", this.getPrevElement(ew));
+          }
+        }
+
+        ew.origin.moveAtom(goSite);
+
+        if (earShotIndexToNext) {
+          this.next = earShotIndexToNext;
+        }
+
+        if (earShotIndexToPrev) {
+          this.prev = earShotIndexToPrev;
+        }
+
+        if (!this.prev || !this.next) {
+          console.log("this has undefined", this.prev, this.next);
+        }
+
+        return true;
+
       }
-      if (this.prev) {
-        earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
-        if (!earShotIndexToPrev || earShotIndexToPrev > 8) return; //no go
-      }
-
-
-
-      if (this.next) {
-        this.getNextElement(ew).prev = ew.getRelativeIndexFromSiteToSite(this.next, relativeIndexToGoTo);
-      }
-
-      if (this.prev) {
-        this.getPrevElement(ew).next = ew.getRelativeIndexFromSiteToSite(this.prev, relativeIndexToGoTo)
-      }
-
-      ew.origin.moveAtom(goSite);
-
-      if (earShotIndexToNext) {
-        this.next = earShotIndexToNext;
-      }
-
-      if (earShotIndexToPrev) {
-        this.prev = earShotIndexToPrev;
-      }
-
 
     }
 
+    return false;
+
   }
 
-
-
-
-
-
   exec(ew: EventWindow) {
+
+    this.reflectOnType();
+
+    if (this.shouldDie) {
+      this.die(ew);
+    }
 
     //if swapper gets to end, unlink
     if (this.isSwapping && this.isAtTail()) {
@@ -202,17 +262,12 @@ export class LinkedListElement extends Elem {
       ew.origin.killSelf();
     }
 
-
-
-
-    this.reflectOnType();
-
+    //swapper, keep swapping
     if (this.isSwapping) {
       this.swapDirection === 1 ? this.swapNext(ew) : this.swapPrev(ew);
     }
 
-
-
+    this.reflectOnType();
 
     super.exec(ew);
   }

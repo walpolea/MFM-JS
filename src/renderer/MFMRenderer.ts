@@ -200,9 +200,11 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("n")) {
           site.atom = new Atom(ElementTypes.SWAPWORM, [7]);
         } else if (this.keysHeld.has("N")) {
-          site.atom = new Atom(ElementTypes.SUPERSWAPWORM, [16]);
+          site.atom = new Atom(ElementTypes.SWAPWORM, [16]);
         } else if (this.keysHeld.has("l")) {
-          site.atom = new Atom(ElementTypes.TENTACLE, [14]);
+          site.atom = new Atom(ElementTypes.LOOPWORM, [7]);
+        } else if (this.keysHeld.has("L")) {
+          site.atom = new Atom(ElementTypes.LOOPWORM, [16]);
         } else {
           site.atom = new Atom(ElementTypes.DREG);
         }
