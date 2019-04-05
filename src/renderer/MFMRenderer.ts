@@ -142,6 +142,7 @@ export class MFMRenderer {
 
   onKeyUp(key: any) {
     this.keysHeld.delete(key.key);
+    this.keysHeld.delete(key.key.toUpperCase());
   }
 
   getSiteFromCanvasXY(x: number, y: number): Site {
@@ -164,8 +165,7 @@ export class MFMRenderer {
       this.selectedSite = site;
 
       if (site) {
-        if (this.keysHeld.has("m")) {
-        } else if (this.keysHeld.has("r")) {
+        if (this.keysHeld.has("r")) {
           site.atom = new Atom(ElementTypes.RES);
         } else if (this.keysHeld.has("w")) {
           site.atom = new Atom(ElementTypes.WALL);
@@ -205,6 +205,10 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.LOOPWORM, [7]);
         } else if (this.keysHeld.has("L")) {
           site.atom = new Atom(ElementTypes.LOOPWORM, [16]);
+        } else if (this.keysHeld.has("k")) {
+          site.atom = new Atom(ElementTypes.LOOPSEED);
+        } else if (this.keysHeld.has("q")) {
+          console.log("DEBUG SITE:", site);
         } else {
           site.atom = new Atom(ElementTypes.DREG);
         }

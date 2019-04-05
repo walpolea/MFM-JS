@@ -87,7 +87,7 @@ export class SwapWormElement extends LinkedListElement {
         this.idleCount = 0;
       }
 
-      if (this.idleCount > 5) {
+      if (this.idleCount > 50) {
         this.swapMove(ew, EventWindow.ALLADJACENT);
       }
 

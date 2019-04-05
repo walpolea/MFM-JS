@@ -2,7 +2,6 @@ import { Site } from "../mfm/classes/Site";
 import * as PIXI from "pixi.js";
 import { ElementTypes, IElementType } from "../mfm/classes/ElementTypes";
 import { SwapWormElement } from "../mfm/classes/elements/SwapWormElement";
-import { SuperSwapWormElement } from "../mfm/classes/elements/SuperSwapWormElement";
 import { LinkedListElement } from "../mfm/classes/elements/LinkedListElement";
 
 export class SiteRenderer {
@@ -33,7 +32,6 @@ export class SiteRenderer {
 
     const swapColors: IElementType[] = [
       ElementTypes.SWAPWORM,
-      ElementTypes.SUPERSWAPWORM,
       ElementTypes.LOOPWORM
     ]
 

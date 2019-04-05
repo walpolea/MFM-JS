@@ -44,7 +44,26 @@ export class LoopWormElement extends LinkedListElement {
       const pt: LinkedListElement = (possibleTail.atom.elem as LinkedListElement);
 
       if (pt && pt.isAtTail()) {
-        console.log("CONNECTED!!");
+        console.log("CONNECTED TAIL!!");
+        this.prev = relativeSiteToGo;
+        pt.next = this.oppositeDirection(relativeSiteToGo);
+        this.isConnected = true;
+      }
+    }
+
+  }
+
+  connectToHead(ew: EventWindow) {
+
+    let choices: number[] = EventWindow.ADJACENT4WAY;
+    let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
+    let possibleHead: Site = this.getSiteDirection(ew, relativeSiteToGo);
+
+    if (possibleHead && possibleHead.atom.type === ElementTypes.LOOPWORM) {
+      const pt: LinkedListElement = (possibleHead.atom.elem as LinkedListElement);
+
+      if (pt && pt.isAtHead()) {
+        console.log("CONNECTED HEAD!!");
         this.prev = relativeSiteToGo;
         pt.next = this.oppositeDirection(relativeSiteToGo);
         this.isConnected = true;
@@ -107,6 +126,26 @@ export class LoopWormElement extends LinkedListElement {
 
 
     } else if (this.isConnected) {
+
+      //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!
+      // if (!(this.getPrevElement(ew) instanceof LoopWormElement) || !(this.getNextElement(ew) instanceof LoopWormElement)) {
+      //   console.log("disconnected");
+      //   ew.origin.killSelf();
+      //   return;
+      // }
+
+      //we disconnected... try to reconnect!
+      // if (!(this.getPrevElement(ew) instanceof LoopWormElement)) {
+      //   //this.isConnected = false;
+      //   this.prev = undefined;
+      //   this.connectToTail(ew);
+      // }
+
+      // if (!(this.getNextElement(ew) instanceof LoopWormElement)) {
+      //   //this.isConnected = false;
+      //   this.next = undefined;
+      //   this.connectToHead(ew);
+      // }
 
       //console.log("is connected");
       const nextEl: LoopWormElement = (this.getNextElement(ew) as LoopWormElement);

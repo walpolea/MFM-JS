@@ -172,8 +172,6 @@ export class LinkedListElement extends Elem {
       //if we're adding a link
       if (leavingAtom) {
 
-
-
         //if this has a prev, it needs to stay within bounds
         if (this.prev) {
           earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
@@ -214,10 +212,6 @@ export class LinkedListElement extends Elem {
           if (!(this.getPrevElement(ew) instanceof LinkedListElement)) return false;
 
           this.getPrevElement(ew).next = ew.getRelativeIndexFromSiteToSite(this.prev, relativeIndexToGoTo);
-
-          if (!this.getPrevElement(ew).prev || !this.getPrevElement(ew).next) {
-            console.log("prev has undefined", this.getPrevElement(ew));
-          }
         }
 
         ew.origin.moveAtom(goSite);
@@ -228,10 +222,6 @@ export class LinkedListElement extends Elem {
 
         if (earShotIndexToPrev) {
           this.prev = earShotIndexToPrev;
-        }
-
-        if (!this.prev || !this.next) {
-          console.log("this has undefined", this.prev, this.next);
         }
 
         return true;
