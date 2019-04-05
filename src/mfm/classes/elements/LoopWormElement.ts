@@ -9,7 +9,7 @@ import { MFMUtils } from "../../utils/utils";
 
 export class LoopWormElement extends LinkedListElement {
 
-  pCHANCE_TO_EAT: number = 800;
+  pCHANCE_TO_EAT: number = 1500;
   WORMSIZE: number;
   birthCount: number;
   isConnected: boolean = false;
@@ -183,7 +183,7 @@ export class LoopWormElement extends LinkedListElement {
             ew.getAdjacent8Way(ElementTypes.STICKYMEMBRANE).swapAtoms(ew.getSites([...EventWindow.LAYER2, ...EventWindow.LAYER3], ElementTypes.EMPTY)[0]);
           }
 
-          if (ew.getSites(EventWindow.LAYER4, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 15
+          if (ew.getSites(EventWindow.LAYER4, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 14
             && ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE)) {
             console.log("clearing space");
             ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE).killSelf();
