@@ -59,6 +59,8 @@ export class LoopSeedElement extends Elem {
     this.nextWall = this.nextWall >= walls.length - 1 ? 0 : this.nextWall + 1;
   }
 
+
+
   makeLoop(ew: EventWindow) {
 
     const site: Site = ew.getSiteByIndex(2);
@@ -69,7 +71,6 @@ export class LoopSeedElement extends Elem {
   hasLoop(ew: EventWindow): boolean {
 
     const loops: Site[] = ew.getSites(EventWindow.ALLADJACENT, ElementTypes.LOOPWORM);
-    console.log(loops);
     return loops.length > 0 && loops[0] !== undefined;
   }
 
@@ -90,14 +91,14 @@ export class LoopSeedElement extends Elem {
       this.cycles = this.nextTravel;
     }
 
-    if (this.cycles > 100) {
+    if (this.cycles > 120) {
 
       outerType = ElementTypes.EMPTY;
-      innerType = ElementTypes.RES;
+      innerType = ElementTypes.LOOPNUCLEUS;
 
     }
 
-    if (this.cycles > 103) {
+    if (this.cycles > 123) {
       ew.origin.killSelf();
     }
 

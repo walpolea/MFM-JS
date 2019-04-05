@@ -15,6 +15,7 @@ import { SuperForkBombElement } from "./elements/SuperForkBomb";
 import { SwapWormElement } from "./elements/SwapWormElement";
 import { LoopWormElement } from "./elements/LoopWormElement";
 import { LoopSeedElement } from "./elements/LoopSeedElement";
+import { LoopNucleusElement } from "./elements/LoopNucleusElement";
 
 export interface IElementType {
   name: string;
@@ -40,7 +41,8 @@ export class ElementTypes {
   static SENTRY: IElementType = { name: "SENTRY", type: "Se", class: SentryElement, color: 0x7f7fff };
   static SWAPWORM: IElementType = { name: "SWAPWORM", type: "Sw", class: SwapWormElement, color: 0xcc0066 };
   static LOOPWORM: IElementType = { name: "LOOPWORM", type: "Tw", class: LoopWormElement, color: 0xcc00cc };
-  static LOOPSEED: IElementType = { name: "LOOPSEED", type: "Ls", class: LoopSeedElement, color: 0xFCC038 }
+  static LOOPSEED: IElementType = { name: "LOOPSEED", type: "Ls", class: LoopSeedElement, color: 0xFCC038 };
+  static LOOPNUCLEUS: IElementType = { name: "LOOPNUCLEUS", type: "Ln", class: LoopNucleusElement, color: 0x000000 }
 
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>()
     .set(ElementTypes.EMPTY.name, ElementTypes.EMPTY)
@@ -53,6 +55,7 @@ export class ElementTypes {
     .set(ElementTypes.LOOPWORM.name, ElementTypes.LOOPWORM)
     .set(ElementTypes.SWAPWORM.name, ElementTypes.SWAPWORM)
     .set(ElementTypes.LOOPSEED.name, ElementTypes.LOOPSEED)
+    .set(ElementTypes.LOOPNUCLEUS.name, ElementTypes.LOOPNUCLEUS);
 
   static registerType(name: string, type: string, c: any, color?: number) {
     this.TYPES_MAP.set(name, { name, type, class: c, color });

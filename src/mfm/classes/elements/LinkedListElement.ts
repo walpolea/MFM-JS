@@ -184,8 +184,6 @@ export class LinkedListElement extends Elem {
 
         return true;
 
-
-
       } else {
 
         //if  moving there allows our links to stay in within ear-shot in event window (don't pull apart and lose each other)

@@ -5,9 +5,11 @@ import { Site } from "../Site";
 import { EmptyElement } from "./EmptyElement";
 import { Atom } from "../Atom";
 import { LinkedListElement } from "./LinkedListElement";
+import { MFMUtils } from "../../utils/utils";
 
 export class LoopWormElement extends LinkedListElement {
 
+  pCHANCE_TO_EAT: number = 500;
   WORMSIZE: number;
   birthCount: number;
   isConnected: boolean = false;
@@ -91,6 +93,26 @@ export class LoopWormElement extends LinkedListElement {
     return ew.windowCompare(compareMap) && ew.windowNotCompare(notCompareMap);
   }
 
+  eatLostNodes(ew: EventWindow) {
+
+    let possibleLostNodes: Site[] = ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.LOOPWORM);
+
+    possibleLostNodes = possibleLostNodes.filter(site => {
+      return (
+        site
+        && (site.atom.elem as LoopWormElement).next
+        && (site.atom.elem as LoopWormElement).prev
+      );
+    });
+
+    if (possibleLostNodes.length) {
+      possibleLostNodes.forEach(site => {
+        ew.origin.killAtom(site);
+      })
+    }
+
+  }
+
 
   exec(ew: EventWindow) {
 
@@ -128,11 +150,11 @@ export class LoopWormElement extends LinkedListElement {
     } else if (this.isConnected) {
 
       //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!
-      // if (!(this.getPrevElement(ew) instanceof LoopWormElement) || !(this.getNextElement(ew) instanceof LoopWormElement)) {
-      //   console.log("disconnected");
-      //   ew.origin.killSelf();
-      //   return;
-      // }
+      if (!(this.getPrevElement(ew) instanceof LinkedListElement) && !(this.getNextElement(ew) instanceof LinkedListElement)) {
+        console.log("disconnected");
+        ew.origin.killSelf();
+        return;
+      }
 
       //we disconnected... try to reconnect!
       // if (!(this.getPrevElement(ew) instanceof LoopWormElement)) {
@@ -157,21 +179,22 @@ export class LoopWormElement extends LinkedListElement {
         this.isSwapping = false;
       } else {
 
-        if (this.checkConditionsForFiller(ew)) {
-          ew.origin.mutateSite(ew.getSiteByIndex(2), new Atom(ElementTypes.RES));
-        } else if (Math.random() < 0.0003) {
+        // if (this.checkConditionsForFiller(ew)) {
+        //   //ew.origin.mutateSite(ew.getSiteByIndex(2), new Atom(ElementTypes.RES));
+        // } 
+
+        if (MFMUtils.oneIn(this.pCHANCE_TO_EAT)) {
           let possibleRes = ew.getAdjacent4Way(ElementTypes.RES);
 
           if (possibleRes) {
             possibleRes.killSelf();
-            this.expandCount = 1;
+            this.expandCount++;
             //console.log("ate a res");
           }
         }
 
 
         let choices: number[] = EventWindow.ADJACENT4WAY;
-
         let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
 
         if (this.expandCount > 0 && Math.random() < 0.1) {
@@ -187,10 +210,11 @@ export class LoopWormElement extends LinkedListElement {
 
         } else {
 
-          this.moveTo(ew, relativeSiteToGo);
+          this.moveTo(ew, relativeSiteToGo, undefined, 8);
         }
       }
 
+      //this.eatLostNodes(ew);
 
     } else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
 

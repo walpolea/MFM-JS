@@ -18,4 +18,8 @@ export class MFMUtils {
 
     return new EventWindow(tile, { row: rr, col: rc });
   }
+
+  static oneIn(n: number): boolean {
+    return ((Math.random() * n) < 1);
+  }
 }
