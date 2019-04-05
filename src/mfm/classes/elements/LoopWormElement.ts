@@ -57,27 +57,6 @@ export class LoopWormElement extends LinkedListElement {
 
   }
 
-
-
-  connectToHead(ew: EventWindow) {
-
-    let choices: number[] = EventWindow.ADJACENT4WAY;
-    let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
-    let possibleHead: Site = this.getSiteDirection(ew, relativeSiteToGo);
-
-    if (possibleHead && possibleHead.atom.type === ElementTypes.LOOPWORM) {
-      const pt: LinkedListElement = (possibleHead.atom.elem as LinkedListElement);
-
-      if (pt && pt.isAtHead()) {
-        console.log("CONNECTED HEAD!!");
-        this.prev = relativeSiteToGo;
-        pt.next = this.oppositeDirection(relativeSiteToGo);
-        this.isConnected = true;
-      }
-    }
-
-  }
-
   eat(ew: EventWindow) {
 
     if (MFMUtils.oneIn(this.pCHANCE_TO_EAT)) {
@@ -134,19 +113,6 @@ export class LoopWormElement extends LinkedListElement {
         ew.origin.killSelf();
         return;
       }
-
-      //we disconnected... try to reconnect!
-      // if (!(this.getPrevElement(ew) instanceof LoopWormElement)) {
-      //   //this.isConnected = false;
-      //   this.prev = undefined;
-      //   this.connectToTail(ew);
-      // }
-
-      // if (!(this.getNextElement(ew) instanceof LoopWormElement)) {
-      //   //this.isConnected = false;
-      //   this.next = undefined;
-      //   this.connectToHead(ew);
-      // }
 
       //console.log("is connected");
       const nextEl: LoopWormElement = (this.getNextElement(ew) as LoopWormElement);

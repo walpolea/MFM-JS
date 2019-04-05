@@ -7,7 +7,7 @@ import { Site } from "../Site";
 
 export class LoopNucleusElement extends Elem {
 
-  pCREATE_RES: number = 150;
+  pCREATE_RES: number = 100;
   pCREATE_MEMBRANE: number = 10;
   reproductionConditionCount: number = 0;
 
