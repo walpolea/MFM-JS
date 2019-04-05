@@ -179,16 +179,16 @@ export class LoopWormElement extends LinkedListElement {
 
         } else {
 
-          if (ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 0) {
-            ew.getAdjacent8Way(ElementTypes.STICKYMEMBRANE).swapAtoms(ew.getSites([...EventWindow.LAYER2, ...EventWindow.LAYER3], ElementTypes.EMPTY)[0]);
-          }
+          // if (ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 0) {
+          //   ew.getAdjacent8Way(ElementTypes.STICKYMEMBRANE).swapAtoms(ew.getSites([...EventWindow.LAYER2, ...EventWindow.LAYER3], ElementTypes.EMPTY)[0]);
+          // }
 
-          if (ew.getSites(EventWindow.LAYER4, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 14
-            && ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE)) {
-            console.log("clearing space");
-            ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE).killSelf();
+          // if (ew.getSites(EventWindow.LAYER4, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 14
+          //   && ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE)) {
+          //   console.log("clearing space");
+          //   ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE).killSelf();
 
-          }
+          // }
 
           this.moveTo(ew, relativeSiteToGo, undefined, 8);
         }

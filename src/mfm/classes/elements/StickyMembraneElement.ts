@@ -6,7 +6,6 @@ import { MFMUtils } from "../../utils/utils";
 
 export class StickyMembraneElement extends Elem {
 
-  pKILL_NEIGHBOR: number = 5000;
   stickyType: IElementType;
   idleCount: number = 0;
   roamCount: number = 0;
@@ -18,7 +17,7 @@ export class StickyMembraneElement extends Elem {
 
   moveToSticker(ew: EventWindow) {
 
-    const sites: number[] = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], this.stickyType, true);
+    const sites: number[] = ew.getIndexes([...EventWindow.LAYER2, ...EventWindow.LAYER3, ...EventWindow.LAYER4], this.stickyType, true);
 
     if (sites[0]) {
       const targetSiteIndex: number = sites[0];
@@ -54,12 +53,23 @@ export class StickyMembraneElement extends Elem {
 
   }
 
-  killThyNeighbor(ew: EventWindow) {
-    if (ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE)) {
-      ew.origin.killAtom(ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE));
-    }
+  repelFromSticker(ew: EventWindow) {
+    const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, this.stickyType, true);
 
+    if (sites[0]) {
+      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY)[0]);
+    }
   }
+
+  uncrowd(ew: EventWindow) {
+
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 32) {
+      console.log("clearing space");
+      ew.origin.killSelf();
+
+    }
+  }
+
 
 
   exec(ew: EventWindow) {
@@ -79,12 +89,12 @@ export class StickyMembraneElement extends Elem {
     } else {
 
       this.moveToSticker(ew);
+      this.repelFromSticker(ew);
+      this.uncrowd(ew);
 
     }
 
-    if (MFMUtils.oneIn(this.pKILL_NEIGHBOR)) {
-      //this.killThyNeighbor(ew);
-    }
+
 
     super.exec(ew);
   }
