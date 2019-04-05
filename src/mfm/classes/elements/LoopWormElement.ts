@@ -9,13 +9,15 @@ import { MFMUtils } from "../../utils/utils";
 
 export class LoopWormElement extends LinkedListElement {
 
-  pCHANCE_TO_EAT: number = 500;
+  pCHANCE_TO_EAT: number = 800;
   WORMSIZE: number;
   birthCount: number;
   isConnected: boolean = false;
   idleCount: number = 0;
 
   expandCount: number = 0;
+  maxEats: number = 2;
+  eatCount: number = 0;
 
   constructor(size: number = 4, prev: number = undefined, next: number = undefined) {
 
@@ -55,6 +57,8 @@ export class LoopWormElement extends LinkedListElement {
 
   }
 
+
+
   connectToHead(ew: EventWindow) {
 
     let choices: number[] = EventWindow.ADJACENT4WAY;
@@ -74,48 +78,23 @@ export class LoopWormElement extends LinkedListElement {
 
   }
 
-  checkConditionsForFiller(ew: EventWindow): boolean {
+  eat(ew: EventWindow) {
 
-    const compareMap = new Map<number, IElementType>();
-    compareMap.set(2, ElementTypes.EMPTY);
-    compareMap.set(13, ElementTypes.LOOPWORM);
-    compareMap.set(19, ElementTypes.LOOPWORM);
-    compareMap.set(25, ElementTypes.LOOPWORM);
-    compareMap.set(27, ElementTypes.LOOPWORM);
-    compareMap.set(22, ElementTypes.LOOPWORM);
+    if (MFMUtils.oneIn(this.pCHANCE_TO_EAT)) {
+      let possibleRes = ew.getAdjacent4Way(ElementTypes.RES);
 
-    const notCompareMap = new Map<number, IElementType>();
-    notCompareMap.set(14, ElementTypes.LOOPWORM);
-    notCompareMap.set(20, ElementTypes.LOOPWORM);
-    notCompareMap.set(23, ElementTypes.LOOPWORM);
-
-
-    return ew.windowCompare(compareMap) && ew.windowNotCompare(notCompareMap);
-  }
-
-  eatLostNodes(ew: EventWindow) {
-
-    let possibleLostNodes: Site[] = ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.LOOPWORM);
-
-    possibleLostNodes = possibleLostNodes.filter(site => {
-      return (
-        site
-        && (site.atom.elem as LoopWormElement).next
-        && (site.atom.elem as LoopWormElement).prev
-      );
-    });
-
-    if (possibleLostNodes.length) {
-      possibleLostNodes.forEach(site => {
-        ew.origin.killAtom(site);
-      })
+      if (possibleRes) {
+        possibleRes.killSelf();
+        this.expandCount++;
+        this.eatCount++;
+        //console.log("ate a res");
+      }
     }
 
   }
 
 
   exec(ew: EventWindow) {
-
 
     let choices: number[];
     let leavingAtom: Atom;
@@ -179,20 +158,10 @@ export class LoopWormElement extends LinkedListElement {
         this.isSwapping = false;
       } else {
 
-        // if (this.checkConditionsForFiller(ew)) {
-        //   //ew.origin.mutateSite(ew.getSiteByIndex(2), new Atom(ElementTypes.RES));
-        // } 
 
-        if (MFMUtils.oneIn(this.pCHANCE_TO_EAT)) {
-          let possibleRes = ew.getAdjacent4Way(ElementTypes.RES);
-
-          if (possibleRes) {
-            possibleRes.killSelf();
-            this.expandCount++;
-            //console.log("ate a res");
-          }
+        if (this.eatCount < this.maxEats) {
+          this.eat(ew);
         }
-
 
         let choices: number[] = EventWindow.ADJACENT4WAY;
         let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
@@ -210,11 +179,21 @@ export class LoopWormElement extends LinkedListElement {
 
         } else {
 
+          if (ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 0) {
+            ew.getAdjacent8Way(ElementTypes.STICKYMEMBRANE).swapAtoms(ew.getSites([...EventWindow.LAYER2, ...EventWindow.LAYER3], ElementTypes.EMPTY)[0]);
+          }
+
+          if (ew.getSites(EventWindow.LAYER4, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 15
+            && ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE)) {
+            console.log("clearing space");
+            ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE).killSelf();
+
+          }
+
           this.moveTo(ew, relativeSiteToGo, undefined, 8);
         }
       }
 
-      //this.eatLostNodes(ew);
 
     } else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
 

@@ -41,10 +41,13 @@ export class Site {
 
   //if targetSite is moveable
   //swap atoms with this one
-  swapAtoms(targetSite: Site) {
+  swapAtoms(targetSite: Site): boolean {
     if (targetSite && targetSite.canMove()) {
       [this.atom, targetSite.atom] = [targetSite.atom, this.atom];
+      return true;
     }
+
+    return false;
   }
 
   mutateSite(targetSite: Site, newAtom: Atom) {

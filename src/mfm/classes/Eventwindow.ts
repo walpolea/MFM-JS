@@ -152,6 +152,27 @@ export class EventWindow {
     return EventWindow.WINDOW_ORDER_OFFSETS[index];
   }
 
+  getIndexToward(destinationIndex: number): number {
+
+    let toX: number = 0;
+    let toY: number = 0;
+    let toIndex: number;
+
+    const destCoord: GridCoord = this.getOffsetByIndex(destinationIndex);
+    const destX: number = destCoord.col;
+    const destY: number = destCoord.row;
+
+    if (destX > 1) { toX = 1; }
+    if (destX < -1) { toX = -1; }
+
+    if (destY > 1) { toY = 1; }
+    if (destY < -1) { toY = -1; }
+
+    const toCoord: GridCoord = { row: toY, col: toX };
+    return this.getIndexByOffset(toCoord);
+
+  }
+
   ////////////////////
   //When you have the need to tell a non-origin site what its offset to another non-origin site is.
   //Like, if origin (who has the EW) needs to tell its index 7 where its index 3 is relative to 7's position
@@ -286,6 +307,54 @@ export class EventWindow {
         return this.windowArray[index];
       }
     });
+  }
+
+
+
+  getIndexes(subset: number[], type: IElementType = undefined, oneRandom: boolean = true): number[] {
+    let candidates: number[] = this.getSubsetIndexes(subset);
+
+    //proxy for getSubset I guess
+    if (!type && !oneRandom) {
+      return candidates;
+    }
+
+    //filter by type
+    if (type) {
+      candidates = this.filterIndexesByType(candidates, type);
+    }
+
+    //return array of just 1 random site from filtered
+    if (oneRandom) {
+      return [this.getRandomIndex(candidates)];
+    }
+
+    return candidates;
+  }
+
+
+  getSubsetIndexes(subset: number[]): number[] {
+    return subset.map(index => {
+      if (this.windowArray[index]) {
+        return index;
+      }
+    });
+  }
+
+  filterIndexesByType(indexes: number[], type: IElementType): number[] {
+
+    return indexes.filter(siteIndex => {
+      const site: Site = this.getSiteByIndex(siteIndex);
+      if (site && site.atom.type === type) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  getRandomIndex(indexes: number[]): number {
+    return indexes[(Math.random() * indexes.length) >> 0];
   }
 
   //gridcoord way to access directions

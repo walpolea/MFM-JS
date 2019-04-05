@@ -16,6 +16,7 @@ import { SwapWormElement } from "./elements/SwapWormElement";
 import { LoopWormElement } from "./elements/LoopWormElement";
 import { LoopSeedElement } from "./elements/LoopSeedElement";
 import { LoopNucleusElement } from "./elements/LoopNucleusElement";
+import { StickyMembraneElement } from "./elements/StickyMembraneElement";
 
 export interface IElementType {
   name: string;
@@ -43,6 +44,7 @@ export class ElementTypes {
   static LOOPWORM: IElementType = { name: "LOOPWORM", type: "Tw", class: LoopWormElement, color: 0xcc00cc };
   static LOOPSEED: IElementType = { name: "LOOPSEED", type: "Ls", class: LoopSeedElement, color: 0xFCC038 };
   static LOOPNUCLEUS: IElementType = { name: "LOOPNUCLEUS", type: "Ln", class: LoopNucleusElement, color: 0x000000 }
+  static STICKYMEMBRANE: IElementType = { name: "STICKYMEMBRANE", type: "Sm", class: StickyMembraneElement, color: 0xCE80BB }
 
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>()
     .set(ElementTypes.EMPTY.name, ElementTypes.EMPTY)
@@ -55,7 +57,8 @@ export class ElementTypes {
     .set(ElementTypes.LOOPWORM.name, ElementTypes.LOOPWORM)
     .set(ElementTypes.SWAPWORM.name, ElementTypes.SWAPWORM)
     .set(ElementTypes.LOOPSEED.name, ElementTypes.LOOPSEED)
-    .set(ElementTypes.LOOPNUCLEUS.name, ElementTypes.LOOPNUCLEUS);
+    .set(ElementTypes.LOOPNUCLEUS.name, ElementTypes.LOOPNUCLEUS)
+    .set(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE);
 
   static registerType(name: string, type: string, c: any, color?: number) {
     this.TYPES_MAP.set(name, { name, type, class: c, color });

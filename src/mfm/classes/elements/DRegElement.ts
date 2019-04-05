@@ -24,7 +24,7 @@ export class DRegElement extends Elem {
 
   exec(ew: EventWindow) {
     //get a random NESW site
-    const availableSite: Site = ew.getAdjacent8Way();
+    const availableSite: Site = ew.getAdjacent4Way();
 
     //CREATION
     if (availableSite && availableSite.atom.type === ElementTypes.EMPTY) {

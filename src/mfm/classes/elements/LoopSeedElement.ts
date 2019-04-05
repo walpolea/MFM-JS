@@ -51,12 +51,32 @@ export class LoopSeedElement extends Elem {
     const walls: number[][] = [northWall, eastWall, southWall, westWall];
     const walltoBuild: number[] = walls[this.nextWall];
 
+    if (this.cycles < 8) {
+      const northClearing: number[] = [5, 2, 7];
+      const eastClearing: number[] = [7, 4, 8];
+      const southClearing: number[] = [8, 3, 6];
+      const westClearing: number[] = [6, 1, 5];
+
+      const clearings: number[][] = [northClearing, eastClearing, southClearing, westClearing];
+      const clearingToClear: number[] = clearings[this.nextWall];
+
+      clearingToClear.forEach(siteNum => {
+        const site: Site = ew.getSiteByIndex(siteNum);
+        ew.origin.mutateSite(site, new Atom(ElementTypes.EMPTY));
+      });
+    }
+
+
     walltoBuild.forEach(siteNum => {
       const site: Site = ew.getSiteByIndex(siteNum);
       ew.origin.mutateSite(site, new Atom(type));
     })
 
     this.nextWall = this.nextWall >= walls.length - 1 ? 0 : this.nextWall + 1;
+  }
+
+  makeRoom(ew: EventWindow) {
+
   }
 
 
@@ -80,6 +100,11 @@ export class LoopSeedElement extends Elem {
 
     let innerType: IElementType = ElementTypes.WALL;
     let outerType: IElementType = ElementTypes.WALL;
+
+    //make room
+    if (this.cycles > 3 && this.cycles < 8) {
+
+    }
 
     if (this.cycles === 8) {
       this.makeLoop(ew);
