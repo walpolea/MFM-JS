@@ -2,7 +2,6 @@ import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
-import { MFMUtils } from "../../utils/utils";
 
 export class StickyMembraneElement extends Elem {
 
