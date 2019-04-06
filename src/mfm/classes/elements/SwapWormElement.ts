@@ -69,7 +69,9 @@ export class SwapWormElement extends LinkedListElement {
 
   exec(ew: EventWindow) {
 
-
+    if (!ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE) && ew.getAdjacent8Way(ElementTypes.EMPTY)) {
+      ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.SWAPWORM, 0.5, 1]))
+    }
 
 
     if (this.birthCount > 0) {

@@ -9,11 +9,19 @@ export class StickyMembraneElement extends Elem {
   stickyType: IElementType;
   idleCount: number = 0;
   roamCount: number = 0;
+  membraneDensity: number;
+  maxRoam: number;
 
-  constructor(stickyType?: IElementType) {
+  constructor(stickyType?: IElementType, membraneDensity?: number, maxRoam?: number) {
     super(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE.type);
     this.stickyType = stickyType ? stickyType : undefined;
+    this.maxRoam = maxRoam ? maxRoam : 200;
+    this.setMembraneDensity(membraneDensity);
 
+  }
+
+  setMembraneDensity(density: number = .75) {
+    this.membraneDensity = density * 40 >> 0;
   }
 
   moveToSticker(ew: EventWindow) {
@@ -64,7 +72,7 @@ export class StickyMembraneElement extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 30) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > this.membraneDensity) {
       console.log("clearing space");
       ew.origin.killSelf();
 
@@ -75,7 +83,7 @@ export class StickyMembraneElement extends Elem {
 
   exec(ew: EventWindow) {
 
-    if (this.roamCount > 2000) {
+    if (this.roamCount > this.maxRoam) {
       ew.origin.killSelf();
     }
 
