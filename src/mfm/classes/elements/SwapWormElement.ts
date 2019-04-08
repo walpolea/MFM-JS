@@ -12,7 +12,7 @@ export class SwapWormElement extends LinkedListElement {
   birthCount: number;
   idleCount: number = 0;
 
-  constructor(size: number, prev?: number, next?: number) {
+  constructor(size: number = 7, prev?: number, next?: number) {
     super(ElementTypes.SWAPWORM, prev, next);
     this.birthCount = this.WORMSIZE = size;
 
