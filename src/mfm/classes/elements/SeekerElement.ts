@@ -10,7 +10,7 @@ export class SeekerElement extends Elem {
     ElementTypes.registerType("SEEKER", "Sk", SeekerElement, 0x999933);
     super(ElementTypes.TYPES_MAP.get("SEEKER").name, ElementTypes.TYPES_MAP.get("SEEKER").type);
 
-    this.seekPos = _seekPos;
+    this.seekPos = _seekPos ? _seekPos : { row: 0, col: 0 };
   }
   exec(ew: EventWindow) {
     let opos: GridCoord = ew.origin.tilePos;

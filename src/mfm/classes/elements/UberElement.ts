@@ -19,8 +19,8 @@ export class UberElement extends SpacialElement {
     if (!_validator) {
       this.passengerValidator = this.defaultValidator;
     }
-    this.homeBase = _homeBase;
-    this.destination = _destination;
+    this.homeBase = _homeBase ? _homeBase : { col: 0, row: 0 };
+    this.destination = _destination ? _destination : { col: 20, row: 20 };
   }
 
   exec(ew: EventWindow) {
