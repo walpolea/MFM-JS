@@ -18,6 +18,7 @@ import { LoopSeedElement } from "./elements/LoopSeedElement";
 import { LoopNucleusElement } from "./elements/LoopNucleusElement";
 import { StickyMembraneElement } from "./elements/StickyMembraneElement";
 import { MembraneWallElement } from "./elements/MembraneWallElement";
+import { MembraneDoorElement } from "./elements/MembraneDoorElement";
 
 export interface IElementType {
   name: string;
@@ -34,6 +35,7 @@ export class ElementTypes {
   static MASON: IElementType = { name: "MASON", type: "Ma", class: MasonElement, color: 0x20ffff };
   static SUPER_MASON: IElementType = { name: "SUPER MASON", type: "SMa", class: SuperMasonElement, color: 0x20cccc };
   static MEMBRANEWALL: IElementType = { name: "MEMBRANE WALL", type: "Mw", class: MembraneWallElement, color: 0x2020ff };
+  static MEMBRANEDOOR: IElementType = { name: "MEMBRANE DOOR", type: "Md", class: MembraneDoorElement, color: 0x6060ff };
   static FORK_BOMB: IElementType = { name: "FORK BOMB", type: "Fb", class: ForkBombElement, color: 0xaa2020 };
   static SUPER_FORK_BOMB: IElementType = { name: "SUPER FORK BOMB", type: "SFb", class: SuperForkBombElement, color: 0xaa0000 };
   static UBER: IElementType = { name: "UBER", type: "Ub", class: UberElement, color: 0xffff00 };
@@ -55,6 +57,7 @@ export class ElementTypes {
     .set(ElementTypes.WALL.name, ElementTypes.WALL)
     .set(ElementTypes.MASON.name, ElementTypes.MASON)
     .set(ElementTypes.MEMBRANEWALL.name, ElementTypes.MEMBRANEWALL)
+    .set(ElementTypes.MEMBRANEDOOR.name, ElementTypes.MEMBRANEDOOR)
     .set(ElementTypes.SUPER_MASON.name, ElementTypes.SUPER_MASON)
     .set(ElementTypes.FORK_BOMB.name, ElementTypes.FORK_BOMB)
     .set(ElementTypes.SUPER_FORK_BOMB.name, ElementTypes.SUPER_FORK_BOMB)
@@ -69,6 +72,7 @@ export class ElementTypes {
     .set(ElementTypes.LOOPSEED.name, ElementTypes.LOOPSEED)
     .set(ElementTypes.LOOPNUCLEUS.name, ElementTypes.LOOPNUCLEUS)
     .set(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE);
+
 
   static registerType(name: string, type: string, c: any, color?: number) {
     this.TYPES_MAP.set(name, { name, type, class: c, color });

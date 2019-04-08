@@ -14,7 +14,7 @@ export class SuperMasonElement extends Elem {
     super(ElementTypes.SUPER_MASON.name, ElementTypes.SUPER_MASON.type, 100, 100);
 
     if (!_path) {
-      _path = SuperMasonElement.boxPath();
+      _path = SuperMasonElement.boxPath(28);
     }
 
     this.setPath(_path);
@@ -92,21 +92,21 @@ export class SuperMasonElement extends Elem {
     if (lastdir !== dir) {
       const lastOuterBuildSite: Site = blueprints[lastdir].outerBuildSite();
       if (lastOuterBuildSite) {
-        ew.origin.mutateSite(lastOuterBuildSite, new Atom(ElementTypes.WALL));
+        ew.origin.mutateSite(lastOuterBuildSite, new Atom(ElementTypes.MEMBRANEWALL, [.1, ElementTypes.SWAPWORM]));
       }
     }
 
     //build the outer wall
     if (outerBuildSite) {
       if (outerBuildSite.atom.type === ElementTypes.RES || outerBuildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(outerBuildSite, new Atom(ElementTypes.WALL));
+        ew.origin.mutateSite(outerBuildSite, new Atom(ElementTypes.MEMBRANEWALL, [.1, ElementTypes.SWAPWORM]));
       }
     }
 
     //build the inner wall
     if (innerBuildSite) {
       if (innerBuildSite.atom.type === ElementTypes.RES || innerBuildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(innerBuildSite, new Atom(ElementTypes.WALL));
+        ew.origin.mutateSite(innerBuildSite, new Atom(ElementTypes.MEMBRANEWALL, [.1, ElementTypes.SWAPWORM]));
       }
     }
 
@@ -114,14 +114,14 @@ export class SuperMasonElement extends Elem {
     if (moveSite) {
       ew.origin.mutateSite(
         moveSite,
-        new Atom(ElementTypes.MASON, [SuperMasonElement.pathToString(this.path), this.curIndex + 1])
+        new Atom(ElementTypes.SUPER_MASON, [SuperMasonElement.pathToString(this.path), this.curIndex + 1])
       );
     }
 
     if (lastSite) {
       ew.origin.mutateSite(
         lastSite,
-        new Atom(ElementTypes.MASON, [SuperMasonElement.pathToString(this.path), this.curIndex - 1])
+        new Atom(ElementTypes.SUPER_MASON, [SuperMasonElement.pathToString(this.path), this.curIndex - 1])
       );
     }
 
