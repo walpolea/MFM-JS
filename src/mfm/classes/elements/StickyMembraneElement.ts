@@ -19,7 +19,7 @@ export class StickyMembraneElement extends Elem {
 
   }
 
-  setMembraneDensity(density: number = .9) {
+  setMembraneDensity(density: number = 1) {
     this.membraneDensity = density * 40 >> 0;
   }
 
