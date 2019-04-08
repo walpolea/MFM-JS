@@ -211,7 +211,7 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("k")) {
           site.atom = new Atom(ElementTypes.LOOPSEED);
         } else if (this.keysHeld.has("m")) {
-          site.atom = new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.SWAPWORM]);
+          site.atom = new Atom(ElementTypes.STICKYMEMBRANE);
         } else if (this.keysHeld.has("q")) {
           console.log("DEBUG SITE:", site);
         } else {

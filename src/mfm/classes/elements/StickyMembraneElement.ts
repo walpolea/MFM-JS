@@ -90,9 +90,9 @@ export class StickyMembraneElement extends Elem {
       ew.origin.killSelf();
     }
 
-    if (!this.stickyType) {
+    if (!this.stickyType || this.stickyType === ElementTypes.STICKYMEMBRANE) {
 
-      //glom on to the first thing that's not empty;
+      //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
 
       const stickSite: Site = ew.getAdjacent8Way();
       if (stickSite && stickSite.atom.type !== ElementTypes.EMPTY) {
@@ -100,13 +100,13 @@ export class StickyMembraneElement extends Elem {
       }
 
 
-    } else {
-
-      this.moveToSticker(ew);
-      this.repelFromSticker(ew);
-      this.uncrowd(ew);
-
     }
+
+    this.moveToSticker(ew);
+    this.repelFromSticker(ew);
+    this.uncrowd(ew);
+
+
 
 
 
