@@ -9,7 +9,7 @@ export class MembraneDoorElement extends MembraneWallElement {
   openCycleLimit: number;
   closedCycleLimit: number;
 
-  constructor(openTime: number = 200, closedTime: number = 200) {
+  constructor(openTime: number = 1, closedTime: number = 20) {
     super();
 
     this.openCycleLimit = openTime;
