@@ -9,7 +9,7 @@ import { MFMUtils } from "../../utils/utils";
 
 export class LoopWormElement extends LinkedListElement {
 
-  pCHANCE_TO_EAT: number = 1500;
+  pCHANCE_TO_EAT: number = 1250;
   WORMSIZE: number;
   birthCount: number;
   isConnected: boolean = false;
@@ -132,7 +132,8 @@ export class LoopWormElement extends LinkedListElement {
         let choices: number[] = EventWindow.ADJACENT4WAY;
         let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
 
-        if (this.expandCount > 0 && Math.random() < 0.1) {
+        if (this.expandCount > 0
+          && ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.LOOPWORM, false).filter(site => site).length < 3) {
 
           //console.log("time to grow")
           const leavingAtom: Atom = new Atom(ElementTypes.LOOPWORM, [0, relativeSiteToGo, this.next]);
@@ -143,21 +144,9 @@ export class LoopWormElement extends LinkedListElement {
             this.expandCount--;
           }
 
-        } else {
-
-          // if (ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 0) {
-          //   ew.getAdjacent8Way(ElementTypes.STICKYMEMBRANE).swapAtoms(ew.getSites([...EventWindow.LAYER2, ...EventWindow.LAYER3], ElementTypes.EMPTY)[0]);
-          // }
-
-          // if (ew.getSites(EventWindow.LAYER4, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > 14
-          //   && ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE)) {
-          //   console.log("clearing space");
-          //   ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE).killSelf();
-
-          // }
-
-          this.moveTo(ew, relativeSiteToGo, undefined, 8);
         }
+        this.moveTo(ew, relativeSiteToGo, undefined, 8);
+
       }
 
 

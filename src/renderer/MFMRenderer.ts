@@ -26,6 +26,7 @@ export class MFMRenderer {
   pointerDown: boolean = false;
   siteTexture: PIXI.Texture = PIXI.Texture.fromImage("/resources/element.png");
   clickArea: PIXI.DisplayObject;
+  curSelectedElement: string;
 
   customSequence: string;
 
@@ -167,6 +168,8 @@ export class MFMRenderer {
       if (site) {
         if (this.keysHeld.has("r")) {
           site.atom = new Atom(ElementTypes.RES);
+        } else if (this.keysHeld.has("t")) {
+          site.atom = new Atom(ElementTypes.DREG);
         } else if (this.keysHeld.has("w")) {
           site.atom = new Atom(ElementTypes.WALL);
         } else if (this.keysHeld.has("z")) {
@@ -195,7 +198,7 @@ export class MFMRenderer {
           });
         } else if (this.keysHeld.has("u")) {
           site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 92, col: 92 }]);
-        } else if (this.keysHeld.has("t")) {
+        } else if (this.keysHeld.has("i")) {
           site.atom = new Atom(ElementTypes.REDUCER);
         } else if (this.keysHeld.has("n")) {
           site.atom = new Atom(ElementTypes.SWAPWORM, [7]);
@@ -212,7 +215,11 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("q")) {
           console.log("DEBUG SITE:", site);
         } else {
-          site.atom = new Atom(ElementTypes.DREG);
+
+          if (this.curSelectedElement && this.curSelectedElement !== "") {
+            site.atom = new Atom(ElementTypes.TYPES_MAP.get(this.curSelectedElement));
+          }
+
         }
       }
 

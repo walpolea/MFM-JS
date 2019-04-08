@@ -66,6 +66,27 @@
       margin: 100px 0;
       color: #aaa;
     }
+
+    #element-container {
+      margin: 10px 0;
+    }
+
+
+    .element {
+      user-select: none;
+      display: inline-block;
+      background-color: #666;
+      padding: 4px;
+      margin: 4px;
+      font-size: 0.8rem;
+      border: 1px solid #000;
+      cursor: hand;
+      border-radius: 8px;
+    }
+
+    .element.selected {
+      background-color: #e000a6;
+    }
   </style>
 </head>
 
@@ -109,11 +130,17 @@
         <br /><br />
         Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
       </div>
+      <div id="element-container">
+        <span class="element" v-for="name in Array.from(typeMap.keys())"
+          :class="{selected: curSelectedElement === name}" @click="selectElement(name);">
+          {{name}}
+        </span>
+      </div>
       <div id="mfm"></div>
     </div>
     <h3>Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
     <ul id="instructions">
-      <li>No keys held - DREG</li>
+      <li>hold "t" - DREG</li>
       <li>hold "e" - EMPTY</li>
       <li>hold "w" - WALL</li>
       <li>hold "r" - RES</li>
@@ -131,7 +158,7 @@
       <li>hold "s" - Sentry, he patrols and protects you from the Fork Bomb</li>
       <li>hold "p" - Create a seeker that tries to get to a location (0,0) non-destructively</li>
       <li>hold "d" - Data Element, whose data is randomly an integer between 1 and 10</li>
-      <li>hold "t" - Reducer Element, looks for data, eats them up and carries the sum total of its corpses</li>
+      <li>hold "i" - Reducer Element, looks for data, eats them up and carries the sum total of its corpses</li>
       <li>hold "u" - Uber Element, looks for data elements and "drives" them to a location (0,0)</li>
       <li>hold "n" or "N (shift+n)" - SwapWorm (small and big). They eat RES and grow! (STILL BUGGY)</li>
       <li>hold "l" or "L (shift+l)" - LoopWorm, starts as a swapworm and if it finds its tail it becomes a loop (STILL

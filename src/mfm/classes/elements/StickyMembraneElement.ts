@@ -19,13 +19,13 @@ export class StickyMembraneElement extends Elem {
 
   }
 
-  setMembraneDensity(density: number = .75) {
+  setMembraneDensity(density: number = .9) {
     this.membraneDensity = density * 40 >> 0;
   }
 
   moveToSticker(ew: EventWindow) {
 
-    const sites: number[] = ew.getIndexes([...EventWindow.LAYER2, ...EventWindow.LAYER3, ...EventWindow.LAYER4], this.stickyType, true);
+    const sites: number[] = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], this.stickyType, true);
 
     if (sites[0]) {
       const targetSiteIndex: number = sites[0];
@@ -92,7 +92,13 @@ export class StickyMembraneElement extends Elem {
 
     if (!this.stickyType) {
 
-      //glom on to anything (not empty);
+      //glom on to the first thing that's not empty;
+
+      const stickSite: Site = ew.getAdjacent8Way();
+      if (stickSite && stickSite.atom.type !== ElementTypes.EMPTY) {
+        this.stickyType = stickSite.atom.type;
+      }
+
 
     } else {
 
