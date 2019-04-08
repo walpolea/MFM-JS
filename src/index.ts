@@ -20,17 +20,24 @@ let app = new Vue({
   mounted() {
 
     this.initTile();
-    this.selectElement("DREG");
+
   },
   methods: {
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
       this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"));
+
+      this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DREG";
+      this.selectElement(this.curSelectedElement);
     },
     selectElement(name: string) {
       console.log("setting element", name);
       this.curSelectedElement = name;
       this.mfmRenderer.curSelectedElement = this.curSelectedElement;
+    },
+    reload() {
+      this.mfmRenderer.deconstruct();
+      this.initTile();
     }
   },
   computed: {
