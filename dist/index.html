@@ -86,7 +86,7 @@
 
     .alert {
       user-select: none;
-      display: inline-block;
+      display: none;
       background-color: #c52525;
 
       padding: 12px;
@@ -102,6 +102,11 @@
       border: 4px solid #000;
       cursor: hand;
       border-radius: 8px;
+
+    }
+
+    .alert.show {
+      display: inline-block;
     }
 
     .element.selected {
@@ -129,7 +134,10 @@
     </header>
     <div id="app">
       <h1>The Simulator</h1>
-      <h1 class="alert" v-cloak v-if="!mfmRenderer.webGLSupported">Your Browser does not have Hardware Acceleration turned on or it is not available.  This app requires it to function.</h1>
+      <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
+        Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to
+        function.
+      </h1>
       <p>
         Have fun playing with the following simulator. But before you get started, understand that this is not meant
         to be a perfect copy of Dr. Dave Ackley's Movable Feast Machine. Instead, this project is intended to expose
@@ -138,7 +146,7 @@
       </p>
       <div>
         Grid Size:
-        <select v-model="gridSize">
+        <select v-model=" gridSize">
           <option value="32x32">32x32</option>
           <option value="48x48">48x48</option>
           <option value="60x40" selected>60x40</option>
@@ -215,4 +223,3 @@
 </body>
 
 </html>
-
