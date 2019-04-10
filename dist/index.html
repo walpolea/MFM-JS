@@ -84,6 +84,26 @@
       border-radius: 8px;
     }
 
+    .alert {
+      user-select: none;
+      display: inline-block;
+      background-color: #c52525;
+
+      padding: 12px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+
+      margin: 12px;
+      margin-top: 24px;
+      margin-bottom: 24px;
+
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: 4px solid #000;
+      cursor: hand;
+      border-radius: 8px;
+    }
+
     .element.selected {
       background-color: #e000a6;
     }
@@ -109,6 +129,7 @@
     </header>
     <div id="app">
       <h1>The Simulator</h1>
+      <h1 class="alert" v-cloak v-if="!mfmRenderer.webGLSupported">Your Browser does not have Hardware Acceleration turned on or it is not available.  This app requires it to function.</h1>
       <p>
         Have fun playing with the following simulator. But before you get started, understand that this is not meant
         to be a perfect copy of Dr. Dave Ackley's Movable Feast Machine. Instead, this project is intended to expose
@@ -194,3 +215,4 @@
 </body>
 
 </html>
+

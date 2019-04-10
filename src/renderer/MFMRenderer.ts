@@ -27,6 +27,7 @@ export class MFMRenderer {
   siteTexture: PIXI.Texture = PIXI.Texture.fromImage("/resources/element.png");
   clickArea: PIXI.DisplayObject;
   curSelectedElement: string;
+  webGLSupported: boolean = PIXI.utils.isWebGLSupported();
 
   customSequence: string;
 
