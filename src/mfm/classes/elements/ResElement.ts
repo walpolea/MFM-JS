@@ -7,7 +7,7 @@ export class ResElement extends Elem {
     super(ElementTypes.RES.name, ElementTypes.RES.type);
   }
   exec(ew: EventWindow) {
-    ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
+    ew.swap(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, ElementTypes.EMPTY));
     super.exec(ew);
   }
 }

@@ -2,7 +2,6 @@ import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
-import { EmptyElement } from "./EmptyElement";
 import { Atom } from "../Atom";
 
 export class LinkedListElement extends Elem {
@@ -99,6 +98,7 @@ export class LinkedListElement extends Elem {
       const swapper = nextSite.atom.elem as LinkedListElement;
 
       this.swapLinks(swapper);
+      //ew.swap(this.next);
       ew.origin.swapAtoms(nextSite);
     }
 

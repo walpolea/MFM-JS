@@ -10,10 +10,8 @@ export class SuperForkBombElement extends Elem {
   }
   exec(ew: EventWindow) {
     //SUPER FORKBOMB
-    ew.getAll().forEach(nextVictim => {
-      if (nextVictim) {
-        ew.origin.mutateSite(nextVictim, new Atom(ElementTypes.SUPER_FORK_BOMB));
-      }
+    ew.getIndexes(EventWindow.ALLADJACENT).forEach(nextVictim => {
+      nextVictim ? ew.mutate(nextVictim, new Atom(ElementTypes.SUPER_FORK_BOMB)) : null;
     });
 
     super.exec(ew);

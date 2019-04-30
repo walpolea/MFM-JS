@@ -18,8 +18,15 @@ export class Atom {
     }
   }
 
+  is(type: IElementType): boolean {
+    return this.type && this.type === type;
+  }
+
+  isOf(type: IElementType): boolean {
+    return this.elem && this.elem instanceof type.class;
+  }
+
   setElement(e: Elem) {
-    console.log("setting atom", e)
     this.elem = e;
     this.type = ElementTypes.TYPES_MAP.get(e.name);
   }

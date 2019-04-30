@@ -9,18 +9,11 @@ export class ForkBombElement extends Elem {
     super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
   }
   exec(ew: EventWindow) {
-    let nextVictim: Site = ew.getAdjacent8Way();
 
+    let nextVictim: number = ew.getRandomIndex(EventWindow.ADJACENT8WAY);
     if (nextVictim) {
-      ew.origin.mutateSite(nextVictim, new Atom(ElementTypes.FORK_BOMB));
+      ew.mutate(nextVictim, new Atom(ElementTypes.FORK_BOMB));
     }
-
-    //SUPER FORKBOMB
-    // ew.getAll().forEach(nextVictim => {
-    //   if (nextVictim) {
-    //     ew.origin.mutateSite(nextVictim, new Atom(ElementTypes.FORK_BOMB));
-    //   }
-    // });
 
     super.exec(ew);
   }

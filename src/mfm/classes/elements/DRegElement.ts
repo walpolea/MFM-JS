@@ -1,10 +1,11 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { EmptyElement } from "./EmptyElement";
 import { ResElement } from "./ResElement";
 import { Atom } from "../Atom";
+import { MFMUtils } from "../../utils/utils";
 
 export class DRegElement extends Elem {
   pDREG_CREATE: number;
@@ -23,37 +24,37 @@ export class DRegElement extends Elem {
   }
 
   exec(ew: EventWindow) {
-    //get a random NESW site
-    const availableSite: Site = ew.getAdjacent4Way();
+
+    //get a random NESW Empty site
+    const availableSite: number = ew.getRandomIndex(EventWindow.ADJACENT4WAY);
 
     //CREATION
-    if (availableSite && availableSite.atom.type === ElementTypes.EMPTY) {
-      const createDReg: boolean = Math.random() * this.pDREG_CREATE < 1;
-      const createRes: boolean = Math.random() * this.pRES_CREATE < 1;
+    if (availableSite && ew.is(availableSite, ElementTypes.EMPTY)) {
+
+      const createDReg: boolean = MFMUtils.oneIn(this.pDREG_CREATE);
+      const createRes: boolean = MFMUtils.oneIn(this.pRES_CREATE);
 
       if (createDReg) {
-        ew.origin.moveAtom(availableSite, new Atom(ElementTypes.DREG));
-        //console.log("DREG CREATED");
+        ew.move(availableSite, new Atom(ElementTypes.DREG));
       } else if (createRes) {
-        ew.origin.moveAtom(availableSite, new Atom(ElementTypes.RES));
-        //console.log("RES CREATED");
+        ew.move(availableSite, new Atom(ElementTypes.RES));
       } else {
-        ew.origin.swapAtoms(availableSite);
+        ew.swap(availableSite);
       }
-    } else if (availableSite && availableSite.atom.type === ElementTypes.DREG) {
-      const destroyDReg: boolean = Math.random() * this.pDREG_DESTROY < 1;
+    } else if (availableSite && ew.is(availableSite, ElementTypes.DREG)) {
+
+      const destroyDReg: boolean = MFMUtils.oneIn(this.pDREG_DESTROY);
 
       if (destroyDReg) {
-        //console.log("DREG DESTROYED");
-        ew.origin.moveAtom(availableSite);
+        ew.move(availableSite);
       }
-    } else {
+
+    } else if (availableSite) {
       //it's something else
-      const destroyAny: boolean = Math.random() * this.pANY_DESTROY < 1;
+      const destroyAny: boolean = MFMUtils.oneIn(this.pANY_DESTROY);
 
       if (destroyAny) {
-        //console.log(availableSite.atom.type.name + " DESTROYED");
-        ew.origin.moveAtom(availableSite);
+        ew.move(availableSite);
       }
     }
 

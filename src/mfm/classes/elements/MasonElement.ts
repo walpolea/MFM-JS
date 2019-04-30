@@ -39,46 +39,46 @@ export class MasonElement extends Elem {
     let blueprints: any = {
       E: {
         moveSite() {
-          return ew.getEast();
+          return ew.east;
         },
         outerBuildSite() {
-          return ew.getSouth();
+          return ew.south;
         },
         innerBuildSite() {
-          return ew.getNorth();
+          return ew.north;
         }
       },
       N: {
         moveSite() {
-          return ew.getNorth();
+          return ew.north;
         },
         outerBuildSite() {
-          return ew.getEast();
+          return ew.east;
         },
         innerBuildSite() {
-          return ew.getWest();
+          return ew.west;
         }
       },
       S: {
         moveSite() {
-          return ew.getSouth();
+          return ew.south;
         },
         outerBuildSite() {
-          return ew.getWest();
+          return ew.west;
         },
         innerBuildSite() {
-          return ew.getEast();
+          return ew.east;
         }
       },
       W: {
         moveSite() {
-          return ew.getWest();
+          return ew.west;
         },
         outerBuildSite() {
-          return ew.getNorth();
+          return ew.north;
         },
         innerBuildSite() {
-          return ew.getSouth();
+          return ew.south;
         }
       }
     };

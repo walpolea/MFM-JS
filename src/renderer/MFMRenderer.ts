@@ -69,15 +69,6 @@ export class MFMRenderer {
     this.clickArea.interactive = true;
     this.pixiapp.stage.addChild(this.clickArea);
 
-    // this.clickArea.on(
-    //   "click",
-    //   (e: PIXI.interaction.InteractionEvent) => {
-    //     this.pointerDown = true;
-    //     this.handleClick(e);
-    //     this.pointerDown = false;
-    //   },
-    //   this
-    // );
     this.clickArea.on("pointerdown", (e: PIXI.interaction.InteractionEvent) => {
       this.pointerDown = true;
       this.handleClick(e);
@@ -125,11 +116,6 @@ export class MFMRenderer {
 
       if (ew.window) {
         ew.origin.atom.exec(ew);
-
-        //ends up being slower as elements populate the board
-        // ew.getAll().forEach(site => {
-        //   this.rendererMap.get(site).update();
-        // });
       }
     }
 
@@ -159,11 +145,9 @@ export class MFMRenderer {
 
   handleClick(e: PIXI.interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
-      //console.log(e);
+
       let p: PIXI.Point = e.data.getLocalPosition(this.pixiapp.stage);
-      //console.log(p.x, p.y);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as PIXI.Sprite);
-      //let site: Site = sr.site;
       this.selectedSite = site;
 
       if (site) {
@@ -194,8 +178,9 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("p")) {
           site.atom = new Atom(ElementTypes.SEEKER, [{ row: 0, col: 0 }]);
         } else if (this.keysHeld.has("d")) {
+          const rval = (Math.random() * 20) >> 0;
           site.atom = new Atom(ElementTypes.DATA, undefined, {
-            value: (Math.random() * 10) >> 0
+            value: rval
           });
         } else if (this.keysHeld.has("u")) {
           site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 92, col: 92 }]);
@@ -224,7 +209,10 @@ export class MFMRenderer {
         }
       }
 
-      this.rendererMap.get(site).update();
+      if (site) {
+        this.rendererMap.get(site).update();
+      }
+
     }
   }
 }

@@ -10,21 +10,31 @@ export class MembraneWallElement extends Elem {
   density: number;
   deactivationType: IElementType;
 
-  constructor(membraneDensity: number = 1, deactivationType: IElementType = undefined) {
+  constructor(membraneDensity: number = 1, deactivationType: IElementType = ElementTypes.SWAPWORM) {
+
     super(ElementTypes.MEMBRANEWALL.name, ElementTypes.MEMBRANEWALL.type, 0, 100);
+
     this.density = membraneDensity;
     this.deactivationType = deactivationType;
   }
   exec(ew: EventWindow) {
 
-    if (this.deactivationType && ew.getSites(EventWindow.ALLADJACENT, this.deactivationType)[0]) {
+    if (this.deactivationType && ew.getRandomIndexOfType(EventWindow.ALLADJACENT, this.deactivationType)) {
       this.activated = false;
     } else if (this.deactivationType) {
+
       this.activated = true;
     }
 
-    if (this.activated && ew.getAdjacent8Way(ElementTypes.EMPTY)) {
-      ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.MEMBRANEWALL, this.density, 1]));
+    if (this.activated && ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, ElementTypes.EMPTY)) {
+      ew.mutate(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.MEMBRANEWALL, this.density, 1]));
+    } else if (!this.activated) {
+      ew.getIndexes(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).forEach(site => {
+        if (site) {
+          ew.destroy(site);
+        }
+      })
+
     }
 
     super.exec(ew);

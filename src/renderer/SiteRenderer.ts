@@ -53,9 +53,18 @@ export class SiteRenderer {
       }
     } else {
 
-      this.visual.tint = this.site.atom.type.color;
+      if (this.site.atom.data) {
+        this.visual.tint = this.rgbToHex(this.site.atom.data.value * 12, this.site.atom.data.value * 12, this.site.atom.data.value * 12);
+      } else {
+        this.visual.tint = this.site.atom.type.color;
+      }
+
 
     }
 
+  }
+
+  rgbToHex(r: number, g: number, b: number) {
+    return ((1 << 24) + (r << 16) + (g << 8) + b);
   }
 }
