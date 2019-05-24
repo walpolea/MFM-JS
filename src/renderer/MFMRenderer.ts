@@ -178,7 +178,7 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("p")) {
           site.atom = new Atom(ElementTypes.SEEKER, [{ row: 0, col: 0 }]);
         } else if (this.keysHeld.has("d")) {
-          const rval = (Math.random() * 20) >> 0;
+          const rval = (Math.random() * 40) >> 0;
           site.atom = new Atom(ElementTypes.DATA, undefined, {
             value: rval
           });

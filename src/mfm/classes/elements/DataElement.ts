@@ -4,7 +4,7 @@ import { ElementTypes } from "../ElementTypes";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
 export class DataElement extends Elem {
-  pPATROL: number = 5;
+  pPATROL: number = 1;
   constructor() {
     super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
   }

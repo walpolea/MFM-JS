@@ -54,7 +54,7 @@ export class SiteRenderer {
     } else {
 
       if (this.site.atom.data) {
-        this.visual.tint = this.rgbToHex(this.site.atom.data.value * 12, this.site.atom.data.value * 12, this.site.atom.data.value * 12);
+        this.visual.tint = this.rgbToHex((this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5);
       } else {
         this.visual.tint = this.site.atom.type.color;
       }

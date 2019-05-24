@@ -8,10 +8,13 @@ export class SorterElement extends Elem {
 
   sortVal: number = 0;
   makeCount: number = 1;
+  lifeSpan: number = 200;
 
-  constructor(sortVal: number = 0) {
+  constructor(sortVal: number = 0, lifeSpan: number = 200) {
     super(ElementTypes.SORTER.name, ElementTypes.SORTER.type);
     this.sortVal = sortVal;
+
+    this.lifeSpan = lifeSpan;
   }
 
   makeSorters(indexes: number[], val: number, ew: EventWindow) {
@@ -48,7 +51,7 @@ export class SorterElement extends Elem {
       ew.destroy();
     }
 
-    if (this.age > 75) {
+    if (this.age > this.lifeSpan) {
       ew.destroy();
     }
 
@@ -64,16 +67,16 @@ export class SorterElement extends Elem {
       if (dval == this.sortVal && ew.is(1, ElementTypes.EMPTY)) {
         ew.swap(1, 4);
 
-      } else if (dval < this.sortVal && ew.is(2, ElementTypes.EMPTY)) {
-        ew.swap(2, 4);
-        //this.killSorters([5], ew);
+      } else if (dval < this.sortVal && ew.is(19, ElementTypes.EMPTY)) {
+        ew.swap(19, 4);
+
         this.makeSorters([6, 10], dval - 1, ew);
 
         this.sortVal = dval;
-      } else if (dval > this.sortVal && ew.is(3, ElementTypes.EMPTY)) {
-        ew.swap(3, 4);
+      } else if (dval > this.sortVal && ew.is(20, ElementTypes.EMPTY)) {
+        ew.swap(20, 4);
         this.sortVal = dval;
-        //this.killSorters([6], ew);
+
         this.makeSorters([5, 11], dval + 1, ew);
       } else if (ew.is(1, ElementTypes.EMPTY)) {
         ew.swap(1, 4);

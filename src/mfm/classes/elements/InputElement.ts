@@ -7,7 +7,7 @@ export class InputElement extends Elem {
 
   max: number;
 
-  constructor(max: number = 20) {
+  constructor(max: number = 40) {
     super(ElementTypes.WALL.name, ElementTypes.WALL.type, 0, 100);
     this.max = max;
   }
