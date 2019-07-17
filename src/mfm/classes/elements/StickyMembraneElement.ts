@@ -69,6 +69,22 @@ export class StickyMembraneElement extends Elem {
     }
   }
 
+  repelDreg(ew: EventWindow) {
+    const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.DREG, true);
+    const eightwaypushmap: Map<number, number> = new Map<number, number>([
+      [1, 37], [2, 38], [3, 39], [4, 40], [5, 25], [6, 26], [7, 27], [8, 28]
+    ]);
+
+    if (sites.length) {
+      sites.forEach(dreg => {
+        const toSite: number = eightwaypushmap.get(dreg);
+        if (ew.is(toSite, ElementTypes.EMPTY)) {
+          ew.move(toSite, undefined, dreg);
+        }
+      });
+    }
+  }
+
   uncrowd(ew: EventWindow) {
 
     if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > this.membraneDensity) {
@@ -105,7 +121,7 @@ export class StickyMembraneElement extends Elem {
     this.moveToSticker(ew);
     this.repelFromSticker(ew);
     this.uncrowd(ew);
-
+    this.repelDreg(ew);
 
 
 

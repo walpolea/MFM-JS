@@ -159,8 +159,9 @@ export class EventWindow {
     //use event window template offsets to build the rest of the event window
     let offset: GridCoord;
     let site: Site;
+    const wolen: number = EventWindow.WINDOW_OFFSETS.length;
 
-    for (let i = 0; i < EventWindow.WINDOW_OFFSETS.length; i++) {
+    for (let i = 0; i < wolen; i++) {
 
       offset = EventWindow.WINDOW_OFFSETS[i];
       site = tile.getSiteByCoord(this.offsetFromOrigin(origin, offset));
@@ -620,7 +621,7 @@ export class EventWindow {
 
     if (toSite && fromSite && toSite.canMove() && fromSite.canMove()) {
 
-      console.log("SWAP", toSite, fromSite);
+      //console.log("SWAP", toSite, fromSite);
 
       [toSite.atom, fromSite.atom] = [fromSite.atom, toSite.atom];
       return true;

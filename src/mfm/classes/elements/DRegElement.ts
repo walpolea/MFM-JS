@@ -18,14 +18,14 @@ export class DRegElement extends Elem {
     super(ElementTypes.DREG.name, ElementTypes.DREG.type);
 
     this.pDREG_CREATE = 1000;
-    this.pRES_CREATE = 300;
+    this.pRES_CREATE = 200;
     this.pDREG_DESTROY = 10;
     this.pANY_DESTROY = 100;
   }
 
   exec(ew: EventWindow) {
 
-    //get a random NESW Empty site
+    //get a random NESW
     const availableSite: number = ew.getRandomIndex(EventWindow.ADJACENT4WAY);
 
     //CREATION
@@ -41,21 +41,10 @@ export class DRegElement extends Elem {
       } else {
         ew.swap(availableSite);
       }
-    } else if (availableSite && ew.is(availableSite, ElementTypes.DREG)) {
+    } else if (availableSite && (ew.is(availableSite, ElementTypes.DREG) && MFMUtils.oneIn(this.pDREG_DESTROY)) || (MFMUtils.oneIn(this.pANY_DESTROY))) {
 
-      const destroyDReg: boolean = MFMUtils.oneIn(this.pDREG_DESTROY);
+      ew.move(availableSite);
 
-      if (destroyDReg) {
-        ew.move(availableSite);
-      }
-
-    } else if (availableSite) {
-      //it's something else
-      const destroyAny: boolean = MFMUtils.oneIn(this.pANY_DESTROY);
-
-      if (destroyAny) {
-        ew.move(availableSite);
-      }
     }
 
     super.exec(ew);
