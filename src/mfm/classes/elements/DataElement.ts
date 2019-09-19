@@ -1,6 +1,7 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes } from "../ElementTypes";
+import { MFMUtils } from "../../utils/utils";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
 export class DataElement extends Elem {
@@ -10,12 +11,12 @@ export class DataElement extends Elem {
   }
   exec(ew: EventWindow) {
     //patrol
-    if (Math.random() * this.pPATROL < 1) {
+    if (MFMUtils.oneIn(this.pPATROL)) {
       //ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
       if (ew.is(1, ElementTypes.EMPTY)) {
         ew.move(1);
       } else {
-        ew.move(ew.getIndexes(EventWindow.ADJACENT4WAY, ElementTypes.EMPTY, true)[0]);
+        ew.move(ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.EMPTY, true)[0]);
       }
 
     }

@@ -13,6 +13,15 @@ export class InputElement extends Elem {
   }
   exec(ew: EventWindow) {
 
+    // const walls: number[] = [10, 11, 15, 16, 25, 26];
+
+    // walls.forEach(wall => {
+    //   if (ew.is(wall, ElementTypes.EMPTY)) {
+    //     ew.mutate(wall, new Atom(ElementTypes.WALL));
+    //   }
+    // })
+
+
     const indexes: number[] = [1, 5, 6];
 
     indexes.forEach(index => {

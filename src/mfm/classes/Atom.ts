@@ -3,11 +3,12 @@ import { EventWindow } from "./Eventwindow";
 import { ElementTypes, IElementType } from "./ElementTypes";
 
 export class Atom {
+
   type: IElementType;
   elem: Elem;
   data: any;
 
-  constructor(_type: IElementType = ElementTypes.EMPTY, _elementParams?: any[], _atomicData?: any) {
+  constructor(_type: IElementType = ElementTypes.EMPTY, _elementParams?: any[], _atomicData?: any, _colorOverride?: number) {
     this.type = _type;
     this.data = _atomicData;
 
@@ -15,6 +16,12 @@ export class Atom {
       this.elem = new this.type.class(..._elementParams);
     } else {
       this.elem = new this.type.class();
+    }
+
+    if (_colorOverride !== undefined) {
+      this.elem.color = _colorOverride;
+    } else {
+      this.elem.color = this.type.color;
     }
   }
 
