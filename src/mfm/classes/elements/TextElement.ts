@@ -17,29 +17,36 @@ export class TextElement extends Elem {
   }
   exec(ew: EventWindow) {
 
-    if (this.char.length > 1) {
-      const charr: string[] = this.char.split("");
-      this.char = charr.shift();
-      ew.mutate(40, new Atom(ElementTypes.TEXT, [charr.join("")]));
-    }
+    if (this.char.length > 0) {
 
-    const charMap: any = MFMFont.characters.get(this.char);
 
-    const selfIsPos: boolean = charMap.positive.indexOf(0) > -1;
 
-    charMap.positive.filter((i: number) => i != 0).forEach((i: number) => {
-      ew.mutate(i, new Atom(ElementTypes.WALL, undefined, undefined, 0xf09a19));
-    });
+      if (this.char.length > 1) {
+        const charr: string[] = this.char.split("");
+        this.char = charr.shift();
+        ew.mutate(40, new Atom(ElementTypes.TEXT, [charr.join("")]));
+      }
 
-    charMap.negative.filter((i: number) => i != 0).forEach((i: number) => {
-      ew.mutate(i, new Atom(ElementTypes.WALL, undefined, undefined, 0x000000));
-    });
+      const charMap: any = MFMFont.characters.get(this.char);
 
-    //Camoflauge
-    if (selfIsPos) {
-      this.color = 0xf09a19;
+      const selfIsPos: boolean = charMap.positive.indexOf(0) > -1;
+
+      charMap.positive.filter((i: number) => i != 0).forEach((i: number) => {
+        ew.mutate(i, new Atom(ElementTypes.WALL, undefined, undefined, 0xf09a19));
+      });
+
+      charMap.negative.filter((i: number) => i != 0).forEach((i: number) => {
+        ew.mutate(i, new Atom(ElementTypes.WALL, undefined, undefined, 0x000000));
+      });
+
+      //Camoflauge
+      if (selfIsPos) {
+        this.color = 0xf09a19;
+      } else {
+        this.color = 0x000000;
+      }
     } else {
-      this.color = 0x000000;
+      ew.origin.killSelf()
     }
     super.exec(ew);
   }

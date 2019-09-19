@@ -200,6 +200,8 @@ export class MFMRenderer {
           site.atom = new Atom(ElementTypes.STICKYMEMBRANE);
         } else if (this.keysHeld.has("q")) {
           console.log("DEBUG SITE:", site);
+        } else if (this.keysHeld.has("C")) {
+          site.atom = new Atom(ElementTypes.WRITER, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
         } else {
 
           if (this.curSelectedElement && this.curSelectedElement !== "") {
