@@ -48,7 +48,7 @@ export class SiteRenderer {
           this.visual.tint = 0xff33ff;
           break;
         default:
-          this.visual.tint = this.site.atom.type.color;
+          this.visual.tint = this.site.atom.elem.color;
           break;
       }
     } else {
@@ -56,7 +56,7 @@ export class SiteRenderer {
       if (this.site.atom.data) {
         this.visual.tint = this.rgbToHex((this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5);
       } else {
-        this.visual.tint = this.site.atom.type.color;
+        this.visual.tint = this.site.atom.elem.color;
       }
 
 

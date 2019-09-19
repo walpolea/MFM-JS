@@ -23,6 +23,8 @@ import { SorterElement } from "./elements/SorterElement";
 import { SortMasterElement } from "./elements/SortMasterElement";
 import { DecayWallElement } from "./elements/DecayWall";
 import { InputElement } from "./elements/InputElement";
+import { TextElement } from "./elements/TextElement";
+import { WriterElement } from "./elements/WriterElement";
 
 export interface IElementType {
   name: string;
@@ -58,6 +60,8 @@ export class ElementTypes {
 
   static SORTER: IElementType = { name: "SORTER", type: "So", class: SorterElement, color: 0x7c1515 }
   static SORTMASTER: IElementType = { name: "SORT MASTER", type: "Sm", class: SortMasterElement, color: 0xd66633 }
+  static TEXT: IElementType = { name: "TEXT", type: "Tx", class: TextElement, color: 0xd66633 }
+  static WRITER: IElementType = { name: "WRITER", type: "Wr", class: WriterElement, color: 0xd66633 }
 
 
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>()
@@ -85,8 +89,9 @@ export class ElementTypes {
     .set(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE)
     .set(ElementTypes.SORTER.name, ElementTypes.SORTER)
     .set(ElementTypes.SORTMASTER.name, ElementTypes.SORTMASTER)
-    .set(ElementTypes.DECAYWALL.name, ElementTypes.DECAYWALL);
-
+    .set(ElementTypes.DECAYWALL.name, ElementTypes.DECAYWALL)
+    .set(ElementTypes.TEXT.name, ElementTypes.TEXT)
+    .set(ElementTypes.WRITER.name, ElementTypes.WRITER)
 
   static registerType(name: string, type: string, c: any, color?: number) {
     this.TYPES_MAP.set(name, { name, type, class: c, color });

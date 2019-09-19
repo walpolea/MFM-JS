@@ -70,14 +70,14 @@ export class SorterElement extends Elem {
       } else if (dval < this.sortVal && ew.is(19, ElementTypes.EMPTY)) {
         ew.swap(19, 4);
 
-        this.makeSorters([6, 10], dval - 1, ew);
+        this.makeSorters([6, 10, 7], dval - 1, ew);
 
         this.sortVal = dval;
       } else if (dval > this.sortVal && ew.is(20, ElementTypes.EMPTY)) {
         ew.swap(20, 4);
         this.sortVal = dval;
 
-        this.makeSorters([5, 11], dval + 1, ew);
+        this.makeSorters([5, 11, 8], dval + 1, ew);
       } else if (ew.is(1, ElementTypes.EMPTY)) {
         ew.swap(1, 4);
         this.sortVal = dval;
