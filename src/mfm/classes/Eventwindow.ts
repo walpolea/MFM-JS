@@ -82,7 +82,7 @@ export class EventWindow {
   static S: number[] = [3];
   static E: number[] = [4];
   static NW: number[] = [5];
-  static SW: number[] = [6]; q
+  static SW: number[] = [6];
   static NE: number[] = [7];
   static SE: number[] = [8];
 
