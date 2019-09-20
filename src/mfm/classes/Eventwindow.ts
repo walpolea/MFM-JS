@@ -82,7 +82,7 @@ export class EventWindow {
   static S: number[] = [3];
   static E: number[] = [4];
   static NW: number[] = [5];
-  static SW: number[] = [6];
+  static SW: number[] = [6]; q
   static NE: number[] = [7];
   static SE: number[] = [8];
 
@@ -480,6 +480,21 @@ export class EventWindow {
   getRandomIndex(siteSet: number[]): number {
     const ri: number = siteSet[(Math.random() * siteSet.length) >> 0];
     return this.getSiteByIndex(ri) ? ri : undefined;
+  }
+
+  getNearestIndex(siteSet: number[], type?: IElementType): number {
+
+    if (type) {
+      siteSet = this.filterIndexesByType(siteSet, type);
+    }
+
+    if (!siteSet.length) {
+      return undefined;
+    }
+
+    const ni: number = Math.min(...siteSet);
+    return this.getSiteByIndex(ni) ? ni : undefined;
+
   }
 
   //return array of sites from site array that match type

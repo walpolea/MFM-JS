@@ -10,8 +10,9 @@ export class TextElement extends Elem {
   pPATROL: number = 1;
 
   char: string;
+  init: boolean = false;
 
-  constructor(_char: string = "ABCDEFHIJKLMNOPQRSTUVWXYZ") {
+  constructor(_char: string = "0123456789") {
     super(ElementTypes.TEXT.name, ElementTypes.TEXT.type);
     this.char = _char;
   }
@@ -25,6 +26,9 @@ export class TextElement extends Elem {
         const charr: string[] = this.char.split("");
         this.char = charr.shift();
         ew.mutate(40, new Atom(ElementTypes.TEXT, [charr.join("")]));
+      } else if (ew.is(40, ElementTypes.TEXT)) {
+        if (!this.init)
+          ew.mutate(40, new Atom(ElementTypes.ERASER, [0, 9]));
       }
 
       const charMap: any = MFMFont.characters.get(this.char);
@@ -45,8 +49,10 @@ export class TextElement extends Elem {
       } else {
         this.color = 0x000000;
       }
+
+      this.init = true;
     } else {
-      ew.origin.killSelf()
+      ew.origin.killSelf(new Atom(ElementTypes.ERASER, [0, 9]))
     }
     super.exec(ew);
   }

@@ -37,7 +37,7 @@ export class ReducerElement extends Elem {
           ew.origin.atom.data[k] = site.atom.data[k];
         } else {
           //console.log("adding");
-          ew.origin.atom.data[k] = site.atom.data[k];
+          ew.origin.atom.data[k] = Math.round((ew.origin.atom.data[k] + site.atom.data[k]) * .5);
         }
       }
 

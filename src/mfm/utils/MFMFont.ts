@@ -110,7 +110,76 @@ export class MFMFont {
     .set("Z", {
       positive: [0, 2, 3, 5, 8],
       negative: [1, 4, 6, 7]
-    });
+    })
+    .set("0", {
+      positive: [1, 2, 3, 4, 5, 6, 7, 8],
+      negative: []
+    })
+    .set("1", {
+      positive: [0, 2, 3, 5, 6, 8],
+      negative: [1, 4, 7]
+    })
+    .set("2", {
+      positive: [2, 3, 4, 5, 6, 8],
+      negative: [0, 1, 7]
+    })
+    .set("3", {
+      positive: [0, 2, 3, 4, 5, 6, 7, 8],
+      negative: [1]
+    })
+    .set("4", {
+      positive: [0, 1, 4, 5, 7, 8],
+      negative: [2, 3, 6]
+    })
+    .set("5", {
+      positive: [1, 2, 3, 5, 7, 8],
+      negative: [0, 4, 6]
+    })
+    .set("6", {
+      positive: [0, 3, 6, 7, 8],
+      negative: [1, 2, 4, 5]
+    })
+    .set("7", {
+      positive: [0, 2, 5, 6, 7],
+      negative: [1, 3, 4, 8]
+    })
+    .set("8", {
+      positive: [0, 1, 2, 3, 4, 6, 7],
+      negative: [5, 8]
+    })
+    .set("9", {
+      positive: [0, 1, 2, 4, 5, 7, 8],
+      negative: [3, 6]
+    })
+    .set("+", {
+      positive: [0, 1, 2, 3, 4],
+      negative: [5, 6, 7, 8]
+    })
+    .set("-", {
+      positive: [0, 1, 4],
+      negative: [2, 3, 5, 6, 7, 8]
+    })
+    .set("*", {
+      positive: [5, 6, 7, 8],
+      negative: [0, 1, 2, 3, 4]
+    })
+    .set("/", {
+      positive: [0, 6, 7],
+      negative: [1, 2, 3, 4, 5, 8]
+    })
+    .set("=", {
+      positive: [2, 3, 5, 6, 7, 8],
+      negative: [0, 1, 4]
+    })
+    .set("<", {
+      positive: [0, 1, 7, 8],
+      negative: [2, 3, 4, 5, 6]
+    })
+    .set(">", {
+      positive: [0, 4, 5, 6],
+      negative: [1, 2, 3, 7, 8]
+    })
+
 
 
   static getNegative(pos: number[]): number[] {

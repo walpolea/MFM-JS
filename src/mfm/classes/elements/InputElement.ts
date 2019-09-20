@@ -22,7 +22,7 @@ export class InputElement extends Elem {
     // })
 
 
-    const indexes: number[] = [1, 5, 6];
+    const indexes: number[] = [7, 4, 8];
 
     indexes.forEach(index => {
 
@@ -32,8 +32,8 @@ export class InputElement extends Elem {
 
     })
 
-    if (ew.is(21, ElementTypes.EMPTY)) {
-      ew.mutate(21, new Atom(ElementTypes.SORTER));
+    if (ew.is(24, ElementTypes.EMPTY)) {
+      ew.mutate(24, new Atom(ElementTypes.SORTER, [0, undefined, "E"]));
     }
 
     super.exec(ew);

@@ -13,8 +13,8 @@ export class DataElement extends Elem {
     //patrol
     if (MFMUtils.oneIn(this.pPATROL)) {
       //ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
-      if (ew.is(1, ElementTypes.EMPTY)) {
-        ew.move(1);
+      if (ew.is(4, ElementTypes.EMPTY)) {
+        ew.move(4);
       } else {
         ew.move(ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.EMPTY, true)[0]);
       }
