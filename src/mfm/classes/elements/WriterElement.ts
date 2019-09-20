@@ -26,7 +26,7 @@ export class WriterElement extends Elem {
 
     if (dataEl) {
       const d: Site = ew.getSiteByIndex(dataEl);
-      if (d.atom.data && d.atom.data.value) {
+      if (d.atom.data && d.atom.data.value && this.str != (d.atom.data.value).toString()) {
 
         this.str = (d.atom.data.value).toString();
         this.valid = false;
