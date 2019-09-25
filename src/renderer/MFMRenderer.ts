@@ -1,6 +1,8 @@
-/// <reference path="./../../node_modules/@types/pixi.js/index.d.ts" />
+///<reference types="pixi.js"/>
+///<reference types="web-threads" path="../../node_modules/web-threads/index.d.ts"/>
 
-import * as PIXI from "pixi.js";
+import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
+import { execute } from 'web-threads';
 import { IElementType, ElementTypes } from "../mfm/classes/ElementTypes";
 import { Tile } from "../mfm/classes/Tile";
 import { MFMUtils } from "../mfm/utils/utils";
@@ -14,26 +16,26 @@ export class MFMRenderer {
   appX: number = 800;
   appY: number = 800;
   selectedSite: Site;
-  timeSpeed: Number = 5000;
+  timeSpeed: number = 5000;
   siteSize: number = 8;
   siteSpacing: number = 0;
   gridOffset: number = 10;
-  srContainer: PIXI.particles.ParticleContainer = new PIXI.particles.ParticleContainer(200000, { tint: true });
-  siteRenderers: Map<PIXI.Sprite, SiteRenderer> = new Map<PIXI.Sprite, SiteRenderer>();
+  srContainer: ParticleContainer = new ParticleContainer(200000, { tint: true });
+  siteRenderers: Map<Sprite, SiteRenderer> = new Map<Sprite, SiteRenderer>();
   rendererMap: Map<Site, SiteRenderer> = new Map<Site, SiteRenderer>();
   container: Element;
   keysHeld: Set<string>;
   pointerDown: boolean = false;
-  siteTexture: PIXI.Texture = PIXI.Texture.fromImage("/resources/element.png");
-  clickArea: PIXI.DisplayObject;
+  siteTexture: Texture = Texture.from("/resources/element.png");
+  clickArea: DisplayObject;
   curSelectedElement: string;
-  webGLSupported: boolean = PIXI.utils.isWebGLSupported();
+  webGLSupported: boolean = utils.isWebGLSupported();
 
   customSequence: string;
 
   tile: Tile;
 
-  pixiapp: PIXI.Application;
+  pixiapp: Application;
 
   constructor(_tile: Tile, _container: Element) {
     this.tile = _tile;
@@ -51,7 +53,7 @@ export class MFMRenderer {
   init() {
     this.keysHeld = new Set<string>();
 
-    this.pixiapp = new PIXI.Application({
+    this.pixiapp = new Application({
       width: this.appX,
       height: this.appY,
       antialias: false,
@@ -64,17 +66,17 @@ export class MFMRenderer {
     this.srContainer.y = this.gridOffset;
     this.pixiapp.stage.addChild(this.srContainer);
 
-    this.clickArea = new PIXI.DisplayObject();
-    this.clickArea.hitArea = new PIXI.Rectangle(0, 0, 800, 800);
+    this.clickArea = new DisplayObject();
+    this.clickArea.hitArea = new Rectangle(0, 0, 800, 800);
     this.clickArea.interactive = true;
     this.pixiapp.stage.addChild(this.clickArea);
 
-    this.clickArea.on("pointerdown", (e: PIXI.interaction.InteractionEvent) => {
+    this.clickArea.on("pointerdown", (e: interaction.InteractionEvent) => {
       this.pointerDown = true;
       this.handleClick(e);
     });
 
-    this.clickArea.on("pointerup", (e: PIXI.interaction.InteractionEvent) => {
+    this.clickArea.on("pointerup", (e: interaction.InteractionEvent) => {
       this.pointerDown = false;
     });
 
@@ -88,7 +90,7 @@ export class MFMRenderer {
     });
 
     this.initSites();
-
+    console.log("added game loop")
     this.pixiapp.ticker.add((delta: number) => this.gameLoop(delta));
     this.container.appendChild(this.pixiapp.view);
   }
@@ -109,19 +111,47 @@ export class MFMRenderer {
   }
 
   gameLoop(delta: number) {
-    let ew: EventWindow;
 
-    for (var i = 0; i < this.timeSpeed; i++) {
+
+    let ew: EventWindow;
+    let renders: Set<SiteRenderer> = new Set<SiteRenderer>();
+
+    let i = 0;
+    for (i; i < this.timeSpeed; i++) {
       ew = MFMUtils.GenerateEventWindow(this.tile, this.tile.width, this.tile.height);
 
       if (ew.window) {
+
+        // let params = {
+        //   fn: ew.origin.atom.exec,
+        //   args: [ew]
+        // }
+        // execute(params);
+
         ew.origin.atom.exec(ew);
+        ew.getAll().forEach(site => {
+
+          if (site)
+            renders.add(this.rendererMap.get(site));
+        })
       }
     }
 
-    Array.from(this.siteRenderers.values()).forEach(sr => {
-      sr.update();
-    });
+    const arr = Array.from(renders.values());
+    let j = 0;
+    let len = arr.length;
+    for (j; j < len; j++) {
+      arr[j].update();
+    }
+
+
+    // const arr = Array.from(this.siteRenderers.values());
+    // let j = 0;
+    // let len = arr.length;
+    // for (j; j < len; j++) {
+    //   arr[j].update();
+    // }
+
   }
 
   onKeyDown(key: any) {
@@ -143,11 +173,11 @@ export class MFMRenderer {
     return this.tile.getSiteByCoord({ row: y, col: x });
   }
 
-  handleClick(e: PIXI.interaction.InteractionEvent) {
+  handleClick(e: interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
 
-      let p: PIXI.Point = e.data.getLocalPosition(this.pixiapp.stage);
-      let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as PIXI.Sprite);
+      let p: Point = e.data.getLocalPosition(this.pixiapp.stage);
+      let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as Sprite);
       this.selectedSite = site;
 
       if (site) {

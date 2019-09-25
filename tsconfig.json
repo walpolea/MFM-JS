@@ -5,6 +5,7 @@
     "noImplicitAny": true,
     "module": "es2015",
     "target": "es2015",
-    "allowJs": true
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   }
 }

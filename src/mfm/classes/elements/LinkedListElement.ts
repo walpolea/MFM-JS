@@ -28,14 +28,17 @@ export class LinkedListElement extends Elem {
   reflectOnType() {
 
     if (this.isAtHead()) {
+      this.color = 0xccffff;
       this.linkType = "HEAD";
     } else if (this.isAtTail()) {
+      this.color = 0xff33ff;
       this.linkType = "TAIL";
     } else if (this.isInMiddle()) {
       this.linkType = "MIDDLE";
     }
 
     if (this.isSwapping) {
+      this.color = 0xfe7f9c;
       this.linkType = "SWAPPER";
     }
 
@@ -65,10 +68,12 @@ export class LinkedListElement extends Elem {
   }
 
   isAtHead(): boolean {
+
     return !!(!this.prev && this.next);
   }
 
   isAtTail(): boolean {
+
     return !!(this.prev && !this.next);
   }
 

@@ -30,37 +30,17 @@ export class SiteRenderer {
 
   update() {
 
-    const swapColors: IElementType[] = [
-      ElementTypes.SWAPWORM,
-      ElementTypes.LOOPWORM
-    ]
-
-    if (swapColors.indexOf(this.site.atom.type) !== -1) {
-
-      switch ((this.site.atom.elem as LinkedListElement).linkType) {
-        case "SWAPPER":
-          this.visual.tint = 0xfe7f9c;
-          break;
-        case "HEAD":
-          this.visual.tint = 0xccffff;
-          break;
-        case "TAIL":
-          this.visual.tint = 0xff33ff;
-          break;
-        default:
-          this.visual.tint = this.site.atom.elem.color;
-          break;
-      }
-    } else {
-
-      if (this.site.atom.data) {
-        this.visual.tint = this.rgbToHex((this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5);
-      } else {
-        this.visual.tint = this.site.atom.elem.color;
-      }
-
-
+    if (!this.site.atom.data) {
+      this.visual.tint = this.site.atom.elem.color;
+      return;
     }
+
+
+    if (this.site.atom.data && this.site.atom.data.value) {
+      this.visual.tint = this.rgbToHex((this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5);
+    }
+
+
 
   }
 
