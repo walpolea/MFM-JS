@@ -26,6 +26,9 @@ import { InputElement } from "./elements/InputElement";
 import { TextElement } from "./elements/TextElement";
 import { WriterElement } from "./elements/WriterElement";
 import { EraserElement } from "./elements/EraserElement";
+import { KeyboardElement } from "./elements/KeyboardElement";
+import { BasePlanterElement } from "./elements/BasePlanterElement";
+import { ReaderElement } from "./elements/ReaderElement";
 
 export interface IElementType {
   name: string;
@@ -64,6 +67,9 @@ export class ElementTypes {
   static TEXT: IElementType = { name: "TEXT", type: "Tx", class: TextElement, color: 0xd66633 }
   static WRITER: IElementType = { name: "WRITER", type: "Wr", class: WriterElement, color: 0xd66633 }
   static ERASER: IElementType = { name: "ERASER", type: "Er", class: EraserElement, color: 0x333333 }
+  static KEYBOARD: IElementType = { name: "KEYBOARD", type: "Kb", class: KeyboardElement, color: 0xeeee22 }
+  static READER: IElementType = { name: "READER", type: "Rd", class: ReaderElement, color: 0xeeee22 }
+  static BASE_PLANTER: IElementType = { name: "PLANTER", type: "Pl", class: BasePlanterElement, color: 0xeeee22 }
 
 
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>()
@@ -95,6 +101,9 @@ export class ElementTypes {
     .set(ElementTypes.TEXT.name, ElementTypes.TEXT)
     .set(ElementTypes.WRITER.name, ElementTypes.WRITER)
     .set(ElementTypes.ERASER.name, ElementTypes.ERASER)
+    .set(ElementTypes.KEYBOARD.name, ElementTypes.KEYBOARD)
+    .set(ElementTypes.BASE_PLANTER.name, ElementTypes.BASE_PLANTER)
+    .set(ElementTypes.READER.name, ElementTypes.READER)
 
   static registerType(name: string, type: string, c: any, color?: number) {
     this.TYPES_MAP.set(name, { name, type, class: c, color });

@@ -664,6 +664,21 @@ export class EventWindow {
 
   }
 
+  //////////////////////
+  // base layer stuff
+  //////////////////////
+  mutateBase(newAtom: Atom): void {
+    this.origin.baseAtom = newAtom;
+  }
+
+  killBase(leavingAtom: Atom = new Atom(ElementTypes.EMPTY)): void {
+    this.origin.baseAtom = leavingAtom;
+  }
+
+  readBase(): Atom {
+    return this.origin.readBase();
+  }
+
 }
 
 

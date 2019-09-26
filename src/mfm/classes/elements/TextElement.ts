@@ -20,8 +20,6 @@ export class TextElement extends Elem {
 
     if (this.char.length > 0) {
 
-
-
       if (this.char.length > 1) {
         const charr: string[] = this.char.split("");
         this.char = charr.shift();
@@ -32,6 +30,10 @@ export class TextElement extends Elem {
       }
 
       const charMap: any = MFMFont.characters.get(this.char);
+
+      if (!charMap) {
+        return;
+      }
 
       const selfIsPos: boolean = charMap.positive.indexOf(0) > -1;
 
@@ -51,6 +53,7 @@ export class TextElement extends Elem {
       }
 
       this.init = true;
+
     } else {
       ew.origin.killSelf(new Atom(ElementTypes.ERASER, [0, 9]))
     }

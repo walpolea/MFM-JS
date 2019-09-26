@@ -5,6 +5,7 @@ import { Atom } from "../Atom";
 import { MFMUtils } from "../../utils/utils";
 import { DataElement } from "./DataElement";
 import { Site } from "../Site";
+import { KeyboardElement } from "./KeyboardElement";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
 export class WriterElement extends Elem {
@@ -23,6 +24,7 @@ export class WriterElement extends Elem {
 
     //look for nearby data
     const dataEl: number = ew.getNearestIndex(EventWindow.ALL, ElementTypes.REDUCER);
+    const dataEl2: number = ew.getNearestIndex(EventWindow.ADJACENT8WAY, ElementTypes.DATA);
 
     if (dataEl) {
       const d: Site = ew.getSiteByIndex(dataEl);
@@ -33,6 +35,15 @@ export class WriterElement extends Elem {
 
       }
 
+    } else if (dataEl2) {
+      const d: Site = ew.getSiteByIndex(dataEl2);
+
+      if (d.atom.data && d.atom.data.value && this.str != (d.atom.data.value).toString()) {
+
+        this.str = (d.atom.data.value).toString();
+        this.valid = false;
+
+      }
     }
 
 

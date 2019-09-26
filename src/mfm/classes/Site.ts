@@ -1,8 +1,6 @@
 import { GridCoord } from "../interfaces/IGridCoord";
 import { MFMUtils } from "../utils/utils";
 import { Atom } from "./Atom";
-import { Elem } from "./Elem";
-import { EmptyElement } from "./elements/EmptyElement";
 import { ElementTypes } from "./ElementTypes";
 
 export class Site {
@@ -10,10 +8,14 @@ export class Site {
   id: string;
 
   atom: Atom;
+  baseAtom: Atom;
 
   constructor(_pos: GridCoord) {
     this.tilePos = _pos;
     this.id = MFMUtils.CtoID(this.tilePos);
+
+    this.atom = new Atom(ElementTypes.EMPTY);
+    this.baseAtom = new Atom(ElementTypes.EMPTY);
 
     this.create();
   }
@@ -56,6 +58,18 @@ export class Site {
     }
   }
 
+  mutateBase(newAtom: Atom): void {
+    this.baseAtom = newAtom;
+  }
+
+  killBase(leavingAtom: Atom = new Atom(ElementTypes.EMPTY)): void {
+    this.baseAtom = leavingAtom;
+  }
+
+  readBase(): Atom {
+    return this.baseAtom;
+  }
+
   coordToward(dest: GridCoord): GridCoord {
     let current: GridCoord = this.tilePos;
     let colDist: number = dest.col - current.col;
@@ -88,6 +102,8 @@ export class Site {
 
     return { row: targetRow, col: targetCol };
   }
+
+
 
   canDestroy(): boolean {
     return Math.random() * 100 < this.atom.elem.destroyability;
