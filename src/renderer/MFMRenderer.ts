@@ -1,8 +1,6 @@
 ///<reference types="pixi.js"/>
-///<reference types="web-threads" path="../../node_modules/web-threads/index.d.ts"/>
 
 import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
-import { execute } from 'web-threads';
 import { IElementType, ElementTypes } from "../mfm/classes/ElementTypes";
 import { Tile } from "../mfm/classes/Tile";
 import { MFMUtils } from "../mfm/utils/utils";
