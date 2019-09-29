@@ -47,6 +47,9 @@ export class MFMRenderer {
   }
 
   deconstruct() {
+    this.ewCache.clear();
+    this.siteRenderers.clear();
+    this.rendererMap.clear();
     this.pixiapp.stop();
     this.pixiapp.destroy(true);
   }
