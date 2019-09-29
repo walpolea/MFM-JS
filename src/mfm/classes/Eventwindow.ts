@@ -141,6 +141,7 @@ export class EventWindow {
   window: Site[]; //indexed array of EW Sites
 
   constructor(_tile: Tile, _origin: GridCoord) {
+    console.log("make window");
     this.makeWindow(_tile, _origin);
   }
 
@@ -149,9 +150,9 @@ export class EventWindow {
     this.origin = tile.getSiteByCoord(origin);
 
     //if the origin is EMPTY Element, let's save some cycles (good, bad?) - bad if you want empty's age.
-    if (this.origin.atom.is(ElementTypes.EMPTY)) {
-      return;
-    }
+    // if (this.origin.atom.is(ElementTypes.EMPTY)) {
+    //   return;
+    // }
 
     this.window = new Array<Site>();
     this.tile = tile;
@@ -167,6 +168,7 @@ export class EventWindow {
       site = tile.getSiteByCoord(this.offsetFromOrigin(origin, offset));
 
       this.window.push(site);
+
     }
 
   }

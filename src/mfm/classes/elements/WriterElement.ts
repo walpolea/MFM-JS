@@ -14,7 +14,7 @@ export class WriterElement extends Elem {
   str: string;
   valid: boolean = true;
 
-  constructor(_str: string = "            ") {
+  constructor(_str: string = "") {
     super(ElementTypes.WRITER.name, ElementTypes.WRITER.type);
     this.str = _str;
 

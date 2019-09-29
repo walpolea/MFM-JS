@@ -9,6 +9,7 @@ import { Site } from "../mfm/classes/Site";
 import { SiteRenderer } from "./SiteRenderer";
 import { Atom } from "../mfm/classes/Atom";
 import { MasonElement } from "../mfm/classes/elements/MasonElement";
+import { GridCoord } from "../mfm/interfaces/IGridCoord";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -28,6 +29,8 @@ export class MFMRenderer {
   clickArea: DisplayObject;
   curSelectedElement: string;
   webGLSupported: boolean = utils.isWebGLSupported();
+
+  ewCache: Map<GridCoord, EventWindow> = new Map<GridCoord, EventWindow>();
 
   customSequence: string;
 
@@ -88,6 +91,7 @@ export class MFMRenderer {
     });
 
     this.initSites();
+
     console.log("added game loop")
     this.pixiapp.ticker.add((delta: number) => this.gameLoop(delta));
     this.container.appendChild(this.pixiapp.view);
@@ -105,7 +109,12 @@ export class MFMRenderer {
       this.srContainer.addChild(sr.visual);
       this.siteRenderers.set(sr.visual, sr);
       this.rendererMap.set(site, sr);
+
+      //cached event windows ++
+      this.ewCache.set(site.tilePos, new EventWindow(this.tile, site.tilePos));
     }
+
+
   }
 
   gameLoop(delta: number) {
@@ -113,18 +122,13 @@ export class MFMRenderer {
 
     let ew: EventWindow;
     let renders: Set<SiteRenderer> = new Set<SiteRenderer>();
-
     let i = 0;
+
     for (i; i < this.timeSpeed; i++) {
-      ew = MFMUtils.GenerateEventWindow(this.tile, this.tile.width, this.tile.height);
 
-      if (ew.window) {
+      ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
 
-        // let params = {
-        //   fn: ew.origin.atom.exec,
-        //   args: [ew]
-        // }
-        // execute(params);
+      if (ew.window && !ew.origin.atom.is(ElementTypes.EMPTY)) {
 
         ew.origin.atom.exec(ew);
         ew.getAll().forEach(site => {
@@ -141,14 +145,6 @@ export class MFMRenderer {
     for (j; j < len; j++) {
       arr[j].update();
     }
-
-
-    // const arr = Array.from(this.siteRenderers.values());
-    // let j = 0;
-    // let len = arr.length;
-    // for (j; j < len; j++) {
-    //   arr[j].update();
-    // }
 
   }
 
