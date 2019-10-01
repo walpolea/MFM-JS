@@ -9,7 +9,7 @@ import { MFMUtils } from "../../utils/utils";
 
 export class LoopWormElement extends LinkedListElement {
 
-  pCHANCE_TO_EAT: number = 1250;
+  pCHANCE_TO_EAT: number = 2500;
   WORMSIZE: number;
   birthCount: number;
   isConnected: boolean = false;
@@ -63,12 +63,27 @@ export class LoopWormElement extends LinkedListElement {
       let possibleRes = ew.getAdjacent4Way(ElementTypes.RES);
 
       if (possibleRes) {
+
         possibleRes.killSelf();
         this.expandCount++;
         this.eatCount++;
-        //console.log("ate a res");
+
       }
+
+
+      //console.log("ate a res");
     }
+  }
+
+
+
+  hardenMembrane(ew: EventWindow) {
+
+    let possibleRes = ew.getIndexes(EventWindow.ADJACENT4WAY, ElementTypes.RES, true)[0];
+    if (possibleRes) {
+      ew.mutate(possibleRes, new Atom(ElementTypes.STUCKMEMBRANE, [ElementTypes.LOOPWORM]));
+    }
+
 
   }
 
@@ -78,6 +93,8 @@ export class LoopWormElement extends LinkedListElement {
     let choices: number[];
     let leavingAtom: Atom;
     let relativeSiteToGoTo: number;
+
+
 
 
     if (this.birthCount > 0) {
@@ -107,6 +124,9 @@ export class LoopWormElement extends LinkedListElement {
 
     } else if (this.isConnected) {
 
+      if (MFMUtils.oneIn(10))
+        this.excreteMembrane(ew);
+
       //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!
       if (!(this.getPrevElement(ew) instanceof LinkedListElement) && !(this.getNextElement(ew) instanceof LinkedListElement)) {
         console.log("disconnected");
@@ -127,6 +147,8 @@ export class LoopWormElement extends LinkedListElement {
 
         if (this.eatCount < this.maxEats) {
           this.eat(ew);
+        } else {
+          this.hardenMembrane(ew);
         }
 
         let choices: number[] = EventWindow.ADJACENT4WAY;
@@ -175,5 +197,18 @@ export class LoopWormElement extends LinkedListElement {
     }
 
     super.exec(ew);
+  }
+
+
+  shouldExcreteMembrane(ew: EventWindow) {
+    return !ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE) && ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY, true)[0];
+  }
+
+  //excrete membrane when no membrane around (4-way) and empty available (8-way)
+  excreteMembrane(ew: EventWindow) {
+    if (this.shouldExcreteMembrane(ew)) {
+      //ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.LOOPWORM, 0.5, 1]));
+      ew.origin.mutateSite(ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY, true)[0], new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.LOOPWORM, 0.5, 1]));
+    }
   }
 }

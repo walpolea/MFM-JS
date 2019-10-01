@@ -12,8 +12,8 @@ export class DataElement extends Elem {
   exec(ew: EventWindow) {
     //patrol
     if (MFMUtils.oneIn(this.pPATROL)) {
-      //ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
-      if (ew.is(4, ElementTypes.EMPTY)) {
+      //ew.origin.swapAtoms(ew.getAdjacent8Way(ElementTypes.EMPTY));
+      if (MFMUtils.oneIn(2) && ew.is(4, ElementTypes.EMPTY)) {
         ew.move(4);
       } else {
         ew.move(ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.EMPTY, true)[0]);

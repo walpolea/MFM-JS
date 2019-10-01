@@ -17,6 +17,7 @@ import { LoopWormElement } from "./elements/LoopWormElement";
 import { LoopSeedElement } from "./elements/LoopSeedElement";
 import { LoopNucleusElement } from "./elements/LoopNucleusElement";
 import { StickyMembraneElement } from "./elements/StickyMembraneElement";
+import { StuckMembraneElement } from "./elements/StuckMembraneElement";
 import { MembraneWallElement } from "./elements/MembraneWallElement";
 import { MembraneDoorElement } from "./elements/MembraneDoorElement";
 import { SorterElement } from "./elements/SorterElement";
@@ -40,7 +41,7 @@ export interface IElementType {
 export class ElementTypes {
   static EMPTY: IElementType = { name: "EMPTY", type: "E", class: EmptyElement, color: 0x303030 };
   static DREG: IElementType = { name: "DREG", type: "D", class: DRegElement, color: 0xff2020 };
-  static RES: IElementType = { name: "RES", type: "R", class: ResElement, color: 0x22d136 };
+  static RES: IElementType = { name: "RES", type: "R", class: ResElement, color: 0x0e5100 };
   static WALL: IElementType = { name: "WALL", type: "W", class: WallElement, color: 0x2020ff };
   static DECAYWALL: IElementType = { name: "DECAY WALL", type: "Dw", class: DecayWallElement, color: 0x4040ff };
   static MASON: IElementType = { name: "MASON", type: "Ma", class: MasonElement, color: 0x20ffff };
@@ -61,6 +62,7 @@ export class ElementTypes {
   static LOOPSEED: IElementType = { name: "LOOP SEED", type: "Ls", class: LoopSeedElement, color: 0xFCC038 };
   static LOOPNUCLEUS: IElementType = { name: "LOOP NUCLEUS", type: "Ln", class: LoopNucleusElement, color: 0xcece24 }
   static STICKYMEMBRANE: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembraneElement, color: 0x6D3D64 }
+  static STUCKMEMBRANE: IElementType = { name: "STUCK MEMBRANE", type: "Stm", class: StuckMembraneElement, color: 0x5e0066 }
 
   static SORTER: IElementType = { name: "SORTER", type: "So", class: SorterElement, color: 0x7c1515 }
   static SORTMASTER: IElementType = { name: "SORT MASTER", type: "Sm", class: SortMasterElement, color: 0xd66633 }
@@ -95,6 +97,7 @@ export class ElementTypes {
     .set(ElementTypes.LOOPSEED.name, ElementTypes.LOOPSEED)
     .set(ElementTypes.LOOPNUCLEUS.name, ElementTypes.LOOPNUCLEUS)
     .set(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE)
+    .set(ElementTypes.STUCKMEMBRANE.name, ElementTypes.STUCKMEMBRANE)
     .set(ElementTypes.SORTER.name, ElementTypes.SORTER)
     .set(ElementTypes.SORTMASTER.name, ElementTypes.SORTMASTER)
     .set(ElementTypes.DECAYWALL.name, ElementTypes.DECAYWALL)

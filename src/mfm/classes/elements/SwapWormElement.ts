@@ -31,6 +31,17 @@ export class SwapWormElement extends LinkedListElement {
     }
   }
 
+  //Eat up the Sticky Membrane protecting the worm in order to improve chances of getting unstuck
+  lowerDefenses(ew: EventWindow) {
+    // ew.getAll(ElementTypes.STICKYMEMBRANE).forEach(membraneSite => {
+    //   membraneSite.killSelf();
+    // });
+
+    ew.getAll(ElementTypes.STUCKMEMBRANE).forEach(membraneSite => {
+      membraneSite.killSelf();
+    })
+  }
+
   swapMove(ew: EventWindow, moveChoices?: number[]) {
 
     //MAKE SWAPPER
@@ -41,8 +52,11 @@ export class SwapWormElement extends LinkedListElement {
 
     const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
+    return moved;
+
   }
 
+  //Eat res, and grow big and strong
   eat(ew: EventWindow) {
 
     //Eat Res
@@ -55,6 +69,7 @@ export class SwapWormElement extends LinkedListElement {
 
   }
 
+  //check if the worm is stuck in itself
   isStuck(ew: EventWindow): boolean {
 
     const compareMap = new Map<number, IElementType>();
@@ -67,34 +82,61 @@ export class SwapWormElement extends LinkedListElement {
 
   }
 
+
+  shouldExcreteMembrane(ew: EventWindow) {
+    //return !ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE) && ew.getAdjacent8Way(ElementTypes.EMPTY);
+    return !ew.getAdjacent4Way(ElementTypes.STUCKMEMBRANE) && ew.getAdjacent8Way(ElementTypes.EMPTY);
+  }
+
+  //excrete membrane when no membrane around (4-way) and empty available (8-way)
+  excreteMembrane(ew: EventWindow) {
+    if (this.shouldExcreteMembrane(ew)) {
+      //ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.SWAPWORM, 0.5, 1]));
+      ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STUCKMEMBRANE, [ElementTypes.SWAPWORM]));
+    }
+  }
+
   exec(ew: EventWindow) {
 
-    if (!ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE) && ew.getAdjacent8Way(ElementTypes.EMPTY)) {
-      ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.SWAPWORM, 0.5, 1]))
-    }
 
+    this.excreteMembrane(ew);
 
+    //Need to be born?
     if (this.birthCount > 0) {
 
       this.birth(ew);
 
-    } else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
+    }
+    //If this is a head, and next is not a swapper, we can move...
+    else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
 
-      this.swapMove(ew);
-      this.eat(ew);
+      const moved: boolean = this.swapMove(ew);
 
-      if (this.isStuck(ew)) {
-        this.idleCount++;
-      } else {
-        this.idleCount = 0;
-      }
+      //hungry for res?
+      //this.eat(ew);
 
-      if (this.idleCount > 50) {
-        this.swapMove(ew, EventWindow.ALLADJACENT);
-      }
+      if (!moved) {
 
-      if (this.idleCount > 100) {
-        this.shouldDie = true;
+
+
+        if (this.isStuck(ew)) {
+          this.idleCount++;
+        } else {
+          this.idleCount = 0;
+        }
+
+        if (this.idleCount > 2) {
+          this.lowerDefenses(ew);
+        }
+
+        if (this.idleCount > 50) {
+
+          this.swapMove(ew, EventWindow.ALLADJACENT);
+        }
+
+        if (this.idleCount > 100) {
+          this.shouldDie = true;
+        }
       }
     }
 

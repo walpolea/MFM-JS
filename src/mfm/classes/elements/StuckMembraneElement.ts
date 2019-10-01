@@ -2,26 +2,22 @@ import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
+import { Atom } from "../Atom";
 
-export class StickyMembraneElement extends Elem {
+export class StuckMembraneElement extends Elem {
 
   stickyType: IElementType;
   idleCount: number = 0;
   roamCount: number = 0;
-  membraneDensity: number;
   maxRoam: number;
 
-  constructor(stickyType?: IElementType, membraneDensity?: number, maxRoam?: number) {
-    super(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE.type);
+  constructor(stickyType?: IElementType, maxRoam: number = 2) {
+    super(ElementTypes.STUCKMEMBRANE.name, ElementTypes.STUCKMEMBRANE.type);
     this.stickyType = stickyType ? stickyType : undefined;
-    this.maxRoam = maxRoam ? maxRoam : 200;
-    this.setMembraneDensity(membraneDensity);
+    this.maxRoam = maxRoam;
 
   }
 
-  setMembraneDensity(density: number = 1) {
-    this.membraneDensity = density * 40 >> 0;
-  }
 
   moveToSticker(ew: EventWindow) {
 
@@ -61,13 +57,6 @@ export class StickyMembraneElement extends Elem {
 
   }
 
-  repelFromSticker(ew: EventWindow) {
-    const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, this.stickyType, true);
-
-    if (sites[0]) {
-      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY)[0]);
-    }
-  }
 
   repelType(ew: EventWindow, type: IElementType) {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, type, true);
@@ -87,22 +76,40 @@ export class StickyMembraneElement extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > this.membraneDensity) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STUCKMEMBRANE, false).filter(site => site).length > 6) {
       ew.origin.killSelf();
     }
   }
 
+  isAdjacentToSticker(ew: EventWindow): boolean {
+    if (ew.getAdjacent4Way(this.stickyType)) {
+      return true;
+    }
+
+    return false;
+  }
+
+
+
   exec(ew: EventWindow) {
 
-    if (this.roamCount > this.maxRoam) {
+    this.uncrowd(ew);
+
+    //repel DREG as defensive move.
+    this.repelType(ew, ElementTypes.DREG);
+    //this.excreteMembrane(ew);
+
+    //death is the greatest adventure
+    if (this.roamCount > this.maxRoam || this.idleCount > 100) {
       ew.origin.killSelf();
     }
 
-    if (this.idleCount > 100) {
-      ew.origin.killSelf();
+    //we're stuck on our stickyType, do nothing!
+    if (this.stickyType && !(this.stickyType === ElementTypes.STUCKMEMBRANE) && this.isAdjacentToSticker(ew)) {
+      return;
     }
 
-    if (!this.stickyType || this.stickyType === ElementTypes.STICKYMEMBRANE) {
+    if (!this.stickyType || this.stickyType === ElementTypes.STUCKMEMBRANE) {
 
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
       const stickSite: Site = ew.getAdjacent8Way();
@@ -114,14 +121,9 @@ export class StickyMembraneElement extends Elem {
     }
 
     this.moveToSticker(ew);
-    this.repelFromSticker(ew);
-    this.uncrowd(ew);
 
-    //repel DREG as defensive move.
-    this.repelType(ew, ElementTypes.DREG);
 
-    //repel RES for experimenting...
-    //this.repelType(ew, ElementTypes.RES);
+
 
     super.exec(ew);
   }
