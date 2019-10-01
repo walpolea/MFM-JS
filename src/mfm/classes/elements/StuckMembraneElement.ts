@@ -76,13 +76,17 @@ export class StuckMembraneElement extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STUCKMEMBRANE, false).filter(site => site).length > 6) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STUCKMEMBRANE, false).filter(site => site).length > 2) {
       ew.origin.killSelf();
     }
   }
 
   isAdjacentToSticker(ew: EventWindow): boolean {
-    if (ew.getAdjacent4Way(this.stickyType)) {
+    // if (ew.getAdjacent4Way(this.stickyType)) {
+    //   return true;
+    // }
+
+    if (ew.getSites([...EventWindow.LAYER1, ...EventWindow.LAYER2], this.stickyType).filter(s => s).length) {
       return true;
     }
 

@@ -9,7 +9,7 @@ import { MFMUtils } from "../../utils/utils";
 
 export class LoopWormElement extends LinkedListElement {
 
-  pCHANCE_TO_EAT: number = 2500;
+  pCHANCE_TO_EAT: number = 1000;
   WORMSIZE: number;
   birthCount: number;
   isConnected: boolean = false;
@@ -151,7 +151,10 @@ export class LoopWormElement extends LinkedListElement {
           this.hardenMembrane(ew);
         }
 
-        let choices: number[] = EventWindow.ADJACENT4WAY;
+        //let choices: number[] = EventWindow.ADJACENT4WAY;
+        //let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
+
+        let choices: number[] = [...ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.EMPTY), ...ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE)];
         let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
 
         if (this.expandCount > 0
