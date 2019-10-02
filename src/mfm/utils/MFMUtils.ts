@@ -2,7 +2,7 @@ import { GridCoord } from "../interfaces/IGridCoord";
 import { EventWindow } from "../classes/Eventwindow";
 import { Tile } from "../classes/Tile";
 
-export class MFMUtils {
+export class Utils {
   static CtoID(c: GridCoord): string {
     return `${c.row}:${c.col}`;
   }

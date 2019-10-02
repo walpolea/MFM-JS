@@ -1,11 +1,11 @@
 import { Site } from "./Site";
-import { MFMUtils } from "../utils/utils";
+import { Utils } from "../utils/utils";
 export class Tile {
     constructor(_pos, _width = 50, _height = 50) {
         this.gridPos = _pos;
         this.width = _width;
         this.height = _height;
-        this.id = MFMUtils.CtoID(this.gridPos);
+        this.id = Utils.CtoID(this.gridPos);
         this.create();
     }
     getSiteByCoord(c) {

@@ -3,7 +3,7 @@ import { Elem } from "../Elem";
 import { SPLAT } from "../../utils/SPLAT";
 import { IElementType } from "../ElementTypes";
 import { Wall } from "./WallElement";
-import { MFMUtils } from "../../utils/MFMUtils";
+import { Utils } from "../../utils/MFMUtils";
 import { Empty } from "./EmptyElement";
 
 export class SortMaster extends Elem {
@@ -42,7 +42,7 @@ export class SortMaster extends Elem {
 
     if (!this.didInit) {
 
-      if (MFMUtils.oneIn(this.pGROW)) {
+      if (Utils.oneIn(this.pGROW)) {
 
         const results = ew.query(this.gridCheck, 1, SortMaster.SPLAT_MAP);
 
@@ -53,7 +53,7 @@ export class SortMaster extends Elem {
 
         }
         this.didInit = true;
-      } else if (MFMUtils.oneIn(this.pWALL)) {
+      } else if (Utils.oneIn(this.pWALL)) {
         const results = ew.query(this.wallCheck, 0, SortMaster.SPLAT_MAP);
 
         if (results && results.get(SortMaster.TYPE_DEF)) {

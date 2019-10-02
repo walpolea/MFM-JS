@@ -4,7 +4,7 @@ import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Empty } from "./EmptyElement";
 import { DReg } from "./DRegElement";
-import { MFMActions } from "../../utils/MFMActions";
+import { Actions } from "../../utils/MFMActions";
 
 export class StuckMembrane extends Elem {
 
@@ -80,7 +80,7 @@ export class StuckMembrane extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 2) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 3) {
       ew.origin.killSelf();
     }
   }
@@ -104,7 +104,7 @@ export class StuckMembrane extends Elem {
     this.uncrowd(ew);
 
     //repel DREG as defensive move.
-    MFMActions.repel(ew, DReg.TYPE_DEF)
+    Actions.repel(ew, DReg.TYPE_DEF)
     //this.excreteMembrane(ew);
 
     //death is the greatest adventure

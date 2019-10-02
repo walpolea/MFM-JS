@@ -1,10 +1,10 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Empty } from "./EmptyElement";
 import { DReg } from "./DRegElement";
-import { MFMActions } from "../../utils/MFMActions";
+import { Actions } from "../../utils/MFMActions";
 
 export class StickyMembrane extends Elem {
 
@@ -126,10 +126,10 @@ export class StickyMembrane extends Elem {
     this.uncrowd(ew);
 
     //Repel self away from sticky, this is what makes this element magical
-    MFMActions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 5, 6, 7, 8])
+    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 5, 6, 7, 8])
 
     //repel DREG as defensive move.
-    MFMActions.repel(ew, DReg.TYPE_DEF)
+    Actions.repel(ew, DReg.TYPE_DEF)
 
     //repel RES for experimenting...
     //this.repelType(ew, Res.TYPE_DEF);

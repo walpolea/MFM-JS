@@ -1,7 +1,7 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { IElementType } from "../ElementTypes";
-import { MFMUtils } from "../../utils/MFMUtils";
+import { Utils } from "../../utils/MFMUtils";
 import { Atom } from "../Atom";
 import { Empty } from "./EmptyElement";
 import { StickyMembrane } from "./StickyMembraneElement";
@@ -59,12 +59,12 @@ export class LoopNucleus extends Elem {
     }
 
 
-    if (MFMUtils.oneIn(this.pCREATE_RES)) {
+    if (Utils.oneIn(this.pCREATE_RES)) {
       ew.origin.mutateSite(ew.getAdjacent4Way(Empty.TYPE_DEF), new Atom(Res.TYPE_DEF, undefined, undefined, 0x336600));
     }
 
     //create a new membrane if none are around and chance
-    // if (MFMUtils.oneIn(this.pCREATE_MEMBRANE)) {
+    // if (Utils.oneIn(this.pCREATE_MEMBRANE)) {
     //   ew.origin.mutateSite(ew.getAdjacent4Way(Empty.TYPE_DEF), new Atom(StuckMembrane.TYPE_DEF, [LoopWorm.TYPE_DEF, 0.8, 1]));
     // }
 

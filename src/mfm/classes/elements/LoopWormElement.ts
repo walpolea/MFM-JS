@@ -4,7 +4,7 @@ import { Site } from "../Site";
 import { Empty } from "./EmptyElement";
 import { Atom } from "../Atom";
 import { LinkedList } from "./LinkedListElement";
-import { MFMUtils } from "../../utils/MFMUtils";
+import { Utils } from "../../utils/MFMUtils";
 import { StickyMembrane } from "./StickyMembraneElement";
 import { Res } from "./ResElement";
 import { StuckMembrane } from "./StuckMembraneElement";
@@ -77,7 +77,7 @@ export class LoopWorm extends LinkedList {
 
   eat(ew: EventWindow) {
 
-    if (MFMUtils.oneIn(this.pCHANCE_TO_EAT)) {
+    if (Utils.oneIn(this.pCHANCE_TO_EAT)) {
       let possibleRes = ew.getAdjacent4Way(Res.TYPE_DEF);
 
       if (possibleRes) {
@@ -143,7 +143,7 @@ export class LoopWorm extends LinkedList {
     } else if (this.isConnected) {
 
       //mating
-      if (MFMUtils.oneIn(10)) {
+      if (Utils.oneIn(10)) {
         const results = ew.query(this.mateCheck, 0, LoopWorm.SPLAT_MAP);
         //console.log("mating", LoopSeed.SPLAT_MAP, this.mateCheck, results);
         if (results) {
@@ -151,7 +151,7 @@ export class LoopWorm extends LinkedList {
         }
       }
 
-      if (MFMUtils.oneIn(10))
+      if (Utils.oneIn(10))
         this.excreteMembrane(ew);
 
       //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!

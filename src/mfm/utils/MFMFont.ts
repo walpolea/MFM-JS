@@ -4,7 +4,7 @@ export interface FontCharacter {
 }
 
 
-export class MFMFont {
+export class Font {
 
   static characters: Map<string, FontCharacter> = new Map<string, FontCharacter>()
     .set("A", {
@@ -181,32 +181,32 @@ export class MFMFont {
     });
 
   static initLowerCase() {
-    MFMFont.characters.set("a", MFMFont.characters.get("a".toUpperCase()))
-      .set("b", MFMFont.characters.get("b".toUpperCase()))
-      .set("c", MFMFont.characters.get("c".toUpperCase()))
-      .set("d", MFMFont.characters.get("d".toUpperCase()))
-      .set("e", MFMFont.characters.get("e".toUpperCase()))
-      .set("f", MFMFont.characters.get("f".toUpperCase()))
-      .set("g", MFMFont.characters.get("g".toUpperCase()))
-      .set("h", MFMFont.characters.get("h".toUpperCase()))
-      .set("i", MFMFont.characters.get("i".toUpperCase()))
-      .set("j", MFMFont.characters.get("j".toUpperCase()))
-      .set("k", MFMFont.characters.get("k".toUpperCase()))
-      .set("l", MFMFont.characters.get("l".toUpperCase()))
-      .set("m", MFMFont.characters.get("m".toUpperCase()))
-      .set("n", MFMFont.characters.get("n".toUpperCase()))
-      .set("o", MFMFont.characters.get("o".toUpperCase()))
-      .set("p", MFMFont.characters.get("p".toUpperCase()))
-      .set("q", MFMFont.characters.get("q".toUpperCase()))
-      .set("r", MFMFont.characters.get("r".toUpperCase()))
-      .set("s", MFMFont.characters.get("s".toUpperCase()))
-      .set("t", MFMFont.characters.get("t".toUpperCase()))
-      .set("u", MFMFont.characters.get("u".toUpperCase()))
-      .set("v", MFMFont.characters.get("v".toUpperCase()))
-      .set("w", MFMFont.characters.get("w".toUpperCase()))
-      .set("x", MFMFont.characters.get("x".toUpperCase()))
-      .set("y", MFMFont.characters.get("y".toUpperCase()))
-      .set("z", MFMFont.characters.get("z".toUpperCase()))
+    Font.characters.set("a", Font.characters.get("a".toUpperCase()))
+      .set("b", Font.characters.get("b".toUpperCase()))
+      .set("c", Font.characters.get("c".toUpperCase()))
+      .set("d", Font.characters.get("d".toUpperCase()))
+      .set("e", Font.characters.get("e".toUpperCase()))
+      .set("f", Font.characters.get("f".toUpperCase()))
+      .set("g", Font.characters.get("g".toUpperCase()))
+      .set("h", Font.characters.get("h".toUpperCase()))
+      .set("i", Font.characters.get("i".toUpperCase()))
+      .set("j", Font.characters.get("j".toUpperCase()))
+      .set("k", Font.characters.get("k".toUpperCase()))
+      .set("l", Font.characters.get("l".toUpperCase()))
+      .set("m", Font.characters.get("m".toUpperCase()))
+      .set("n", Font.characters.get("n".toUpperCase()))
+      .set("o", Font.characters.get("o".toUpperCase()))
+      .set("p", Font.characters.get("p".toUpperCase()))
+      .set("q", Font.characters.get("q".toUpperCase()))
+      .set("r", Font.characters.get("r".toUpperCase()))
+      .set("s", Font.characters.get("s".toUpperCase()))
+      .set("t", Font.characters.get("t".toUpperCase()))
+      .set("u", Font.characters.get("u".toUpperCase()))
+      .set("v", Font.characters.get("v".toUpperCase()))
+      .set("w", Font.characters.get("w".toUpperCase()))
+      .set("x", Font.characters.get("x".toUpperCase()))
+      .set("y", Font.characters.get("y".toUpperCase()))
+      .set("z", Font.characters.get("z".toUpperCase()))
   };
 
   /*
@@ -222,4 +222,4 @@ export class MFMFont {
 
 }
 
-MFMFont.initLowerCase();
+Font.initLowerCase();

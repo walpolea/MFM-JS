@@ -1,6 +1,6 @@
 import { Site } from "./Site";
 import { GridCoord } from "../interfaces/IGridCoord";
-import { MFMUtils } from "../utils/MFMUtils";
+import { Utils } from "../utils/MFMUtils";
 
 export class Tile {
   width: number;
@@ -14,7 +14,7 @@ export class Tile {
   }
 
   getSiteByCoord(c: GridCoord): Site {
-    return this.sites.get(MFMUtils.CtoID(c));
+    return this.sites.get(Utils.CtoID(c));
   }
 
   getRandomSite(): Site {

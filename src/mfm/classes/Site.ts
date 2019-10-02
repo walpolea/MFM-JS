@@ -1,5 +1,5 @@
 import { GridCoord } from "../interfaces/IGridCoord";
-import { MFMUtils } from "../utils/MFMUtils";
+import { Utils } from "../utils/MFMUtils";
 import { Atom } from "./Atom";
 import { Empty } from "./elements/EmptyElement";
 
@@ -12,7 +12,7 @@ export class Site {
 
   constructor(_pos: GridCoord) {
     this.tilePos = _pos;
-    this.id = MFMUtils.CtoID(this.tilePos);
+    this.id = Utils.CtoID(this.tilePos);
 
     this.atom = new Atom(Empty.TYPE_DEF);
     this.baseAtom = new Atom(Empty.TYPE_DEF);

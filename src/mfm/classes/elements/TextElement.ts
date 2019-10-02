@@ -1,7 +1,7 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
-import { MFMFont } from "../../utils/MFMFont";
+import { Font } from "../../utils/MFMFont";
 import { Atom } from "../Atom";
 import { Wall } from "./WallElement";
 import { Eraser } from "./EraserElement";
@@ -33,7 +33,7 @@ export class Text extends Elem {
           ew.mutate(40, new Atom(Eraser.TYPE_DEF, [0, 9]));
       }
 
-      const charMap: any = MFMFont.characters.get(this.char);
+      const charMap: any = Font.characters.get(this.char);
 
       if (!charMap) {
         return;

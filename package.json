@@ -40,17 +40,17 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/preset-env": "^7.5.4",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
     "@types/p5": "^0.7.3",
     "babel-loader": "^8.0.6",
     "pixi-particles": "^4.1.2",
     "pixi.js": "^5.1.5",
     "ts-loader": "^5.4.5",
-    "typescript": "^3.5.3",
-    "web-threads": "^1.0.51",
-    "webpack": "^4.36.1",
-    "webpack-cli": "^3.3.6"
+    "typescript": "^3.6.3",
+    "web-threads": "^1.0.52",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "threads": "^0.12.1"

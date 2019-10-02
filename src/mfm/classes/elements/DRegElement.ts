@@ -1,7 +1,7 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { IElementType } from "../ElementTypes";
-import { MFMUtils } from "../../utils/MFMUtils";
+import { Utils } from "../../utils/MFMUtils";
 import { Empty } from "./EmptyElement";
 import { Res } from "./ResElement";
 
@@ -33,8 +33,8 @@ export class DReg extends Elem {
     //CREATION
     if (availableSite && ew.is(availableSite, Empty.TYPE_DEF)) {
 
-      const createDReg: boolean = MFMUtils.oneIn(this.pDREG_CREATE);
-      const createRes: boolean = MFMUtils.oneIn(this.pRES_CREATE);
+      const createDReg: boolean = Utils.oneIn(this.pDREG_CREATE);
+      const createRes: boolean = Utils.oneIn(this.pRES_CREATE);
 
       if (createDReg) {
         ew.move(availableSite, DReg.CREATE());
@@ -43,7 +43,7 @@ export class DReg extends Elem {
       } else {
         ew.swap(availableSite);
       }
-    } else if (availableSite && (ew.is(availableSite, DReg.TYPE_DEF) && MFMUtils.oneIn(this.pDREG_DESTROY)) || (MFMUtils.oneIn(this.pANY_DESTROY))) {
+    } else if (availableSite && (ew.is(availableSite, DReg.TYPE_DEF) && Utils.oneIn(this.pDREG_DESTROY)) || (Utils.oneIn(this.pANY_DESTROY))) {
 
       ew.move(availableSite);
 

@@ -1,14 +1,14 @@
 import { EventWindow } from "../classes/EventWindow";
-import { MFMUtils } from "./MFMUtils";
+import { Utils } from "./MFMUtils";
 import { Empty } from "../classes/elements/EmptyElement";
 import { IElementType } from "../classes/ElementTypes";
 
-export class MFMActions {
+export class Actions {
 
 
   static patrol(ew: EventWindow, withinSet: number[] = EventWindow.ADJACENT4WAY, pChance: number = 1): boolean {
 
-    if (MFMUtils.oneIn(pChance)) {
+    if (Utils.oneIn(pChance)) {
       const ei: number = ew.getIndexes(withinSet, Empty.TYPE_DEF, true)[0];
 
       if (ei) {
