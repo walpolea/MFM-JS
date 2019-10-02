@@ -1,28 +1,30 @@
 import { EventWindow } from "../Eventwindow";
-import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
-import { Site } from "../Site";
-import { EmptyElement } from "./EmptyElement";
+import { Empty } from "./EmptyElement";
 import { Atom } from "../Atom";
-import { LinkedListElement } from "./LinkedListElement";
+import { LinkedList } from "./LinkedListElement";
+import { StuckMembrane } from "./StuckMembraneElement";
+import { Res } from "./ResElement";
 
-export class SwapWormElement extends LinkedListElement {
+export class SwapWorm extends LinkedList {
+
+  static TYPE_DEF: IElementType = { name: "SWAP WORM", type: "Sw", class: SwapWorm, color: 0xcc0066 };
+
 
   WORMSIZE: number;
   birthCount: number;
   idleCount: number = 0;
 
   constructor(size: number = 7, prev?: number, next?: number) {
-    super(ElementTypes.SWAPWORM, prev, next);
+    super(SwapWorm.TYPE_DEF, prev, next);
     this.birthCount = this.WORMSIZE = size;
-
   }
 
   birth(ew: EventWindow) {
     //BE BORN
     const choices: number[] = EventWindow.ADJACENT8WAY;
     const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
-    const leavingAtom: Atom = new Atom(ElementTypes.SWAPWORM, [0, relativeSiteToGoTo, this.next]);
+    const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
 
     const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
@@ -33,11 +35,11 @@ export class SwapWormElement extends LinkedListElement {
 
   //Eat up the Sticky Membrane protecting the worm in order to improve chances of getting unstuck
   lowerDefenses(ew: EventWindow) {
-    // ew.getAll(ElementTypes.STICKYMEMBRANE).forEach(membraneSite => {
+    // ew.getAll(StickyMembrane.TYPE_DEF).forEach(membraneSite => {
     //   membraneSite.killSelf();
     // });
 
-    ew.getAll(ElementTypes.STUCKMEMBRANE).forEach(membraneSite => {
+    ew.getAll(StuckMembrane.TYPE_DEF).forEach(membraneSite => {
       membraneSite.killSelf();
     })
   }
@@ -47,8 +49,8 @@ export class SwapWormElement extends LinkedListElement {
     //MAKE SWAPPER
     const choices: number[] = moveChoices ? moveChoices : EventWindow.ADJACENT8WAY;
     const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
-    const leavingAtom: Atom = new Atom(ElementTypes.SWAPWORM, [0, relativeSiteToGoTo, this.next]);
-    (leavingAtom.elem as LinkedListElement).isSwapping = true;
+    const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
+    (leavingAtom.elem as LinkedList).isSwapping = true;
 
     const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
@@ -60,7 +62,7 @@ export class SwapWormElement extends LinkedListElement {
   eat(ew: EventWindow) {
 
     //Eat Res
-    let possibleRes = ew.getAdjacent4Way(ElementTypes.RES);
+    let possibleRes = ew.getAdjacent4Way(Res.TYPE_DEF);
 
     if (possibleRes) {
       possibleRes.killSelf();
@@ -75,7 +77,7 @@ export class SwapWormElement extends LinkedListElement {
     const compareMap = new Map<number, IElementType>();
 
     EventWindow.ADJACENT8WAY.forEach(index => {
-      compareMap.set(index, ElementTypes.EMPTY);
+      compareMap.set(index, Empty.TYPE_DEF);
     })
 
     return ew.windowNotCompare(compareMap);
@@ -84,15 +86,15 @@ export class SwapWormElement extends LinkedListElement {
 
 
   shouldExcreteMembrane(ew: EventWindow) {
-    //return !ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE) && ew.getAdjacent8Way(ElementTypes.EMPTY);
-    return !ew.getAdjacent4Way(ElementTypes.STUCKMEMBRANE) && ew.getAdjacent8Way(ElementTypes.EMPTY);
+    //return !ew.getAdjacent4Way(StickyMembrane.TYPE_DEF) && ew.getAdjacent8Way(Empty.TYPE_DEF);
+    return !ew.getAdjacent4Way(StuckMembrane.TYPE_DEF) && ew.getAdjacent8Way(Empty.TYPE_DEF);
   }
 
   //excrete membrane when no membrane around (4-way) and empty available (8-way)
   excreteMembrane(ew: EventWindow) {
     if (this.shouldExcreteMembrane(ew)) {
-      //ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.SWAPWORM, 0.5, 1]));
-      ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STUCKMEMBRANE, [ElementTypes.SWAPWORM]));
+      //ew.origin.mutateSite(ew.getAdjacent8Way(Empty.TYPE_DEF), new Atom(StickyMembrane.TYPE_DEF, [SwapWorm.TYPE_DEF, 0.5, 1]));
+      ew.origin.mutateSite(ew.getAdjacent8Way(Empty.TYPE_DEF), new Atom(StuckMembrane.TYPE_DEF, [SwapWorm.TYPE_DEF]));
     }
   }
 

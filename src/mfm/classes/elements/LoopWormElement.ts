@@ -1,13 +1,20 @@
 import { EventWindow } from "../Eventwindow";
-import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
-import { EmptyElement } from "./EmptyElement";
+import { Empty } from "./EmptyElement";
 import { Atom } from "../Atom";
-import { LinkedListElement } from "./LinkedListElement";
-import { MFMUtils } from "../../utils/utils";
+import { LinkedList } from "./LinkedListElement";
+import { MFMUtils } from "../../utils/MFMUtils";
+import { StickyMembrane } from "./StickyMembraneElement";
+import { Res } from "./ResElement";
+import { StuckMembrane } from "./StuckMembraneElement";
+import { SPLAT } from "../../utils/SPLAT";
+import { LoopSeed } from "./LoopSeedElement";
 
-export class LoopWormElement extends LinkedListElement {
+export class LoopWorm extends LinkedList {
+
+  static TYPE_DEF: IElementType = { name: "LOOP WORM", type: "Tw", class: LoopWorm, color: 0xcc00cc };
+  static CREATE = LoopWorm.CREATOR();
 
   pCHANCE_TO_EAT: number = 1000;
   WORMSIZE: number;
@@ -19,20 +26,31 @@ export class LoopWormElement extends LinkedListElement {
   maxEats: number = 2;
   eatCount: number = 0;
 
+  mateCheck: Map<number, string>;
+
   constructor(size: number = 4, prev: number = undefined, next: number = undefined) {
 
-    super(ElementTypes.LOOPWORM, prev, next);
+    super(LoopWorm.TYPE_DEF, prev, next);
+    LoopWorm.INITIALIZE_SPLAT_MAP()();
+
+
     this.birthCount = this.WORMSIZE = size;
+
+    this.mateCheck = SPLAT.splatToMap(`
+          ~~##~
+          ~#@~~
+          ##~~~
+      `);
 
   }
 
   isStuck(ew: EventWindow): boolean {
 
     const compareMap = new Map<number, IElementType>();
-    compareMap.set(1, ElementTypes.EMPTY);
-    compareMap.set(2, ElementTypes.EMPTY);
-    compareMap.set(3, ElementTypes.EMPTY);
-    compareMap.set(4, ElementTypes.EMPTY);
+    compareMap.set(1, Empty.TYPE_DEF);
+    compareMap.set(2, Empty.TYPE_DEF);
+    compareMap.set(3, Empty.TYPE_DEF);
+    compareMap.set(4, Empty.TYPE_DEF);
 
     return ew.windowNotCompare(compareMap);
 
@@ -44,8 +62,8 @@ export class LoopWormElement extends LinkedListElement {
     let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
     let possibleTail: Site = this.getSiteDirection(ew, relativeSiteToGo);
 
-    if (possibleTail && possibleTail.atom.type === ElementTypes.LOOPWORM) {
-      const pt: LinkedListElement = (possibleTail.atom.elem as LinkedListElement);
+    if (possibleTail && possibleTail.atom.type === LoopWorm.TYPE_DEF) {
+      const pt: LinkedList = (possibleTail.atom.elem as LinkedList);
 
       if (pt && pt.isAtTail()) {
         console.log("CONNECTED TAIL!!");
@@ -60,7 +78,7 @@ export class LoopWormElement extends LinkedListElement {
   eat(ew: EventWindow) {
 
     if (MFMUtils.oneIn(this.pCHANCE_TO_EAT)) {
-      let possibleRes = ew.getAdjacent4Way(ElementTypes.RES);
+      let possibleRes = ew.getAdjacent4Way(Res.TYPE_DEF);
 
       if (possibleRes) {
 
@@ -79,9 +97,9 @@ export class LoopWormElement extends LinkedListElement {
 
   hardenMembrane(ew: EventWindow) {
 
-    let possibleRes = ew.getIndexes(EventWindow.ADJACENT4WAY, ElementTypes.RES, true)[0];
+    let possibleRes = ew.getIndexes(EventWindow.ADJACENT4WAY, Res.TYPE_DEF, true)[0];
     if (possibleRes) {
-      ew.mutate(possibleRes, new Atom(ElementTypes.STUCKMEMBRANE, [ElementTypes.LOOPWORM]));
+      ew.mutate(possibleRes, new Atom(StuckMembrane.TYPE_DEF, [LoopWorm.TYPE_DEF]));
     }
 
 
@@ -102,7 +120,7 @@ export class LoopWormElement extends LinkedListElement {
       //BE BORN
       choices = EventWindow.ADJACENT4WAY;
       relativeSiteToGoTo = choices[Math.random() * choices.length >> 0];
-      leavingAtom = new Atom(ElementTypes.LOOPWORM, [0, relativeSiteToGoTo, this.next]);
+      leavingAtom = new Atom(LoopWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
 
       const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
@@ -124,18 +142,27 @@ export class LoopWormElement extends LinkedListElement {
 
     } else if (this.isConnected) {
 
+      //mating
+      if (MFMUtils.oneIn(10)) {
+        const results = ew.query(this.mateCheck, 0, LoopWorm.SPLAT_MAP);
+        //console.log("mating", LoopSeed.SPLAT_MAP, this.mateCheck, results);
+        if (results) {
+          ew.mutate(0, LoopSeed.CREATE());
+        }
+      }
+
       if (MFMUtils.oneIn(10))
         this.excreteMembrane(ew);
 
       //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!
-      if (!(this.getPrevElement(ew) instanceof LinkedListElement) && !(this.getNextElement(ew) instanceof LinkedListElement)) {
+      if (!(this.getPrevElement(ew) instanceof LinkedList) && !(this.getNextElement(ew) instanceof LinkedList)) {
         console.log("disconnected");
         ew.origin.killSelf();
         return;
       }
 
       //console.log("is connected");
-      const nextEl: LoopWormElement = (this.getNextElement(ew) as LoopWormElement);
+      const nextEl: LoopWorm = (this.getNextElement(ew) as LoopWorm);
       if (nextEl) {
         nextEl.isConnected = true;
       }
@@ -154,15 +181,15 @@ export class LoopWormElement extends LinkedListElement {
         //let choices: number[] = EventWindow.ADJACENT4WAY;
         //let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
 
-        let choices: number[] = [...ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.EMPTY), ...ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE)];
+        let choices: number[] = [...ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF), ...ew.getIndexes(EventWindow.ADJACENT8WAY, StickyMembrane.TYPE_DEF)];
         let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
 
         if (this.expandCount > 0
-          && ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.LOOPWORM, false).filter(site => site).length < 3) {
+          && ew.getSites(EventWindow.ADJACENT8WAY, LoopWorm.TYPE_DEF, false).filter(site => site).length < 3) {
 
           //console.log("time to grow")
-          const leavingAtom: Atom = new Atom(ElementTypes.LOOPWORM, [0, relativeSiteToGo, this.next]);
-          (leavingAtom.elem as LoopWormElement).isConnected = true;
+          const leavingAtom: Atom = new Atom(LoopWorm.TYPE_DEF, [0, relativeSiteToGo, this.next]);
+          (leavingAtom.elem as LoopWorm).isConnected = true;
           const moved = this.moveTo(ew, relativeSiteToGo, leavingAtom, 8);
 
           if (moved) {
@@ -180,8 +207,8 @@ export class LoopWormElement extends LinkedListElement {
       //MAKE SWAPPER
       choices = EventWindow.ADJACENT4WAY;
       relativeSiteToGoTo = choices[Math.random() * choices.length >> 0];
-      leavingAtom = new Atom(ElementTypes.LOOPWORM, [0, relativeSiteToGoTo, this.next]);
-      (leavingAtom.elem as LinkedListElement).isSwapping = true;
+      leavingAtom = new Atom(LoopWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
+      (leavingAtom.elem as LinkedList).isSwapping = true;
 
       const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
@@ -204,14 +231,14 @@ export class LoopWormElement extends LinkedListElement {
 
 
   shouldExcreteMembrane(ew: EventWindow) {
-    return !ew.getAdjacent4Way(ElementTypes.STICKYMEMBRANE) && ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY, true)[0];
+    return !ew.getAdjacent4Way(StickyMembrane.TYPE_DEF) && ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF, true)[0];
   }
 
   //excrete membrane when no membrane around (4-way) and empty available (8-way)
   excreteMembrane(ew: EventWindow) {
     if (this.shouldExcreteMembrane(ew)) {
-      //ew.origin.mutateSite(ew.getAdjacent8Way(ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.LOOPWORM, 0.5, 1]));
-      ew.origin.mutateSite(ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY, true)[0], new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.LOOPWORM, 0.5, 1]));
+      //ew.origin.mutateSite(ew.getAdjacent8Way(Empty.TYPE_DEF), new Atom(StickyMembrane.TYPE_DEF, [LoopWorm.TYPE_DEF, 0.5, 1]));
+      ew.origin.mutateSite(ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF, true)[0], StickyMembrane.CREATE([LoopWorm.TYPE_DEF, 0.5, 1]));
     }
   }
 }

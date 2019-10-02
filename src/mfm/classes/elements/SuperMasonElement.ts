@@ -1,19 +1,26 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
-import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
+import { MembraneWall } from "./MembraneWallElement";
+import { SwapWorm } from "./SwapWormElement";
+import { Res } from "./ResElement";
 
-export class SuperMasonElement extends Elem {
+export class SuperMason extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "SUPER MASON", type: "SMa", class: SuperMason, color: 0x20cccc };
+  static CREATE = SuperMason.CREATOR();
+
   path: string[] = [];
   curIndex: number = 0; //used to traverse index, but now this is sort of like the mason's ID in the path, it doesn't change for the individual, but is kept up (+1,-1) by neighbor masons
 
   //it's important that the path loops on itself, even if it just means reversing back to the beginning
   constructor(_path: string = undefined, _curIndex: number = 0) {
-    super(ElementTypes.SUPER_MASON.name, ElementTypes.SUPER_MASON.type, 100, 100);
+    super(SuperMason.TYPE_DEF, 100, 100);
 
     if (!_path) {
-      _path = SuperMasonElement.boxPath(28);
+      _path = SuperMason.boxPath(28);
     }
 
     this.setPath(_path);
@@ -32,7 +39,7 @@ export class SuperMasonElement extends Elem {
     }
 
     let lastdir: string = this.curIndex === 0 ? this.path[this.path.length - 1] : this.path[this.curIndex - 1];
-    let reverseDir: string = SuperMasonElement.getOppositeDir(lastdir);
+    let reverseDir: string = SuperMason.getOppositeDir(lastdir);
     let dir: string = this.path[this.curIndex];
 
     let blueprints: any = {
@@ -91,21 +98,21 @@ export class SuperMasonElement extends Elem {
     if (lastdir !== dir) {
       const lastOuterBuildSite: Site = blueprints[lastdir].outerBuildSite();
       if (lastOuterBuildSite) {
-        ew.origin.mutateSite(lastOuterBuildSite, new Atom(ElementTypes.MEMBRANEWALL, [.1, ElementTypes.SWAPWORM]));
+        ew.origin.mutateSite(lastOuterBuildSite, MembraneWall.CREATE([.1, SwapWorm.TYPE_DEF]));
       }
     }
 
     //build the outer wall
     if (outerBuildSite) {
-      if (outerBuildSite.atom.type === ElementTypes.RES || outerBuildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(outerBuildSite, new Atom(ElementTypes.MEMBRANEWALL, [.1, ElementTypes.SWAPWORM]));
+      if (outerBuildSite.atom.type === Res.TYPE_DEF || outerBuildSite.atom.type === Empty.TYPE_DEF) {
+        ew.origin.mutateSite(outerBuildSite, MembraneWall.CREATE([.1, SwapWorm.TYPE_DEF]));
       }
     }
 
     //build the inner wall
     if (innerBuildSite) {
-      if (innerBuildSite.atom.type === ElementTypes.RES || innerBuildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(innerBuildSite, new Atom(ElementTypes.MEMBRANEWALL, [.1, ElementTypes.SWAPWORM]));
+      if (innerBuildSite.atom.type === Res.TYPE_DEF || innerBuildSite.atom.type === Empty.TYPE_DEF) {
+        ew.origin.mutateSite(innerBuildSite, MembraneWall.CREATE([.1, SwapWorm.TYPE_DEF]));
       }
     }
 
@@ -113,14 +120,14 @@ export class SuperMasonElement extends Elem {
     if (moveSite) {
       ew.origin.mutateSite(
         moveSite,
-        new Atom(ElementTypes.SUPER_MASON, [SuperMasonElement.pathToString(this.path), this.curIndex + 1])
+        SuperMason.CREATE([SuperMason.pathToString(this.path), this.curIndex + 1])
       );
     }
 
     if (lastSite) {
       ew.origin.mutateSite(
         lastSite,
-        new Atom(ElementTypes.SUPER_MASON, [SuperMasonElement.pathToString(this.path), this.curIndex - 1])
+        SuperMason.CREATE([SuperMason.pathToString(this.path), this.curIndex - 1])
       );
     }
 

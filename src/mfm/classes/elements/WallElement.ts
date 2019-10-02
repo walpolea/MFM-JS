@@ -1,10 +1,17 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 
-export class WallElement extends Elem {
+export class Wall extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "WALL", type: "w", class: Wall, color: 0x2020ff };
+  static CREATE = Wall.CREATOR();
+
   constructor() {
-    super(ElementTypes.WALL.name, ElementTypes.WALL.type, 0, 100);
+    super(Wall.TYPE_DEF, 0, 100);
+
+    Wall.INITIALIZE_SPLAT_MAP()();
+
   }
   exec(ew: EventWindow) {
     super.exec(ew);

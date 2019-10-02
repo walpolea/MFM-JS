@@ -1,13 +1,15 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
-import { Site } from "../Site";
-import { EmptyElement } from "./EmptyElement";
-import { ResElement } from "./ResElement";
-import { Atom } from "../Atom";
-import { MFMUtils } from "../../utils/utils";
+import { IElementType } from "../ElementTypes";
+import { MFMUtils } from "../../utils/MFMUtils";
+import { Empty } from "./EmptyElement";
+import { Res } from "./ResElement";
 
-export class DRegElement extends Elem {
+export class DReg extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "DREG", type: "D", class: DReg, color: 0xff2020 };
+  static CREATE = DReg.CREATOR();
+
   pDREG_CREATE: number;
   pRES_CREATE: number;
   pDREG_DESTROY: number;
@@ -15,7 +17,7 @@ export class DRegElement extends Elem {
   pTOTAL_CHANCE: number;
 
   constructor() {
-    super(ElementTypes.DREG.name, ElementTypes.DREG.type);
+    super(DReg.TYPE_DEF);
 
     this.pDREG_CREATE = 1000;
     this.pRES_CREATE = 200;
@@ -29,19 +31,19 @@ export class DRegElement extends Elem {
     const availableSite: number = ew.getRandomIndex(EventWindow.ADJACENT4WAY);
 
     //CREATION
-    if (availableSite && ew.is(availableSite, ElementTypes.EMPTY)) {
+    if (availableSite && ew.is(availableSite, Empty.TYPE_DEF)) {
 
       const createDReg: boolean = MFMUtils.oneIn(this.pDREG_CREATE);
       const createRes: boolean = MFMUtils.oneIn(this.pRES_CREATE);
 
       if (createDReg) {
-        ew.move(availableSite, new Atom(ElementTypes.DREG));
+        ew.move(availableSite, DReg.CREATE());
       } else if (createRes) {
-        ew.move(availableSite, new Atom(ElementTypes.RES));
+        ew.move(availableSite, Res.CREATE());
       } else {
         ew.swap(availableSite);
       }
-    } else if (availableSite && (ew.is(availableSite, ElementTypes.DREG) && MFMUtils.oneIn(this.pDREG_DESTROY)) || (MFMUtils.oneIn(this.pANY_DESTROY))) {
+    } else if (availableSite && (ew.is(availableSite, DReg.TYPE_DEF) && MFMUtils.oneIn(this.pDREG_DESTROY)) || (MFMUtils.oneIn(this.pANY_DESTROY))) {
 
       ew.move(availableSite);
 

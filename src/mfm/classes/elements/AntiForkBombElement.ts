@@ -1,20 +1,26 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
+import { ForkBomb } from "./ForkBombElement";
 
-export class AntiForkBombElement extends Elem {
+export class AntiForkBomb extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "ANTI FORK BOMB", type: "Af", class: AntiForkBomb, color: 0x7f7f20 };
+  static CREATE = AntiForkBomb.CREATOR();
+
   birthedIndex: number;
   pDIE: number = 1.2; //~75% chance to die
   pEXPLODE: number = 1.33; //75% chance to explode
-  constructor(_birthedIndex: number = undefined) {
-    super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
 
+  constructor(_birthedIndex: number = undefined) {
+    super(AntiForkBomb.TYPE_DEF);
     this.birthedIndex = _birthedIndex;
   }
   exec(ew: EventWindow) {
-    let fb: Site = ew.getNearest(ElementTypes.FORK_BOMB);
+    let fb: Site = ew.getNearest(ForkBomb.TYPE_DEF);
 
     //randomly die if no fork bombs around
     if (!fb && Math.random() * this.pDIE < 1) {
@@ -25,8 +31,8 @@ export class AntiForkBombElement extends Elem {
     //while there are forkbombs present, destroy them!
 
     while (fb) {
-      ew.origin.mutateSite(fb, new Atom(ElementTypes.ANTI_FORK_BOMB));
-      fb = ew.getNearest(ElementTypes.FORK_BOMB);
+      ew.origin.mutateSite(fb, new Atom(AntiForkBomb.TYPE_DEF));
+      fb = ew.getNearest(ForkBomb.TYPE_DEF);
     }
 
     //RED ALERT! Make new anti fork bombs in all EMPTY directions
@@ -34,18 +40,18 @@ export class AntiForkBombElement extends Elem {
       //this is the first
       [...Array(40).keys()].forEach(index => {
         let site = ew.getSiteByIndex(index);
-        if (site && site.atom.type === ElementTypes.EMPTY) {
-          ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB, [index]));
+        if (site && site.atom.type === Empty.TYPE_DEF) {
+          ew.origin.mutateSite(site, new Atom(AntiForkBomb.TYPE_DEF, [index]));
         }
       });
     } else {
       //this is a child, just continue that way
       [ew.getSiteByIndex(this.birthedIndex)].forEach(site => {
-        if (site && site.atom.type === ElementTypes.EMPTY) {
+        if (site && site.atom.type === Empty.TYPE_DEF) {
           if (Math.random() * this.pEXPLODE < 1) {
-            ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB)); //explode
+            ew.origin.mutateSite(site, new Atom(AntiForkBomb.TYPE_DEF)); //explode
           } else {
-            ew.origin.mutateSite(site, new Atom(ElementTypes.ANTI_FORK_BOMB, [this.birthedIndex]));
+            ew.origin.mutateSite(site, new Atom(AntiForkBomb.TYPE_DEF, [this.birthedIndex]));
           }
         }
       });

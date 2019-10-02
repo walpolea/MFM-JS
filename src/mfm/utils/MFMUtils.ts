@@ -22,4 +22,18 @@ export class MFMUtils {
   static oneIn(n: number): boolean {
     return ((Math.random() * n) < 1);
   }
+
+  static oneRandom(arr: any[]): any {
+    return arr[(arr.length * Math.random()) >> 0];
+  }
+
+  //reduce an array to a random n of the values
+  static getRandom(arr: any[], n: number = 1): any[] {
+
+    while (arr.length > n) {
+      arr.splice(Math.random() * arr.length >> 0, 1);
+    }
+
+    return arr;
+  }
 }

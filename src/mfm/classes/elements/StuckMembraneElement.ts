@@ -2,9 +2,14 @@ import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
-import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
+import { DReg } from "./DRegElement";
+import { MFMActions } from "../../utils/MFMActions";
 
-export class StuckMembraneElement extends Elem {
+export class StuckMembrane extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "STUCK MEMBRANE", type: "Stm", class: StuckMembrane, color: 0x5e0066 }
+  static CREATE = StuckMembrane.CREATOR();
 
   stickyType: IElementType;
   idleCount: number = 0;
@@ -12,12 +17,11 @@ export class StuckMembraneElement extends Elem {
   maxRoam: number;
 
   constructor(stickyType?: IElementType, maxRoam: number = 2) {
-    super(ElementTypes.STUCKMEMBRANE.name, ElementTypes.STUCKMEMBRANE.type);
+    super(StuckMembrane.TYPE_DEF);
     this.stickyType = stickyType ? stickyType : undefined;
     this.maxRoam = maxRoam;
 
   }
-
 
   moveToSticker(ew: EventWindow) {
 
@@ -29,7 +33,7 @@ export class StuckMembraneElement extends Elem {
 
       const toSite: Site = ew.getSiteByIndex(toSiteIndex);
 
-      if (toSite && toSite.atom.type === ElementTypes.EMPTY) {
+      if (toSite && toSite.atom.type === Empty.TYPE_DEF) {
         const swapped: boolean = ew.origin.swapAtoms(toSite);
 
         if (!swapped) {
@@ -42,7 +46,7 @@ export class StuckMembraneElement extends Elem {
       }
     } else {
       //roam
-      const swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
+      const swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent4Way(Empty.TYPE_DEF));
 
       if (!swapped) {
         this.idleCount++;
@@ -67,7 +71,7 @@ export class StuckMembraneElement extends Elem {
     if (sites.length) {
       sites.forEach(dreg => {
         const toSite: number = eightwaypushmap.get(dreg);
-        if (ew.is(toSite, ElementTypes.EMPTY)) {
+        if (ew.is(toSite, Empty.TYPE_DEF)) {
           ew.move(toSite, undefined, dreg);
         }
       });
@@ -76,7 +80,7 @@ export class StuckMembraneElement extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STUCKMEMBRANE, false).filter(site => site).length > 2) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 2) {
       ew.origin.killSelf();
     }
   }
@@ -100,7 +104,7 @@ export class StuckMembraneElement extends Elem {
     this.uncrowd(ew);
 
     //repel DREG as defensive move.
-    this.repelType(ew, ElementTypes.DREG);
+    MFMActions.repel(ew, DReg.TYPE_DEF)
     //this.excreteMembrane(ew);
 
     //death is the greatest adventure
@@ -109,15 +113,15 @@ export class StuckMembraneElement extends Elem {
     }
 
     //we're stuck on our stickyType, do nothing!
-    if (this.stickyType && !(this.stickyType === ElementTypes.STUCKMEMBRANE) && this.isAdjacentToSticker(ew)) {
+    if (this.stickyType && !(this.stickyType === StuckMembrane.TYPE_DEF) && this.isAdjacentToSticker(ew)) {
       return;
     }
 
-    if (!this.stickyType || this.stickyType === ElementTypes.STUCKMEMBRANE) {
+    if (!this.stickyType || this.stickyType === StuckMembrane.TYPE_DEF) {
 
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
       const stickSite: Site = ew.getAdjacent8Way();
-      if (stickSite && stickSite.atom.type !== ElementTypes.EMPTY) {
+      if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
         this.stickyType = stickSite.atom.type;
       }
 

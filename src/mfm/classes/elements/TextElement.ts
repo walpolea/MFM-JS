@@ -1,19 +1,23 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
-import { MFMUtils } from "../../utils/utils";
+import { ElementTypes, IElementType } from "../ElementTypes";
 import { MFMFont } from "../../utils/MFMFont";
 import { Atom } from "../Atom";
+import { Wall } from "./WallElement";
+import { Eraser } from "./EraserElement";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
-export class TextElement extends Elem {
-  pPATROL: number = 1;
+export class Text extends Elem {
 
+  static TYPE_DEF: IElementType = { name: "TEXT", type: "Tx", class: Text, color: 0xd66633 }
+
+  pPATROL: number = 1;
   char: string;
   init: boolean = false;
 
   constructor(_char: string = "0123456789") {
-    super(ElementTypes.TEXT.name, ElementTypes.TEXT.type);
+    super(Text.TYPE_DEF);
+
     this.char = _char;
   }
   exec(ew: EventWindow) {
@@ -23,10 +27,10 @@ export class TextElement extends Elem {
       if (this.char.length > 1) {
         const charr: string[] = this.char.split("");
         this.char = charr.shift();
-        ew.mutate(40, new Atom(ElementTypes.TEXT, [charr.join("")]));
-      } else if (ew.is(40, ElementTypes.TEXT)) {
+        ew.mutate(40, new Atom(Text.TYPE_DEF, [charr.join("")]));
+      } else if (ew.is(40, Text.TYPE_DEF)) {
         if (!this.init)
-          ew.mutate(40, new Atom(ElementTypes.ERASER, [0, 9]));
+          ew.mutate(40, new Atom(Eraser.TYPE_DEF, [0, 9]));
       }
 
       const charMap: any = MFMFont.characters.get(this.char);
@@ -38,11 +42,11 @@ export class TextElement extends Elem {
       const selfIsPos: boolean = charMap.positive.indexOf(0) > -1;
 
       charMap.positive.filter((i: number) => i != 0).forEach((i: number) => {
-        ew.mutate(i, new Atom(ElementTypes.WALL, undefined, undefined, 0xf09a19));
+        ew.mutate(i, new Atom(Wall.TYPE_DEF, undefined, undefined, 0xf09a19));
       });
 
       charMap.negative.filter((i: number) => i != 0).forEach((i: number) => {
-        ew.mutate(i, new Atom(ElementTypes.WALL, undefined, undefined, 0x000000));
+        ew.mutate(i, new Atom(Wall.TYPE_DEF, undefined, undefined, 0x000000));
       });
 
       //Camoflauge
@@ -55,7 +59,7 @@ export class TextElement extends Elem {
       this.init = true;
 
     } else {
-      ew.origin.killSelf(new Atom(ElementTypes.ERASER, [0, 9]))
+      ew.origin.killSelf(new Atom(Eraser.TYPE_DEF, [0, 9]))
     }
     super.exec(ew);
   }

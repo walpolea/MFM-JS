@@ -1,13 +1,15 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { ElementTypes, IElementType } from "../ElementTypes";
 
-export class DecayWallElement extends Elem {
+export class DecayWall extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "DECAY WALL", type: "Dw", class: DecayWall, color: 0x4040ff };
 
   lifeSpan: number;
 
   constructor(lifeSpan: number = 10) {
-    super(ElementTypes.DECAYWALL.name, ElementTypes.DECAYWALL.type, 0, 100);
+    super(DecayWall.TYPE_DEF, 0, 100);
 
     this.lifeSpan = lifeSpan;
   }

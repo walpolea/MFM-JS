@@ -1,6 +1,6 @@
 import { Site } from "./Site";
 import { GridCoord } from "../interfaces/IGridCoord";
-import { MFMUtils } from "../utils/utils";
+import { MFMUtils } from "../utils/MFMUtils";
 
 export class Tile {
   width: number;

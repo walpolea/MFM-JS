@@ -1,20 +1,27 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
 import { GridCoord } from "../../interfaces/IGridCoord";
+import { Empty } from "./EmptyElement";
+import { Wall } from "./WallElement";
+import { Res } from "./ResElement";
 
-export class MasonElement extends Elem {
+export class Mason extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "MASON", type: "Ma", class: Mason, color: 0x20ffff };
+  static CREATE = Mason.CREATOR();
+
   path: string[] = [];
   curIndex: number = 0; //used to traverse index, but now this is sort of like the mason's ID in the path, it doesn't change for the individual, but is kept up (+1,-1) by neighbor masons
 
   //it's important that the path loops on itself, even if it just means reversing back to the beginning
   constructor(_path: string = undefined, _curIndex: number = 0) {
-    super(ElementTypes.MASON.name, ElementTypes.MASON.type, 100, 100);
+    super(Mason.TYPE_DEF);
 
     if (!_path) {
-      _path = MasonElement.boxPath();
+      _path = Mason.boxPath();
     }
 
     this.setPath(_path);
@@ -33,7 +40,7 @@ export class MasonElement extends Elem {
     }
 
     let lastdir: string = this.curIndex === 0 ? this.path[this.path.length - 1] : this.path[this.curIndex - 1];
-    let reverseDir: string = MasonElement.getOppositeDir(lastdir);
+    let reverseDir: string = Mason.getOppositeDir(lastdir);
     let dir: string = this.path[this.curIndex];
 
     let blueprints: any = {
@@ -94,21 +101,21 @@ export class MasonElement extends Elem {
     if (lastdir !== dir) {
       const lastOuterBuildSite: Site = blueprints[lastdir].outerBuildSite();
       if (lastOuterBuildSite) {
-        ew.origin.mutateSite(lastOuterBuildSite, new Atom(ElementTypes.WALL));
+        ew.origin.mutateSite(lastOuterBuildSite, new Atom(Wall.TYPE_DEF));
       }
     }
 
     //build the outer wall
     if (outerBuildSite) {
-      if (outerBuildSite.atom.type === ElementTypes.RES || outerBuildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(outerBuildSite, new Atom(ElementTypes.WALL));
+      if (outerBuildSite.atom.type === Res.TYPE_DEF || outerBuildSite.atom.type === Empty.TYPE_DEF) {
+        ew.origin.mutateSite(outerBuildSite, new Atom(Wall.TYPE_DEF));
       }
     }
 
     //build the inner wall
     if (innerBuildSite) {
-      if (innerBuildSite.atom.type === ElementTypes.RES || innerBuildSite.atom.type === ElementTypes.EMPTY) {
-        ew.origin.mutateSite(innerBuildSite, new Atom(ElementTypes.WALL));
+      if (innerBuildSite.atom.type === Res.TYPE_DEF || innerBuildSite.atom.type === Empty.TYPE_DEF) {
+        ew.origin.mutateSite(innerBuildSite, new Atom(Wall.TYPE_DEF));
       }
     }
 
@@ -116,14 +123,14 @@ export class MasonElement extends Elem {
     if (moveSite) {
       ew.origin.mutateSite(
         moveSite,
-        new Atom(ElementTypes.MASON, [MasonElement.pathToString(this.path), this.curIndex + 1])
+        new Atom(Mason.TYPE_DEF, [Mason.pathToString(this.path), this.curIndex + 1])
       );
     }
 
     if (lastSite) {
       // ew.origin.mutateSite(
       //   lastSite,
-      //   new Atom(ElementTypes.MASON, [MasonElement.pathToString(this.path), this.curIndex - 1])
+      //   new Atom(Mason.TYPE_DEF, [MasonElement.pathToString(this.path), this.curIndex - 1])
       // );
     }
 

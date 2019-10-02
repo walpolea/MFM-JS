@@ -1,7 +1,7 @@
 import { GridCoord } from "../interfaces/IGridCoord";
-import { MFMUtils } from "../utils/utils";
+import { MFMUtils } from "../utils/MFMUtils";
 import { Atom } from "./Atom";
-import { ElementTypes } from "./ElementTypes";
+import { Empty } from "./elements/EmptyElement";
 
 export class Site {
   tilePos: GridCoord;
@@ -14,8 +14,8 @@ export class Site {
     this.tilePos = _pos;
     this.id = MFMUtils.CtoID(this.tilePos);
 
-    this.atom = new Atom(ElementTypes.EMPTY);
-    this.baseAtom = new Atom(ElementTypes.EMPTY);
+    this.atom = new Atom(Empty.TYPE_DEF);
+    this.baseAtom = new Atom(Empty.TYPE_DEF);
 
     this.create();
   }
@@ -25,17 +25,17 @@ export class Site {
   killAtom(targetSite: Site) {
     let kill: boolean = Math.random() * 100 < targetSite.atom.elem.destroyability;
     if (kill) {
-      targetSite.atom = new Atom(ElementTypes.EMPTY);
+      targetSite.atom = new Atom(Empty.TYPE_DEF);
     }
   }
 
-  killSelf(leavingAtom: Atom = new Atom(ElementTypes.EMPTY)) {
+  killSelf(leavingAtom: Atom = new Atom(Empty.TYPE_DEF)) {
     this.atom = leavingAtom;
   }
 
   //if target site is killable
   //move this atom to targetSite, and leave behind leavingAtom, which by default is empty
-  moveAtom(targetSite: Site, leavingAtom: Atom = new Atom(ElementTypes.EMPTY)) {
+  moveAtom(targetSite: Site, leavingAtom: Atom = new Atom(Empty.TYPE_DEF)) {
     if (targetSite && targetSite.canDestroy()) {
       [this.atom, targetSite.atom] = [leavingAtom, this.atom];
     }
@@ -62,7 +62,7 @@ export class Site {
     this.baseAtom = newAtom;
   }
 
-  killBase(leavingAtom: Atom = new Atom(ElementTypes.EMPTY)): void {
+  killBase(leavingAtom: Atom = new Atom(Empty.TYPE_DEF)): void {
     this.baseAtom = leavingAtom;
   }
 

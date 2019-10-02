@@ -1,11 +1,17 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
-import { LoopWormElement } from "./LoopWormElement";
+import { IElementType } from "../ElementTypes";
+import { LoopWorm } from "./LoopWormElement";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
+import { LoopNucleus } from "./LoopNucleusElement";
+import { Wall } from "./WallElement";
 
-export class LoopSeedElement extends Elem {
+export class LoopSeed extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "LOOP SEED", type: "Ls", class: LoopSeed, color: 0xFCC038 };
+  static CREATE = LoopSeed.CREATOR();
 
   travelPath: number[] = [4, 3, 1, 2];
   nextTravel: number = 0;
@@ -14,13 +20,13 @@ export class LoopSeedElement extends Elem {
 
 
   constructor() {
-    super(ElementTypes.LOOPSEED.name, ElementTypes.LOOPSEED.type);
+    super(LoopSeed.TYPE_DEF);
   }
 
 
   makeLoopNode(ew: EventWindow, index: number, prev: number, next: number) {
 
-    const loopNode: LoopWormElement = new LoopWormElement(0, prev, next);
+    const loopNode: LoopWorm = new LoopWorm(0, prev, next);
     loopNode.isConnected = true;
     loopNode.expandCount = 1;
 
@@ -62,7 +68,7 @@ export class LoopSeedElement extends Elem {
 
       clearingToClear.forEach(siteNum => {
         const site: Site = ew.getSiteByIndex(siteNum);
-        ew.origin.mutateSite(site, new Atom(ElementTypes.EMPTY));
+        ew.origin.mutateSite(site, new Atom(Empty.TYPE_DEF));
       });
     }
 
@@ -84,13 +90,13 @@ export class LoopSeedElement extends Elem {
   makeLoop(ew: EventWindow) {
 
     const site: Site = ew.getSiteByIndex(2);
-    ew.origin.mutateSite(site, new Atom(ElementTypes.LOOPWORM, [11]));
+    ew.origin.mutateSite(site, new Atom(LoopWorm.TYPE_DEF, [11]));
 
   }
 
   hasLoop(ew: EventWindow): boolean {
 
-    const loops: Site[] = ew.getSites(EventWindow.ALLADJACENT, ElementTypes.LOOPWORM);
+    const loops: Site[] = ew.getSites(EventWindow.ALLADJACENT, LoopWorm.TYPE_DEF);
     return loops.length > 0 && loops[0] !== undefined;
   }
 
@@ -98,8 +104,8 @@ export class LoopSeedElement extends Elem {
 
   exec(ew: EventWindow) {
 
-    let innerType: IElementType = ElementTypes.WALL;
-    let outerType: IElementType = ElementTypes.WALL;
+    let innerType: IElementType = Wall.TYPE_DEF;
+    let outerType: IElementType = Wall.TYPE_DEF;
 
     //make room
     if (this.cycles > 3 && this.cycles < 8) {
@@ -118,8 +124,8 @@ export class LoopSeedElement extends Elem {
 
     if (this.cycles > 120) {
 
-      outerType = ElementTypes.EMPTY;
-      innerType = ElementTypes.LOOPNUCLEUS;
+      outerType = Empty.TYPE_DEF;
+      innerType = LoopNucleus.TYPE_DEF;
 
     }
 
@@ -132,57 +138,6 @@ export class LoopSeedElement extends Elem {
     this.travel(ew, innerType);
 
     this.cycles++;
-
-
-
-
-
-
-
-
-    // const innerLoop: number[][] = [
-    //   //[5, 2, 7], [2, 7, 4], [7, 4, 8], [4, 8, 3], [8, 3, 6], [3, 6, 1], [6, 1, 5], [1, 5, 2]
-    //   []
-    // ]
-    // const outerLoop: number[][] = [
-    //   //prev, node, next
-    //   [15, 10, 17],
-    //   [10, 17, 27],
-    //   [17, 27, 19],
-    //   [27, 19, 35],
-    //   [19, 35, 24],
-    //   [35, 24, 36],
-    //   [24, 36, 20],
-    //   [36, 20, 28],
-    //   [20, 28, 18],
-    //   [28, 18, 11],
-    //   [18, 11, 16],
-    //   [11, 16, 26],
-    //   [16, 26, 14],
-    //   [26, 14, 30],
-    //   [14, 30, 21],
-    //   [30, 21, 29],
-    //   [21, 29, 13],
-    //   [29, 13, 25],
-    //   [13, 25, 15],
-    //   [25, 15, 10]
-    // ]
-
-    // const resSites: number[] = []
-
-    // innerLoop.forEach(nodeDef => {
-    //   this.makeLoopNode(ew, nodeDef[1], nodeDef[0], nodeDef[2]);
-    // });
-
-    // // outerLoop.forEach(nodeDef => {
-    // //   this.makeLoopNode(ew, nodeDef[1], nodeDef[0], nodeDef[2]);
-    // // });
-
-    // resSites.forEach(siteNum => {
-    //   ew.origin.mutateSite(ew.getSiteByIndex(siteNum), new Atom(ElementTypes.RES));
-    // })
-
-    // ew.origin.killSelf(new Atom(ElementTypes.RES));
 
     super.exec(ew);
   }

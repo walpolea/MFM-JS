@@ -1,66 +1,74 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
+import { Res } from "./ResElement";
+import { Empty } from "./EmptyElement";
+import { ForkBomb } from "./ForkBombElement";
+import { AntiForkBomb } from "./AntiForkBombElement";
 
-export class SentryElement extends Elem {
+export class Sentry extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "SENTRY", type: "Se", class: Sentry, color: 0x7f7fff };
+
+
   onHighAlert: boolean = false;
   pSENTRY_CREATE: number = 20;
   pRES_CREATE: number = 1000;
 
   constructor() {
-    super(ElementTypes.SENTRY.name, ElementTypes.SENTRY.type);
+    super(Sentry.TYPE_DEF);
   }
   exec(ew: EventWindow) {
     super.exec(ew);
 
-    let fb: Site = ew.getNearest(ElementTypes.FORK_BOMB);
+    let fb: Site = ew.getNearest(ForkBomb.TYPE_DEF);
 
     //fork bombs are near! High Alert!
     if (fb) {
       this.onHighAlert = true;
     }
 
-    let se: Site = ew.getNearest(ElementTypes.SENTRY);
+    let se: Site = ew.getNearest(Sentry.TYPE_DEF);
 
     //Nearby Snetry is on high alert! We should be too!
-    if (se && (se.atom.elem as SentryElement).onHighAlert) {
+    if (se && (se.atom.elem as Sentry).onHighAlert) {
       this.onHighAlert = true;
     }
 
-    let totalNearbySentry: number = ew.getAll(ElementTypes.SENTRY).length;
+    let totalNearbySentry: number = ew.getAll(Sentry.TYPE_DEF).length;
 
     //Kinda boring and crowded around here, requesting honorable discharge, sir!
     if (!this.onHighAlert && totalNearbySentry > 2) {
-      ew.origin.killSelf(new Atom(ElementTypes.RES));
+      ew.origin.killSelf(new Atom(Res.TYPE_DEF));
     }
 
     //Res nearby? Maybe recruit someone for the cause
-    var res: Site = ew.getAdjacent8Way(ElementTypes.RES);
+    var res: Site = ew.getAdjacent8Way(Res.TYPE_DEF);
 
     if (res) {
       //if high alert, definitely recruit, otherwise, maybe
       if (this.onHighAlert || Math.random() * this.pSENTRY_CREATE < 1) {
-        ew.origin.mutateSite(res, new Atom(ElementTypes.SENTRY));
+        ew.origin.mutateSite(res, new Atom(Sentry.TYPE_DEF));
       }
       //no res nearby, maybe we should make one.
     } else if (Math.random() * this.pRES_CREATE < 1) {
-      let nearEmpty: Site = ew.getNearest(ElementTypes.EMPTY);
+      let nearEmpty: Site = ew.getNearest(Empty.TYPE_DEF);
       if (nearEmpty) {
-        ew.origin.mutateSite(nearEmpty, new Atom(ElementTypes.RES));
+        ew.origin.mutateSite(nearEmpty, new Atom(Res.TYPE_DEF));
       }
     }
 
     //Fire!!!
     if (this.onHighAlert) {
-      var e: Site = ew.getNearest(ElementTypes.EMPTY);
-      ew.origin.mutateSite(e, new Atom(ElementTypes.ANTI_FORK_BOMB));
+      var e: Site = ew.getNearest(Empty.TYPE_DEF);
+      ew.origin.mutateSite(e, AntiForkBomb.CREATE());
 
       this.onHighAlert = false;
     }
 
     //patrol
-    ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
+    ew.origin.swapAtoms(ew.getAdjacent4Way(Empty.TYPE_DEF));
   }
 }

@@ -1,9 +1,9 @@
 import { GridCoord } from "../interfaces/IGridCoord";
 import { Tile } from "./Tile";
-import { MFMUtils } from "../utils/utils";
 import { Site } from "./Site";
-import { IElementType, ElementTypes } from "./ElementTypes";
 import { Atom } from "./Atom";
+import { IElementType, ElementTypes } from "./ElementTypes";
+import { Empty } from "./elements/EmptyElement";
 
 //Event window as describbed here: http://robust.cs.unm.edu/lib/exe/fetch.php?w=300&tok=4c8f49&media=dev:event-window-10.png
 //Collection of sites which contain atoms, built from an origin (center) site
@@ -149,11 +149,6 @@ export class EventWindow {
 
     this.origin = tile.getSiteByCoord(origin);
 
-    //if the origin is EMPTY Element, let's save some cycles (good, bad?) - bad if you want empty's age.
-    // if (this.origin.atom.is(ElementTypes.EMPTY)) {
-    //   return;
-    // }
-
     this.window = new Array<Site>();
     this.tile = tile;
 
@@ -179,8 +174,6 @@ export class EventWindow {
   private offsetFromOrigin(origin: GridCoord, offset: GridCoord): GridCoord {
     return { row: origin.row + offset.row, col: origin.col + offset.col };
   }
-
-
 
   /////////////////////////////////////
   //Index <> Offset > Site conversions
@@ -431,7 +424,6 @@ export class EventWindow {
     });
   }
 
-
   //get indexes of subset (of type)
   getIndexes(subset: number[], type: IElementType = undefined, oneRandom: boolean = false): number[] {
     let candidates: number[] = this.getSubsetIndexes(subset);
@@ -624,7 +616,7 @@ export class EventWindow {
     if (toSite && fromSite && fromSite.canMove() && toSite.canDestroy()) {
 
       toSite.atom = fromSite.atom;
-      fromSite.atom = leavingAtom ? leavingAtom : new Atom(ElementTypes.EMPTY);
+      fromSite.atom = leavingAtom ? leavingAtom : Empty.CREATE();
       return true;
     }
 
@@ -662,7 +654,7 @@ export class EventWindow {
 
   destroy(targetIndex: number = 0): boolean {
 
-    return this.mutate(targetIndex, new Atom(ElementTypes.EMPTY));
+    return this.mutate(targetIndex, new Atom(Empty.TYPE_DEF));
 
   }
 
@@ -673,7 +665,7 @@ export class EventWindow {
     this.origin.baseAtom = newAtom;
   }
 
-  killBase(leavingAtom: Atom = new Atom(ElementTypes.EMPTY)): void {
+  killBase(leavingAtom: Atom = new Atom(Empty.TYPE_DEF)): void {
     this.origin.baseAtom = leavingAtom;
   }
 
@@ -681,8 +673,39 @@ export class EventWindow {
     return this.origin.readBase();
   }
 
+  ///QUERYING
+  query(ewMap: Map<number, string>, fuzziness: number = 0, typesMap: Map<string, IElementType> = ElementTypes.SPLAT_MAP) {
+
+    const matches: Map<IElementType, number[]> = new Map<IElementType, number[]>();
+    let matchCount: number = 0;
+
+    const keys = Array.from(ewMap.keys());
+    const values = Array.from(ewMap.values());
+
+    console.log(typesMap);
+
+    for (let i = 0; i < ewMap.size; i++) {
+      const char: string = values[i];
+      const cursn: number = keys[i]
+      const type: IElementType = typesMap.get(char);
+
+      if (this.window[cursn] && type && this.window[cursn].atom.type.name === type.name) {
+        matchCount++;
+        if (matches.has(type)) {
+          matches.set(type, [...matches.get(type), cursn]);
+        } else {
+          matches.set(type, [cursn])
+        }
+      }
+    }
+
+    //fuzziness is how many of the sites in the map have to match the event window, 0 means ALL must match
+    if (fuzziness > 0) {
+      return matchCount >= fuzziness ? matches : undefined;
+    } else {
+      console.log(matchCount, ewMap.size - 1);
+      return (matchCount == ewMap.size - 1) ? matches : undefined;
+    }
+  }
+
 }
-
-
-
-

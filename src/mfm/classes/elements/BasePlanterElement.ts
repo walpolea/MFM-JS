@@ -1,15 +1,16 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 import { Atom } from "../Atom";
+import { Keyboard } from "./KeyboardElement";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
-export class BasePlanterElement extends Elem {
+export class BasePlanter extends Elem {
+  static TYPE_DEF: IElementType = { name: "PLANTER", type: "Pl", class: BasePlanter, color: 0xeeee22 }
   PLANT_TYPE: IElementType;
 
-  constructor(plantType: IElementType = ElementTypes.KEYBOARD) {
-    super(ElementTypes.BASE_PLANTER.name, ElementTypes.BASE_PLANTER.type);
-
+  constructor(plantType: IElementType = Keyboard.TYPE_DEF) {
+    super(BasePlanter.TYPE_DEF);
     this.PLANT_TYPE = plantType;
   }
   exec(ew: EventWindow) {

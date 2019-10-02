@@ -3,13 +3,27 @@
 import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
 import { IElementType, ElementTypes } from "../mfm/classes/ElementTypes";
 import { Tile } from "../mfm/classes/Tile";
-import { MFMUtils } from "../mfm/utils/utils";
 import { EventWindow } from "../mfm/classes/Eventwindow";
 import { Site } from "../mfm/classes/Site";
 import { SiteRenderer } from "./SiteRenderer";
 import { Atom } from "../mfm/classes/Atom";
-import { MasonElement } from "../mfm/classes/elements/MasonElement";
+import { Mason } from "../mfm/classes/elements/MasonElement";
 import { GridCoord } from "../mfm/interfaces/IGridCoord";
+import { Empty } from "../mfm/classes/elements/EmptyElement";
+import { SwapWorm } from "../mfm/classes/elements/SwapWormElement";
+import { StickyMembrane } from "../mfm/classes/elements/StickyMembraneElement";
+import { Res } from "../mfm/classes/elements/ResElement";
+import { DReg } from "../mfm/classes/elements/DRegElement";
+import { Wall } from "../mfm/classes/elements/WallElement";
+import { ForkBomb } from "../mfm/classes/elements/ForkBombElement";
+import { SuperForkBomb } from "../mfm/classes/elements/SuperForkBomb";
+import { AntiForkBomb } from "../mfm/classes/elements/AntiForkBombElement";
+import { Sentry } from "../mfm/classes/elements/SentryElement";
+import { Data } from "../mfm/classes/elements/DataElement";
+import { Reducer } from "../mfm/classes/elements/ReducerElement";
+import { LoopWorm } from "../mfm/classes/elements/LoopWormElement";
+import { LoopSeed } from "../mfm/classes/elements/LoopSeedElement";
+import { Writer } from "../mfm/classes/elements/WriterElement";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -131,7 +145,7 @@ export class MFMRenderer {
 
       ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
 
-      if (ew.window && !ew.origin.atom.is(ElementTypes.EMPTY)) {
+      if (ew.window && !ew.origin.atom.is(Empty.TYPE_DEF)) {
 
         ew.origin.atom.exec(ew);
         ew.getAll().forEach(site => {
@@ -179,56 +193,52 @@ export class MFMRenderer {
 
       if (site) {
         if (this.keysHeld.has("r")) {
-          site.atom = new Atom(ElementTypes.RES);
+          site.atom = Res.CREATE();
         } else if (this.keysHeld.has("t")) {
-          site.atom = new Atom(ElementTypes.DREG);
+          site.atom = new Atom(DReg.TYPE_DEF);
         } else if (this.keysHeld.has("w")) {
-          site.atom = new Atom(ElementTypes.WALL);
+          site.atom = new Atom(Wall.TYPE_DEF);
         } else if (this.keysHeld.has("z")) {
-          site.atom = new Atom(ElementTypes.MASON, [MasonElement.boxPath(12)]);
+          site.atom = new Atom(Mason.TYPE_DEF, [Mason.boxPath(12)]);
         } else if (this.keysHeld.has("Z")) {
-          site.atom = new Atom(ElementTypes.MASON, [MasonElement.boxPath(24)]);
+          site.atom = new Atom(Mason.TYPE_DEF, [Mason.boxPath(24)]);
         } else if (this.keysHeld.has("x")) {
-          site.atom = new Atom(ElementTypes.MASON, [MasonElement.linePath(48, "E")]);
+          site.atom = new Atom(Mason.TYPE_DEF, [Mason.linePath(48, "E")]);
         } else if (this.keysHeld.has("c")) {
-          site.atom = new Atom(ElementTypes.MASON, [MasonElement.linePath(48, "S")]);
+          site.atom = new Atom(Mason.TYPE_DEF, [Mason.linePath(48, "S")]);
         } else if (this.keysHeld.has("e")) {
-          site.atom = new Atom(ElementTypes.EMPTY);
+          site.atom = new Atom(Empty.TYPE_DEF);
         } else if (this.keysHeld.has("b")) {
-          site.atom = new Atom(ElementTypes.FORK_BOMB);
+          site.atom = new Atom(ForkBomb.TYPE_DEF);
         } else if (this.keysHeld.has("B")) {
-          site.atom = new Atom(ElementTypes.SUPER_FORK_BOMB);
+          site.atom = new Atom(SuperForkBomb.TYPE_DEF);
         } else if (this.keysHeld.has("a")) {
-          site.atom = new Atom(ElementTypes.ANTI_FORK_BOMB);
+          site.atom = new Atom(AntiForkBomb.TYPE_DEF);
         } else if (this.keysHeld.has("s")) {
-          site.atom = new Atom(ElementTypes.SENTRY);
-        } else if (this.keysHeld.has("p")) {
-          site.atom = new Atom(ElementTypes.SEEKER, [{ row: 0, col: 0 }]);
+          site.atom = new Atom(Sentry.TYPE_DEF);
         } else if (this.keysHeld.has("d")) {
           const rval = (Math.random() * 40) >> 0;
-          site.atom = new Atom(ElementTypes.DATA, undefined, {
+          site.atom = Data.CREATE(undefined, {
             value: rval
           });
-        } else if (this.keysHeld.has("u")) {
-          site.atom = new Atom(ElementTypes.UBER, [{ row: 0, col: 0 }, { row: 92, col: 92 }]);
         } else if (this.keysHeld.has("i")) {
-          site.atom = new Atom(ElementTypes.REDUCER);
+          site.atom = new Atom(Reducer.TYPE_DEF);
         } else if (this.keysHeld.has("n")) {
-          site.atom = new Atom(ElementTypes.SWAPWORM, [7]);
+          site.atom = new Atom(SwapWorm.TYPE_DEF, [7]);
         } else if (this.keysHeld.has("N")) {
-          site.atom = new Atom(ElementTypes.SWAPWORM, [16]);
+          site.atom = new Atom(SwapWorm.TYPE_DEF, [16]);
         } else if (this.keysHeld.has("l")) {
-          site.atom = new Atom(ElementTypes.LOOPWORM, [7]);
+          site.atom = new Atom(LoopWorm.TYPE_DEF, [7]);
         } else if (this.keysHeld.has("L")) {
-          site.atom = new Atom(ElementTypes.LOOPWORM, [16]);
+          site.atom = new Atom(LoopWorm.TYPE_DEF, [16]);
         } else if (this.keysHeld.has("k")) {
-          site.atom = new Atom(ElementTypes.LOOPSEED);
+          site.atom = new Atom(LoopSeed.TYPE_DEF);
         } else if (this.keysHeld.has("m")) {
-          site.atom = new Atom(ElementTypes.STICKYMEMBRANE);
+          site.atom = new Atom(StickyMembrane.TYPE_DEF);
         } else if (this.keysHeld.has("q")) {
           console.log("DEBUG SITE:", site);
         } else if (this.keysHeld.has("C")) {
-          site.atom = new Atom(ElementTypes.WRITER, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
+          site.atom = new Atom(Writer.TYPE_DEF, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
         } else {
 
           if (this.curSelectedElement && this.curSelectedElement !== "") {

@@ -1,13 +1,15 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 
-export class KeyboardElement extends Elem {
+export class Keyboard extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "KEYBOARD", type: "Kb", class: Keyboard, color: 0xeeee22 }
 
   data: any = undefined;
 
   constructor() {
-    super(ElementTypes.KEYBOARD.name, ElementTypes.KEYBOARD.type);
+    super(Keyboard.TYPE_DEF);
 
     window.addEventListener("keyup", (e) => {
       this.onKey(e);
@@ -20,7 +22,6 @@ export class KeyboardElement extends Elem {
   }
 
   onKey(e: KeyboardEvent): void {
-    console.log("key", e.key);
     this.data = e.key;
   }
 

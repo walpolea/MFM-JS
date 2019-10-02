@@ -3,8 +3,12 @@ import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
+import { Reducer } from "./ReducerElement";
 
-export class SorterElement extends Elem {
+export class Sorter extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "SORTER", type: "So", class: Sorter, color: 0x7c1515 }
 
   sortVal: number = 0;
   makeCount: number = 1;
@@ -12,9 +16,9 @@ export class SorterElement extends Elem {
   sortDirection: string = "E";
 
   constructor(sortVal: number = 0, lifeSpan: number = 200, sortDirection: string = "E") {
-    super(ElementTypes.SORTER.name, ElementTypes.SORTER.type);
-    this.sortVal = sortVal;
+    super(Sorter.TYPE_DEF);
 
+    this.sortVal = sortVal;
     this.lifeSpan = lifeSpan;
     this.sortDirection = sortDirection;
   }
@@ -25,8 +29,8 @@ export class SorterElement extends Elem {
 
       const sorter: Site = ew.getSiteByIndex(index);
 
-      if (ew.is(sorter, ElementTypes.EMPTY)) {
-        ew.mutate(index, new Atom(ElementTypes.SORTER, [val, undefined, this.sortDirection]));
+      if (ew.is(sorter, Empty.TYPE_DEF)) {
+        ew.mutate(index, new Atom(Sorter.TYPE_DEF, [val, undefined, this.sortDirection]));
       }
 
     });
@@ -39,8 +43,8 @@ export class SorterElement extends Elem {
 
       const sorter: Site = ew.getSiteByIndex(index);
 
-      if (ew.is(sorter, ElementTypes.SORTER)) {
-        ew.mutate(index, new Atom(ElementTypes.EMPTY));
+      if (ew.is(sorter, Sorter.TYPE_DEF)) {
+        ew.mutate(index, new Atom(Empty.TYPE_DEF));
       }
 
     });
@@ -49,7 +53,7 @@ export class SorterElement extends Elem {
 
   exec(ew: EventWindow) {
 
-    if (ew.is(1, ElementTypes.REDUCER)) {
+    if (ew.is(1, Reducer.TYPE_DEF)) {
       ew.destroy();
     }
 
@@ -67,42 +71,42 @@ export class SorterElement extends Elem {
       const dval: any = availableSite.atom.data.value;
 
       if (this.sortDirection === "W") {
-        if (dval == this.sortVal && ew.is(1, ElementTypes.EMPTY)) {
+        if (dval == this.sortVal && ew.is(1, Empty.TYPE_DEF)) {
           ew.swap(1, 4);
 
-        } else if (dval < this.sortVal && ew.is(19, ElementTypes.EMPTY)) {
+        } else if (dval < this.sortVal && ew.is(19, Empty.TYPE_DEF)) {
           ew.swap(19, 4);
 
           this.makeSorters([6, 10, 7], dval - 1, ew);
 
           this.sortVal = dval;
-        } else if (dval > this.sortVal && ew.is(20, ElementTypes.EMPTY)) {
+        } else if (dval > this.sortVal && ew.is(20, Empty.TYPE_DEF)) {
           ew.swap(20, 4);
           this.sortVal = dval;
 
           this.makeSorters([5, 11, 8], dval + 1, ew);
-        } else if (ew.is(1, ElementTypes.EMPTY)) {
+        } else if (ew.is(1, Empty.TYPE_DEF)) {
           ew.swap(1, 4);
           this.sortVal = dval;
         }
 
       } else {
 
-        if (dval == this.sortVal && ew.is(4, ElementTypes.EMPTY)) {
+        if (dval == this.sortVal && ew.is(4, Empty.TYPE_DEF)) {
           ew.swap(4, 1);
 
-        } else if (dval < this.sortVal && ew.is(13, ElementTypes.EMPTY)) {
+        } else if (dval < this.sortVal && ew.is(13, Empty.TYPE_DEF)) {
           ew.swap(13, 1);
 
           this.makeSorters([8, 10, 5], dval - 1, ew);
 
           this.sortVal = dval;
-        } else if (dval > this.sortVal && ew.is(14, ElementTypes.EMPTY)) {
+        } else if (dval > this.sortVal && ew.is(14, Empty.TYPE_DEF)) {
           ew.swap(14, 1);
           this.sortVal = dval;
 
           this.makeSorters([6, 7, 11], dval + 1, ew);
-        } else if (ew.is(4, ElementTypes.EMPTY)) {
+        } else if (ew.is(4, Empty.TYPE_DEF)) {
           ew.swap(4, 1);
           this.sortVal = dval;
         }

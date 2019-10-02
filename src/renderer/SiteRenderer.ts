@@ -1,8 +1,5 @@
 import { Site } from "../mfm/classes/Site";
 import * as PIXI from "pixi.js";
-import { ElementTypes, IElementType } from "../mfm/classes/ElementTypes";
-import { SwapWormElement } from "../mfm/classes/elements/SwapWormElement";
-import { LinkedListElement } from "../mfm/classes/elements/LinkedListElement";
 
 export class SiteRenderer {
   site: Site;
@@ -39,8 +36,6 @@ export class SiteRenderer {
     if (this.site.atom.data && this.site.atom.data.value) {
       this.visual.tint = this.rgbToHex((this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5);
     }
-
-
 
   }
 

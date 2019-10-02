@@ -1,24 +1,29 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
+import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
+import { Data } from "./DataElement";
 
-export class ReducerElement extends Elem {
+export class Reducer extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "REDUCER", type: "Re", class: Reducer, color: 0x00ffff };
+
   constructor() {
-    super(ElementTypes.REDUCER.name, ElementTypes.REDUCER.type);
+    super(Reducer.TYPE_DEF);
   }
   exec(ew: EventWindow) {
 
-    if (ew.is(2, ElementTypes.EMPTY)) {
-      ew.mutate(2, new Atom(ElementTypes.REDUCER));
+    if (ew.is(2, Empty.TYPE_DEF)) {
+      ew.mutate(2, new Atom(Reducer.TYPE_DEF));
     }
 
-    if (ew.is(3, ElementTypes.EMPTY)) {
-      ew.mutate(3, new Atom(ElementTypes.REDUCER));
+    if (ew.is(3, Empty.TYPE_DEF)) {
+      ew.mutate(3, new Atom(Reducer.TYPE_DEF));
     }
 
-    let nearbyData: Site = ew.getAdjacent4Way(ElementTypes.DATA);
+    let nearbyData: Site = ew.getAdjacent4Way(Data.TYPE_DEF);
     if (nearbyData) {
       this.reduce(nearbyData, ew);
     }

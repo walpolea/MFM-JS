@@ -1,8 +1,12 @@
 import { EventWindow } from "../Eventwindow";
-import { ElementTypes } from "../ElementTypes";
-import { MembraneWallElement } from "./MembraneWallElement";
+import { ElementTypes, IElementType } from "../ElementTypes";
+import { MembraneWall } from "./MembraneWallElement";
+import { StickyMembrane } from "./StickyMembraneElement";
 
-export class MembraneDoorElement extends MembraneWallElement {
+export class MembraneDoor extends MembraneWall {
+
+  static TYPE_DEF: IElementType = { name: "MEMBRANE DOOR", type: "Md", class: MembraneDoor, color: 0x6060ff };
+
 
   openCycles: number = 0
   closedCycles: number = 0;
@@ -29,7 +33,7 @@ export class MembraneDoorElement extends MembraneWallElement {
       }
     } else {
 
-      ew.getAll(ElementTypes.STICKYMEMBRANE).filter(site => site).forEach(site => {
+      ew.getAll(StickyMembrane.TYPE_DEF).filter(site => site).forEach(site => {
         site.killSelf();
       })
 

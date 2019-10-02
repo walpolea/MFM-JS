@@ -1,18 +1,23 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
-import { MFMUtils } from "../../utils/utils";
+import { IElementType } from "../ElementTypes";
+import { MFMUtils } from "../../utils/MFMUtils";
 import { Atom } from "../Atom";
-import { Site } from "../Site";
+import { Empty } from "./EmptyElement";
+import { StickyMembrane } from "./StickyMembraneElement";
+import { LoopWorm } from "./LoopWormElement";
+import { Res } from "./ResElement";
 
-export class LoopNucleusElement extends Elem {
+export class LoopNucleus extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "LOOP NUCLEUS", type: "Ln", class: LoopNucleus, color: 0xcece24 }
 
   pCREATE_RES: number = 4;
   pCREATE_MEMBRANE: number = 20;
   aloneCount: number = 0;
 
   constructor() {
-    super(ElementTypes.LOOPNUCLEUS.name, ElementTypes.LOOPNUCLEUS.type);
+    super(LoopNucleus.TYPE_DEF);
   }
 
   repelType(ew: EventWindow, type: IElementType) {
@@ -24,7 +29,7 @@ export class LoopNucleusElement extends Elem {
     if (sites.length) {
       sites.forEach(dreg => {
         const toSite: number = eightwaypushmap.get(dreg);
-        if (ew.is(toSite, ElementTypes.EMPTY)) {
+        if (ew.is(toSite, Empty.TYPE_DEF)) {
           ew.move(toSite, undefined, dreg);
         }
       });
@@ -32,17 +37,17 @@ export class LoopNucleusElement extends Elem {
   }
 
   eatStickyMembrane(ew: EventWindow) {
-    ew.getSites(EventWindow.ADJACENT8WAY, ElementTypes.STICKYMEMBRANE).forEach(st => {
+    ew.getSites(EventWindow.ADJACENT8WAY, StickyMembrane.TYPE_DEF).forEach(st => {
       if (st) st.killSelf();
     })
   }
 
   exec(ew: EventWindow) {
 
-    //this.repelType(ew, ElementTypes.STICKYMEMBRANE);
+    //this.repelType(ew, StickyMembrane.TYPE_DEF);
     this.eatStickyMembrane(ew);
 
-    if (ew.getAll(ElementTypes.LOOPWORM).length === 0) {
+    if (ew.getAll(LoopWorm.TYPE_DEF).length === 0) {
       this.aloneCount++;
     } else {
       this.aloneCount = 0;
@@ -55,16 +60,16 @@ export class LoopNucleusElement extends Elem {
 
 
     if (MFMUtils.oneIn(this.pCREATE_RES)) {
-      ew.origin.mutateSite(ew.getAdjacent4Way(ElementTypes.EMPTY), new Atom(ElementTypes.RES, undefined, undefined, 0x336600));
+      ew.origin.mutateSite(ew.getAdjacent4Way(Empty.TYPE_DEF), new Atom(Res.TYPE_DEF, undefined, undefined, 0x336600));
     }
 
     //create a new membrane if none are around and chance
     // if (MFMUtils.oneIn(this.pCREATE_MEMBRANE)) {
-    //   ew.origin.mutateSite(ew.getAdjacent4Way(ElementTypes.EMPTY), new Atom(ElementTypes.STUCKMEMBRANE, [ElementTypes.LOOPWORM, 0.8, 1]));
+    //   ew.origin.mutateSite(ew.getAdjacent4Way(Empty.TYPE_DEF), new Atom(StuckMembrane.TYPE_DEF, [LoopWorm.TYPE_DEF, 0.8, 1]));
     // }
 
     //move
-    ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
+    ew.origin.swapAtoms(ew.getAdjacent4Way(Empty.TYPE_DEF));
 
     super.exec(ew);
   }

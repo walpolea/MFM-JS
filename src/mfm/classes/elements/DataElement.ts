@@ -1,22 +1,28 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
-import { MFMUtils } from "../../utils/utils";
+import { IElementType } from "../ElementTypes";
+import { MFMUtils } from "../../utils/MFMUtils";
+import { Empty } from "./EmptyElement";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
-export class DataElement extends Elem {
+export class Data extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "DATA", type: "Da", class: Data, color: 0xcccccc };
+  static CREATE = Data.CREATOR();
+
   pPATROL: number = 1;
+
   constructor() {
-    super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
+    super(Data.TYPE_DEF);
   }
   exec(ew: EventWindow) {
     //patrol
     if (MFMUtils.oneIn(this.pPATROL)) {
-      //ew.origin.swapAtoms(ew.getAdjacent8Way(ElementTypes.EMPTY));
-      if (MFMUtils.oneIn(2) && ew.is(4, ElementTypes.EMPTY)) {
+      //ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));
+      if (MFMUtils.oneIn(2) && ew.is(4, Empty.TYPE_DEF)) {
         ew.move(4);
       } else {
-        ew.move(ew.getIndexes(EventWindow.ADJACENT8WAY, ElementTypes.EMPTY, true)[0]);
+        ew.move(ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, true)[0]);
       }
 
     }

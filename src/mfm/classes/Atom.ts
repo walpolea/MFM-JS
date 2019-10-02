@@ -1,6 +1,7 @@
 import { Elem } from "./Elem";
 import { EventWindow } from "./Eventwindow";
 import { ElementTypes, IElementType } from "./ElementTypes";
+import { Empty } from "./elements/EmptyElement";
 
 export class Atom {
 
@@ -8,7 +9,7 @@ export class Atom {
   elem: Elem;
   data: any;
 
-  constructor(_type: IElementType = ElementTypes.EMPTY, _elementParams?: any[], _atomicData?: any, _colorOverride?: number) {
+  constructor(_type: IElementType = Empty.TYPE_DEF, _elementParams?: any[], _atomicData?: any, _colorOverride?: number) {
     this.type = _type;
     this.data = _atomicData;
 

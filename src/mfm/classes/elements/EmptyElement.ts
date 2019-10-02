@@ -1,11 +1,14 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
-import { GridCoord } from "../../interfaces/IGridCoord";
+import { IElementType } from "../ElementTypes";
 
-export class EmptyElement extends Elem {
+export class Empty extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "EMPTY", type: "E", class: Empty, color: 0x303030 };
+  static CREATE = Empty.CREATOR();
+
   constructor() {
-    super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
+    super(Empty.TYPE_DEF);
   }
   exec(ew: EventWindow) {
     super.exec(ew);

@@ -1,18 +1,21 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes } from "../ElementTypes";
-import { Site } from "../Site";
-import { Atom } from "../Atom";
+import { IElementType } from "../ElementTypes";
 
-export class ForkBombElement extends Elem {
+export class ForkBomb extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "FORK BOMB", type: "Fb", class: ForkBomb, color: 0xaa2020 };
+  static CREATE = ForkBomb.CREATOR();
+
   constructor() {
-    super(ElementTypes.EMPTY.name, ElementTypes.EMPTY.type);
+    super(ForkBomb.TYPE_DEF);
   }
   exec(ew: EventWindow) {
 
     let nextVictim: number = ew.getRandomIndex(EventWindow.ADJACENT8WAY);
+
     if (nextVictim) {
-      ew.mutate(nextVictim, new Atom(ElementTypes.FORK_BOMB));
+      ew.mutate(nextVictim, ForkBomb.CREATE());
     }
 
     super.exec(ew);

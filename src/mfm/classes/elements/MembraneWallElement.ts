@@ -2,17 +2,22 @@ import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Atom } from "../Atom";
-import { StickyMembraneElement } from "./StickyMembraneElement";
+import { StickyMembrane } from "./StickyMembraneElement";
+import { Empty } from "./EmptyElement";
+import { SwapWorm } from "./SwapWormElement";
 
-export class MembraneWallElement extends Elem {
+export class MembraneWall extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "MEMBRANE WALL", type: "Mw", class: MembraneWall, color: 0x2020ff };
+  static CREATE = MembraneWall.CREATOR();
 
   activated: boolean = true;
   density: number;
   deactivationType: IElementType;
 
-  constructor(membraneDensity: number = 1, deactivationType: IElementType = ElementTypes.SWAPWORM) {
+  constructor(membraneDensity: number = 1, deactivationType: IElementType = SwapWorm.TYPE_DEF) {
 
-    super(ElementTypes.MEMBRANEWALL.name, ElementTypes.MEMBRANEWALL.type, 0, 100);
+    super(MembraneWall.TYPE_DEF, 0, 100);
 
     this.density = membraneDensity;
     this.deactivationType = deactivationType;
@@ -26,10 +31,10 @@ export class MembraneWallElement extends Elem {
       this.activated = true;
     }
 
-    if (this.activated && ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, ElementTypes.EMPTY)) {
-      ew.mutate(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, ElementTypes.EMPTY), new Atom(ElementTypes.STICKYMEMBRANE, [ElementTypes.MEMBRANEWALL, this.density, 1]));
+    if (this.activated && ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF)) {
+      ew.mutate(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF), StickyMembrane.CREATE([MembraneWall.TYPE_DEF, this.density, 1]));
     } else if (!this.activated) {
-      ew.getIndexes(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).forEach(site => {
+      ew.getIndexes(EventWindow.ALLADJACENT, StickyMembrane.TYPE_DEF, false).forEach(site => {
         if (site) {
           ew.destroy(site);
         }

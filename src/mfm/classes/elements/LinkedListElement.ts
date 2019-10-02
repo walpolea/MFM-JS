@@ -1,10 +1,13 @@
 import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
-import { ElementTypes, IElementType } from "../ElementTypes";
+import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
+import { Empty } from "./EmptyElement";
 
-export class LinkedListElement extends Elem {
+export class LinkedList extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "LINKED LIST ELEMENT", type: "Ll", class: LinkedList, color: 0xcc0066 };
 
   next: number;
   prev: number;
@@ -14,7 +17,7 @@ export class LinkedListElement extends Elem {
   shouldDie: boolean = false;
 
   constructor(elementType: IElementType, prev?: number, next?: number) {
-    super(elementType.name, elementType.type);
+    super(LinkedList.TYPE_DEF);
 
     this.prev = prev;
     this.next = next;
@@ -57,14 +60,14 @@ export class LinkedListElement extends Elem {
     return this.getSiteDirection(ew, this.next);
   }
 
-  getPrevElement(ew: EventWindow): LinkedListElement {
+  getPrevElement(ew: EventWindow): LinkedList {
     const ps: Site = this.getPrevSite(ew);
-    return (ps && ps.atom) ? ps.atom.elem as LinkedListElement : undefined;
+    return (ps && ps.atom) ? ps.atom.elem as LinkedList : undefined;
   }
 
-  getNextElement(ew: EventWindow): LinkedListElement {
+  getNextElement(ew: EventWindow): LinkedList {
     const ns: Site = this.getNextSite(ew);
-    return (ns && ns.atom) ? ns.atom.elem as LinkedListElement : undefined;
+    return (ns && ns.atom) ? ns.atom.elem as LinkedList : undefined;
   }
 
   isAtHead(): boolean {
@@ -87,7 +90,7 @@ export class LinkedListElement extends Elem {
     const prevSite: Site = this.getPrevSite(ew);
 
     if (prevSite) {
-      const swapper = prevSite.atom.elem as LinkedListElement;
+      const swapper = prevSite.atom.elem as LinkedList;
       this.swapLinks(swapper);
       ew.origin.swapAtoms(prevSite);
     }
@@ -100,7 +103,7 @@ export class LinkedListElement extends Elem {
     const nextSite: Site = this.getNextSite(ew);
 
     if (nextSite) {
-      const swapper = nextSite.atom.elem as LinkedListElement;
+      const swapper = nextSite.atom.elem as LinkedList;
 
       this.swapLinks(swapper);
       //ew.swap(this.next);
@@ -110,13 +113,13 @@ export class LinkedListElement extends Elem {
 
   }
 
-  //swap next/prev links with another LinkedListElement
-  swapLinks(swapper: LinkedListElement) {
+  //swap next/prev links with another LinkedList
+  swapLinks(swapper: LinkedList) {
     [this.next, swapper.next, this.prev, swapper.prev] = [swapper.next, this.next, swapper.prev, this.prev];
   }
 
   //reverse links
-  reverseLinks(elem: LinkedListElement) {
+  reverseLinks(elem: LinkedList) {
     [elem.prev, elem.next] = [elem.next, elem.prev];
   }
 
@@ -124,8 +127,8 @@ export class LinkedListElement extends Elem {
   unlink(ew: EventWindow) {
 
 
-    const nextEl: LinkedListElement = this.getNextElement(ew);
-    const prevEl: LinkedListElement = this.getPrevElement(ew);
+    const nextEl: LinkedList = this.getNextElement(ew);
+    const prevEl: LinkedList = this.getPrevElement(ew);
     if (nextEl && prevEl) {
       //we're unlinking from the middle, close the gap
 
@@ -145,7 +148,7 @@ export class LinkedListElement extends Elem {
 
   die(ew: EventWindow) {
 
-    const nextEl: LinkedListElement = this.getNextElement(ew);
+    const nextEl: LinkedList = this.getNextElement(ew);
 
     if (nextEl) {
       nextEl.shouldDie = true;
@@ -172,7 +175,7 @@ export class LinkedListElement extends Elem {
     let earShotIndexToPrev: number;
 
     //if it's an empty site
-    if (goSite && goSite.atom.type === ElementTypes.EMPTY) {
+    if (goSite && goSite.atom.type === Empty.TYPE_DEF) {
 
       //if we're adding a link
       if (leavingAtom) {
@@ -204,7 +207,7 @@ export class LinkedListElement extends Elem {
         if (this.getNextElement(ew)) {
 
           //found that sometimes we want to link up with empty, oops!
-          if (!(this.getNextElement(ew) instanceof LinkedListElement)) return false;
+          if (!(this.getNextElement(ew) instanceof LinkedList)) return false;
 
           this.getNextElement(ew).prev = ew.getRelativeIndexFromSiteToSite(this.next, relativeIndexToGoTo);
 
@@ -212,7 +215,7 @@ export class LinkedListElement extends Elem {
 
         if (this.getPrevElement(ew)) {
 
-          if (!(this.getPrevElement(ew) instanceof LinkedListElement)) return false;
+          if (!(this.getPrevElement(ew) instanceof LinkedList)) return false;
 
           this.getPrevElement(ew).next = ew.getRelativeIndexFromSiteToSite(this.prev, relativeIndexToGoTo);
         }

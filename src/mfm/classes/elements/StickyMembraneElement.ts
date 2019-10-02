@@ -2,8 +2,14 @@ import { EventWindow } from "../Eventwindow";
 import { Elem } from "../Elem";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { Site } from "../Site";
+import { Empty } from "./EmptyElement";
+import { DReg } from "./DRegElement";
+import { MFMActions } from "../../utils/MFMActions";
 
-export class StickyMembraneElement extends Elem {
+export class StickyMembrane extends Elem {
+
+  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembrane, color: 0x6D3D64 }
+  static CREATE = StickyMembrane.CREATOR();
 
   stickyType: IElementType;
   idleCount: number = 0;
@@ -12,7 +18,9 @@ export class StickyMembraneElement extends Elem {
   maxRoam: number;
 
   constructor(stickyType?: IElementType, membraneDensity?: number, maxRoam?: number) {
-    super(ElementTypes.STICKYMEMBRANE.name, ElementTypes.STICKYMEMBRANE.type);
+
+    super(StickyMembrane.TYPE_DEF);
+
     this.stickyType = stickyType ? stickyType : undefined;
     this.maxRoam = maxRoam ? maxRoam : 200;
     this.setMembraneDensity(membraneDensity);
@@ -33,7 +41,7 @@ export class StickyMembraneElement extends Elem {
 
       const toSite: Site = ew.getSiteByIndex(toSiteIndex);
 
-      if (toSite && toSite.atom.type === ElementTypes.EMPTY) {
+      if (toSite && toSite.atom.type === Empty.TYPE_DEF) {
         const swapped: boolean = ew.origin.swapAtoms(toSite);
 
         if (!swapped) {
@@ -46,7 +54,7 @@ export class StickyMembraneElement extends Elem {
       }
     } else {
       //roam
-      const swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent4Way(ElementTypes.EMPTY));
+      const swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent4Way(Empty.TYPE_DEF));
 
       if (!swapped) {
         this.idleCount++;
@@ -65,7 +73,7 @@ export class StickyMembraneElement extends Elem {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, this.stickyType, true);
 
     if (sites[0]) {
-      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, ElementTypes.EMPTY)[0]);
+      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF)[0]);
     }
   }
 
@@ -78,7 +86,7 @@ export class StickyMembraneElement extends Elem {
     if (sites.length) {
       sites.forEach(dreg => {
         const toSite: number = eightwaypushmap.get(dreg);
-        if (ew.is(toSite, ElementTypes.EMPTY)) {
+        if (ew.is(toSite, Empty.TYPE_DEF)) {
           ew.move(toSite, undefined, dreg);
         }
       });
@@ -87,7 +95,7 @@ export class StickyMembraneElement extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, ElementTypes.STICKYMEMBRANE, false).filter(site => site).length > this.membraneDensity) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, StickyMembrane.TYPE_DEF, false).filter(site => site).length > this.membraneDensity) {
       ew.origin.killSelf();
     }
   }
@@ -102,11 +110,11 @@ export class StickyMembraneElement extends Elem {
       ew.origin.killSelf();
     }
 
-    if (!this.stickyType || this.stickyType === ElementTypes.STICKYMEMBRANE) {
+    if (!this.stickyType || this.stickyType === StickyMembrane.TYPE_DEF) {
 
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
       const stickSite: Site = ew.getAdjacent8Way();
-      if (stickSite && stickSite.atom.type !== ElementTypes.EMPTY) {
+      if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
         this.stickyType = stickSite.atom.type;
       }
 
@@ -114,14 +122,17 @@ export class StickyMembraneElement extends Elem {
     }
 
     this.moveToSticker(ew);
-    this.repelFromSticker(ew);
+    //this.repelFromSticker(ew);
     this.uncrowd(ew);
 
+    //Repel self away from sticky, this is what makes this element magical
+    MFMActions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 5, 6, 7, 8])
+
     //repel DREG as defensive move.
-    this.repelType(ew, ElementTypes.DREG);
+    MFMActions.repel(ew, DReg.TYPE_DEF)
 
     //repel RES for experimenting...
-    //this.repelType(ew, ElementTypes.RES);
+    //this.repelType(ew, Res.TYPE_DEF);
 
     super.exec(ew);
   }
