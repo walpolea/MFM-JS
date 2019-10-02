@@ -21,3 +21,8 @@ export class SuperForkBomb extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+SuperForkBomb.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(SuperForkBomb.TYPE_DEF);

@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Atom } from "../Atom";
 import { Keyboard } from "./KeyboardElement";
 
@@ -21,3 +21,8 @@ export class BasePlanter extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+BasePlanter.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(BasePlanter.TYPE_DEF);

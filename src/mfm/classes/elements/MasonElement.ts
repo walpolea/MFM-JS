@@ -220,3 +220,8 @@ export class Mason extends Elem {
     return map[dir];
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+Mason.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Mason.TYPE_DEF);

@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 
 export class ForkBomb extends Elem {
 
@@ -21,3 +21,8 @@ export class ForkBomb extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+ForkBomb.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(ForkBomb.TYPE_DEF);

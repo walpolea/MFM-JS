@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Utils } from "../../utils/MFMUtils";
 import { Empty } from "./EmptyElement";
 import { Res } from "./ResElement";
@@ -39,7 +39,7 @@ export class DReg extends Elem {
       if (createDReg) {
         ew.move(availableSite, DReg.CREATE());
       } else if (createRes) {
-        ew.move(availableSite, Res.CREATE());
+        ew.move(availableSite, Res.CREATE_BLUE(undefined, undefined, 0x00ff00));
       } else {
         ew.swap(availableSite);
       }
@@ -52,3 +52,10 @@ export class DReg extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+DReg.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(DReg.TYPE_DEF);
+//Register a SPLAT symbol
+ElementTypes.registerSPLAT("d", DReg.TYPE_DEF);

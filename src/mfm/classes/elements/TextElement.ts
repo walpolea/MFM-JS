@@ -65,3 +65,7 @@ export class Text extends Elem {
   }
 }
 
+//Initialize Splat Map maps the # to to the self type
+Text.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Text.TYPE_DEF);

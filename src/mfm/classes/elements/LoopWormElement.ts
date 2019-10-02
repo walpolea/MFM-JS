@@ -1,5 +1,5 @@
 import { EventWindow } from "../EventWindow";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Site } from "../Site";
 import { Empty } from "./EmptyElement";
 import { Atom } from "../Atom";
@@ -242,3 +242,8 @@ export class LoopWorm extends LinkedList {
     }
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+LoopWorm.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(LoopWorm.TYPE_DEF);

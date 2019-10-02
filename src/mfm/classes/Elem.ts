@@ -14,9 +14,9 @@ export abstract class Elem {
     }
   }
 
-  static CREATOR() {
-    return (params?: any[], atomicData?: any, colorOverride?: number): Atom => {
-      return new Atom(this.TYPE_DEF, params, atomicData, colorOverride);
+  static CREATOR(params?: any[], atomicData?: any, colorOverride?: number) {
+    return (_params?: any[], _atomicData?: any, _colorOverride?: number): Atom => {
+      return new Atom(this.TYPE_DEF, _params || params, _atomicData || atomicData, _colorOverride || colorOverride);
     };
   }
 

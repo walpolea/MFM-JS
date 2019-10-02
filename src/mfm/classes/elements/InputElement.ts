@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Atom } from "../Atom";
 import { Empty } from "./EmptyElement";
 import { Data } from "./DataElement";
@@ -35,3 +35,8 @@ export class Input extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+Input.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Input.TYPE_DEF);

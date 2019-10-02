@@ -49,3 +49,8 @@ export class MembraneDoor extends MembraneWall {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+MembraneDoor.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(MembraneDoor.TYPE_DEF);

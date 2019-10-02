@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
 import { Empty } from "./EmptyElement";
@@ -62,3 +62,8 @@ export class AntiForkBomb extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+AntiForkBomb.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(AntiForkBomb.TYPE_DEF);

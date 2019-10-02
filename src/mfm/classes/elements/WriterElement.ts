@@ -81,3 +81,7 @@ export class Writer extends Elem {
   }
 }
 
+//Initialize Splat Map maps the # to to the self type
+Writer.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Writer.TYPE_DEF);

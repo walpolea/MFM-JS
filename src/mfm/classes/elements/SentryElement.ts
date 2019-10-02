@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
 import { Res } from "./ResElement";
@@ -11,7 +11,7 @@ import { AntiForkBomb } from "./AntiForkBombElement";
 export class Sentry extends Elem {
 
   static TYPE_DEF: IElementType = { name: "SENTRY", type: "Se", class: Sentry, color: 0x7f7fff };
-
+  static CREATE = Sentry.CREATOR();
 
   onHighAlert: boolean = false;
   pSENTRY_CREATE: number = 20;
@@ -41,7 +41,7 @@ export class Sentry extends Elem {
 
     //Kinda boring and crowded around here, requesting honorable discharge, sir!
     if (!this.onHighAlert && totalNearbySentry > 2) {
-      ew.origin.killSelf(new Atom(Res.TYPE_DEF));
+      ew.origin.killSelf(Res.CREATE_BLUE());
     }
 
     //Res nearby? Maybe recruit someone for the cause
@@ -50,13 +50,13 @@ export class Sentry extends Elem {
     if (res) {
       //if high alert, definitely recruit, otherwise, maybe
       if (this.onHighAlert || Math.random() * this.pSENTRY_CREATE < 1) {
-        ew.origin.mutateSite(res, new Atom(Sentry.TYPE_DEF));
+        ew.origin.mutateSite(res, Sentry.CREATE());
       }
       //no res nearby, maybe we should make one.
     } else if (Math.random() * this.pRES_CREATE < 1) {
       let nearEmpty: Site = ew.getNearest(Empty.TYPE_DEF);
       if (nearEmpty) {
-        ew.origin.mutateSite(nearEmpty, new Atom(Res.TYPE_DEF));
+        ew.origin.mutateSite(nearEmpty, Res.CREATE_BLUE());
       }
     }
 
@@ -72,3 +72,8 @@ export class Sentry extends Elem {
     ew.origin.swapAtoms(ew.getAdjacent4Way(Empty.TYPE_DEF));
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+Sentry.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Sentry.TYPE_DEF);

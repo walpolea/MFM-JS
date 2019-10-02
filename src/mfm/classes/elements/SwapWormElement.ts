@@ -145,3 +145,8 @@ export class SwapWorm extends LinkedList {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+SwapWorm.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(SwapWorm.TYPE_DEF);

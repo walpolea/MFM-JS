@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
 
 export class Empty extends Elem {
 
@@ -14,3 +14,10 @@ export class Empty extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+Empty.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Empty.TYPE_DEF);
+//Register a SPLAT symbol
+ElementTypes.registerSPLAT("_", Empty.TYPE_DEF);

@@ -141,7 +141,7 @@ export class EventWindow {
   window: Site[]; //indexed array of EW Sites
 
   constructor(_tile: Tile, _origin: GridCoord) {
-    console.log("make window");
+    //console.log("make window");
     this.makeWindow(_tile, _origin);
   }
 
@@ -682,8 +682,6 @@ export class EventWindow {
     const keys = Array.from(ewMap.keys());
     const values = Array.from(ewMap.values());
 
-    console.log(typesMap);
-
     for (let i = 0; i < ewMap.size; i++) {
       const char: string = values[i];
       const cursn: number = keys[i]
@@ -703,7 +701,6 @@ export class EventWindow {
     if (fuzziness > 0) {
       return matchCount >= fuzziness ? matches : undefined;
     } else {
-      console.log(matchCount, ewMap.size - 1);
       return (matchCount == ewMap.size - 1) ? matches : undefined;
     }
   }

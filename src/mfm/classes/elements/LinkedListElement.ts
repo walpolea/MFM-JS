@@ -268,4 +268,3 @@ export class LinkedList extends Elem {
     super.exec(ew);
   }
 }
-

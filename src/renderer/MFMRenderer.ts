@@ -1,6 +1,7 @@
 ///<reference types="pixi.js"/>
 
 import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
+import "../mfm/ElementIncludes";
 import { IElementType, ElementTypes } from "../mfm/classes/ElementTypes";
 import { Tile } from "../mfm/classes/Tile";
 import { EventWindow } from "../mfm/classes/EventWindow";
@@ -24,6 +25,7 @@ import { Reducer } from "../mfm/classes/elements/ReducerElement";
 import { LoopWorm } from "../mfm/classes/elements/LoopWormElement";
 import { LoopSeed } from "../mfm/classes/elements/LoopSeedElement";
 import { Writer } from "../mfm/classes/elements/WriterElement";
+import { SortMaster } from "../mfm/classes/elements/SortMasterElement";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -235,6 +237,8 @@ export class MFMRenderer {
           site.atom = new Atom(LoopSeed.TYPE_DEF);
         } else if (this.keysHeld.has("m")) {
           site.atom = new Atom(StickyMembrane.TYPE_DEF);
+        } else if (this.keysHeld.has("u")) {
+          site.atom = SortMaster.CREATE();
         } else if (this.keysHeld.has("q")) {
           console.log("DEBUG SITE:", site);
         } else if (this.keysHeld.has("C")) {

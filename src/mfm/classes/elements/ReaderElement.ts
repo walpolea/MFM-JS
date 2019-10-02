@@ -41,3 +41,7 @@ export class Reader extends Elem {
 
 }
 
+//Initialize Splat Map maps the # to to the self type
+Reader.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Reader.TYPE_DEF);

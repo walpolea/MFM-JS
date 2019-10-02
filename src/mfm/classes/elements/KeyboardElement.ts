@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 
 export class Keyboard extends Elem {
 
@@ -27,3 +27,8 @@ export class Keyboard extends Elem {
 
 
 }
+
+//Initialize Splat Map maps the # to to the self type
+Keyboard.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+//ElementTypes.registerType(Keybaord.TYPE_DEF);

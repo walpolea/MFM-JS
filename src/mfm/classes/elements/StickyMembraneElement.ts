@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { Site } from "../Site";
 import { Empty } from "./EmptyElement";
 import { DReg } from "./DRegElement";
@@ -137,3 +137,8 @@ export class StickyMembrane extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+StickyMembrane.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(StickyMembrane.TYPE_DEF);

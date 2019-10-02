@@ -120,3 +120,8 @@ export class Sorter extends Elem {
   }
 
 }
+
+//Initialize Splat Map maps the # to to the self type
+Sorter.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Sorter.TYPE_DEF);

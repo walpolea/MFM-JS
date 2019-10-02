@@ -1,6 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
-import { IElementType } from "../ElementTypes";
+import { IElementType, ElementTypes } from "../ElementTypes";
 import { LoopWorm } from "./LoopWormElement";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
@@ -142,3 +142,8 @@ export class LoopSeed extends Elem {
     super.exec(ew);
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+LoopSeed.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(LoopSeed.TYPE_DEF);

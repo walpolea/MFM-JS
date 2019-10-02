@@ -51,3 +51,8 @@ export class Reducer extends Elem {
     }
   }
 }
+
+//Initialize Splat Map maps the # to to the self type
+Reducer.INITIALIZE_SPLAT_MAP()();
+//Tells the App/GUI that this element exists
+ElementTypes.registerType(Reducer.TYPE_DEF);

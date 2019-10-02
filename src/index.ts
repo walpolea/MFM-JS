@@ -14,13 +14,12 @@ let app = new Vue({
       mfmRenderer: MFMRenderer,
       customSequence: "" as string,
       curSelectedElement: "" as string,
-      typeMap: ElementTypes.TYPES_MAP as Map<string, IElementType>
     };
   },
   mounted() {
-
     this.initTile();
 
+    console.log(this.typeMap);
   },
   methods: {
     initTile() {
@@ -46,6 +45,9 @@ let app = new Vue({
     },
     gridRows() {
       return this.gridSize.split("x")[1];
+    },
+    typeMap() {
+      return ElementTypes.TYPES_MAP;
     }
   },
   watch: {
