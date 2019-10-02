@@ -1,4 +1,4 @@
-import { EventWindow } from "../Eventwindow";
+import { EventWindow } from "../EventWindow";
 import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Empty } from "./EmptyElement";

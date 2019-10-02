@@ -1,5 +1,5 @@
 import { GridCoord } from "../interfaces/IGridCoord";
-import { EventWindow } from "../classes/Eventwindow";
+import { EventWindow } from "../classes/EventWindow";
 import { Tile } from "../classes/Tile";
 
 export class Utils {

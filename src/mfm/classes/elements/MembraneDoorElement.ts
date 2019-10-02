@@ -1,4 +1,4 @@
-import { EventWindow } from "../Eventwindow";
+import { EventWindow } from "../EventWindow";
 import { ElementTypes, IElementType } from "../ElementTypes";
 import { MembraneWall } from "./MembraneWallElement";
 import { StickyMembrane } from "./StickyMembraneElement";

@@ -1,5 +1,5 @@
 import { Elem } from "./Elem";
-import { EventWindow } from "./Eventwindow";
+import { EventWindow } from "./EventWindow";
 import { ElementTypes, IElementType } from "./ElementTypes";
 import { Empty } from "./elements/EmptyElement";
 

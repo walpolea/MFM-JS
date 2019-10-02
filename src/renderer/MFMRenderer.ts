@@ -3,7 +3,7 @@
 import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
 import { IElementType, ElementTypes } from "../mfm/classes/ElementTypes";
 import { Tile } from "../mfm/classes/Tile";
-import { EventWindow } from "../mfm/classes/Eventwindow";
+import { EventWindow } from "../mfm/classes/EventWindow";
 import { Site } from "../mfm/classes/Site";
 import { SiteRenderer } from "./SiteRenderer";
 import { Atom } from "../mfm/classes/Atom";

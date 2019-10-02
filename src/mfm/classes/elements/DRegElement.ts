@@ -1,4 +1,4 @@
-import { EventWindow } from "../Eventwindow";
+import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
 import { IElementType } from "../ElementTypes";
 import { Utils } from "../../utils/MFMUtils";

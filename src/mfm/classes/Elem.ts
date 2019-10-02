@@ -1,4 +1,4 @@
-import { EventWindow } from "./Eventwindow";
+import { EventWindow } from "./EventWindow";
 import { IElementType, ElementTypes } from "./ElementTypes";
 import { Atom } from "./Atom";
 
