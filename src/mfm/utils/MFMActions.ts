@@ -12,6 +12,7 @@ export class Actions {
       const ei: number = ew.getIndexes(withinSet, Empty.TYPE_DEF, true)[0];
 
       if (ei) {
+        ew.move(ei);
         return true;
       } else {
         return false;

@@ -14,7 +14,7 @@ export class Template extends Elem {
   //STATIC SETUP
 
   //TYPE_DEF is important! Make something up!
-  static TYPE_DEF: IElementType = { name: "TEMPLATE", type: "Tmp", class: Template, color: 0xff2020 };
+  static TYPE_DEF: IElementType = { name: "TEMPLATE", type: "Tmp", class: Template, color: 0xfefefe };
   //CREATE is the default Factory to create an Atom of this Element
   static CREATE = Template.CREATOR();
   //If your Element takes in parameters in the constructor, you can add more Macro Factories here using CREATOR([params], data, color)
@@ -46,9 +46,8 @@ export class Template extends Elem {
 
     //This is where the magic happens
 
-    if (Utils.oneIn(this.pPATROL)) { //1 in 10 chance
-      Actions.patrol(ew, EventWindow.ADJACENT8WAY); //patrol (move) in an 8-way direction
-    }
+
+    Actions.patrol(ew, EventWindow.ADJACENT8WAY, this.pPATROL); //patrol (move) in an 8-way direction
 
     //The EventWindow object has a bunch of helper functions
     //for querying and manipulating Atoms in the Eventwindow
