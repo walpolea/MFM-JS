@@ -54,7 +54,6 @@ export class Template extends Elem {
 
     //This is where the magic happens
 
-
     Actions.patrol(ew, EventWindow.ADJACENT8WAY, this.pPATROL); //patrol (move) in an 8-way direction
 
     //The EventWindow object has a bunch of helper functions

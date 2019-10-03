@@ -652,6 +652,12 @@ export class EventWindow {
     return false;
   }
 
+  mutateMany(siteSet: number[], atomCreator: Function, creatorParams?: any[]) {
+    siteSet.forEach(sn => {
+      this.mutate(sn, atomCreator(creatorParams));
+    });
+  }
+
   destroy(targetIndex: number = 0): boolean {
 
     return this.mutate(targetIndex, new Atom(Empty.TYPE_DEF));

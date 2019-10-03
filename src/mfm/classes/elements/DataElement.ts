@@ -22,7 +22,7 @@ export class Data extends Elem {
       if (Utils.oneIn(2) && ew.is(4, Empty.TYPE_DEF)) {
         ew.move(4);
       } else {
-        ew.move(ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, true)[0]);
+        ew.move(ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF, true)[0]);
       }
 
     }

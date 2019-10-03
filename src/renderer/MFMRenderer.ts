@@ -26,6 +26,7 @@ import { LoopWorm } from "../mfm/classes/elements/LoopWormElement";
 import { LoopSeed } from "../mfm/classes/elements/LoopSeedElement";
 import { Writer } from "../mfm/classes/elements/WriterElement";
 import { SortMaster } from "../mfm/classes/elements/SortMasterElement";
+import { OnewayDoor } from "../mfm/classes/elements/OnewayDoorElement";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -243,6 +244,16 @@ export class MFMRenderer {
           console.log("DEBUG SITE:", site);
         } else if (this.keysHeld.has("C")) {
           site.atom = new Atom(Writer.TYPE_DEF, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
+        } else if (this.keysHeld.has("1")) {
+          site.atom = OnewayDoor.W_EXIT_EENT();
+        } else if (this.keysHeld.has("2")) {
+          site.atom = OnewayDoor.S_EXIT_NENT();
+        } else if (this.keysHeld.has("3")) {
+          site.atom = OnewayDoor.E_EXIT_WENT();
+        } else if (this.keysHeld.has("4")) {
+          site.atom = OnewayDoor.N_EXIT_SENT();
+        } else if (this.keysHeld.has("5")) {
+          site.atom = OnewayDoor.NE_EXIT_WENT();
         } else {
 
           if (this.curSelectedElement && this.curSelectedElement !== "") {
