@@ -24,5 +24,6 @@ import { Input } from "./classes/elements/InputElement";
 import { Keyboard } from "./classes/elements/KeyboardElement";
 import { BasePlanter } from "./classes/elements/BasePlanterElement";
 import { Text } from "./classes/elements/TextElement";
+import { Reader } from "./classes/elements/ReaderElement";
 
-[Mason, SuperMason, StuckMembrane, Input, Data, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template];
+[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template];

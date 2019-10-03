@@ -7,6 +7,7 @@ import { IElementType, ElementTypes } from "../ElementTypes";
 import { Utils } from "../../utils/MFMUtils";
 import { Actions } from "../../utils/MFMActions";
 import { SPLAT } from "../../utils/SPLAT";
+import { Empty } from "./EmptyElement";
 
 export class Template extends Elem {
 
@@ -19,7 +20,6 @@ export class Template extends Elem {
   static CREATE = Template.CREATOR();
   //If your Element takes in parameters in the constructor, you can add more Macro Factories here using CREATOR([params], data, color)
 
-
   //If you want to use SPLAT notation, you should set up static maps for your queries here
   //Splat strings must be noted symmetrically, use tilde (~) to balance out the notation without caring about those sites
   // # means this element's type, @ means the origin and it has to be in the middle of the diagram
@@ -30,10 +30,18 @@ export class Template extends Elem {
      ~
   `);
 
+  static checkBottom = SPLAT.splatToMap(`
+              ~
+              ~
+              @
+              #
+              #              
+  `)
+
   ////////////////
   //INSTANCE SETUP
 
-  pPATROL: number = 10; //ok to initialize here or constructor
+  pPATROL: number = 5; //ok to initialize here or constructor
 
   constructor() {
     super(Template.TYPE_DEF);
@@ -64,6 +72,12 @@ export class Template extends Elem {
           ew.destroy(templateIndex);
         })
       }
+    }
+
+    const bottomCheckResult = ew.query(Template.checkBottom, 0, Template.SPLAT_MAP);
+    const nearbyEmpty = ew.getRandomIndexOfType(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
+    if (bottomCheckResult && nearbyEmpty) {
+      ew.mutate(nearbyEmpty, Template.CREATE(undefined, undefined, (this.color + 0xf0) % 0xffffff));
     }
 
 
