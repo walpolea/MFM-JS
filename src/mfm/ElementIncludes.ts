@@ -30,6 +30,7 @@ import { OnewayDoor } from "./classes/elements/OnewayDoorElement";
 import { MembraneWall } from "./classes/elements/MembraneWallElement";
 import { MembraneDoor } from "./classes/elements/MembraneDoorElement";
 import { Eraser } from "./classes/elements/EraserElement";
+import { Sand } from "./classes/elements/SandElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -93,6 +94,9 @@ export class ElementIncludes {
     .set("Misc", [
       ["Eraser", Eraser.CREATE],
     ])
+    .set("Sandbox Stuff", [
+      ["Sand", Sand.CREATE],
+    ]);
 
 
 
