@@ -9,6 +9,7 @@ import { Sorter } from "./SorterElement";
 export class Input extends Elem {
 
   static TYPE_DEF: IElementType = { name: "INPUT", type: "In", class: Input, color: 0x888888 };
+  static CREATE = Input.CREATOR();
 
   max: number;
 

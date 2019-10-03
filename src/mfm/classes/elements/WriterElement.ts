@@ -10,7 +10,8 @@ import { Data } from "./DataElement";
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
 export class Writer extends Elem {
 
-  static TYPE_DEF: IElementType = { name: "WRITER", type: "Wr", class: Writer, color: 0xd66633 }
+  static TYPE_DEF: IElementType = { name: "WRITER", type: "Wr", class: Writer, color: 0xd66633 };
+  static CREATE = Writer.CREATOR();
 
   pPATROL: number = 1;
 

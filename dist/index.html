@@ -16,6 +16,8 @@
 
     h3 {
       color: #e1325e;
+      margin-bottom: 2px;
+      margin-top: 4px;
     }
 
     main {
@@ -69,14 +71,15 @@
 
     #element-container {
       margin: 10px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
-
 
     .element {
       user-select: none;
       display: inline-block;
       background-color: #666;
-      padding: 4px;
+      padding: 4px 8px;
       margin: 4px;
       font-size: 0.8rem;
       border: 1px solid #000;
@@ -154,17 +157,22 @@
           <option value="64x64">64x64</option>
           <option value="96x96">96x96</option>
           <option value="128x128">128x128</option>
+          <option value="196x196">196x196</option>
         </select>
 
         <br /><br />
         Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
       </div>
       <div id="element-container">
-        <span class="element" v-for="name in Array.from(typeMap.keys())"
-          :class="{selected: curSelectedElement === name}" @click="selectElement(name);">
-          {{name}}
-        </span>
+        <div v-for="groupName in Array.from(typeMap.keys())">
+          <h3>{{groupName}}</h3>
+          <span class="element" v-for="element in typeMap.get(groupName)"
+            :class="{selected: curSelectedElement === element[0]}" @click="selectElement(element[0], element[1]);">
+            {{element[0]}}
+          </span>
+        </div>
       </div>
+
       <div id="mfm"></div>
       <div><button @click="reload()">Clear Grid</button></div>
     </div>

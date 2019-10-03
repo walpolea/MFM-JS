@@ -10,6 +10,7 @@ import { Eraser } from "./EraserElement";
 export class Text extends Elem {
 
   static TYPE_DEF: IElementType = { name: "TEXT", type: "Tx", class: Text, color: 0xd66633 }
+  static CREATE = Text.CREATOR();
 
   pPATROL: number = 1;
   char: string;

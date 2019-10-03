@@ -1,6 +1,7 @@
 import { Tile } from "./mfm/classes/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementTypes, IElementType } from "./mfm/classes/ElementTypes";
+import { ElementIncludes } from "./mfm/ElementIncludes";
 
 declare var Vue: any;
 
@@ -29,10 +30,11 @@ let app = new Vue({
       this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DREG";
       this.selectElement(this.curSelectedElement);
     },
-    selectElement(name: string) {
+    selectElement(name: string, func: Function) {
       console.log("setting element", name);
       this.curSelectedElement = name;
       this.mfmRenderer.curSelectedElement = this.curSelectedElement;
+      this.mfmRenderer.curSelectedElementFunction = func;
     },
     reload() {
       this.mfmRenderer.deconstruct();
@@ -47,7 +49,7 @@ let app = new Vue({
       return this.gridSize.split("x")[1];
     },
     typeMap() {
-      return ElementTypes.TYPES_MAP;
+      return ElementIncludes.ELEMENT_MENU_MAP;
     }
   },
   watch: {

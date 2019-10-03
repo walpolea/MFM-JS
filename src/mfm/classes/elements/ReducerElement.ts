@@ -9,6 +9,7 @@ import { Data } from "./DataElement";
 export class Reducer extends Elem {
 
   static TYPE_DEF: IElementType = { name: "REDUCER", type: "Re", class: Reducer, color: 0x00ffff };
+  static CREATE = Reducer.CREATOR();
 
   constructor() {
     super(Reducer.TYPE_DEF);

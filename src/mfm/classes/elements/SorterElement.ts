@@ -9,6 +9,7 @@ import { Reducer } from "./ReducerElement";
 export class Sorter extends Elem {
 
   static TYPE_DEF: IElementType = { name: "SORTER", type: "So", class: Sorter, color: 0x7c1515 }
+  static CREATE = Sorter.CREATOR();
 
   sortVal: number = 0;
   makeCount: number = 1;

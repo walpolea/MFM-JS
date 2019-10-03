@@ -31,9 +31,10 @@ export class LoopSeed extends Elem {
     loopNode.expandCount = 1;
 
     const site: Site = ew.getSiteByIndex(index);
-    const atom: Atom = new Atom();
-    atom.setElement(loopNode);
-    ew.origin.mutateSite(site, atom);
+    // const atom: Atom = new Atom();
+    // atom.setElement(loopNode);
+
+    ew.origin.mutateSite(site, LoopWorm.CREATE([0, prev, next]));
 
   }
 

@@ -12,17 +12,33 @@ export class OnewayDoor extends Elem {
   static TYPE_DEF: IElementType = { name: "ONEWAY DOOR", type: "Od", class: OnewayDoor, color: 0x4466ff };
   static CREATE = OnewayDoor.CREATOR();
 
-  static NS_EXITS_WENT = OnewayDoor.CREATOR([[2, 3], 1]);
-  static NS_EXITS_EENT = OnewayDoor.CREATOR([[2, 3], 4]);
-  static EW_EXITS_SENT = OnewayDoor.CREATOR([[1, 4], 3]);
-  static EW_EXITS_NENT = OnewayDoor.CREATOR([[1, 4], 2]);
+  //named by <ENTRANCE>_<EXIT(S)>
+  //forks
+  static W_NS = OnewayDoor.CREATOR([[2, 3], 1]);
+  static E_NS = OnewayDoor.CREATOR([[2, 3], 4]);
+  static S_EW = OnewayDoor.CREATOR([[1, 4], 3]);
+  static N_EW = OnewayDoor.CREATOR([[1, 4], 2]);
+  static W_NE = OnewayDoor.CREATOR([[2, 4], 1]);
 
-  static E_EXIT_WENT = OnewayDoor.CREATOR([[4], 1]);
-  static W_EXIT_EENT = OnewayDoor.CREATOR([[1], 4]);
-  static N_EXIT_SENT = OnewayDoor.CREATOR([[2], 3]);
-  static S_EXIT_NENT = OnewayDoor.CREATOR([[3], 2]);
+  //counter-clockwise corners
+  static E_S = OnewayDoor.CREATOR([[3], 4]);
+  static N_E = OnewayDoor.CREATOR([[4], 2]);
+  static W_N = OnewayDoor.CREATOR([[2], 1]);
+  static S_W = OnewayDoor.CREATOR([[1], 3]);
 
-  static NE_EXIT_WENT = OnewayDoor.CREATOR([[2, 4], 1]);
+  //clockwise corners
+  static S_E = OnewayDoor.CREATOR([[4], 3]);
+  static E_N = OnewayDoor.CREATOR([[2], 4]);
+  static N_W = OnewayDoor.CREATOR([[1], 2]);
+  static W_S = OnewayDoor.CREATOR([[3], 1]);
+
+  //straights
+  static W_E = OnewayDoor.CREATOR([[4], 1]);
+  static E_W = OnewayDoor.CREATOR([[1], 4]);
+  static S_N = OnewayDoor.CREATOR([[2], 3]);
+  static N_S = OnewayDoor.CREATOR([[3], 2]);
+
+
 
   static checkWalls = SPLAT.splatToMap(`
     w~w

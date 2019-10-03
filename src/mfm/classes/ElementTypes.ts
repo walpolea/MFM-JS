@@ -24,5 +24,3 @@ export class ElementTypes {
   }
 }
 
-
-import { Template } from "./elements/TemplateElement";

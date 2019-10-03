@@ -45,6 +45,7 @@ export class MFMRenderer {
   siteTexture: Texture = Texture.from("/resources/element.png");
   clickArea: DisplayObject;
   curSelectedElement: string;
+  curSelectedElementFunction: Function;
   webGLSupported: boolean = utils.isWebGLSupported();
 
   ewCache: Map<GridCoord, EventWindow> = new Map<GridCoord, EventWindow>();
@@ -245,19 +246,29 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("C")) {
           site.atom = new Atom(Writer.TYPE_DEF, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
         } else if (this.keysHeld.has("1")) {
-          site.atom = OnewayDoor.W_EXIT_EENT();
+          site.atom = OnewayDoor.E_W();
         } else if (this.keysHeld.has("2")) {
-          site.atom = OnewayDoor.S_EXIT_NENT();
+          site.atom = OnewayDoor.N_S();
         } else if (this.keysHeld.has("3")) {
-          site.atom = OnewayDoor.E_EXIT_WENT();
+          site.atom = OnewayDoor.W_E();
         } else if (this.keysHeld.has("4")) {
-          site.atom = OnewayDoor.N_EXIT_SENT();
+          site.atom = OnewayDoor.S_N();
         } else if (this.keysHeld.has("5")) {
-          site.atom = OnewayDoor.NE_EXIT_WENT();
+          site.atom = OnewayDoor.E_S();
+        } else if (this.keysHeld.has("6")) {
+          site.atom = OnewayDoor.N_E();
+        } else if (this.keysHeld.has("7")) {
+          site.atom = OnewayDoor.W_N();
+        } else if (this.keysHeld.has("8")) {
+          site.atom = OnewayDoor.S_W();
+        } else if (this.keysHeld.has("9")) {
+          site.atom = OnewayDoor.W_NE();
+        } else if (this.keysHeld.has("0")) {
+          site.atom = OnewayDoor.W_NS();
         } else {
 
-          if (this.curSelectedElement && this.curSelectedElement !== "") {
-            site.atom = new Atom(ElementTypes.TYPES_MAP.get(this.curSelectedElement));
+          if (this.curSelectedElementFunction) {
+            site.atom = this.curSelectedElementFunction();
           }
 
         }

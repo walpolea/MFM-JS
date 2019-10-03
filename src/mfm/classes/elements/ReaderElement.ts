@@ -10,7 +10,7 @@ import { Empty } from "./EmptyElement";
 export class Reader extends Elem {
 
   static TYPE_DEF: IElementType = { name: "READER", type: "Rd", class: Reader, color: 0xeeee22 }
-
+  static CREATE = Reader.CREATOR();
 
   constructor() {
     super(Reader.TYPE_DEF);

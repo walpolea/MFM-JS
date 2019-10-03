@@ -9,7 +9,7 @@ import { Res } from "./ResElement";
 export class SwapWorm extends LinkedList {
 
   static TYPE_DEF: IElementType = { name: "SWAP WORM", type: "Sw", class: SwapWorm, color: 0xcc0066 };
-
+  static CREATE = SwapWorm.CREATOR();
 
   WORMSIZE: number;
   birthCount: number;

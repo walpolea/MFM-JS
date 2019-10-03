@@ -27,5 +27,63 @@ import { Text } from "./classes/elements/TextElement";
 import { Reader } from "./classes/elements/ReaderElement";
 import { RevolvingDoor } from "./classes/elements/RevolvingDoorElement";
 import { OnewayDoor } from "./classes/elements/OnewayDoorElement";
+import { Atom } from "./classes/Atom";
 
-[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
+//[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
+
+export class ElementIncludes {
+
+  static ELEMENT_MENU_MAP: Map<string, [string, Function][]> = new Map<string, [string, Function][]>()
+    .set("MFM", [
+      ["Empty", Empty.CREATE],
+      ["DReg", DReg.CREATE],
+      ["Res", Res.CREATE],
+      ["Blue Res", Res.CREATE_BLUE],
+      ["ForkBonmb", ForkBomb.CREATE],
+      ["SuperForkbomb", SuperForkBomb.CREATE],
+      ["AntiForkBomb", AntiForkBomb.CREATE],
+      ["Sentry", Sentry.CREATE]
+    ])
+    .set("Structural", [
+      ["Wall", Wall.CREATE],
+      ["Mason", Mason.CREATE],
+      ["Super Mason", SuperMason.CREATE],
+    ])
+    .set("Doors", [
+      ["Revolving Door", RevolvingDoor.CREATE],
+      ["W -> NES", OnewayDoor.CREATE],
+      ["W -> E", OnewayDoor.W_E],
+      ["N -> S", OnewayDoor.N_S],
+      ["S -> N", OnewayDoor.S_N],
+      ["E -> W", OnewayDoor.E_W],
+    ])
+    .set("Goopy Stuff", [
+      ["StickyMembrane", StickyMembrane.CREATE],
+      ["StuckMembrane", StuckMembrane.CREATE],
+      ["Fireworks (Template)", Template.CREATE],
+    ])
+    .set("Worms", [
+      ["SwapWorm", SwapWorm.CREATE],
+      ["LoopWorm", LoopWorm.CREATE],
+      ["LoopSeed", LoopSeed.CREATE]
+    ])
+    .set("Data Stuff", [
+      ["Data", Data.CREATE],
+      ["Sorter", Sorter.CREATE],
+      ["SortMaster", SortMaster.CREATE],
+      ["Input", Input.CREATE],
+      ["Reducer", Reducer.CREATE],
+    ])
+    .set("Input", [
+      ["Planter", BasePlanter.CREATE],
+      ["Reader", Reader.CREATE],
+      ["Writer", Writer.CREATE],
+      ["Text", Text.CREATE],
+    ])
+
+
+
+
+
+
+}
