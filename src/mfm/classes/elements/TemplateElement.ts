@@ -77,7 +77,7 @@ export class Template extends Elem {
     const bottomCheckResult = ew.query(Template.checkBottom, 0, Template.SPLAT_MAP);
     const nearbyEmpty = ew.getRandomIndexOfType(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
     if (bottomCheckResult && nearbyEmpty) {
-      ew.mutate(nearbyEmpty, Template.CREATE(undefined, undefined, (this.color + 0xf0) % 0xffffff));
+      ew.mutate(nearbyEmpty, Template.CREATE(undefined, undefined, (this.color + 0xf6 > 0xffffff ? 0x444444 : this.color + 0xf6)));
     }
 
 
