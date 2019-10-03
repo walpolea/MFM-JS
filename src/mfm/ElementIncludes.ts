@@ -54,11 +54,15 @@ export class ElementIncludes {
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],
-      ["W -> NES", OnewayDoor.CREATE],
-      ["W -> E", OnewayDoor.W_E],
-      ["N -> S", OnewayDoor.N_S],
-      ["S -> N", OnewayDoor.S_N],
-      ["E -> W", OnewayDoor.E_W],
+      ["W→NES", OnewayDoor.CREATE],
+      ["W→E", OnewayDoor.W_E],
+      ["N→S", OnewayDoor.N_S],
+      ["S→N", OnewayDoor.S_N],
+      ["E→W", OnewayDoor.E_W],
+      ["⬋ E→S", OnewayDoor.E_S],
+      ["⬊ N→E", OnewayDoor.N_E],
+      ["⬈ W→N", OnewayDoor.W_N],
+      ["⬉ S→W", OnewayDoor.S_W],
     ])
     .set("Goopy Stuff", [
       ["StickyMembrane", StickyMembrane.CREATE],
