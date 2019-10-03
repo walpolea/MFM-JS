@@ -12,10 +12,27 @@ export class Data extends Elem {
 
   pPATROL: number = 1;
 
-  constructor() {
+  initializedData: boolean = false;
+  datas: any[]
+
+  constructor(_datas: any[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
     super(Data.TYPE_DEF);
+    this.datas = _datas;
   }
   exec(ew: EventWindow) {
+
+    if (!this.initializedData) {
+      if (ew.origin.atom.data === undefined) {
+        ew.origin.atom.data = {};
+      }
+      const val = this.datas[(this.datas.length * Math.random()) >> 0];
+      console.log(val);
+      ew.origin.atom.data.value = val;
+      this.initializedData = true;
+    }
+
+    this.color = Utils.rgbToHex((ew.origin.atom.data.value) * 5, (ew.origin.atom.data.value) * 5, (ew.origin.atom.data.value) * 5);
+
     //patrol
     if (Utils.oneIn(this.pPATROL)) {
       //ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));

@@ -24,13 +24,14 @@ export class Input extends Elem {
     indexes.forEach(index => {
 
       if (ew.is(index, Empty.TYPE_DEF)) {
-        ew.mutate(index, new Atom(Data.TYPE_DEF, undefined, { value: Math.random() * this.max << 0 }));
+        //ew.mutate(index, new Atom(Data.TYPE_DEF, undefined, { value: Math.random() * this.max << 0 }));
+        ew.mutate(index, Data.CREATE([[Math.random() * this.max << 0]]));
       }
 
     })
 
     if (ew.is(24, Empty.TYPE_DEF)) {
-      ew.mutate(24, new Atom(Sorter.TYPE_DEF, [0, undefined, "E"]));
+      ew.mutate(24, Sorter.CREATE([0, undefined, "E"]));
     }
 
     super.exec(ew);

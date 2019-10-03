@@ -32,7 +32,7 @@ export class Writer extends Elem {
 
     if (dataEl) {
       const d: Site = ew.getSiteByIndex(dataEl);
-      if (d.atom.data && d.atom.data.value && this.str != (d.atom.data.value).toString()) {
+      if (d.atom.data !== undefined && d.atom.data.value !== undefined && this.str != (d.atom.data.value).toString()) {
 
         this.str = (d.atom.data.value).toString();
         this.valid = false;
@@ -42,7 +42,7 @@ export class Writer extends Elem {
     } else if (dataEl2) {
       const d: Site = ew.getSiteByIndex(dataEl2);
 
-      if (d.atom.data && d.atom.data.value && this.str != (d.atom.data.value).toString()) {
+      if (d.atom.data !== undefined && d.atom.data.value !== undefined && this.str != (d.atom.data.value).toString()) {
 
         this.str = (d.atom.data.value).toString();
         this.valid = false;

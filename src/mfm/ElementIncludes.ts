@@ -29,6 +29,7 @@ import { RevolvingDoor } from "./classes/elements/RevolvingDoorElement";
 import { OnewayDoor } from "./classes/elements/OnewayDoorElement";
 import { MembraneWall } from "./classes/elements/MembraneWallElement";
 import { MembraneDoor } from "./classes/elements/MembraneDoorElement";
+import { Eraser } from "./classes/elements/EraserElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -88,6 +89,9 @@ export class ElementIncludes {
       ["Reader", Reader.CREATE],
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
+    ])
+    .set("Misc", [
+      ["Eraser", Eraser.CREATE],
     ])
 
 

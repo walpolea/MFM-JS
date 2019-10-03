@@ -28,7 +28,8 @@ export class Reader extends Elem {
 
       if (emptyAdj !== undefined && key !== undefined) {
 
-        ew.mutate(emptyAdj, new Atom(Data.TYPE_DEF, undefined, { value: key }));
+        //ew.mutate(emptyAdj, Data.CREATE([key]new Atom(Data.TYPE_DEF, undefined, { value: key }));
+        ew.mutate(emptyAdj, Data.CREATE([[key]]));
 
         (ew.origin.readBase().elem as Keyboard).data = undefined;
       }

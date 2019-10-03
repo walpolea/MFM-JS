@@ -5,6 +5,7 @@ import { IElementType, ElementTypes } from "../ElementTypes";
 export class Eraser extends Elem {
 
   static TYPE_DEF: IElementType = { name: "ERASER", type: "Er", class: Eraser, color: 0x000000 }
+  static CREATE = Eraser.CREATOR();
 
   eraseFrom: number;
   eraseTo: number;
