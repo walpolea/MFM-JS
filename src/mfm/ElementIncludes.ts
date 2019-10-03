@@ -27,7 +27,8 @@ import { Text } from "./classes/elements/TextElement";
 import { Reader } from "./classes/elements/ReaderElement";
 import { RevolvingDoor } from "./classes/elements/RevolvingDoorElement";
 import { OnewayDoor } from "./classes/elements/OnewayDoorElement";
-import { Atom } from "./classes/Atom";
+import { MembraneWall } from "./classes/elements/MembraneWallElement";
+import { MembraneDoor } from "./classes/elements/MembraneDoorElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -39,7 +40,7 @@ export class ElementIncludes {
       ["DReg", DReg.CREATE],
       ["Res", Res.CREATE],
       ["Blue Res", Res.CREATE_BLUE],
-      ["ForkBonmb", ForkBomb.CREATE],
+      ["ForkBomb", ForkBomb.CREATE],
       ["SuperForkbomb", SuperForkBomb.CREATE],
       ["AntiForkBomb", AntiForkBomb.CREATE],
       ["Sentry", Sentry.CREATE]
@@ -48,6 +49,8 @@ export class ElementIncludes {
       ["Wall", Wall.CREATE],
       ["Mason", Mason.CREATE],
       ["Super Mason", SuperMason.CREATE],
+      ["MembraneWall", MembraneWall.CREATE],
+      ["MembraneDoor", MembraneDoor.CREATE],
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],
@@ -64,6 +67,8 @@ export class ElementIncludes {
     ])
     .set("Worms", [
       ["SwapWorm", SwapWorm.CREATE],
+      ["Long SW", SwapWorm.CREATOR([24])],
+      ["Short SW", SwapWorm.CREATOR([2])],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE]
     ])
@@ -75,7 +80,7 @@ export class ElementIncludes {
       ["Reducer", Reducer.CREATE],
     ])
     .set("Input", [
-      ["Planter", BasePlanter.CREATE],
+      ["KeyboardPlanter", BasePlanter.CREATE],
       ["Reader", Reader.CREATE],
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
