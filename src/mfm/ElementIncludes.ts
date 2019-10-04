@@ -65,6 +65,18 @@ export class ElementIncludes {
       ["⬊ N→E", OnewayDoor.N_E],
       ["⬈ W→N", OnewayDoor.W_N],
       ["⬉ S→W", OnewayDoor.S_W],
+      ["⬈ S→E", OnewayDoor.S_E],
+      ["⬉ E→N", OnewayDoor.E_N],
+      ["⬋ N→W", OnewayDoor.N_W],
+      ["⬊ W→S", OnewayDoor.W_S],
+      ["W→NS", OnewayDoor.W_NS],
+      ["E→NS", OnewayDoor.E_NS],
+      ["S→EW", OnewayDoor.S_EW],
+      ["N→EW", OnewayDoor.N_EW],
+      ["W→NE", OnewayDoor.W_NE],
+      ["N→WSE", OnewayDoor.N_WSE],
+      ["WNE→S", OnewayDoor.WNE_S],
+
     ])
     .set("Goopy Stuff", [
       ["StickyMembrane", StickyMembrane.CREATE],

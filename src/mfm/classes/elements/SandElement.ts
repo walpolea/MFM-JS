@@ -7,54 +7,63 @@ import { SPLAT } from "../../utils/SPLAT";
 import { Empty } from "./EmptyElement";
 
 export class Sand extends Elem {
-	
+
 	static TYPE_DEF: IElementType = { name: "SAND", type: "SB", class: Sand, color: 0xffdd00 };
 	static CREATE = Sand.CREATOR();
-	
+
 	static checkDown = SPLAT.splatToMap(`
 		~
 		@
 		_
 	`)
-  
+
 	static checkDownRight = SPLAT.splatToMap(`
 		~~~
 		~@~
 		~#_
 	`)
-  
+
 	static checkDownLeft = SPLAT.splatToMap(`
 		~~~
 		~@~
 		_#~
 	`)
 
-  constructor() {
-    super(Sand.TYPE_DEF);
-  }
+	constructor() {
+		super(Sand.TYPE_DEF);
+	}
 
-  exec(ew: EventWindow) {
+	exec(ew: EventWindow) {
 
-    //Using SPLAT
-    const fallResult = ew.query(Sand.checkDown, 0, Sand.SPLAT_MAP);
-    if (fallResult) {
-      const emptySite = fallResult.get(Empty.TYPE_DEF)
-	  ew.swap(emptySite[0])
-    }
-	
-    const slideRightResult = ew.query(Sand.checkDownRight, 0, Sand.SPLAT_MAP);
-    if (slideRightResult) {
-      const emptySite = slideRightResult.get(Empty.TYPE_DEF)
-	  ew.swap(emptySite[0])
-    }
-	
-    const slideLeftResult = ew.query(Sand.checkDownLeft, 0, Sand.SPLAT_MAP);
-    if (slideLeftResult) {
-      const emptySite = slideLeftResult.get(Empty.TYPE_DEF)
-	  ew.swap(emptySite[0])
-    }
+		//Using SPLAT
+		const fallResult = ew.query(Sand.checkDown, 0, Sand.SPLAT_MAP);
+		if (fallResult) {
+			const emptySite = fallResult.get(Empty.TYPE_DEF)
+			ew.swap(emptySite[0]);
+		} else {
 
-  }
+			const slideRightResult = ew.query(Sand.checkDownRight, 0, Sand.SPLAT_MAP);
+			const slideLeftResult = ew.query(Sand.checkDownLeft, 0, Sand.SPLAT_MAP);
+
+			if (slideRightResult && slideLeftResult) {
+
+				if (Utils.oneIn(2)) {
+					ew.swap(slideRightResult.get(Empty.TYPE_DEF)[0]);
+				} else {
+					ew.swap(slideLeftResult.get(Empty.TYPE_DEF)[0]);
+				}
+
+			} else if (slideRightResult) {
+				const emptySite = slideRightResult.get(Empty.TYPE_DEF)
+				ew.swap(emptySite[0]);
+			} else if (slideLeftResult) {
+				const emptySite = slideLeftResult.get(Empty.TYPE_DEF)
+				ew.swap(emptySite[0])
+			}
+
+		}
+	}
+
 }
 
 Sand.INITIALIZE_SPLAT_MAP()();
