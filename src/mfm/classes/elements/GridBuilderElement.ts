@@ -6,6 +6,7 @@ import { SPLAT } from "../../utils/SPLAT";
 import { Empty } from "./EmptyElement";
 import { Wall } from "./WallElement";
 import { Sand } from "./SandElement";
+import { Data } from "./DataElement";
 
 export class GridBuilder extends Elem {
 
@@ -15,6 +16,8 @@ export class GridBuilder extends Elem {
   static GRID_WALL = GridBuilder.CREATOR([Wall.CREATE]);
   static GRID_SORTER = GridBuilder.CREATOR([Sorter.CREATE]);
   static GRID_SAND = GridBuilder.CREATOR([Sand.CREATE]);
+  static GRID_DATA = GridBuilder.CREATOR([Data.CREATE]);
+
 
   static gridOut = SPLAT.splatToMap(`
   _~_

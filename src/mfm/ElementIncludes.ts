@@ -62,6 +62,8 @@ export class ElementIncludes {
       ["Wall Grid", GridBuilder.GRID_WALL],
       ["Sand Grid", GridBuilder.GRID_SAND],
       ["Sorter Grid", GridBuilder.GRID_SORTER],
+      ["Data Grid", GridBuilder.GRID_DATA],
+      ["DecayWall Grid", GridBuilder.CREATOR([DecayWall.LIVE_100])],
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],
