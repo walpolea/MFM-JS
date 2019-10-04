@@ -67,12 +67,15 @@
     header {
       margin: 100px 0;
       color: #aaa;
+      text-align: center;
     }
 
     #element-container {
       margin: 10px 0;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-gap: 1rem;
+
     }
 
     .element {
@@ -116,6 +119,37 @@
     .element.selected {
       background-color: #e000a6;
     }
+
+    #mfm-grid-container {
+      margin-bottom: 20px;
+    }
+
+    @media only screen and (min-width:1300px) {
+
+      main {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 40px;
+      }
+
+      #element-container {
+        justify-items: center;
+
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: 1fr;
+        text-align: left;
+      }
+
+      #mfm-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: right;
+      }
+
+      #mfm {
+        margin: 0 auto;
+      }
+    }
   </style>
 </head>
 
@@ -137,45 +171,51 @@
       </nav>
     </header>
     <div id="app">
-      <h1>The Simulator</h1>
-      <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
-        Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to
-        function.
-      </h1>
-      <p>
-        Have fun playing with the following simulator. But before you get started, understand that this is not meant
-        to be a perfect copy of Dr. Dave Ackley's Movable Feast Machine. Instead, this project is intended to expose
-        you to what robust-first living computation is like. Also, the simulator currently only emulates a single
-        tile, and is not built in a way to grow indefinitely.
-      </p>
-      <div>
-        Grid Size:
-        <select v-model=" gridSize">
-          <option value="32x32">32x32</option>
-          <option value="48x48">48x48</option>
-          <option value="60x40" selected>60x40</option>
-
-          <option value="64x64">64x64</option>
-          <option value="96x96">96x96</option>
-          <option value="128x128">128x128</option>
-          <option value="196x196">196x196</option>
-        </select>
-
-        <br /><br />
-        Time Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
+      <div id="intro">
+        <h1>The Simulator</h1>
+        <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
+          Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to
+          function.
+        </h1>
+        <p>
+          Have fun playing with the following simulator. But before you get started, understand that this is not meant
+          to be a perfect copy of Dr. Dave Ackley's Movable Feast Machine. Instead, this project is intended to expose
+          you to what robust-first living computation is like. Also, the simulator currently only emulates a single
+          tile, and is not built in a way to grow indefinitely.
+        </p>
       </div>
-      <div id="element-container">
-        <div v-for="groupName in Array.from(typeMap.keys())">
-          <h3>{{groupName}}</h3>
-          <span class="element" v-for="element in typeMap.get(groupName)"
-            :class="{selected: curSelectedElement === element[0]}" @click="selectElement(element[0], element[1]);">
-            {{element[0]}}
-          </span>
+      <div id="mfm-grid">
+        <div id="element-container">
+          <div v-for="groupName in Array.from(typeMap.keys())">
+            <h3>{{groupName}}</h3>
+            <span class="element" v-for="element in typeMap.get(groupName)"
+              :class="{selected: curSelectedElement === element[0]}" @click="selectElement(element[0], element[1]);">
+              {{element[0]}}
+            </span>
+          </div>
         </div>
-      </div>
+        <div id="mfm-grid-container">
 
-      <div id="mfm"></div>
-      <div><button @click="reload()">Clear Grid</button></div>
+          <div id="mfm"></div>
+
+          <button @click="reload()">Clear Grid</button>
+          Grid Size:
+          <select v-model=" gridSize">
+            <option value="32x32">32x32</option>
+            <option value="48x48">48x48</option>
+            <option value="60x40" selected>60x40</option>
+
+            <option value="64x64">64x64</option>
+            <option value="96x96">96x96</option>
+            <option value="128x128">128x128</option>
+            <option value="196x196">196x196</option>
+          </select>
+
+          Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
+        </div>
+
+      </div>
+    </div>
     </div>
     <h3>Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
     <ul id="instructions">

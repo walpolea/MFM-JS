@@ -150,25 +150,21 @@ export class Symmetries {
   //this is what maps a symmetry to NORMAL, where key is normal index and value is symmetry index
   static SYM_MAP(sym: number[][]): Map<number, number> {
 
-    const map: Map<number, number> = new Map<number, number>();
-
+    const symmap: Map<number, number> = new Map<number, number>();
 
     const flatNormal = Symmetries.PSYM_NORMAL.flat();
     const flatSym = sym.flat();
 
-
     flatNormal.forEach((ni, i) => {
-      map.set(ni, flatSym[i]);
+      symmap.set(ni, flatSym[i]);
     });
 
-    console.log(map);
-
-    return map;
+    return symmap;
 
 
   }
 
-
+  //DIY Symmetry sets with a bitmask
   static GET_SYMMETRIES(bitmask: number): Map<number, number>[] {
     return Symmetries.ALL.filter((sym, index) => {
       return bitmask & (1 << index);

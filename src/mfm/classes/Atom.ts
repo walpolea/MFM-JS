@@ -40,6 +40,13 @@ export class Atom {
   }
 
   exec(ew: EventWindow) {
+
+    //profile?
+    //var t0 = performance.now();
+
     this.elem.exec(ew);
+
+    // var t1 = performance.now();
+    // console.log(this.type.name + " took " + (t1 - t0) + " ms");
   }
 }
