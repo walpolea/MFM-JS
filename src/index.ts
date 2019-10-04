@@ -1,6 +1,5 @@
 import { Tile } from "./mfm/classes/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
-import { ElementTypes, IElementType } from "./mfm/classes/ElementTypes";
 import { ElementIncludes } from "./mfm/ElementIncludes";
 import { DReg } from "./mfm/classes/elements/DRegElement";
 
@@ -27,7 +26,8 @@ let app = new Vue({
       this.g = new Tile(this.gridCols, this.gridRows);
       this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"));
 
-      this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DREG";
+      this.mfmRenderer.timeSpeed = this.timeSpeed ? this.timeSpeed : 5000;
+      this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DReg";
       this.curSelectedFunc = this.curSelectedFunc ? this.curSelectedFunc : DReg.CREATE;
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
     },

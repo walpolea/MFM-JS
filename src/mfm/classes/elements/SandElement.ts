@@ -34,6 +34,7 @@ export class Sand extends Elem {
 
 		//Should I fall?
 		const fallResult = ew.query(Sand.checkDown, 0, Sand.SPLAT_MAP);
+
 		if (fallResult) {
 
 			const emptySite = fallResult.get(Empty.TYPE_DEF)

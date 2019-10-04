@@ -31,6 +31,7 @@ import { MembraneWall } from "./classes/elements/MembraneWallElement";
 import { MembraneDoor } from "./classes/elements/MembraneDoorElement";
 import { Eraser } from "./classes/elements/EraserElement";
 import { Sand } from "./classes/elements/SandElement";
+import { DecayWall } from "./classes/elements/DecayWallElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -53,6 +54,11 @@ export class ElementIncludes {
       ["Super Mason", SuperMason.CREATE],
       ["MembraneWall", MembraneWall.CREATE],
       ["MembraneDoor", MembraneDoor.CREATE],
+      ["DecayWall-10", DecayWall.CREATE],
+      ["DecayWall-100", DecayWall.LIVE_100],
+      ["DecayWall-1000", DecayWall.LIVE_1000],
+      ["DecayWall-10000", DecayWall.LIVE_10000],
+
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],

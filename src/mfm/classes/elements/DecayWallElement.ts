@@ -5,6 +5,12 @@ import { ElementTypes, IElementType } from "../ElementTypes";
 export class DecayWall extends Elem {
 
   static TYPE_DEF: IElementType = { name: "DECAY WALL", type: "Dw", class: DecayWall, color: 0x4040ff };
+  static CREATE = DecayWall.CREATOR();
+
+  static LIVE_100 = DecayWall.CREATOR([100]);
+  static LIVE_1000 = DecayWall.CREATOR([1000]);
+  static LIVE_10000 = DecayWall.CREATOR([10000]);
+
 
   lifeSpan: number;
 
