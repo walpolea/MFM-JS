@@ -5,11 +5,18 @@ import { Site } from "../Site";
 import { Atom } from "../Atom";
 import { Empty } from "./EmptyElement";
 import { Reducer } from "./ReducerElement";
+import { SPLAT } from "../../utils/SPLAT";
 
 export class Sorter extends Elem {
 
   static TYPE_DEF: IElementType = { name: "SORTER", type: "So", class: Sorter, color: 0x7c1515 }
   static CREATE = Sorter.CREATOR();
+
+  static gridOut = SPLAT.splatToMap(`
+  _~_
+  ~@~
+  _~_
+  `);
 
   sortVal: number = 0;
   makeCount: number = 1;
@@ -65,7 +72,7 @@ export class Sorter extends Elem {
 
     //is there data to the east?
     const availableSite: Site = this.sortDirection === "W" ? ew.getSiteByIndex(4) : ew.getSiteByIndex(1);
-    if (availableSite.atom.data) {
+    if (availableSite && availableSite.atom.data) {
 
       this.age = 0;
 
