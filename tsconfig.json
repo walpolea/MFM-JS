@@ -5,6 +5,11 @@
     "noImplicitAny": true,
     "module": "es2015",
     "target": "es2015",
+    "lib": [
+      "es2019",
+      "dom",
+      "esnext.array",
+    ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true
   }

@@ -4,6 +4,10 @@ import { Site } from "./Site";
 import { Atom } from "./Atom";
 import { IElementType, ElementTypes } from "./ElementTypes";
 import { Empty } from "./elements/EmptyElement";
+import { Symmetries } from "../utils/Symmetries";
+import { Utils } from "../utils/MFMUtils";
+
+
 
 //Event window as describbed here: http://robust.cs.unm.edu/lib/exe/fetch.php?w=300&tok=4c8f49&media=dev:event-window-10.png
 //Collection of sites which contain atoms, built from an origin (center) site
@@ -680,15 +684,21 @@ export class EventWindow {
   }
 
   ///QUERYING
-  query(ewMap: Map<number, string>, fuzziness: number = 0, typesMap: Map<string, IElementType> = ElementTypes.SPLAT_MAP) {
+  query(ewMap: Map<number, string>, fuzziness: number = 0, typesMap: Map<string, IElementType> = ElementTypes.SPLAT_MAP, symmetries: Map<number, number>[] = Symmetries.NORMAL) {
+
+    const symmetry = Utils.oneRandom(symmetries);
 
     const matches: Map<IElementType, number[]> = new Map<IElementType, number[]>();
     let matchCount: number = 0;
 
-    const keys = Array.from(ewMap.keys());
-    const values = Array.from(ewMap.values());
+    const keys = Symmetries.APPLY(Array.from(ewMap.keys()), symmetry);
 
-    for (let i = 0; i < ewMap.size; i++) {
+
+
+    const values = Array.from(ewMap.values());
+    const ewMapLen: number = ewMap.size;
+
+    for (let i = 0; i < ewMapLen; i++) {
       const char: string = values[i];
       const cursn: number = keys[i]
       const type: IElementType = typesMap.get(char);

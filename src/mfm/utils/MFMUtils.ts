@@ -38,6 +38,45 @@ export class Utils {
   }
 
 
+  static processArrayMiddleOut(array: any[], startIndex?: number, direction: string = 'left') {
+
+    if (!startIndex) {
+      startIndex = array.length * .5 >> 0;
+    }
+    if (startIndex < 0) {
+      startIndex = 0;
+    }
+    else if (startIndex > array.length) {
+      startIndex = array.length - 1;
+    };
+
+    var newArray = [];
+
+    var i = startIndex;
+
+    if (direction === 'right') {
+      var j = i + 1;
+      while (j < array.length || i >= 0) {
+        if (i >= 0) newArray.push(array[i]);
+        if (j < array.length) newArray.push(array[j]);
+        i--;
+        j++;
+      };
+    }
+    else if (direction === 'left') {
+      var j = i - 1;
+      while (j >= 0 || i < array.length) {
+        if (i < array.length) newArray.push(array[i]);
+        if (j >= 0) newArray.push(array[j]);
+        i++;
+        j--;
+      };
+    };
+
+    return newArray;
+  }
+
+
 
 
 

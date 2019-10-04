@@ -5,6 +5,7 @@ import { Utils } from "../../utils/MFMUtils";
 import { Actions } from "../../utils/MFMActions";
 import { SPLAT } from "../../utils/SPLAT";
 import { Empty } from "./EmptyElement";
+import { Symmetries } from "../../utils/Symmetries";
 
 export class Sand extends Elem {
 
@@ -17,17 +18,11 @@ export class Sand extends Elem {
 		_
 	`)
 
-	static checkDownRight = SPLAT.splatToMap(`
+	static checkSlide = SPLAT.splatToMap(`
 		~~~
 		~@~
 		~#_
-	`)
-
-	static checkDownLeft = SPLAT.splatToMap(`
-		~~~
-		~@~
-		_#~
-	`)
+	`);
 
 	constructor() {
 		super(Sand.TYPE_DEF);
@@ -36,29 +31,23 @@ export class Sand extends Elem {
 	exec(ew: EventWindow) {
 
 		//Using SPLAT
+
+		//Should I fall?
 		const fallResult = ew.query(Sand.checkDown, 0, Sand.SPLAT_MAP);
 		if (fallResult) {
+
 			const emptySite = fallResult.get(Empty.TYPE_DEF)
 			ew.swap(emptySite[0]);
-		} else {
 
-			const slideRightResult = ew.query(Sand.checkDownRight, 0, Sand.SPLAT_MAP);
-			const slideLeftResult = ew.query(Sand.checkDownLeft, 0, Sand.SPLAT_MAP);
+		}
+		//Should I slide?
+		else {
 
-			if (slideRightResult && slideLeftResult) {
+			const slideLRResult = ew.query(Sand.checkSlide, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
 
-				if (Utils.oneIn(2)) {
-					ew.swap(slideRightResult.get(Empty.TYPE_DEF)[0]);
-				} else {
-					ew.swap(slideLeftResult.get(Empty.TYPE_DEF)[0]);
-				}
-
-			} else if (slideRightResult) {
-				const emptySite = slideRightResult.get(Empty.TYPE_DEF)
-				ew.swap(emptySite[0]);
-			} else if (slideLeftResult) {
-				const emptySite = slideLeftResult.get(Empty.TYPE_DEF)
-				ew.swap(emptySite[0])
+			if (slideLRResult) {
+				const empty = slideLRResult.get(Empty.TYPE_DEF)[0];
+				ew.swap(empty);
 			}
 
 		}
