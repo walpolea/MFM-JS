@@ -7,8 +7,10 @@ import { Empty } from "./EmptyElement";
 import { Wall } from "./WallElement";
 import { Sand } from "./SandElement";
 import { Data } from "./DataElement";
+import { Actions } from "../../utils/MFMActions";
+import { Builder } from "./BuilderElement";
 
-export class GridBuilder extends Elem {
+export class GridBuilder extends Builder {
 
   static TYPE_DEF: IElementType = { name: "GRID BUILDER", type: "Gb", class: GridBuilder, color: 0x44ccaa };
   static CREATE = GridBuilder.CREATOR();
@@ -19,31 +21,19 @@ export class GridBuilder extends Elem {
   static GRID_DATA = GridBuilder.CREATOR([Data.CREATE]);
 
 
-  static gridOut = SPLAT.splatToMap(`
+  static gridPath: Map<number, string> = SPLAT.splatToMap(`
   _~_
   ~@~
   _~_
-`)
+`);
 
-  atomizer: Function;
-
-  constructor(_atomizer = Wall.CREATE) {
-    super(GridBuilder.TYPE_DEF);
-    this.atomizer = _atomizer;
+  constructor(_atomizer: Function = undefined) {
+    super(_atomizer, GridBuilder.gridPath);
+    this.setType(GridBuilder.TYPE_DEF);
   }
 
   exec(ew: EventWindow) {
-
-    const result = ew.query(GridBuilder.gridOut, 1, GridBuilder.SPLAT_MAP);
-
-    if (result) {
-      result.get(Empty.TYPE_DEF).forEach(empty => {
-        //replace empties with more of me
-        ew.mutate(empty, GridBuilder.CREATE([this.atomizer]));
-      });
-    }
-    //replace myself with the thing I build
-    ew.mutate(0, this.atomizer());
+    super.exec(ew);
   }
 
 }

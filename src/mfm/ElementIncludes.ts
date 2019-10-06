@@ -33,6 +33,9 @@ import { Eraser } from "./classes/elements/EraserElement";
 import { Sand } from "./classes/elements/SandElement";
 import { DecayWall } from "./classes/elements/DecayWallElement";
 import { GridBuilder } from "./classes/elements/GridBuilderElement";
+import { Builder } from "./classes/elements/BuilderElement";
+import { Builders } from "./classes/elements/Builders";
+import { SPLAT } from "./utils/SPLAT";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -59,11 +62,16 @@ export class ElementIncludes {
       ["DecayWall-100", DecayWall.LIVE_100],
       ["DecayWall-1000", DecayWall.LIVE_1000],
       ["DecayWall-10000", DecayWall.LIVE_10000],
+      ["Grid Builder", GridBuilder.CREATE],
       ["Wall Grid", GridBuilder.GRID_WALL],
       ["Sand Grid", GridBuilder.GRID_SAND],
       ["Sorter Grid", GridBuilder.GRID_SORTER],
       ["Data Grid", GridBuilder.GRID_DATA],
       ["DecayWall Grid", GridBuilder.CREATOR([DecayWall.LIVE_100])],
+      ["Builder", Builder.CREATE],
+      ["Fun Builder", Builders.LOOP],
+      ["Horizontal Wall", Builders.HLINE],
+      ["Vertical Wall", Builders.VLINE],
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],

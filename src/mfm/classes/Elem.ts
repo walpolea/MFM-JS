@@ -31,13 +31,17 @@ export abstract class Elem {
 
   constructor(_typeDef: IElementType, _moveability: number = 100, _destroyability: number = 100) {
 
-    this.name = _typeDef.name;
-    this.type = _typeDef.type;
-    this.color = _typeDef.color;
+    this.setType(_typeDef);
 
     this.moveability = _moveability;
     this.destroyability = _destroyability;
     this.age = 0;
+  }
+
+  setType(_typeDef: IElementType) {
+    this.name = _typeDef.name;
+    this.type = _typeDef.type;
+    this.color = _typeDef.color;
   }
 
   exec(ew: EventWindow) {

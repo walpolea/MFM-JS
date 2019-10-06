@@ -65,6 +65,7 @@ export class MFMRenderer {
   }
 
   deconstruct() {
+    this.srContainer.destroy();
     this.ewCache.clear();
     this.siteRenderers.clear();
     this.rendererMap.clear();
