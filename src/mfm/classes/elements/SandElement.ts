@@ -24,6 +24,12 @@ export class Sand extends Elem {
 		~#_
 	`);
 
+	static checkSlide2 = SPLAT.splatToMap(`
+		~~~
+		~@_
+		~~_
+	`);
+
 	constructor() {
 		super(Sand.TYPE_DEF);
 	}
@@ -49,8 +55,16 @@ export class Sand extends Elem {
 			if (slideLRResult) {
 				const empty = slideLRResult.get(Empty.TYPE_DEF)[0];
 				ew.swap(empty);
-			}
+			} else {
 
+				const slide2Result = ew.query(Sand.checkSlide2, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
+
+				if (slide2Result) {
+					const empty = slide2Result.get(Empty.TYPE_DEF)[0];
+					ew.swap(empty);
+				}
+
+			}
 		}
 	}
 

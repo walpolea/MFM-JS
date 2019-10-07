@@ -16,5 +16,18 @@ export class Builders {
   _
   `), Symmetries.NORMAL]);
 
+  static DLINE_SE = Builder.CREATOR([Wall.CREATE, SPLAT.splatToMap(`
+  _~~
+  ~@~
+  ~~_
+  `), Symmetries.NORMAL]);
+
+  static DLINE_NE = Builder.CREATOR([Wall.CREATE, SPLAT.splatToMap(`
+  ~~_
+  ~@~
+  _~~
+  `), Symmetries.NORMAL]);
+
+
 
 }

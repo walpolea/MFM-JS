@@ -61,7 +61,6 @@ export class ElementIncludes {
       ["DecayWall-10", DecayWall.CREATE],
       ["DecayWall-100", DecayWall.LIVE_100],
       ["DecayWall-1000", DecayWall.LIVE_1000],
-      ["DecayWall-10000", DecayWall.LIVE_10000],
       ["Grid Builder", GridBuilder.CREATE],
       ["Wall Grid", GridBuilder.GRID_WALL],
       ["Sand Grid", GridBuilder.GRID_SAND],
@@ -69,9 +68,11 @@ export class ElementIncludes {
       ["Data Grid", GridBuilder.GRID_DATA],
       ["DecayWall Grid", GridBuilder.CREATOR([DecayWall.LIVE_100])],
       ["Builder", Builder.CREATE],
-      ["Fun Builder", Builders.LOOP],
-      ["Horizontal Wall", Builders.HLINE],
-      ["Vertical Wall", Builders.VLINE],
+      ["Fun", Builders.LOOP],
+      ["H Wall", Builders.HLINE],
+      ["V Wall", Builders.VLINE],
+      ["SE Diag Wall", Builders.DLINE_SE],
+      ["NE Diag Wall", Builders.DLINE_NE],
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],

@@ -15,11 +15,6 @@ export class Builder extends Elem {
   static TYPE_DEF: IElementType = { name: "BUILDER", type: "Bd", class: Builder, color: 0x44ccaa };
   static CREATE = Builder.CREATOR();
 
-  static GRID_WALL = Builder.CREATOR([Wall.CREATE]);
-  static GRID_SORTER = Builder.CREATOR([Sorter.CREATE]);
-  static GRID_SAND = Builder.CREATOR([Sand.CREATE]);
-  static GRID_DATA = Builder.CREATOR([Data.CREATE]);
-
 
   buildPath: Map<number, string>;
   buildSym: Map<number, number>[];
