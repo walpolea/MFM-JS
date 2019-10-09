@@ -20,10 +20,10 @@ export class SwapWorm extends LinkedList {
     this.birthCount = this.WORMSIZE = size;
   }
 
-  birth(ew: EventWindow) {
+  birth(ew: EventWindow): boolean {
     //BE BORN
-    const choices: number[] = EventWindow.ADJACENT8WAY;
-    const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
+    const choices: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
+    const relativeSiteToGoTo: number = Math.min(...choices);//choices[Math.random() * choices.length >> 0];
     const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
 
     const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
@@ -31,6 +31,8 @@ export class SwapWorm extends LinkedList {
     if (moved) {
       this.birthCount--;
     }
+
+    return moved;
   }
 
   //Eat up the Sticky Membrane protecting the worm in order to improve chances of getting unstuck
@@ -47,15 +49,18 @@ export class SwapWorm extends LinkedList {
   swapMove(ew: EventWindow, moveChoices?: number[]) {
 
     //MAKE SWAPPER
-    const choices: number[] = moveChoices ? moveChoices : EventWindow.ADJACENT8WAY;
+    const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
     const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
-    const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
-    (leavingAtom.elem as LinkedList).isSwapping = true;
+    if (relativeSiteToGoTo) {
+      const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
+      (leavingAtom.elem as LinkedList).isSwapping = true;
 
-    const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
+      const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
-    return moved;
+      return moved;
+    }
 
+    return false;
   }
 
   //Eat res, and grow big and strong
@@ -74,14 +79,30 @@ export class SwapWorm extends LinkedList {
   //check if the worm is stuck in itself
   isStuck(ew: EventWindow): boolean {
 
-    const compareMap = new Map<number, IElementType>();
+    const empties = ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
 
-    EventWindow.ADJACENT8WAY.forEach(index => {
-      compareMap.set(index, Empty.TYPE_DEF);
-    })
+    if (empties.length) {
+      return false;
+    }
 
-    return ew.windowNotCompare(compareMap);
+    return true;
 
+  }
+
+  unStick(ew: EventWindow): boolean {
+
+    const choices: number[] = ew.getIndexes(EventWindow.ALLADJACENT, Empty.TYPE_DEF);
+    const relativeSiteToGoTo: number = Math.min(...choices);
+    if (relativeSiteToGoTo || relativeSiteToGoTo !== Infinity) {
+      const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
+      (leavingAtom.elem as LinkedList).isSwapping = true;
+
+      const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
+
+      return moved;
+    }
+
+    return false;
   }
 
 
@@ -98,28 +119,39 @@ export class SwapWorm extends LinkedList {
     }
   }
 
+  handleIdle(ew: EventWindow) {
+    if (this.idleCount > 2) {
+      console.log("lower defenses");
+      this.lowerDefenses(ew);
+    }
+
+    if (this.idleCount > 50) {
+      console.log("unsticking");
+      if (this.unStick(ew)) {
+        this.idleCount = 0;
+      }
+
+    }
+
+    if (this.idleCount > 100) {
+      console.log("die");
+      this.shouldDie = true;
+    }
+  }
+
   exec(ew: EventWindow) {
 
+    let moved: boolean = false;
 
-    this.excreteMembrane(ew);
 
     //Need to be born?
     if (this.birthCount > 0) {
 
-      this.birth(ew);
-
-    }
-    //If this is a head, and next is not a swapper, we can move...
-    else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
-
-      const moved: boolean = this.swapMove(ew);
-
-      //hungry for res?
-      //this.eat(ew);
+      moved = this.birth(ew);
 
       if (!moved) {
 
-
+        console.log("stuck");
 
         if (this.isStuck(ew)) {
           this.idleCount++;
@@ -127,20 +159,37 @@ export class SwapWorm extends LinkedList {
           this.idleCount = 0;
         }
 
-        if (this.idleCount > 2) {
-          this.lowerDefenses(ew);
-        }
-
-        if (this.idleCount > 50) {
-
-          this.swapMove(ew, EventWindow.ALLADJACENT);
-        }
-
-        if (this.idleCount > 100) {
-          this.shouldDie = true;
-        }
+        this.handleIdle(ew);
       }
+
     }
+    //If this is a head, and next is not a swapper, we can move...
+    else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
+
+      moved = this.swapMove(ew);
+
+      //hungry for res?
+      //this.eat(ew);
+
+      if (!moved) {
+
+        console.log("stuck");
+
+        if (this.isStuck(ew)) {
+          this.idleCount++;
+        } else {
+          this.idleCount = 0;
+        }
+
+        this.handleIdle(ew);
+      }
+
+
+    } else {
+      this.excreteMembrane(ew);
+    }
+
+
 
     super.exec(ew);
   }

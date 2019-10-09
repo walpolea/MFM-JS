@@ -8,6 +8,7 @@ import { Utils } from "../../utils/MFMUtils";
 import { Actions } from "../../utils/MFMActions";
 import { SPLAT } from "../../utils/SPLAT";
 import { Empty } from "./EmptyElement";
+import { Symmetries } from "../../utils/Symmetries";
 
 export class Template extends Elem {
 
@@ -61,7 +62,7 @@ export class Template extends Elem {
 
 
     //Using SPLAT
-    const result = ew.query(Template.checkTopLeftRight, 0, Template.SPLAT_MAP);
+    const result = ew.query(Template.checkTopLeftRight, 0, Template.SPLAT_MAP, Symmetries.NORMAL);
 
     if (result) {
       //we have a match!
@@ -73,7 +74,7 @@ export class Template extends Elem {
       }
     }
 
-    const bottomCheckResult = ew.query(Template.checkBottom, 0, Template.SPLAT_MAP);
+    const bottomCheckResult = ew.query(Template.checkBottom, 0, Template.SPLAT_MAP, Symmetries.NORMAL);
     const nearbyEmpty = ew.getRandomIndexOfType(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
     if (bottomCheckResult && nearbyEmpty) {
       ew.mutate(nearbyEmpty, Template.CREATE(undefined, undefined, (this.color + 0xf6 > 0xffffff ? 0xfefefe : this.color + 0xf6)));

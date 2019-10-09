@@ -73,6 +73,7 @@ export class ElementIncludes {
       ["V Wall", Builders.VLINE],
       ["SE Diag Wall", Builders.DLINE_SE],
       ["NE Diag Wall", Builders.DLINE_NE],
+      ["V DecayWall", Builders.VDLINE],
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],

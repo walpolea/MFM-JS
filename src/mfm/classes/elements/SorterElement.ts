@@ -20,7 +20,7 @@ export class Sorter extends Elem {
 
   sortVal: number = 0;
   makeCount: number = 1;
-  lifeSpan: number = 200;
+  lifeSpan: number = 100;
   sortDirection: string = "E";
 
   constructor(sortVal: number = 0, lifeSpan: number = 200, sortDirection: string = "E") {

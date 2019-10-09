@@ -2,6 +2,7 @@ import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
 import { IElementType, ElementTypes } from "../ElementTypes";
 import { Utils } from "../../utils/MFMUtils";
+import { SPLAT } from "../../utils/SPLAT";
 import { Empty } from "./EmptyElement";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
@@ -10,12 +11,19 @@ export class Data extends Elem {
   static TYPE_DEF: IElementType = { name: "DATA", type: "Da", class: Data, color: 0xcccccc };
   static CREATE = Data.CREATOR();
 
+
+  static dataNearby = SPLAT.splatToMap(`
+    ###
+    #@#
+    ###
+  `)
+
   pPATROL: number = 1;
 
   initializedData: boolean = false;
   datas: any[]
 
-  constructor(_datas: any[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+  constructor(_datas: any[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]) {
     super(Data.TYPE_DEF);
     this.datas = _datas;
   }
@@ -33,6 +41,7 @@ export class Data extends Elem {
 
     this.color = Utils.rgbToHex((ew.origin.atom.data.value) * 5, (ew.origin.atom.data.value) * 5, (ew.origin.atom.data.value) * 5);
 
+    //const datanearby = ew.query(Data.dataNearby, 1, Data.SPLAT_MAP);
     //patrol
     if (Utils.oneIn(this.pPATROL)) {
       //ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));
