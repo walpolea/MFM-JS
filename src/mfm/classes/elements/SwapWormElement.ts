@@ -125,7 +125,7 @@ export class SwapWorm extends LinkedList {
       this.lowerDefenses(ew);
     }
 
-    if (this.idleCount > 50) {
+    if (this.idleCount > 4) {
       console.log("unsticking");
       if (this.unStick(ew)) {
         this.idleCount = 0;
