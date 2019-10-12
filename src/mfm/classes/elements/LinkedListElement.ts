@@ -47,6 +47,30 @@ export class LinkedList extends Elem {
 
   }
 
+  isAtHead(): boolean {
+    return !!(!this.prev && this.next);
+  }
+
+  isAtTail(): boolean {
+    return !!(this.prev && !this.next);
+  }
+
+  isInMiddle(): boolean {
+    return !!(this.next && this.prev);
+  }
+
+  checkHead(ew: EventWindow): boolean {
+    return (this.next && this.getNextElement(ew) instanceof LinkedList);
+  }
+
+  checkMiddle(ew: EventWindow): boolean {
+    return this.checkHead(ew) && this.checkTail(ew);
+  }
+
+  checkTail(ew: EventWindow): boolean {
+    return (this.prev && this.getPrevElement(ew) instanceof LinkedList);
+  }
+
   //helper that takes in the next/prev EW index (direction) and returns the site
   getSiteDirection(ew: EventWindow, dir: number): Site {
     return ew.getSiteByIndex(dir);
@@ -70,19 +94,7 @@ export class LinkedList extends Elem {
     return (ns && ns.atom) ? ns.atom.elem as LinkedList : undefined;
   }
 
-  isAtHead(): boolean {
 
-    return !!(!this.prev && this.next);
-  }
-
-  isAtTail(): boolean {
-
-    return !!(this.prev && !this.next);
-  }
-
-  isInMiddle(): boolean {
-    return !!(this.next && this.prev);
-  }
 
   //swap this element with it's previous link
   swapPrev(ew: EventWindow) {
@@ -174,21 +186,25 @@ export class LinkedList extends Elem {
     let earShotIndexToNext: number;
     let earShotIndexToPrev: number;
 
+    console.log(goSite);
+
     //if it's an empty site
     if (goSite && goSite.atom.type === Empty.TYPE_DEF) {
-
       //if we're adding a link
       if (leavingAtom) {
-
         //if this has a prev, it needs to stay within bounds
         if (this.prev) {
-          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
+          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, 0);
           if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) return false; //no go
           this.prev = earShotIndexToPrev;
         }
-
         ew.origin.moveAtom(goSite, leavingAtom);
         this.next = this.oppositeDirection(relativeIndexToGoTo);
+
+        //handle growing from tail, circular ref
+        if (this.next == this.prev) {
+          this.next = undefined;
+        }
 
         return true;
 

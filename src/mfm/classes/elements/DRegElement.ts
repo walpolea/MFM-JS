@@ -4,6 +4,7 @@ import { IElementType, ElementTypes } from "../ElementTypes";
 import { Utils } from "../../utils/MFMUtils";
 import { Empty } from "./EmptyElement";
 import { Res } from "./ResElement";
+import { SPLAT } from "../../utils/SPLAT";
 
 export class DReg extends Elem {
 
@@ -17,6 +18,7 @@ export class DReg extends Elem {
   pTOTAL_CHANCE: number;
 
   constructor() {
+
     super(DReg.TYPE_DEF);
 
     this.pDREG_CREATE = 1000;

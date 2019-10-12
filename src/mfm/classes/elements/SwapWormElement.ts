@@ -5,6 +5,7 @@ import { Atom } from "../Atom";
 import { LinkedList } from "./LinkedListElement";
 import { StuckMembrane } from "./StuckMembraneElement";
 import { Res } from "./ResElement";
+import { Wall } from "./WallElement";
 
 export class SwapWorm extends LinkedList {
 
@@ -35,15 +36,20 @@ export class SwapWorm extends LinkedList {
     return moved;
   }
 
-  //Eat up the Sticky Membrane protecting the worm in order to improve chances of getting unstuck
-  lowerDefenses(ew: EventWindow) {
-    // ew.getAll(StickyMembrane.TYPE_DEF).forEach(membraneSite => {
-    //   membraneSite.killSelf();
-    // });
 
-    ew.getAll(StuckMembrane.TYPE_DEF).forEach(membraneSite => {
-      membraneSite.killSelf();
-    })
+
+  tailGrow(ew: EventWindow, moveChoices?: number[]) {
+    const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
+    const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
+    if (relativeSiteToGoTo) {
+      console.log("grow tail", relativeSiteToGoTo, this.prev)
+      const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, this.prev, relativeSiteToGoTo]);
+      const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
+
+      return moved;
+    }
+
+    return false;
   }
 
   swapMove(ew: EventWindow, moveChoices?: number[]) {
@@ -80,12 +86,18 @@ export class SwapWorm extends LinkedList {
   isStuck(ew: EventWindow): boolean {
 
     const empties = ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
+    const worms = ew.getIndexes(EventWindow.ADJACENT4WAY, SwapWorm.TYPE_DEF);
 
-    if (empties.length) {
+    if (empties.length > 0) {
       return false;
     }
 
-    return true;
+    //worms should only be stuck by themselves... let walls and such trap them
+    if (worms.length >= 2) {
+      return true;
+    }
+
+    return false;
 
   }
 
@@ -105,6 +117,12 @@ export class SwapWorm extends LinkedList {
     return false;
   }
 
+  //Eat up the Stuck Membrane protecting the worm in order to improve chances of getting unstuck
+  lowerDefenses(ew: EventWindow) {
+    ew.getAll(StuckMembrane.TYPE_DEF).forEach(membraneSite => {
+      membraneSite.killSelf();
+    })
+  }
 
   shouldExcreteMembrane(ew: EventWindow) {
     //return !ew.getAdjacent4Way(StickyMembrane.TYPE_DEF) && ew.getAdjacent8Way(Empty.TYPE_DEF);
@@ -120,23 +138,18 @@ export class SwapWorm extends LinkedList {
   }
 
   handleIdle(ew: EventWindow) {
+
     if (this.idleCount > 2) {
       console.log("lower defenses");
       this.lowerDefenses(ew);
     }
 
-    if (this.idleCount > 4) {
-      console.log("unsticking");
-      if (this.unStick(ew)) {
-        this.idleCount = 0;
-      }
-
+    if (this.idleCount > 20 && this.isAtTail()) {
+      console.log("tail grow");
+      this.tailGrow(ew);
+      this.idleCount = 0;
     }
 
-    if (this.idleCount > 100) {
-      console.log("die");
-      this.shouldDie = true;
-    }
   }
 
   exec(ew: EventWindow) {
@@ -150,12 +163,9 @@ export class SwapWorm extends LinkedList {
       moved = this.birth(ew);
 
       if (!moved) {
+        this.idleCount++;
 
-        console.log("stuck");
-
-        if (this.isStuck(ew)) {
-          this.idleCount++;
-        } else {
+        if (this.isStuck(ew) && this.unStick(ew)) {
           this.idleCount = 0;
         }
 
@@ -173,11 +183,9 @@ export class SwapWorm extends LinkedList {
 
       if (!moved) {
 
-        console.log("stuck");
+        this.idleCount++;
 
-        if (this.isStuck(ew)) {
-          this.idleCount++;
-        } else {
+        if (this.isStuck(ew) && this.unStick(ew)) {
           this.idleCount = 0;
         }
 
@@ -186,9 +194,17 @@ export class SwapWorm extends LinkedList {
 
 
     } else {
+      //if I have a prev, and my prev has an idleCount bigger than mine, increase mine!
+      //how we inherit idleCount down the worm
+      if (this.prev) {
+
+        if (this.idleCount < (this.getPrevElement(ew) as SwapWorm).idleCount) {
+          this.idleCount++;
+        }
+        this.handleIdle(ew);
+      }
       this.excreteMembrane(ew);
     }
-
 
 
     super.exec(ew);

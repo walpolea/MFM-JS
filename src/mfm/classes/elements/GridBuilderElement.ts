@@ -3,11 +3,9 @@ import { Elem } from "../Elem";
 import { IElementType, ElementTypes } from "../ElementTypes";
 import { Sorter } from "./SorterElement";
 import { SPLAT } from "../../utils/SPLAT";
-import { Empty } from "./EmptyElement";
 import { Wall } from "./WallElement";
 import { Sand } from "./SandElement";
 import { Data } from "./DataElement";
-import { Actions } from "../../utils/MFMActions";
 import { Builder } from "./BuilderElement";
 
 export class GridBuilder extends Builder {

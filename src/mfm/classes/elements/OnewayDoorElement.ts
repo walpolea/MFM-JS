@@ -1,4 +1,3 @@
-
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
 import { IElementType, ElementTypes } from "../ElementTypes";

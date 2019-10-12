@@ -1,8 +1,6 @@
 import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
 import { IElementType, ElementTypes } from "../ElementTypes";
-import { Utils } from "../../utils/MFMUtils";
-import { Actions } from "../../utils/MFMActions";
 import { SPLAT } from "../../utils/SPLAT";
 import { Empty } from "./EmptyElement";
 import { Symmetries } from "../../utils/Symmetries";
@@ -18,13 +16,13 @@ export class Sand extends Elem {
 		_
 	`)
 
-	static checkSlide = SPLAT.splatToMap(`
+	static checkSandSlide = SPLAT.splatToMap(`
 		~~~
 		~@~
 		~#_
 	`);
 
-	static checkSlide2 = SPLAT.splatToMap(`
+	static checkEdge = SPLAT.splatToMap(`
 		~~~
 		~@_
 		~~_
@@ -50,17 +48,17 @@ export class Sand extends Elem {
 		//Should I slide?
 		else {
 
-			const slideLRResult = ew.query(Sand.checkSlide, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
+			const shouldSlideLeftOrRight = ew.query(Sand.checkSandSlide, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
 
-			if (slideLRResult) {
-				const empty = slideLRResult.get(Empty.TYPE_DEF)[0];
+			if (shouldSlideLeftOrRight) {
+				const empty = shouldSlideLeftOrRight.get(Empty.TYPE_DEF)[0];
 				ew.swap(empty);
 			} else {
 
-				const slide2Result = ew.query(Sand.checkSlide2, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
+				const shouldSlideOffEdge = ew.query(Sand.checkEdge, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
 
-				if (slide2Result) {
-					const empty = slide2Result.get(Empty.TYPE_DEF)[0];
+				if (shouldSlideOffEdge) {
+					const empty = shouldSlideOffEdge.get(Empty.TYPE_DEF)[0];
 					ew.swap(empty);
 				}
 
