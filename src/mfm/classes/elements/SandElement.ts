@@ -46,6 +46,8 @@ export class Sand extends Elem {
 	exec(ew: EventWindow) {
 
 		//Using SPLAT
+
+		//Falling
 		const fallResult = ew.query(Sand.checkDownEW, 0, Sand.SPLAT_MAP);
 		if (fallResult) {
 			const site = fallResult.get(Empty.TYPE_DEF) ? fallResult.get(Empty.TYPE_DEF)[0] : fallResult.get(Water.TYPE_DEF)[0];
@@ -53,6 +55,7 @@ export class Sand extends Elem {
 			return;
 		}
 
+		//Sliding
 		const slideResult = ew.query(Sand.checkSlideEW, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
 		if (slideResult) {
 			const site = slideResult.get(Empty.TYPE_DEF) ? slideResult.get(Empty.TYPE_DEF)[0] : slideResult.get(Water.TYPE_DEF)[0];
