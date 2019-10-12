@@ -31,6 +31,7 @@ import { MembraneWall } from "./classes/elements/MembraneWallElement";
 import { MembraneDoor } from "./classes/elements/MembraneDoorElement";
 import { Eraser } from "./classes/elements/EraserElement";
 import { Sand } from "./classes/elements/SandElement";
+import { Water } from "./classes/elements/WaterElement";
 import { DecayWall } from "./classes/elements/DecayWallElement";
 import { GridBuilder } from "./classes/elements/GridBuilderElement";
 import { Builder } from "./classes/elements/BuilderElement";
@@ -129,6 +130,7 @@ export class ElementIncludes {
     ])
     .set("Sandbox Stuff", [
       ["Sand", Sand.CREATE],
+      ["Water", Water.CREATE],
     ]);
 
 
