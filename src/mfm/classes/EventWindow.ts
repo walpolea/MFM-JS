@@ -6,6 +6,7 @@ import { IElementType, ElementTypes } from "./ElementTypes";
 import { Empty } from "./elements/EmptyElement";
 import { Symmetries } from "../utils/Symmetries";
 import { Utils } from "../utils/MFMUtils";
+import { SPLATEval } from "../utils/SPLAT";
 
 
 
@@ -684,7 +685,7 @@ export class EventWindow {
   }
 
   ///QUERYING
-  query(ewMap: Map<number, string>, fuzziness: number = 0, typesMap: Map<string, IElementType> = ElementTypes.SPLAT_MAP, symmetries: Map<number, number>[] = Symmetries.NORMAL) {
+  query(ewMap: Map<number, string>, fuzziness: number = 0, typesMap: Map<string, IElementType | SPLATEval> = ElementTypes.SPLAT_MAP, symmetries: Map<number, number>[] = Symmetries.NORMAL) {
 
     const symmetry = Utils.oneRandom(symmetries);
 
@@ -693,24 +694,45 @@ export class EventWindow {
 
     const keys = Symmetries.APPLY(Array.from(ewMap.keys()), symmetry);
 
-
-
     const values = Array.from(ewMap.values());
     const ewMapLen: number = ewMap.size;
 
     for (let i = 0; i < ewMapLen; i++) {
       const char: string = values[i];
       const cursn: number = keys[i]
-      const type: IElementType = typesMap.get(char);
+      const type: IElementType | SPLATEval = typesMap.get(char);
 
-      if (this.window[cursn] && type && this.window[cursn].atom.type.name === type.name) {
-        matchCount++;
-        if (matches.has(type)) {
-          matches.set(type, [...matches.get(type), cursn]);
-        } else {
-          matches.set(type, [cursn])
+      if (typeof type === "function") {
+
+        if (this.window[cursn] && type) {
+
+          const t: IElementType = type(this.window[cursn].atom.type)
+
+          if (t !== undefined) {
+            matchCount++;
+            if (matches.has(t)) {
+              matches.set(t, [...matches.get(t), cursn]);
+            } else {
+              matches.set(t, [cursn])
+            }
+          }
+
         }
+
+      } else {
+
+        if (this.window[cursn] && type && this.window[cursn].atom.type === type) {
+          matchCount++;
+          if (matches.has(type)) {
+            matches.set(type, [...matches.get(type), cursn]);
+          } else {
+            matches.set(type, [cursn])
+          }
+        }
+
       }
+
+
     }
 
     //fuzziness is how many of the sites in the map have to match the event window, 0 means ALL must match

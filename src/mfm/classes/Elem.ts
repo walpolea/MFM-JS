@@ -1,11 +1,12 @@
 import { EventWindow } from "./EventWindow";
 import { IElementType, ElementTypes } from "./ElementTypes";
 import { Atom } from "./Atom";
+import { SPLATEval } from "../utils/SPLAT";
 
 export abstract class Elem {
 
   static TYPE_DEF: IElementType;
-  static SPLAT_MAP: Map<string, IElementType> = new Map<string, IElementType>();
+  static SPLAT_MAP: Map<string, IElementType | SPLATEval> = new Map<string, IElementType>();
 
   static INITIALIZE_SPLAT_MAP() {
     return () => {
