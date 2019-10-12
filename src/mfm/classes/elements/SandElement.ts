@@ -23,18 +23,6 @@ export class Sand extends Elem {
 		~~w
 	`);
 
-	static checkSplash = SPLAT.splatToMap(`
-		~~~
-		~@_
-		~~W
-	`);
-
-	static checkSplashOut = SPLAT.splatToMap(`
-		~~~
-		~@W
-		~~_
-	`);
-
 	constructor() {
 		super(Sand.TYPE_DEF);
 
@@ -63,21 +51,7 @@ export class Sand extends Elem {
 			return;
 		}
 
-		//Should I splash into water?
-		const splashResult = ew.query(Sand.checkSplash, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
-		if (splashResult) {
-			const waterSite = splashResult.get(Water.TYPE_DEF)[0];
-			ew.swap(waterSite);
-			return;
-		}
 
-		//Should I splash into water?
-		const splashOutResult = ew.query(Sand.checkSplashOut, 0, Sand.SPLAT_MAP, Symmetries.REFLECTX);
-		if (splashOutResult) {
-			const emptySite = splashOutResult.get(Empty.TYPE_DEF)[0];
-			ew.swap(emptySite);
-			return;
-		}
 	}
 
 }
