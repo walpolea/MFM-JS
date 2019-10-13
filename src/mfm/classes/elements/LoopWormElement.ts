@@ -85,7 +85,6 @@ export class LoopWorm extends LinkedList {
         possibleRes.killSelf();
         this.expandCount++;
         this.eatCount++;
-
       }
 
 
@@ -143,13 +142,13 @@ export class LoopWorm extends LinkedList {
     } else if (this.isConnected) {
 
       //mating
-      if (Utils.oneIn(10)) {
-        const results = ew.query(this.mateCheck, 0, LoopWorm.SPLAT_MAP);
-        //console.log("mating", LoopSeed.SPLAT_MAP, this.mateCheck, results);
-        if (results) {
-          ew.mutate(0, LoopSeed.CREATE());
-        }
-      }
+      // if (Utils.oneIn(10)) {
+      //   const results = ew.query(this.mateCheck, 0, LoopWorm.SPLAT_MAP);
+      //   //console.log("mating", LoopSeed.SPLAT_MAP, this.mateCheck, results);
+      //   if (results) {
+      //     ew.mutate(0, LoopSeed.CREATE());
+      //   }
+      // }
 
       if (Utils.oneIn(10))
         this.excreteMembrane(ew);
@@ -161,7 +160,6 @@ export class LoopWorm extends LinkedList {
         return;
       }
 
-      //console.log("is connected");
       const nextEl: LoopWorm = (this.getNextElement(ew) as LoopWorm);
       if (nextEl) {
         nextEl.isConnected = true;
@@ -178,10 +176,7 @@ export class LoopWorm extends LinkedList {
           this.hardenMembrane(ew);
         }
 
-        //let choices: number[] = EventWindow.ADJACENT4WAY;
-        //let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
-
-        let choices: number[] = [...ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF), ...ew.getIndexes(EventWindow.ADJACENT8WAY, StickyMembrane.TYPE_DEF)];
+        let choices: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
         let relativeSiteToGo: number = choices[Math.random() * choices.length >> 0];
 
         if (this.expandCount > 0
@@ -190,14 +185,16 @@ export class LoopWorm extends LinkedList {
           //console.log("time to grow")
           const leavingAtom: Atom = new Atom(LoopWorm.TYPE_DEF, [0, relativeSiteToGo, this.next]);
           (leavingAtom.elem as LoopWorm).isConnected = true;
-          const moved = this.moveTo(ew, relativeSiteToGo, leavingAtom, 8);
+          const moved = this.moveTo(ew, relativeSiteToGo, leavingAtom);
 
           if (moved) {
             this.expandCount--;
           }
 
+        } else {
+          this.moveTo(ew, relativeSiteToGo, undefined);
         }
-        this.moveTo(ew, relativeSiteToGo, undefined, 8);
+        //
 
       }
 

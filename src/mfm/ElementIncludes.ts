@@ -64,7 +64,6 @@ export class ElementIncludes {
       ["DecayWall-1000", DecayWall.LIVE_1000],
       ["Grid Builder", GridBuilder.CREATE],
       ["Wall Grid", GridBuilder.GRID_WALL],
-      ["Sand Grid", GridBuilder.GRID_SAND],
       ["Sorter Grid", GridBuilder.GRID_SORTER],
       ["Data Grid", GridBuilder.GRID_DATA],
       ["DecayWall Grid", GridBuilder.CREATOR([DecayWall.LIVE_100])],
@@ -75,6 +74,7 @@ export class ElementIncludes {
       ["SE Diag Wall", Builders.DLINE_SE],
       ["NE Diag Wall", Builders.DLINE_NE],
       ["V DecayWall", Builders.VDLINE],
+      ["H DecayWall", Builders.HDLINE],
     ])
     .set("Doors", [
       ["Revolving Door", RevolvingDoor.CREATE],
@@ -108,7 +108,7 @@ export class ElementIncludes {
     .set("Worms", [
       ["SwapWorm", SwapWorm.CREATE],
       ["Long SW", SwapWorm.CREATOR([24])],
-      ["Short SW", SwapWorm.CREATOR([2])],
+      ["Short SW", SwapWorm.CREATOR([1])],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE]
     ])
@@ -131,6 +131,8 @@ export class ElementIncludes {
     .set("Sandbox Stuff", [
       ["Sand", Sand.CREATE],
       ["Water", Water.CREATE],
+      ["Sand Grid", GridBuilder.GRID_SAND],
+      ["Water Grid", GridBuilder.CREATOR([Water.CREATE])],
     ]);
 
 

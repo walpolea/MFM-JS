@@ -52,6 +52,7 @@ export class Builders {
   static DLINE_SE = Builder.CREATOR([Wall.CREATE, Splatish.DLINE_SE, Symmetries.NORMAL]);
   static DLINE_NE = Builder.CREATOR([Wall.CREATE, Splatish.DLINE_NE, Symmetries.NORMAL]);
   static VDLINE = Builder.CREATOR([DecayWall.LIVE_100, Splatish.VLINE, Symmetries.NORMAL]);
+  static HDLINE = Builder.CREATOR([DecayWall.LIVE_100, Splatish.HLINE, Symmetries.NORMAL]);
 
 
 }

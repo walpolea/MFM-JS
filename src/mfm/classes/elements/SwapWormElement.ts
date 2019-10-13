@@ -6,6 +6,7 @@ import { LinkedList } from "./LinkedListElement";
 import { StuckMembrane } from "./StuckMembraneElement";
 import { Res } from "./ResElement";
 import { Wall } from "./WallElement";
+import { Data } from "./DataElement";
 
 export class SwapWorm extends LinkedList {
 
@@ -15,6 +16,8 @@ export class SwapWorm extends LinkedList {
   WORMSIZE: number;
   birthCount: number;
   idleCount: number = 0;
+  dazedCount: number = 0;
+  growData: number;
 
   constructor(size: number = 7, prev?: number, next?: number) {
     super(SwapWorm.TYPE_DEF, prev, next);
@@ -39,11 +42,14 @@ export class SwapWorm extends LinkedList {
 
 
   tailGrow(ew: EventWindow, moveChoices?: number[]) {
+
     const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
     const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
+
     if (relativeSiteToGoTo) {
       console.log("grow tail", relativeSiteToGoTo, this.prev)
       const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, this.prev, relativeSiteToGoTo]);
+      leavingAtom.data = { value: this.growData };
       const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
 
       return moved;
@@ -72,12 +78,13 @@ export class SwapWorm extends LinkedList {
   //Eat res, and grow big and strong
   eat(ew: EventWindow) {
 
-    //Eat Res
-    let possibleRes = ew.getAdjacent4Way(Res.TYPE_DEF);
+    //Eat Data
+    let possibleData = ew.getAdjacent4Way(Data.TYPE_DEF);
 
-    if (possibleRes) {
-      possibleRes.killSelf();
-      this.birthCount = 1;
+    if (possibleData && possibleData.atom.data.value) {
+      this.dazedCount = 1;
+      this.growData = possibleData.atom.data.value;
+      possibleData.killSelf();
     }
 
   }
@@ -140,19 +147,19 @@ export class SwapWorm extends LinkedList {
   handleIdle(ew: EventWindow) {
 
     if (this.idleCount > 2) {
-      console.log("lower defenses");
       this.lowerDefenses(ew);
-    }
-
-    if (this.idleCount > 20 && this.isAtTail()) {
-      console.log("tail grow");
-      this.tailGrow(ew);
-      this.idleCount = 0;
     }
 
   }
 
   exec(ew: EventWindow) {
+
+    if (this.dazedCount > 0) {
+      this.dazedCount--;
+      return;
+    } else {
+      this.dazedCount = 0;
+    }
 
     let moved: boolean = false;
 
@@ -173,41 +180,72 @@ export class SwapWorm extends LinkedList {
       }
 
     }
-    //If this is a head, and next is not a swapper, we can move...
-    else if (this.isAtHead() && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
+    //If this is a head
+    else if (this.isAtHead()) {
 
-      moved = this.swapMove(ew);
+      //and no growData aand next is not a swapper, we can move...
+      if (!this.growData && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
 
-      //hungry for res?
-      //this.eat(ew);
+        moved = this.swapMove(ew);
 
-      if (!moved) {
+        //hungry for data?
+        this.eat(ew);
 
-        this.idleCount++;
+        if (!moved) {
 
-        if (this.isStuck(ew) && this.unStick(ew)) {
-          this.idleCount = 0;
-        }
-
-        this.handleIdle(ew);
-      }
-
-
-    } else {
-      //if I have a prev, and my prev has an idleCount bigger than mine, increase mine!
-      //how we inherit idleCount down the worm
-      if (this.prev) {
-
-        if (this.idleCount < (this.getPrevElement(ew) as SwapWorm).idleCount) {
           this.idleCount++;
+
+          if (this.isStuck(ew) && this.unStick(ew)) {
+            this.idleCount = 0;
+          }
+
+          this.handleIdle(ew);
         }
-        this.handleIdle(ew);
       }
-      this.excreteMembrane(ew);
+
+    }
+    //Not a head
+    else {
+
+      //updateIdleCount down the worm
+      if (this.getPrevElement(ew)) {
+
+        const prevEl: SwapWorm = (this.getPrevElement(ew) as SwapWorm);
+
+        if (prevEl.growData && !this.isSwapping) {
+          this.growData = prevEl.growData;
+          prevEl.growData = undefined;
+          //[this.growData, prevEl.growData] = [prevEl.growData, undefined];
+        }
+
+        this.idleCount = prevEl.idleCount;
+      }
+      this.handleIdle(ew);
+
+
+      if (!this.isSwapping && this.isAtTail() && this.growData) {
+        this.lowerDefenses(ew);
+        if (this.tailGrow(ew)) {
+
+          this.growData = undefined;
+        }
+      }
+
+
     }
 
 
+    this.excreteMembrane(ew);
+
+
+
     super.exec(ew);
+
+    if (this.growData) {
+      this.color = 0x22aa44;
+    } else {
+      this.reflectOnType();
+    }
   }
 }
 

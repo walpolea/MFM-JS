@@ -37,6 +37,7 @@ export class LinkedList extends Elem {
       this.color = 0xff33ff;
       this.linkType = "TAIL";
     } else if (this.isInMiddle()) {
+      this.color = 0xcc0066;
       this.linkType = "MIDDLE";
     }
 
@@ -101,7 +102,7 @@ export class LinkedList extends Elem {
 
     const prevSite: Site = this.getPrevSite(ew);
 
-    if (prevSite) {
+    if (this.prev) {
       const swapper = prevSite.atom.elem as LinkedList;
       this.swapLinks(swapper);
       ew.origin.swapAtoms(prevSite);
@@ -131,8 +132,8 @@ export class LinkedList extends Elem {
   }
 
   //reverse links
-  reverseLinks(elem: LinkedList) {
-    [elem.prev, elem.next] = [elem.next, elem.prev];
+  reverseLinks(link: LinkedList) {
+    [link.prev, link.next] = [link.next, link.prev];
   }
 
   //remove self from the linked list, but don't let it fall apart
@@ -141,13 +142,13 @@ export class LinkedList extends Elem {
 
     const nextEl: LinkedList = this.getNextElement(ew);
     const prevEl: LinkedList = this.getPrevElement(ew);
+
     if (nextEl && prevEl) {
       //we're unlinking from the middle, close the gap
 
       nextEl.prev = ew.getRelativeIndexFromSiteToSite(this.next, this.prev); //this.next
       prevEl.next = ew.getRelativeIndexFromSiteToSite(this.prev, this.next); //this.prev
     } else if (prevEl) {
-
       //if there's a prev but no next, then we're at the tail and the prev needs to clear its next reference.
       prevEl.next = undefined;
     }
@@ -176,55 +177,75 @@ export class LinkedList extends Elem {
     return EventWindow.OPPOSITES[index];
   }
 
-  moveTo(ew: EventWindow, relativeIndexToGoTo: number, leavingAtom?: Atom, maxIndex?: number): boolean {
+  //Allow a node to move, but do all the proper checking so that it doesn't pull itself apart
+  moveTo(ew: EventWindow, relativeIndexToGoTo: number, leavingAtom?: Atom, maxIndex: number = 8): boolean {
 
-    if (!maxIndex) {
-      maxIndex = 8;
-    }
+    const iAmHead: boolean = this.isAtHead();
+    const iAmTail: boolean = this.isAtTail();
+    const iAmMiddle: boolean = this.isInMiddle();
 
     let goSite: Site = this.getSiteDirection(ew, relativeIndexToGoTo);
     let earShotIndexToNext: number;
     let earShotIndexToPrev: number;
 
-    console.log(goSite);
 
-    //if it's an empty site
-    if (goSite && goSite.atom.type === Empty.TYPE_DEF) {
+    //if goSite is an Empty
+    if (goSite && goSite.atom.is(Empty.TYPE_DEF)) {
+
       //if we're adding a link
       if (leavingAtom) {
-        //if this has a prev, it needs to stay within bounds
-        if (this.prev) {
-          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, 0);
-          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) return false; //no go
-          this.prev = earShotIndexToPrev;
-        }
-        ew.origin.moveAtom(goSite, leavingAtom);
+
         this.next = this.oppositeDirection(relativeIndexToGoTo);
 
-        //handle growing from tail, circular ref
-        if (this.next == this.prev) {
+        //if tail or middle, it needs to stay within bounds
+        if (iAmTail) {
+          console.log("I AM TAIL!")
           this.next = undefined;
+
+          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, 0);
+
+          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
+            return false; //no go
+          }
+
+          this.prev = earShotIndexToPrev;
+        } else if (iAmMiddle) {
+          console.log("I AM MIDDLE")
+          earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
+
+          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
+            return false; //no go
+          }
+
+          this.prev = earShotIndexToPrev;
         }
+
+        ew.move(relativeIndexToGoTo, leavingAtom);
 
         return true;
 
-      } else {
-
+      }
+      //we're not adding a link, just trying to move
+      else {
         //if  moving there allows our links to stay in within ear-shot in event window (don't pull apart and lose each other)
         if (this.next) {
           earShotIndexToNext = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.next);
-          if (!earShotIndexToNext || earShotIndexToNext > maxIndex) return false; //no go
+          if (!earShotIndexToNext || earShotIndexToNext > maxIndex) {
+            return false; //move is too far away, let's make like a tree
+          }
         }
+
         if (this.prev) {
           earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
-          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) return false; //no go
+          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
+            return false; //move is too far away, and get outta here
+          }
         }
 
         if (this.getNextElement(ew)) {
 
           //found that sometimes we want to link up with empty, oops!
           if (!(this.getNextElement(ew) instanceof LinkedList)) return false;
-
           this.getNextElement(ew).prev = ew.getRelativeIndexFromSiteToSite(this.next, relativeIndexToGoTo);
 
         }
@@ -232,7 +253,6 @@ export class LinkedList extends Elem {
         if (this.getPrevElement(ew)) {
 
           if (!(this.getPrevElement(ew) instanceof LinkedList)) return false;
-
           this.getPrevElement(ew).next = ew.getRelativeIndexFromSiteToSite(this.prev, relativeIndexToGoTo);
         }
 
@@ -257,6 +277,7 @@ export class LinkedList extends Elem {
   }
 
   exec(ew: EventWindow) {
+
 
     this.reflectOnType();
 

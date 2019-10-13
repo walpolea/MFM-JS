@@ -44,12 +44,12 @@ export class Data extends Elem {
     //const datanearby = ew.query(Data.dataNearby, 1, Data.SPLAT_MAP);
     //patrol
     if (Utils.oneIn(this.pPATROL)) {
-      //ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));
-      if (Utils.oneIn(2) && ew.is(4, Empty.TYPE_DEF)) {
-        ew.move(4);
-      } else {
-        ew.move(ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF, true)[0]);
-      }
+      ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));
+      // if (Utils.oneIn(2) && ew.is(4, Empty.TYPE_DEF)) {
+      //   ew.move(4);
+      // } else {
+      //   ew.move(ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF, true)[0]);
+      // }
 
     }
 
