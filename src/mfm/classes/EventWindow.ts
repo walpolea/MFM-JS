@@ -619,9 +619,16 @@ export class EventWindow {
     const fromSite: Site = this.getSiteByIndex(fromIndex);
 
     if (toSite && fromSite && fromSite.canMove() && toSite.canDestroy()) {
-
       toSite.atom = fromSite.atom;
-      fromSite.atom = leavingAtom ? leavingAtom : Empty.CREATE();
+
+      if (leavingAtom) {
+
+        fromSite.atom = leavingAtom;
+        console.log("set leaving", leavingAtom, fromSite);
+      } else {
+        console.log("leaving an empty");
+        fromSite.atom = Empty.CREATE();
+      }
       return true;
     }
 

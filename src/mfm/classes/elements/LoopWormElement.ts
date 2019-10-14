@@ -154,7 +154,7 @@ export class LoopWorm extends LinkedList {
         this.excreteMembrane(ew);
 
       //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!
-      if (!(this.getPrevElement(ew) instanceof LinkedList) && !(this.getNextElement(ew) instanceof LinkedList)) {
+      if (!(this.getPrevElement(ew) instanceof LinkedList) && !(this.getNextElement(ew) instanceof LinkedList) && !this.hasMoved(ew)) {
         console.log("disconnected");
         ew.origin.killSelf();
         return;
@@ -194,7 +194,6 @@ export class LoopWorm extends LinkedList {
         } else {
           this.moveTo(ew, relativeSiteToGo, undefined);
         }
-        //
 
       }
 

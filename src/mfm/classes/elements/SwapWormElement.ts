@@ -183,7 +183,7 @@ export class SwapWorm extends LinkedList {
     //If this is a head
     else if (this.isAtHead()) {
 
-      //and no growData aand next is not a swapper, we can move...
+      //and no growData and next is not a swapper, we can move...
       if (!this.growData && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
 
         moved = this.swapMove(ew);
