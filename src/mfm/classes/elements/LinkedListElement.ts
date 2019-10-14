@@ -4,6 +4,7 @@ import { IElementType } from "../ElementTypes";
 import { Site } from "../Site";
 import { Atom } from "../Atom";
 import { Empty } from "./EmptyElement";
+import { Data } from "./DataElement";
 
 export class LinkedList extends Elem {
 
@@ -319,7 +320,12 @@ export class LinkedList extends Elem {
 
     //unlinked nodes should die
     if (this.linkType !== "INITIAL" && !this.hasMoved(ew) && !this.next && !this.prev) {
-      ew.origin.killSelf();
+      if (ew.origin.atom.data) {
+        ew.origin.atom = Data.CREATE([ew.origin.atom.data.value]);
+      } else {
+        ew.origin.killSelf();
+      }
+
     }
 
     //swapper, keep swapping

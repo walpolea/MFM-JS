@@ -21,21 +21,28 @@ export class Data extends Elem {
   pPATROL: number = 1;
 
   initializedData: boolean = false;
-  datas: any[]
+  initialData: any;
 
-  constructor(_datas: any[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]) {
+  constructor(_initialData: any = undefined) {
     super(Data.TYPE_DEF);
-    this.datas = _datas;
+    this.initialData = _initialData;
   }
   exec(ew: EventWindow) {
 
     if (!this.initializedData) {
+
       if (ew.origin.atom.data === undefined) {
         ew.origin.atom.data = {};
+
+        if (this.initialData) {
+          ew.origin.atom.data.value = this.initialData;
+        } else {
+          //Default 0 to 40
+          ew.origin.atom.data.value = Math.random() * 40 >> 0;
+        }
+
       }
-      const val = this.datas[(this.datas.length * Math.random()) >> 0];
-      console.log(val);
-      ew.origin.atom.data.value = val;
+
       this.initializedData = true;
     }
 
