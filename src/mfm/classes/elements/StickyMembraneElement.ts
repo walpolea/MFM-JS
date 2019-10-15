@@ -8,7 +8,7 @@ import { Actions } from "../../utils/MFMActions";
 
 export class StickyMembrane extends Elem {
 
-  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembrane, color: 0x6D3D64 }
+  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembrane, color: 0x611075 }
   static CREATE = StickyMembrane.CREATOR();
 
   stickyType: IElementType;

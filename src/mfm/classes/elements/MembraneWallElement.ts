@@ -24,7 +24,7 @@ export class MembraneWall extends Elem {
   }
   exec(ew: EventWindow) {
 
-    if (this.deactivationType && ew.getRandomIndexOfType(EventWindow.ALLADJACENT, this.deactivationType)) {
+    if (this.deactivationType && ew.getRandomIndexOfType(EventWindow.LAYER4, this.deactivationType)) {
       this.activated = false;
     } else if (this.deactivationType) {
 
@@ -32,7 +32,7 @@ export class MembraneWall extends Elem {
     }
 
     if (this.activated && ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF)) {
-      ew.mutate(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF), StickyMembrane.CREATE([MembraneWall.TYPE_DEF, this.density, 1]));
+      ew.mutate(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF), StickyMembrane.CREATE([MembraneWall.TYPE_DEF, this.density, 1], undefined, 0x3222a8));
     } else if (!this.activated) {
       ew.getIndexes(EventWindow.ALLADJACENT, StickyMembrane.TYPE_DEF, false).forEach(site => {
         if (site) {

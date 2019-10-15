@@ -16,7 +16,7 @@ export class StuckMembrane extends Elem {
   roamCount: number = 0;
   maxRoam: number;
 
-  constructor(stickyType?: IElementType, maxRoam: number = 2) {
+  constructor(stickyType?: IElementType, maxRoam: number = 3) {
     super(StuckMembrane.TYPE_DEF);
     this.stickyType = stickyType ? stickyType : undefined;
     this.maxRoam = maxRoam;
@@ -80,7 +80,7 @@ export class StuckMembrane extends Elem {
 
   uncrowd(ew: EventWindow) {
 
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 3) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 5) {
       ew.origin.killSelf();
     }
   }
