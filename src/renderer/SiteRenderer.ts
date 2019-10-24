@@ -1,4 +1,4 @@
-import { Site } from "../mfm/classes/Site";
+import { Site } from "../mfm/core/Site";
 import * as PIXI from "pixi.js";
 
 export class SiteRenderer {

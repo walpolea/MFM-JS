@@ -1,6 +1,6 @@
 import { Symmetries } from "./Symmetries";
 import { Utils } from "./MFMUtils";
-import { IElementType } from "../classes/ElementTypes";
+import { IElementType } from "../core/IElementType";
 
 //SPLAT Eval Function should take in an IElementType and return an IElementType that is matched
 //or undefined if no match

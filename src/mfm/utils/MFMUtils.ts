@@ -1,8 +1,9 @@
-import { GridCoord } from "../interfaces/IGridCoord";
-import { EventWindow } from "../classes/EventWindow";
-import { Tile } from "../classes/Tile";
+import { GridCoord } from "../core/IGridCoord";
+import { EventWindow } from "../core/EventWindow";
+import { Tile } from "../core/Tile";
 
 export class Utils {
+
   static CtoID(c: GridCoord): string {
     return `${c.row}:${c.col}`;
   }

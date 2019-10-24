@@ -1,7 +1,7 @@
-import { Tile } from "./mfm/classes/Tile";
+import { Tile } from "./mfm/core/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
-import { DReg } from "./mfm/classes/elements/DRegElement";
+import { DReg } from "./mfm/core/elements/DRegElement";
 
 declare var Vue: any;
 
@@ -15,7 +15,8 @@ let app = new Vue({
       mfmRenderer: MFMRenderer,
       customSequence: "" as string,
       curSelectedElement: "" as string,
-      curSelectedFunc: undefined as Function
+      curSelectedFunc: undefined as Function,
+      shouldRender: true as boolean,
     };
   },
   mounted() {
@@ -64,6 +65,10 @@ let app = new Vue({
     },
     customSequence(val: string) {
       this.mfmRenderer.customSequence = this.customSequence;
+    },
+    shouldRender(val: boolean) {
+      console.log("should render", val);
+      this.mfmRenderer.shouldRender = val;
     }
   }
 });

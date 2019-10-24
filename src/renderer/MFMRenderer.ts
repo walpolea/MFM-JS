@@ -2,31 +2,30 @@
 
 import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
 import "../mfm/ElementIncludes";
-import { IElementType, ElementTypes } from "../mfm/classes/ElementTypes";
-import { Tile } from "../mfm/classes/Tile";
-import { EventWindow } from "../mfm/classes/EventWindow";
-import { Site } from "../mfm/classes/Site";
+import { Tile } from "../mfm/core/Tile";
+import { EventWindow } from "../mfm/core/EventWindow";
+import { Site } from "../mfm/core/Site";
 import { SiteRenderer } from "./SiteRenderer";
-import { Atom } from "../mfm/classes/Atom";
-import { Mason } from "../mfm/classes/elements/MasonElement";
-import { GridCoord } from "../mfm/interfaces/IGridCoord";
-import { Empty } from "../mfm/classes/elements/EmptyElement";
-import { SwapWorm } from "../mfm/classes/elements/SwapWormElement";
-import { StickyMembrane } from "../mfm/classes/elements/StickyMembraneElement";
-import { Res } from "../mfm/classes/elements/ResElement";
-import { DReg } from "../mfm/classes/elements/DRegElement";
-import { Wall } from "../mfm/classes/elements/WallElement";
-import { ForkBomb } from "../mfm/classes/elements/ForkBombElement";
-import { SuperForkBomb } from "../mfm/classes/elements/SuperForkBomb";
-import { AntiForkBomb } from "../mfm/classes/elements/AntiForkBombElement";
-import { Sentry } from "../mfm/classes/elements/SentryElement";
-import { Data } from "../mfm/classes/elements/DataElement";
-import { Reducer } from "../mfm/classes/elements/ReducerElement";
-import { LoopWorm } from "../mfm/classes/elements/LoopWormElement";
-import { LoopSeed } from "../mfm/classes/elements/LoopSeedElement";
-import { Writer } from "../mfm/classes/elements/WriterElement";
-import { SortMaster } from "../mfm/classes/elements/SortMasterElement";
-import { OnewayDoor } from "../mfm/classes/elements/OnewayDoorElement";
+import { Atom } from "../mfm/core/Atom";
+import { Mason } from "../mfm/core/elements/MasonElement";
+import { GridCoord } from "../mfm/core/IGridCoord";
+import { Empty } from "../mfm/core/elements/EmptyElement";
+import { SwapWorm } from "../mfm/core/elements/SwapWormElement";
+import { StickyMembrane } from "../mfm/core/elements/StickyMembraneElement";
+import { Res } from "../mfm/core/elements/ResElement";
+import { DReg } from "../mfm/core/elements/DRegElement";
+import { Wall } from "../mfm/core/elements/WallElement";
+import { ForkBomb } from "../mfm/core/elements/ForkBombElement";
+import { SuperForkBomb } from "../mfm/core/elements/SuperForkBomb";
+import { AntiForkBomb } from "../mfm/core/elements/AntiForkBombElement";
+import { Sentry } from "../mfm/core/elements/SentryElement";
+import { Data } from "../mfm/core/elements/DataElement";
+import { Reducer } from "../mfm/core/elements/ReducerElement";
+import { LoopWorm } from "../mfm/core/elements/LoopWormElement";
+import { LoopSeed } from "../mfm/core/elements/LoopSeedElement";
+import { Writer } from "../mfm/core/elements/WriterElement";
+import { SortMaster } from "../mfm/core/elements/SortMasterElement";
+import { OnewayDoor } from "../mfm/core/elements/OnewayDoorElement";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -42,6 +41,7 @@ export class MFMRenderer {
   container: Element;
   keysHeld: Set<string>;
   pointerDown: boolean = false;
+  shouldRender: boolean = true;
   siteTexture: Texture = Texture.from("/resources/element.png");
   clickArea: DisplayObject;
   curSelectedElement: string;
@@ -144,7 +144,8 @@ export class MFMRenderer {
 
     let ew: EventWindow;
     let renders: Set<SiteRenderer> = new Set<SiteRenderer>();
-    let i = 0;
+    let i = 0, j = 0;
+    let renderSites = [];
 
     for (i; i < this.timeSpeed; i++) {
 
@@ -153,19 +154,25 @@ export class MFMRenderer {
       if (ew.window && !ew.origin.atom.is(Empty.TYPE_DEF)) {
 
         ew.origin.atom.exec(ew);
-        ew.getAll().forEach(site => {
+        if (this.shouldRender) {
+          const allSites = ew.getAll();
+          const len = allSites.length;
+          for (j = 0; j < len; j++) {
+            if (allSites[j]) renders.add(this.rendererMap.get(allSites[j]));
+          }
+        }
 
-          if (site)
-            renders.add(this.rendererMap.get(site));
-        })
       }
     }
 
-    const arr = Array.from(renders.values());
-    let j = 0;
-    let len = arr.length;
-    for (j; j < len; j++) {
-      arr[j].update();
+    if (this.shouldRender) {
+
+      const arr = Array.from(renders.values());
+      let k = 0;
+      let len = arr.length;
+      for (k; k < len; k++) {
+        arr[k].update();
+      }
     }
 
   }

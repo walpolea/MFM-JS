@@ -1,41 +1,41 @@
 //For the time being, you need to add your Element here to make it show up in the GUI
-import { Mason } from "../mfm/classes/elements/MasonElement";
-import { Empty } from "../mfm/classes/elements/EmptyElement";
-import { SwapWorm } from "../mfm/classes/elements/SwapWormElement";
-import { StickyMembrane } from "../mfm/classes/elements/StickyMembraneElement";
-import { Res } from "../mfm/classes/elements/ResElement";
-import { DReg } from "../mfm/classes/elements/DRegElement";
-import { Wall } from "../mfm/classes/elements/WallElement";
-import { ForkBomb } from "../mfm/classes/elements/ForkBombElement";
-import { SuperForkBomb } from "../mfm/classes/elements/SuperForkBomb";
-import { AntiForkBomb } from "../mfm/classes/elements/AntiForkBombElement";
-import { Sentry } from "../mfm/classes/elements/SentryElement";
-import { Data } from "../mfm/classes/elements/DataElement";
-import { Reducer } from "../mfm/classes/elements/ReducerElement";
-import { LoopWorm } from "../mfm/classes/elements/LoopWormElement";
-import { LoopSeed } from "../mfm/classes/elements/LoopSeedElement";
-import { Writer } from "../mfm/classes/elements/WriterElement";
-import { Sorter } from "../mfm/classes/elements/SorterElement";
-import { SortMaster } from "../mfm/classes/elements/SortMasterElement";
-import { Template } from "../mfm/classes/elements/TemplateElement";
-import { SuperMason } from "./classes/elements/SuperMasonElement";
-import { StuckMembrane } from "./classes/elements/StuckMembraneElement";
-import { Input } from "./classes/elements/InputElement";
-import { Keyboard } from "./classes/elements/KeyboardElement";
-import { BasePlanter } from "./classes/elements/BasePlanterElement";
-import { Text } from "./classes/elements/TextElement";
-import { Reader } from "./classes/elements/ReaderElement";
-import { RevolvingDoor } from "./classes/elements/RevolvingDoorElement";
-import { OnewayDoor } from "./classes/elements/OnewayDoorElement";
-import { MembraneWall } from "./classes/elements/MembraneWallElement";
-import { MembraneDoor } from "./classes/elements/MembraneDoorElement";
-import { Eraser } from "./classes/elements/EraserElement";
-import { Sand } from "./classes/elements/SandElement";
-import { Water } from "./classes/elements/WaterElement";
-import { DecayWall } from "./classes/elements/DecayWallElement";
-import { GridBuilder } from "./classes/elements/GridBuilderElement";
-import { Builder } from "./classes/elements/BuilderElement";
-import { Builders } from "./classes/elements/Builders";
+import { Mason } from "./core/elements/MasonElement";
+import { Empty } from "./core/elements/EmptyElement";
+import { SwapWorm } from "./core/elements/SwapWormElement";
+import { StickyMembrane } from "./core/elements/StickyMembraneElement";
+import { Res } from "./core/elements/ResElement";
+import { DReg } from "./core/elements/DRegElement";
+import { Wall } from "./core/elements/WallElement";
+import { ForkBomb } from "./core/elements/ForkBombElement";
+import { SuperForkBomb } from "./core/elements/SuperForkBomb";
+import { AntiForkBomb } from "./core/elements/AntiForkBombElement";
+import { Sentry } from "./core/elements/SentryElement";
+import { Data } from "./core/elements/DataElement";
+import { Reducer } from "./core/elements/ReducerElement";
+import { LoopWorm } from "./core/elements/LoopWormElement";
+import { LoopSeed } from "./core/elements/LoopSeedElement";
+import { Writer } from "./core/elements/WriterElement";
+import { Sorter } from "./core/elements/SorterElement";
+import { SortMaster } from "./core/elements/SortMasterElement";
+import { Template } from "./core/elements/TemplateElement";
+import { SuperMason } from "./core/elements/SuperMasonElement";
+import { StuckMembrane } from "./core/elements/StuckMembraneElement";
+import { Input } from "./core/elements/InputElement";
+import { Keyboard } from "./core/elements/KeyboardElement";
+import { BasePlanter } from "./core/elements/BasePlanterElement";
+import { Text } from "./core/elements/TextElement";
+import { Reader } from "./core/elements/ReaderElement";
+import { RevolvingDoor } from "./core/elements/RevolvingDoorElement";
+import { OnewayDoor } from "./core/elements/OnewayDoorElement";
+import { MembraneWall } from "./core/elements/MembraneWallElement";
+import { MembraneDoor } from "./core/elements/MembraneDoorElement";
+import { Eraser } from "./core/elements/EraserElement";
+import { Sand } from "./core/elements/SandElement";
+import { Water } from "./core/elements/WaterElement";
+import { DecayWall } from "./core/elements/DecayWallElement";
+import { GridBuilder } from "./core/elements/GridBuilderElement";
+import { Builder } from "./core/elements/BuilderElement";
+import { Builders } from "./core/elements/Builders";
 import { SPLAT } from "./utils/SPLAT";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
@@ -58,7 +58,10 @@ export class ElementIncludes {
       ["Mason", Mason.CREATE],
       ["Super Mason", SuperMason.CREATE],
       ["MembraneWall", MembraneWall.CREATE],
-      ["MembraneDoor", MembraneDoor.CREATE],
+      ["MembraneWallXL", MembraneWall.SW_XL],
+      ["MembraneWallLrg", MembraneWall.SW_LRG],
+      ["MembraneDataWall", MembraneWall.D_MED],
+      ["MembraneDataWallLrg", MembraneWall.D_LRG],
       ["DecayWall-10", DecayWall.CREATE],
       ["DecayWall-100", DecayWall.LIVE_100],
       ["DecayWall-1000", DecayWall.LIVE_1000],

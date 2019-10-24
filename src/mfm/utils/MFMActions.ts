@@ -1,7 +1,7 @@
-import { EventWindow } from "../classes/EventWindow";
+import { EventWindow } from "../core/EventWindow";
 import { Utils } from "./MFMUtils";
-import { Empty } from "../classes/elements/EmptyElement";
-import { IElementType } from "../classes/ElementTypes";
+import { Empty } from "../core/elements/EmptyElement";
+import { IElementType } from "../core/IElementType";
 
 export class Actions {
 
