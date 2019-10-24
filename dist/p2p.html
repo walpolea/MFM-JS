@@ -74,69 +74,73 @@
 
 <body>
   <div id="app">
-    <tile-connections ref="tc" @connection="onConnection" @ontileid="onTileId"></tile-connections>
+    <tile-connections ref="tc" @connection="onConnection" @ontileid="onTileId" @onmessage="handleMessage">
+    </tile-connections>
     <div class="grid">
       <div class="tile nw" :class="{connected:connectedNW}">
-        <div>
+        <div v-if="!connectedNW">
           <input id="nw-peerid" type="text"><button
             @click="connect(document.querySelector('#nw-peerid').value, 'nw')">connect</button>
         </div>
-        <div v-if="connectedNW">
+        <div v-else>
           <input id="nw-message" type="text"><button
             @click="send('nw', document.querySelector('#nw-message').value)">send message</button>
         </div>
       </div>
       <div class="tile ne" :class="{connected:connectedNE}">
-        <div>
+        <div v-if="!connectedNE">
           <input id="ne-peerid" type="text"><button
             @click="connect(document.querySelector('#ne-peerid').value, 'ne')">connect</button>
         </div>
-        <div v-if="connectedNE">
+        <div v-else>
           <input id="ne-message" type="text"><button
             @click="send('ne', document.querySelector('#ne-message').value)">send message</button>
         </div>
       </div>
       <div class=" tile w" :class="{connected:connectedW}">
-        <div>
+        <div v-if="!connectedW">
           <input id="w-peerid" type="text"><button
             @click="connect(document.querySelector('#w-peerid').value, 'w')">connect</button>
         </div>
-        <div v-if="connectedW">
+        <div v-else>
           <input id="w-message" type="text"><button @click="send('w', document.querySelector('#w-message').value)">send
             message</button>
         </div>
       </div>
       <div class="tile self">
         <h3>My ID: {{tileId}}</h3>
+        <h4>{{lastMessage}}</h4>
       </div>
       <div class="tile e" :class="{connected:connectedE}">
-        <div>
+        <div v-if="!connectedE">
           <input id="e-peerid" type="text"><button
             @click="connect(document.querySelector('#e-peerid').value, 'e')">connect</button>
         </div>
-        <div v-if="connectedE">
+        <div v-else>
           <input id="e-message" type="text"><button @click="send('e', document.querySelector('#e-message').value)">send
             message</button>
         </div>
       </div>
       <div class="tile sw" :class="{connected:connectedSW}">
-        <div>
-          <input id="sw-peerid" type="text"><button
-            @click="connect(document.querySelector('#sw-peerid').value, 'sw')">connect</button>
+        <div v-if="!connectedSW">
+          <input id="sw-peerid" type="text">
+          <button @click="connect(document.querySelector('#sw-peerid').value, 'sw')">connect</button>
         </div>
-        <div v-if="connectedSW">
+        <div v-else>
           <input id="sw-message" type="text"><button
-            @click="send('sw', document.querySelector('#sw-message').value)">send message</button>
+            @click="send('sw', document.querySelector('#sw-message').value)">send
+            message</button>
         </div>
       </div>
       <div class="tile se" :class="{connected:connectedSE}">
-        <div>
+        <div v-if="!connectedSE">
           <input id="se-peerid" type="text"><button
             @click="connect(document.querySelector('#se-peerid').value, 'se')">connect</button>
         </div>
-        <div v-if="connectedSE">
+        <div v-else>
           <input id="se-message" type="text"><button
-            @click="send('se', document.querySelector('#se-message').value)">send message</button>
+            @click="send('se', document.querySelector('#se-message').value)">send
+            message</button>
         </div>
       </div>
     </div>
@@ -159,7 +163,8 @@
       data: {
         activeConnections: [],
         directions: ["nw", "ne", "w", "self", "e", "sw", "se"],
-        tileId: undefined
+        tileId: undefined,
+        lastMessage: undefined,
       },
       computed: {
         connectedNW() {
@@ -194,6 +199,9 @@
         onConnection(dir) {
           console.log("got connection from TileConnections");
           this.activeConnections.push(dir)
+        },
+        handleMessage(data) {
+          this.lastMessage = `msg from ${data.from}: ${data.message}`;
         },
         send(dirTo, message) {
           this.$refs.tc.send(dirTo, message);
