@@ -26,6 +26,7 @@ export const TileConnections = Vue.component("tile-connections", {
       this.$emit("ontileid", id);
       this.tileId = id;
 
+
       //set up peer connection callback
       this.peer.on('connection', (dataConnection) => {
 
@@ -43,6 +44,10 @@ export const TileConnections = Vue.component("tile-connections", {
             this.handleMessage(data);
           });
 
+          dataConnection.on('close', () => {
+            console.log("disconnected", this.peer.connections)
+          });
+
           this.peer.connect(dataConnection.peer, { label: this.oppositeDirection(dir) });
 
         } else {
@@ -55,6 +60,9 @@ export const TileConnections = Vue.component("tile-connections", {
 
   },
   methods: {
+    directionConnection(dir) {
+      return this.connections[dir] ? this.peer.connections[this.connections[dir]] : undefined
+    },
     oppositeDirection(dir) {
       return {
         "w": "e",
@@ -72,12 +80,15 @@ export const TileConnections = Vue.component("tile-connections", {
         dir = this.oppositeDirection(dir);
 
         const curConn = this.peer.connect(id, { label: dir });
-        console.log(curConn);
         this.connections[this.oppositeDirection(dir)] = id;
         this.$emit("connection", this.oppositeDirection(dir));
 
         curConn.on('data', (data) => {
           this.handleMessage(data);
+        });
+
+        curConn.on('close', () => {
+          console.log("disconnected...", this.peer.connections)
         });
 
       } else {
@@ -86,7 +97,7 @@ export const TileConnections = Vue.component("tile-connections", {
 
     },
     send(to, data) {
-      const conn = this.peer.connections[this.connections[to]][0];
+      const conn = this.directionConnection(to)[0];
       console.log(conn);
       if (conn) {
         console.log("sending message to", to, data);
