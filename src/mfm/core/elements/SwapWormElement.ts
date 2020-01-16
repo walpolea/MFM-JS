@@ -84,7 +84,7 @@ export class SwapWorm extends LinkedList {
     let possibleData = ew.getAdjacent4Way(Data.TYPE_DEF);
 
     if (possibleData && possibleData.atom.data.value !== undefined) {
-      this.dazedCount = 50;
+      this.dazedCount = 5;
       this.growData = possibleData.atom.data.value;
       possibleData.killSelf();
     }

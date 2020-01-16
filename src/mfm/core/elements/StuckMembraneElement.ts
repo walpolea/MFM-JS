@@ -102,7 +102,7 @@ export class StuckMembrane extends Elem {
 
   exec(ew: EventWindow) {
 
-    this.uncrowd(ew);
+    //this.uncrowd(ew);
 
     //repel DREG as defensive move.
     Actions.repel(ew, DReg.TYPE_DEF)

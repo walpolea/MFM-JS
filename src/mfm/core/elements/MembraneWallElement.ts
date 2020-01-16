@@ -2,8 +2,6 @@ import { EventWindow } from "../EventWindow";
 import { Elem } from "../Elem";
 import { IElementType } from "../IElementType";
 import { ElementTypes } from "../ElementTypes";
-import { Atom } from "../Atom";
-import { StickyMembrane } from "./StickyMembraneElement";
 import { Empty } from "./EmptyElement";
 import { SwapWorm } from "./SwapWormElement";
 import { StuckMembrane } from "./StuckMembraneElement";
@@ -14,7 +12,7 @@ export class MembraneWall extends Elem {
   static TYPE_DEF: IElementType = { name: "MEMBRANE WALL", type: "Mw", class: MembraneWall, color: 0x2020ff };
   static CREATE = MembraneWall.CREATOR();
 
-  static SW_XL = MembraneWall.CREATOR([1, [...EventWindow.LAYER1, ...EventWindow.LAYER2, EventWindow.LAYER3]]);
+  static SW_XL = MembraneWall.CREATOR([1, [...EventWindow.LAYER1, ...EventWindow.LAYER2, ...EventWindow.LAYER3, ...EventWindow.LAYER4]]);
   static SW_LRG = MembraneWall.CREATOR([1, [...EventWindow.LAYER1, ...EventWindow.LAYER2]]);
   static SW_MED = MembraneWall.CREATOR();
   static SW_SM = MembraneWall.CREATOR([1, EventWindow.ADJACENT4WAY]);
@@ -39,10 +37,10 @@ export class MembraneWall extends Elem {
   }
   exec(ew: EventWindow) {
 
-    if (this.deactivationType && ew.getRandomIndexOfType(EventWindow.LAYER4, this.deactivationType)) {
+    //if (this.deactivationType && ew.getRandomIndexOfType(EventWindow.LAYER4, this.deactivationType)) {
+    if (this.deactivationType && ew.getRandomIndexOfType(EventWindow.ALLADJACENT, this.deactivationType)) {
       this.activated = false;
     } else if (this.deactivationType) {
-
       this.activated = true;
     }
 

@@ -8,6 +8,7 @@ import { Wall } from "./WallElement";
 import { Sand } from "./SandElement";
 import { Data } from "./DataElement";
 import { Builder } from "./BuilderElement";
+import { MembraneWall } from "./MembraneWallElement";
 
 export class GridBuilder extends Builder {
 
@@ -18,6 +19,7 @@ export class GridBuilder extends Builder {
   static GRID_SORTER = GridBuilder.CREATOR([Sorter.CREATE]);
   static GRID_SAND = GridBuilder.CREATOR([Sand.CREATE]);
   static GRID_DATA = GridBuilder.CREATOR([Data.CREATE]);
+  static GRID_MEMBRANEWALL = GridBuilder.CREATOR([MembraneWall.SW_XL]);
 
 
   static gridPath: Map<number, string> = SPLAT.splatToMap(`
@@ -26,8 +28,42 @@ export class GridBuilder extends Builder {
   _~_
 `);
 
+  static gridPath2: Map<number, string> = SPLAT.splatToMap(`
+  ~~_~~
+  ~~~~~
+  _~@~_
+  ~~~~~
+  ~~_~~
+`);
+
+  static gridPath3: Map<number, string> = SPLAT.splatToMap(`
+  
+    _
+   ~~~
+  ~~~~~
+ ~~~~~~~
+_~~~@~~~_
+ ~~~~~~~
+  ~~~~~
+   ~~~
+    _
+`);
+
+  static gridPath4: Map<number, string> = SPLAT.splatToMap(`
+  
+    _
+   ~~~
+  ~_~_~
+ ~~~~~~~
+~~~~@~~~~
+ ~~~~~~~
+  ~_~_~
+   ~~~
+    _
+`);
+
   constructor(_atomizer: Function = undefined) {
-    super(_atomizer, GridBuilder.gridPath);
+    super(_atomizer, GridBuilder.gridPath4);
     this.setType(GridBuilder.TYPE_DEF);
   }
 
