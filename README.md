@@ -22,3 +22,4 @@ Install
 - serve up index.html to view in browser
   - you can `npm install -g http-server`
   - and then `http-server ./dist`
+  
