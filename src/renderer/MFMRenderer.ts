@@ -1,6 +1,6 @@
 ///<reference types="pixi.js"/>
 
-import { ParticleContainer, DisplayObject, Texture, Sprite, Application, utils, interaction, Point, Rectangle } from "pixi.js";
+import { ParticleContainer, Container, Texture, Sprite, Application, utils, Point, Rectangle } from "pixi.js";
 import "../mfm/ElementIncludes";
 import { Tile } from "../mfm/core/Tile";
 import { EventWindow } from "../mfm/core/EventWindow";
@@ -44,7 +44,7 @@ export class MFMRenderer {
   pointerDown: boolean = false;
   shouldRender: boolean = true;
   siteTexture: Texture = Texture.from("/resources/element.png");
-  clickArea: DisplayObject;
+  clickArea: Container;
   curSelectedElement: string;
   curSelectedElementFunction: Function;
   webGLSupported: boolean = utils.isWebGLSupported();
@@ -84,6 +84,7 @@ export class MFMRenderer {
   }
 
   init() {
+    console.log("webgl supported? ", this.webGLSupported);
     this.keysHeld = new Set<string>();
 
     this.pixiapp = new Application({
@@ -99,17 +100,17 @@ export class MFMRenderer {
     this.srContainer.y = this.gridOffset;
     this.pixiapp.stage.addChild(this.srContainer);
 
-    this.clickArea = new DisplayObject();
+    this.clickArea = new Container();
     this.clickArea.hitArea = new Rectangle(0, 0, 800, 800);
     this.clickArea.interactive = true;
     this.pixiapp.stage.addChild(this.clickArea);
 
-    this.clickArea.on("pointerdown", (e: interaction.InteractionEvent) => {
+    this.clickArea.on("pointerdown", (e: PIXI.InteractionEvent) => {
       this.pointerDown = true;
       this.handleClick(e);
     });
 
-    this.clickArea.on("pointerup", (e: interaction.InteractionEvent) => {
+    this.clickArea.on("pointerup", (e: PIXI.InteractionEvent) => {
       this.pointerDown = false;
     });
 
@@ -198,7 +199,7 @@ export class MFMRenderer {
     return this.tile.getSiteByCoord({ row: y, col: x });
   }
 
-  handleClick(e: interaction.InteractionEvent) {
+  handleClick(e: PIXI.InteractionEvent) {
     if (this.pointerDown && e.target) {
       let p: Point = e.data.getLocalPosition(this.pixiapp.stage);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as Sprite);
