@@ -9,8 +9,6 @@ import { Symmetries } from "../utils/Symmetries";
 import { Utils } from "../utils/MFMUtils";
 import { SPLATEval } from "../utils/SPLAT";
 
-
-
 //Event window as describbed here: http://robust.cs.unm.edu/lib/exe/fetch.php?w=300&tok=4c8f49&media=dev:event-window-10.png
 //Collection of sites which contain atoms, built from an origin (center) site
 export class EventWindow {
@@ -55,7 +53,7 @@ export class EventWindow {
     { col: -4, row: 0 },
     { col: 0, row: -4 },
     { col: 0, row: 4 },
-    { col: 4, row: 0 }
+    { col: 4, row: 0 },
   ];
 
   //directions as gridcoords, good for cartesian-based traversal of event window
@@ -123,24 +121,240 @@ export class EventWindow {
   static NE_QUADRANT: number[] = [7, 17, 19, 27, 33, 35];
   static SE_QUADRANT: number[] = [8, 18, 20, 28, 34, 36];
 
-  static W_HEMISPHERE: number[] = Array.from(new Set<number>([...EventWindow.NW_QUADRANT, ...EventWindow.W_LINE, ...EventWindow.SW_QUADRANT])).sort((a, b) => a - b); //[1, 5, 6, 9, 13, 14, 15, 16, 21, 25, 26, 29, 30, 31, 32, 37];
-  static N_HEMISPHERE: number[] = Array.from(new Set<number>([...EventWindow.NW_QUADRANT, ...EventWindow.N_LINE, ...EventWindow.NE_QUADRANT])).sort((a, b) => a - b); //[2, 5, 7, 10, 13, 15, 17, 19, 22, 25, 27, 29, 31, 33, 35, 38];
-  static S_HEMISPHERE: number[] = Array.from(new Set<number>([...EventWindow.SW_QUADRANT, ...EventWindow.S_LINE, ...EventWindow.SE_QUADRANT])).sort((a, b) => a - b); //[3, 6, 8, 11, 14, 16, 18, 20, 23, 26, 28, 30, 32, 34, 36, 39];
-  static E_HEMISPHERE: number[] = Array.from(new Set<number>([...EventWindow.NE_QUADRANT, ...EventWindow.E_LINE, ...EventWindow.SE_QUADRANT])).sort((a, b) => a - b); //[4, 7, 8, 12, 17, 18, 19, 20, 24, 27, 28, 33, 34, 35, 36, 40];
+  static W_HEMISPHERE: number[] = Array.from(
+    new Set<number>([...EventWindow.NW_QUADRANT, ...EventWindow.W_LINE, ...EventWindow.SW_QUADRANT])
+  ).sort((a, b) => a - b); //[1, 5, 6, 9, 13, 14, 15, 16, 21, 25, 26, 29, 30, 31, 32, 37];
+  static N_HEMISPHERE: number[] = Array.from(
+    new Set<number>([...EventWindow.NW_QUADRANT, ...EventWindow.N_LINE, ...EventWindow.NE_QUADRANT])
+  ).sort((a, b) => a - b); //[2, 5, 7, 10, 13, 15, 17, 19, 22, 25, 27, 29, 31, 33, 35, 38];
+  static S_HEMISPHERE: number[] = Array.from(
+    new Set<number>([...EventWindow.SW_QUADRANT, ...EventWindow.S_LINE, ...EventWindow.SE_QUADRANT])
+  ).sort((a, b) => a - b); //[3, 6, 8, 11, 14, 16, 18, 20, 23, 26, 28, 30, 32, 34, 36, 39];
+  static E_HEMISPHERE: number[] = Array.from(
+    new Set<number>([...EventWindow.NE_QUADRANT, ...EventWindow.E_LINE, ...EventWindow.SE_QUADRANT])
+  ).sort((a, b) => a - b); //[4, 7, 8, 12, 17, 18, 19, 20, 24, 27, 28, 33, 34, 35, 36, 40];
 
-  static ALL: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40];
-  static ALLADJACENT: number[] = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40];
-  static OPPOSITES: number[] = [0, 4, 3, 2, 1, 8, 7, 6, 5, 12, 11, 10, 9, 20, 19, 18, 17, 16, 15, 14, 13, 24, 23, 22, 21, 28, 27, 26, 25, 36, 35, 34, 33, 32, 31, 30, 29, 40, 39, 38, 37];
+  static ALL: number[] = [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+  ];
+  static ALLADJACENT: number[] = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+  ];
+  static OPPOSITES: number[] = [
+    0,
+    4,
+    3,
+    2,
+    1,
+    8,
+    7,
+    6,
+    5,
+    12,
+    11,
+    10,
+    9,
+    20,
+    19,
+    18,
+    17,
+    16,
+    15,
+    14,
+    13,
+    24,
+    23,
+    22,
+    21,
+    28,
+    27,
+    26,
+    25,
+    36,
+    35,
+    34,
+    33,
+    32,
+    31,
+    30,
+    29,
+    40,
+    39,
+    38,
+    37,
+  ];
 
-  static X_REFLECTION: number[] = [0, 1, 3, 2, 4, 6, 5, 8, 7, 9, 11, 10, 12, 14, 13, 16, 15, 18, 17, 20, 19, 21, 23, 22, 24, 26, 25, 28, 27, 30, 29, 32, 31, 34, 33, 36, 35, 37, 39, 38, 40];
-  static Y_REFLECTION: number[] = [0, 4, 2, 3, 1, 7, 8, 5, 6, 12, 10, 11, 9, 19, 20, 17, 18, 15, 16, 13, 14, 24, 22, 23, 21, 27, 28, 25, 26, 35, 36, 33, 34, 31, 32, 29, 30, 40, 38, 39, 37];
+  static X_REFLECTION: number[] = [
+    0,
+    1,
+    3,
+    2,
+    4,
+    6,
+    5,
+    8,
+    7,
+    9,
+    11,
+    10,
+    12,
+    14,
+    13,
+    16,
+    15,
+    18,
+    17,
+    20,
+    19,
+    21,
+    23,
+    22,
+    24,
+    26,
+    25,
+    28,
+    27,
+    30,
+    29,
+    32,
+    31,
+    34,
+    33,
+    36,
+    35,
+    37,
+    39,
+    38,
+    40,
+  ];
+  static Y_REFLECTION: number[] = [
+    0,
+    4,
+    2,
+    3,
+    1,
+    7,
+    8,
+    5,
+    6,
+    12,
+    10,
+    11,
+    9,
+    19,
+    20,
+    17,
+    18,
+    15,
+    16,
+    13,
+    14,
+    24,
+    22,
+    23,
+    21,
+    27,
+    28,
+    25,
+    26,
+    35,
+    36,
+    33,
+    34,
+    31,
+    32,
+    29,
+    30,
+    40,
+    38,
+    39,
+    37,
+  ];
   static XY_REFLECTION: number[] = EventWindow.OPPOSITES;
 
   static SUBSETS: Map<string, number[]> = new Map<string, number[]>()
     .set("4way", EventWindow.ADJACENT4WAY)
     .set("8way", EventWindow.ADJACENT8WAY)
     .set("all", EventWindow.ALL);
-
 
   tile: Tile;
   origin: Site;
@@ -152,7 +366,6 @@ export class EventWindow {
   }
 
   private makeWindow(tile: Tile, origin: GridCoord) {
-
     this.origin = tile.getSiteByCoord(origin);
 
     this.window = new Array<Site>();
@@ -164,14 +377,11 @@ export class EventWindow {
     const wolen: number = EventWindow.WINDOW_OFFSETS.length;
 
     for (let i = 0; i < wolen; i++) {
-
       offset = EventWindow.WINDOW_OFFSETS[i];
       site = tile.getSiteByCoord(this.offsetFromOrigin(origin, offset));
 
       this.window.push(site);
-
     }
-
   }
 
   //get relative offset gridcoord from absolute gridcoord
@@ -201,8 +411,8 @@ export class EventWindow {
   //get the site index by gridcoord offset { row: 1, col: 1} = 8
   getIndexByOffset(offset: GridCoord): number {
     //console.log(offset);
-    return EventWindow.WINDOW_OFFSETS.findIndex(gc => {
-      return (gc.col === offset.col && gc.row === offset.row);
+    return EventWindow.WINDOW_OFFSETS.findIndex((gc) => {
+      return gc.col === offset.col && gc.row === offset.row;
     });
   }
 
@@ -215,7 +425,6 @@ export class EventWindow {
   //return the index 1-step away that is toward the destination from the start
   //possibly good for sensors to relay directional info given the limited event window
   getIndexToward(destinationIndex: number, startingIndex: number = 0): number {
-
     let toX: number = 0;
     let toY: number = 0;
 
@@ -225,15 +434,22 @@ export class EventWindow {
     const destCoord: GridCoord = this.getOffsetByIndex(destinationIndex);
     const [destX, destY] = [destCoord.col, destCoord.row];
 
-    if (destX > 1) { toX = startX + 1; }
-    if (destX < -1) { toX = startX + (-1); }
+    if (destX > 1) {
+      toX = startX + 1;
+    }
+    if (destX < -1) {
+      toX = startX + -1;
+    }
 
-    if (destY > 1) { toY = startY + 1; }
-    if (destY < -1) { toY = startY + (-1); }
+    if (destY > 1) {
+      toY = startY + 1;
+    }
+    if (destY < -1) {
+      toY = startY + -1;
+    }
 
     const toCoord: GridCoord = { row: toY, col: toX };
     return this.getIndexByOffset(toCoord);
-
   }
 
   ////////////////////
@@ -241,7 +457,6 @@ export class EventWindow {
   //Like, if origin (who has the EW) needs to tell its index 7 where its index 3 is relative to 7's position
   //useful for linked-list manipulation, hopefully other things too.
   getRelativeIndexFromSiteToSite(fromSite: number, toSite: number): number {
-
     const fromOffset: GridCoord = EventWindow.WINDOW_OFFSETS[fromSite];
     const toOffset: GridCoord = EventWindow.WINDOW_OFFSETS[toSite];
 
@@ -264,7 +479,6 @@ export class EventWindow {
   }
   ////////////////////
 
-
   /////////////////////////////////
   //A bunch of useful number[] math
   /////////////////////////////////
@@ -273,7 +487,7 @@ export class EventWindow {
   //pass in as many site sets (number[]) as you like!
   getUnion(...siteSets: number[][]): number[] {
     let union: number[] = [];
-    siteSets.forEach(set => {
+    siteSets.forEach((set) => {
       union = [...union, ...set];
     });
 
@@ -286,11 +500,10 @@ export class EventWindow {
   //returns a number[] of values intersecting all siteSets
   //good for dynamic EW sets, like sites on LAYER1 that are also in NORTHERM_HEMISPHERE
   getIntersection(...siteSets: number[][]): number[] {
-
     let intersection: number[] = this.getUnion(...siteSets);
 
     siteSets.forEach((set, index) => {
-      intersection = [...intersection.filter(value => -1 !== set.indexOf(value))];
+      intersection = [...intersection.filter((value) => -1 !== set.indexOf(value))];
     });
 
     return intersection;
@@ -298,38 +511,36 @@ export class EventWindow {
 
   //returns the opposite of an intersection, the indexes that don't overlap in the sets
   getExclusion(...siteSets: number[][]): number[] {
-
     const allIndexes: number[] = this.getUnion(...siteSets);
     const inclusion: number[] = this.getIntersection(...siteSets);
 
-    let exclusion: number[] = allIndexes.filter(value => -1 === inclusion.indexOf(value));
+    let exclusion: number[] = allIndexes.filter((value) => -1 === inclusion.indexOf(value));
 
     return exclusion;
   }
 
   //given a base set of indexes, minus (remove) any in the minus sets
   getMinus(baseSet: number[], ...minusSets: number[][]): number[] {
-
     const minusUnion: number[] = this.getUnion(...minusSets);
-    return baseSet.filter(value => -1 === minusUnion.indexOf(value)).sort((a, b) => a - b);
+    return baseSet.filter((value) => -1 === minusUnion.indexOf(value)).sort((a, b) => a - b);
   }
 
   getOpposite(siteSet: number[]): number[] {
-    return siteSet.map(index => {
+    return siteSet.map((index) => {
       return EventWindow.OPPOSITES[index];
-    })
+    });
   }
 
   getXReflection(siteSet: number[]): number[] {
-    return siteSet.map(index => {
+    return siteSet.map((index) => {
       return EventWindow.X_REFLECTION[index];
-    })
+    });
   }
 
   getYReflection(siteSet: number[]): number[] {
-    return siteSet.map(index => {
+    return siteSet.map((index) => {
       return EventWindow.Y_REFLECTION[index];
-    })
+    });
   }
 
   ///////////////////////////////
@@ -339,7 +550,7 @@ export class EventWindow {
   //return all window sites (of type)
   getAll(specificType: IElementType = undefined): Site[] {
     if (specificType) {
-      return this.window.filter(site => {
+      return this.window.filter((site) => {
         if (site && site.atom.is(specificType)) {
           return true;
         } else {
@@ -418,12 +629,12 @@ export class EventWindow {
       return [this.getRandomSite(candidates)];
     }
 
-    return candidates.filter(site => site);
+    return candidates.filter((site) => site);
   }
 
   //get a subset of sites from the event window, subset defined as array of indexes
   getSubset(subset: number[]): Site[] {
-    return subset.map(index => {
+    return subset.map((index) => {
       if (this.window[index]) {
         return this.window[index];
       }
@@ -452,9 +663,8 @@ export class EventWindow {
     return candidates;
   }
 
-
   getSubsetIndexes(subset: number[]): number[] {
-    return subset.map(index => {
+    return subset.map((index) => {
       if (this.window[index]) {
         return index;
       }
@@ -462,8 +672,7 @@ export class EventWindow {
   }
 
   filterIndexesByType(indexes: number[], type: IElementType): number[] {
-
-    return indexes.filter(siteIndex => {
+    return indexes.filter((siteIndex) => {
       const site: Site = this.getSiteByIndex(siteIndex);
       if (site && site.atom.is(type)) {
         return true;
@@ -483,7 +692,6 @@ export class EventWindow {
   }
 
   getNearestIndex(siteSet: number[], type?: IElementType): number {
-
     if (type) {
       siteSet = this.filterIndexesByType(siteSet, type);
     }
@@ -494,12 +702,11 @@ export class EventWindow {
 
     const ni: number = Math.min(...siteSet);
     return this.getSiteByIndex(ni) ? ni : undefined;
-
   }
 
   //return array of sites from site array that match type
   private filterSitesByType(sites: Site[], type: IElementType): Site[] {
-    return sites.filter(site => {
+    return sites.filter((site) => {
       if (site && site.atom.is(type)) {
         return true;
       }
@@ -523,11 +730,7 @@ export class EventWindow {
     return sites[sites.length - 1];
   }
 
-
-
-
   is(site: number | Site = 0, type: IElementType | IElementType[]): boolean {
-
     let isIt: boolean = false;
 
     let checkSite: Site;
@@ -543,12 +746,11 @@ export class EventWindow {
     }
 
     if (Array.isArray(type)) {
-      const filtered: IElementType[] = type.filter(type => {
-        return checkSite.atom.type === type
+      const filtered: IElementType[] = type.filter((type) => {
+        return checkSite.atom.type === type;
       });
 
       isIt = filtered.length ? true : false;
-
     } else {
       isIt = checkSite.atom.type === type;
     }
@@ -556,28 +758,23 @@ export class EventWindow {
     return isIt;
   }
 
-
   //given a map of types that is keyed by Event Window index numbers
   //compare the indexes to the event window
   //this allows you to pass in a desired Event Window state and see if there's a match
   windowCompare(compareMap: Map<number, IElementType>): boolean {
-
     let matchCount: number = 0;
     let isMatch = false;
 
     compareMap.forEach((elType, key) => {
-
       //for now the edges don't count
       if (!this.window[key]) {
         matchCount++;
       }
 
       if (this.window[key] && this.window[key].atom.is(elType)) {
-
         matchCount++;
       }
     });
-
 
     if (matchCount === compareMap.size) {
       isMatch = true;
@@ -587,12 +784,10 @@ export class EventWindow {
   }
 
   windowNotCompare(compareMap: Map<number, IElementType>): boolean {
-
     let matchCount: number = 0;
     let isMatch = false;
 
     compareMap.forEach((elType, key) => {
-
       //for now the edges don't count
       if (!this.window[key]) {
         matchCount++;
@@ -610,7 +805,6 @@ export class EventWindow {
     return isMatch;
   }
 
-
   /////////////////////////////////
   // EVENT WINDOW ACTIONS
   /////////////////////////////////
@@ -623,11 +817,10 @@ export class EventWindow {
       toSite.atom = fromSite.atom;
 
       if (leavingAtom) {
-
         fromSite.atom = leavingAtom;
-        console.log("set leaving", leavingAtom, fromSite);
+        // console.log("set leaving", leavingAtom, fromSite);
       } else {
-        console.log("leaving an empty");
+        // console.log("leaving an empty");
         fromSite.atom = Empty.CREATE();
       }
       return true;
@@ -637,12 +830,10 @@ export class EventWindow {
   }
 
   swap(toIndex: number, fromIndex: number = 0): boolean {
-
     const toSite: Site = this.getSiteByIndex(toIndex);
     const fromSite: Site = this.getSiteByIndex(fromIndex);
 
     if (toSite && fromSite && toSite.canMove() && fromSite.canMove()) {
-
       //console.log("SWAP", toSite, fromSite);
 
       [toSite.atom, fromSite.atom] = [fromSite.atom, toSite.atom];
@@ -650,11 +841,9 @@ export class EventWindow {
     }
 
     return false;
-
   }
 
   mutate(targetIndex: number, atom: Atom): boolean {
-
     const targetSite: Site = this.getSiteByIndex(targetIndex);
 
     if (targetSite && targetSite.canDestroy()) {
@@ -666,15 +855,13 @@ export class EventWindow {
   }
 
   mutateMany(siteSet: number[], atomCreator: Function, creatorParams?: any[]) {
-    siteSet.forEach(sn => {
+    siteSet.forEach((sn) => {
       this.mutate(sn, atomCreator(creatorParams));
     });
   }
 
   destroy(targetIndex: number = 0): boolean {
-
     return this.mutate(targetIndex, new Atom(Empty.TYPE_DEF));
-
   }
 
   //////////////////////
@@ -693,8 +880,12 @@ export class EventWindow {
   }
 
   ///QUERYING
-  query(ewMap: Map<number, string>, fuzziness: number = 0, typesMap: Map<string, IElementType | SPLATEval> = ElementTypes.SPLAT_MAP, symmetries: Map<number, number>[] = Symmetries.NORMAL) {
-
+  query(
+    ewMap: Map<number, string>,
+    fuzziness: number = 0,
+    typesMap: Map<string, IElementType | SPLATEval> = ElementTypes.SPLAT_MAP,
+    symmetries: Map<number, number>[] = Symmetries.NORMAL
+  ) {
     const symmetry = Utils.oneRandom(symmetries);
 
     const matches: Map<IElementType, number[]> = new Map<IElementType, number[]>();
@@ -707,48 +898,39 @@ export class EventWindow {
 
     for (let i = 0; i < ewMapLen; i++) {
       const char: string = values[i];
-      const cursn: number = keys[i]
+      const cursn: number = keys[i];
       const type: IElementType | SPLATEval = typesMap.get(char);
 
       if (typeof type === "function") {
-
         if (this.window[cursn] && type) {
-
-          const t: IElementType = type(this.window[cursn].atom.type)
+          const t: IElementType = type(this.window[cursn].atom.type);
 
           if (t !== undefined) {
             matchCount++;
             if (matches.has(t)) {
               matches.set(t, [...matches.get(t), cursn]);
             } else {
-              matches.set(t, [cursn])
+              matches.set(t, [cursn]);
             }
           }
-
         }
-
       } else {
-
         if (this.window[cursn] && type && this.window[cursn].atom.type === type) {
           matchCount++;
           if (matches.has(type)) {
             matches.set(type, [...matches.get(type), cursn]);
           } else {
-            matches.set(type, [cursn])
+            matches.set(type, [cursn]);
           }
         }
-
       }
-
-
     }
 
     //fuzziness is how many of the sites in the map have to match the event window, 0 means ALL must match
     if (fuzziness > 0) {
       return matchCount >= fuzziness ? matches : undefined;
     } else {
-      return (matchCount == ewMap.size - 1) ? matches : undefined;
+      return matchCount == ewMap.size - 1 ? matches : undefined;
     }
   }
-
 }

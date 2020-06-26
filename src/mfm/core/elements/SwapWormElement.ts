@@ -11,7 +11,6 @@ import { Data } from "./DataElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 
 export class SwapWorm extends LinkedList {
-
   static TYPE_DEF: IElementType = { name: "SWAP WORM", type: "Sw", class: SwapWorm, color: 0xcc0066 };
   static CREATE = SwapWorm.CREATOR();
 
@@ -29,7 +28,7 @@ export class SwapWorm extends LinkedList {
   birth(ew: EventWindow): boolean {
     //BE BORN
     const choices: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
-    const relativeSiteToGoTo: number = Math.min(...choices);//choices[Math.random() * choices.length >> 0];
+    const relativeSiteToGoTo: number = Math.min(...choices); //choices[Math.random() * choices.length >> 0];
     const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
 
     const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
@@ -41,15 +40,12 @@ export class SwapWorm extends LinkedList {
     return moved;
   }
 
-
-
   tailGrow(ew: EventWindow, moveChoices?: number[]) {
-
     const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
-    const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
+    const relativeSiteToGoTo: number = choices[(Math.random() * choices.length) >> 0];
 
     if (relativeSiteToGoTo) {
-      console.log("grow tail", relativeSiteToGoTo, this.prev)
+      console.log("grow tail", relativeSiteToGoTo, this.prev);
       const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, this.prev, relativeSiteToGoTo]);
       leavingAtom.data = { value: this.growData };
       const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
@@ -61,10 +57,9 @@ export class SwapWorm extends LinkedList {
   }
 
   swapMove(ew: EventWindow, moveChoices?: number[]) {
-
     //MAKE SWAPPER
     const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
-    const relativeSiteToGoTo: number = choices[Math.random() * choices.length >> 0];
+    const relativeSiteToGoTo: number = choices[(Math.random() * choices.length) >> 0];
     if (relativeSiteToGoTo) {
       const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
       (leavingAtom.elem as LinkedList).isSwapping = true;
@@ -79,21 +74,18 @@ export class SwapWorm extends LinkedList {
 
   //Eat res, and grow big and strong
   eat(ew: EventWindow) {
-
     //Eat Data
     let possibleData = ew.getAdjacent4Way(Data.TYPE_DEF);
 
-    if (possibleData && possibleData.atom.data.value !== undefined) {
+    if (possibleData?.atom?.data?.value !== undefined) {
       this.dazedCount = 50;
       this.growData = possibleData.atom.data.value;
       possibleData.killSelf();
     }
-
   }
 
   //check if the worm is stuck in itself
   isStuck(ew: EventWindow): boolean {
-
     const empties = ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
     const worms = ew.getIndexes(EventWindow.ADJACENT4WAY, SwapWorm.TYPE_DEF);
 
@@ -107,11 +99,9 @@ export class SwapWorm extends LinkedList {
     }
 
     return false;
-
   }
 
   unStick(ew: EventWindow): boolean {
-
     const choices: number[] = ew.getIndexes(EventWindow.ALLADJACENT, Empty.TYPE_DEF);
     const relativeSiteToGoTo: number = Math.min(...choices);
     if (relativeSiteToGoTo || relativeSiteToGoTo !== Infinity) {
@@ -128,9 +118,9 @@ export class SwapWorm extends LinkedList {
 
   //Eat up the Stuck Membrane protecting the worm in order to improve chances of getting unstuck
   lowerDefenses(ew: EventWindow) {
-    ew.getAll(StickyMembrane.TYPE_DEF).forEach(membraneSite => {
+    ew.getAll(StickyMembrane.TYPE_DEF).forEach((membraneSite) => {
       membraneSite.killSelf();
-    })
+    });
 
     // ew.getAll(StuckMembrane.TYPE_DEF).forEach(membraneSite => {
     //   membraneSite.killSelf();
@@ -151,15 +141,12 @@ export class SwapWorm extends LinkedList {
   }
 
   handleIdle(ew: EventWindow) {
-
     if (this.idleCount > 20) {
       this.lowerDefenses(ew);
     }
-
   }
 
   exec(ew: EventWindow) {
-
     if (this.dazedCount > 0) {
       this.dazedCount--;
       return;
@@ -169,10 +156,8 @@ export class SwapWorm extends LinkedList {
 
     let moved: boolean = false;
 
-
     //Need to be born?
     if (this.birthCount > 0) {
-
       moved = this.birth(ew);
 
       if (!moved) {
@@ -184,21 +169,17 @@ export class SwapWorm extends LinkedList {
 
         this.handleIdle(ew);
       }
-
     }
     //If this is a head
     else if (this.isAtHead()) {
-
       //and no growData and next is not a swapper, we can move...
       if (!this.growData && this.getNextElement(ew) && !this.getNextElement(ew).isSwapping) {
-
         moved = this.swapMove(ew);
 
         //hungry for data?
         this.eat(ew);
 
         if (!moved) {
-
           this.idleCount++;
 
           if (this.isStuck(ew) && this.unStick(ew)) {
@@ -208,15 +189,12 @@ export class SwapWorm extends LinkedList {
           this.handleIdle(ew);
         }
       }
-
     }
     //Not a head
     else {
-
       //updateIdleCount down the worm
       if (this.getPrevElement(ew)) {
-
-        const prevEl: SwapWorm = (this.getPrevElement(ew) as SwapWorm);
+        const prevEl: SwapWorm = this.getPrevElement(ew) as SwapWorm;
 
         if (prevEl.growData && !this.isSwapping) {
           this.growData = prevEl.growData;
@@ -228,23 +206,15 @@ export class SwapWorm extends LinkedList {
       }
       this.handleIdle(ew);
 
-
       if (!this.isSwapping && this.isAtTail() && this.growData) {
         this.lowerDefenses(ew);
         if (this.tailGrow(ew)) {
-
           this.growData = undefined;
         }
       }
 
       this.excreteMembrane(ew);
-
     }
-
-
-
-
-
 
     super.exec(ew);
 

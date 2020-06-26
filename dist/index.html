@@ -197,7 +197,9 @@
         <div id="mfm-grid-container">
 
           <div id="mfm"></div>
-          Render? <input type="checkbox" v-model="shouldRender">
+          <!-- Render? <input type="checkbox" v-model="shouldRender"> -->
+          <button @click="clearAllOfType()">Clear Type</button>
+
           <button @click="reload()">Clear Grid</button>
           Grid Size:
           <select v-model=" gridSize">

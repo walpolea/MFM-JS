@@ -26,6 +26,7 @@ import { LoopSeed } from "../mfm/core/elements/LoopSeedElement";
 import { Writer } from "../mfm/core/elements/WriterElement";
 import { SortMaster } from "../mfm/core/elements/SortMasterElement";
 import { OnewayDoor } from "../mfm/core/elements/OnewayDoorElement";
+import { IElementType } from "../mfm/core/IElementType";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -73,6 +74,15 @@ export class MFMRenderer {
     this.pixiapp.destroy(true);
   }
 
+  killType(type: IElementType) {
+    this.tile.sites.forEach((site) => {
+      if (site?.atom?.type == type) {
+        site.killSelf();
+        this.rendererMap.get(site).update();
+      }
+    });
+  }
+
   init() {
     this.keysHeld = new Set<string>();
 
@@ -82,7 +92,7 @@ export class MFMRenderer {
       antialias: false,
       transparent: false,
       backgroundColor: 0x222222,
-      resolution: 1
+      resolution: 1,
     });
 
     this.srContainer.x = this.gridOffset;
@@ -114,7 +124,7 @@ export class MFMRenderer {
 
     this.initSites();
 
-    console.log("added game loop")
+    console.log("added game loop");
     this.pixiapp.ticker.add((delta: number) => this.gameLoop(delta));
     this.container.appendChild(this.pixiapp.view);
   }
@@ -135,24 +145,19 @@ export class MFMRenderer {
       //cached event windows ++
       this.ewCache.set(site.tilePos, new EventWindow(this.tile, site.tilePos));
     }
-
-
   }
 
   gameLoop(delta: number) {
-
-
     let ew: EventWindow;
     let renders: Set<SiteRenderer> = new Set<SiteRenderer>();
-    let i = 0, j = 0;
+    let i = 0,
+      j = 0;
     let renderSites = [];
 
     for (i; i < this.timeSpeed; i++) {
-
       ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
 
       if (ew.window && !ew.origin.atom.is(Empty.TYPE_DEF)) {
-
         ew.origin.atom.exec(ew);
         if (this.shouldRender) {
           const allSites = ew.getAll();
@@ -161,12 +166,10 @@ export class MFMRenderer {
             if (allSites[j]) renders.add(this.rendererMap.get(allSites[j]));
           }
         }
-
       }
     }
 
     if (this.shouldRender) {
-
       const arr = Array.from(renders.values());
       let k = 0;
       let len = arr.length;
@@ -174,7 +177,6 @@ export class MFMRenderer {
         arr[k].update();
       }
     }
-
   }
 
   onKeyDown(key: any) {
@@ -198,7 +200,6 @@ export class MFMRenderer {
 
   handleClick(e: interaction.InteractionEvent) {
     if (this.pointerDown && e.target) {
-
       let p: Point = e.data.getLocalPosition(this.pixiapp.stage);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as Sprite);
       this.selectedSite = site;
@@ -231,7 +232,7 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("d")) {
           const rval = (Math.random() * 40) >> 0;
           site.atom = Data.CREATE(undefined, {
-            value: rval
+            value: rval,
           });
         } else if (this.keysHeld.has("i")) {
           site.atom = new Atom(Reducer.TYPE_DEF);
@@ -274,18 +275,15 @@ export class MFMRenderer {
         } else if (this.keysHeld.has("0")) {
           site.atom = OnewayDoor.W_NS();
         } else {
-
           if (this.curSelectedElementFunction) {
             site.atom = this.curSelectedElementFunction();
           }
-
         }
       }
 
       if (site) {
         this.rendererMap.get(site).update();
       }
-
     }
   }
 }

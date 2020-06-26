@@ -7,11 +7,13 @@ import { Empty } from "./EmptyElement";
 import { MembraneWall } from "./MembraneWallElement";
 import { SwapWorm } from "./SwapWormElement";
 import { Res } from "./ResElement";
+import { StuckMembrane } from "./StuckMembraneElement";
+import { Data } from "./DataElement";
 
 export class SuperMason extends Elem {
-
   static TYPE_DEF: IElementType = { name: "SUPER MASON", type: "SMa", class: SuperMason, color: 0x20cccc };
   static CREATE = SuperMason.CREATOR();
+  static RANDOM_CREATE = SuperMason.CREATOR([SuperMason.randomPath(20)]);
 
   path: string[] = [];
   curIndex: number = 0; //used to traverse index, but now this is sort of like the mason's ID in the path, it doesn't change for the individual, but is kept up (+1,-1) by neighbor masons
@@ -53,7 +55,7 @@ export class SuperMason extends Elem {
         },
         innerBuildSite() {
           return ew.north;
-        }
+        },
       },
       N: {
         moveSite() {
@@ -64,7 +66,7 @@ export class SuperMason extends Elem {
         },
         innerBuildSite() {
           return ew.west;
-        }
+        },
       },
       S: {
         moveSite() {
@@ -75,7 +77,7 @@ export class SuperMason extends Elem {
         },
         innerBuildSite() {
           return ew.east;
-        }
+        },
       },
       W: {
         moveSite() {
@@ -86,8 +88,8 @@ export class SuperMason extends Elem {
         },
         innerBuildSite() {
           return ew.south;
-        }
-      }
+        },
+      },
     };
 
     const moveSite: Site = blueprints[dir].moveSite();
@@ -99,37 +101,31 @@ export class SuperMason extends Elem {
     if (lastdir !== dir) {
       const lastOuterBuildSite: Site = blueprints[lastdir].outerBuildSite();
       if (lastOuterBuildSite) {
-        ew.origin.mutateSite(lastOuterBuildSite, MembraneWall.CREATE([.1, SwapWorm.TYPE_DEF]));
+        ew.origin.mutateSite(lastOuterBuildSite, MembraneWall.CREATE([0.1, EventWindow.LAYER4, Data.TYPE_DEF]));
       }
     }
 
     //build the outer wall
     if (outerBuildSite) {
-      if (outerBuildSite.atom.type === Res.TYPE_DEF || outerBuildSite.atom.type === Empty.TYPE_DEF) {
-        ew.origin.mutateSite(outerBuildSite, MembraneWall.CREATE([.1, SwapWorm.TYPE_DEF]));
+      if (outerBuildSite.atom.type === Res.TYPE_DEF || ew.is(outerBuildSite, [Empty.TYPE_DEF, StuckMembrane.TYPE_DEF])) {
+        ew.origin.mutateSite(outerBuildSite, MembraneWall.CREATE([0.1, EventWindow.LAYER4, Data.TYPE_DEF]));
       }
     }
 
     //build the inner wall
     if (innerBuildSite) {
-      if (innerBuildSite.atom.type === Res.TYPE_DEF || innerBuildSite.atom.type === Empty.TYPE_DEF) {
-        ew.origin.mutateSite(innerBuildSite, MembraneWall.CREATE([.1, SwapWorm.TYPE_DEF]));
+      if (innerBuildSite.atom.type === Res.TYPE_DEF || ew.is(innerBuildSite, [Empty.TYPE_DEF, StuckMembrane.TYPE_DEF])) {
+        ew.origin.mutateSite(innerBuildSite, MembraneWall.CREATE([0.1, EventWindow.ADJACENT8WAY, Data.TYPE_DEF]));
       }
     }
 
     //move to next site and leave another mason to help
     if (moveSite) {
-      ew.origin.mutateSite(
-        moveSite,
-        SuperMason.CREATE([SuperMason.pathToString(this.path), this.curIndex + 1])
-      );
+      ew.origin.mutateSite(moveSite, SuperMason.CREATE([SuperMason.pathToString(this.path), this.curIndex + 1]));
     }
 
     if (lastSite) {
-      ew.origin.mutateSite(
-        lastSite,
-        SuperMason.CREATE([SuperMason.pathToString(this.path), this.curIndex - 1])
-      );
+      ew.origin.mutateSite(lastSite, SuperMason.CREATE([SuperMason.pathToString(this.path), this.curIndex - 1]));
     }
 
     super.exec(ew);
@@ -212,7 +208,7 @@ export class SuperMason extends Elem {
       N: "S",
       S: "N",
       E: "W",
-      W: "E"
+      W: "E",
     };
 
     return map[dir];

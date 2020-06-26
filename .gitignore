@@ -1,3 +1,4 @@
 /node_modules
 /art
-DS_store
+.DS_Store
+package-lock.json

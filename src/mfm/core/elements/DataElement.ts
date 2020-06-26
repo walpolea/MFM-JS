@@ -8,30 +8,28 @@ import { Empty } from "./EmptyElement";
 
 //data exists on the atom, so this thing doesn't do much but be a shell for an instance
 export class Data extends Elem {
-
   static TYPE_DEF: IElementType = { name: "DATA", type: "Da", class: Data, color: 0xcccccc };
   static CREATE = Data.CREATOR();
-
 
   static dataNearby = SPLAT.splatToMap(`
     ###
     #@#
     ###
-  `)
+  `);
 
   pPATROL: number = 1;
 
   initializedData: boolean = false;
   initialData: any;
+  travelWindow: number[];
 
-  constructor(_initialData: any = undefined) {
+  constructor(_initialData: any = undefined, _travelWindow: number[] = EventWindow.ADJACENT4WAY) {
     super(Data.TYPE_DEF);
+    this.travelWindow = _travelWindow;
     this.initialData = _initialData;
   }
   exec(ew: EventWindow) {
-
     if (!this.initializedData) {
-
       if (ew.origin.atom.data === undefined) {
         ew.origin.atom.data = {};
 
@@ -39,28 +37,20 @@ export class Data extends Elem {
           ew.origin.atom.data.value = this.initialData;
         } else {
           //Default 0 to 40
-          ew.origin.atom.data.value = Math.random() * 40 >> 0;
+          ew.origin.atom.data.value = (Math.random() * 40) >> 0;
         }
-
       }
 
       this.initializedData = true;
     }
 
-    this.color = Utils.rgbToHex((ew.origin.atom.data.value) * 5, (ew.origin.atom.data.value) * 5, (ew.origin.atom.data.value) * 5);
+    this.color = Utils.rgbToHex(ew.origin.atom.data.value * 5, ew.origin.atom.data.value * 5, ew.origin.atom.data.value * 5);
 
-    const nearbyDataCount: number = ew.getIndexes(EventWindow.ALLADJACENT, Data.TYPE_DEF).filter(i => i).length;
+    const nearbyDataCount: number = ew.getIndexes(EventWindow.ALLADJACENT, Data.TYPE_DEF).filter((i) => i).length;
 
-    //const datanearby = ew.query(Data.dataNearby, 1, Data.SPLAT_MAP);
     //patrol
     if (Utils.oneIn(this.pPATROL * nearbyDataCount)) {
-      ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));
-      // if (Utils.oneIn(2) && ew.is(4, Empty.TYPE_DEF)) {
-      //   ew.move(4);
-      // } else {
-      //   ew.move(ew.getIndexes(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF, true)[0]);
-      // }
-
+      ew.origin.swapAtoms(ew.getSites(this.travelWindow, Empty.TYPE_DEF, true)[0]);
     }
 
     super.exec(ew);

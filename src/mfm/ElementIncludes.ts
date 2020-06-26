@@ -41,7 +41,6 @@ import { SPLAT } from "./utils/SPLAT";
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
 export class ElementIncludes {
-
   static ELEMENT_MENU_MAP: Map<string, [string, Function][]> = new Map<string, [string, Function][]>()
     .set("MFM", [
       ["Empty", Empty.CREATE],
@@ -51,12 +50,13 @@ export class ElementIncludes {
       ["ForkBomb", ForkBomb.CREATE],
       ["SuperForkbomb", SuperForkBomb.CREATE],
       ["AntiForkBomb", AntiForkBomb.CREATE],
-      ["Sentry", Sentry.CREATE]
+      ["Sentry", Sentry.CREATE],
     ])
     .set("Structural", [
       ["Wall", Wall.CREATE],
       ["Mason", Mason.CREATE],
       ["Super Mason", SuperMason.CREATE],
+      // ["Super Mason Random", SuperMason.RANDOM_CREATE],
       ["MembraneWall", MembraneWall.CREATE],
       ["MembraneWallXL", MembraneWall.SW_XL],
       ["MembraneWallLrg", MembraneWall.SW_LRG],
@@ -101,7 +101,6 @@ export class ElementIncludes {
       ["W→NE", OnewayDoor.W_NE],
       ["N→WSE", OnewayDoor.N_WSE],
       ["WNE→S", OnewayDoor.WNE_S],
-
     ])
     .set("Goopy Stuff", [
       ["StickyMembrane", StickyMembrane.CREATE],
@@ -113,7 +112,7 @@ export class ElementIncludes {
       ["Long SW", SwapWorm.CREATOR([24])],
       ["Short SW", SwapWorm.CREATOR([1])],
       ["LoopWorm", LoopWorm.CREATE],
-      ["LoopSeed", LoopSeed.CREATE]
+      ["LoopSeed", LoopSeed.CREATE],
     ])
     .set("Data Stuff", [
       ["Data", Data.CREATE],
@@ -128,19 +127,11 @@ export class ElementIncludes {
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
     ])
-    .set("Misc", [
-      ["Eraser", Eraser.CREATE],
-    ])
+    .set("Misc", [["Eraser", Eraser.CREATE]])
     .set("Sandbox Stuff", [
       ["Sand", Sand.CREATE],
       ["Water", Water.CREATE],
       ["Sand Grid", GridBuilder.GRID_SAND],
       ["Water Grid", GridBuilder.CREATOR([Water.CREATE])],
     ]);
-
-
-
-
-
-
 }

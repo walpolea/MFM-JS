@@ -42,7 +42,10 @@ let app = new Vue({
     reload() {
       this.mfmRenderer.deconstruct();
       this.initTile();
-    }
+    },
+    clearAllOfType() {
+      this.mfmRenderer.killType(this.curSelectedFunc().type);
+    },
   },
   computed: {
     gridCols() {
@@ -53,7 +56,7 @@ let app = new Vue({
     },
     typeMap() {
       return ElementIncludes.ELEMENT_MENU_MAP;
-    }
+    },
   },
   watch: {
     timeSpeed(val: number) {
@@ -69,6 +72,6 @@ let app = new Vue({
     shouldRender(val: boolean) {
       console.log("should render", val);
       this.mfmRenderer.shouldRender = val;
-    }
-  }
+    },
+  },
 });

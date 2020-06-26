@@ -7,7 +7,6 @@ import { Empty } from "./EmptyElement";
 import { Data } from "./DataElement";
 
 export class LinkedList extends Elem {
-
   static TYPE_DEF: IElementType = { name: "LINKED LIST ELEMENT", type: "Ll", class: LinkedList, color: 0xcc0066 };
 
   next: number;
@@ -18,7 +17,6 @@ export class LinkedList extends Elem {
   shouldDie: boolean = false;
 
   constructor(elementType: IElementType, prev?: number, next?: number) {
-
     super(LinkedList.TYPE_DEF);
 
     this.prev = prev;
@@ -31,11 +29,9 @@ export class LinkedList extends Elem {
     } else {
       this.reflectOnType();
     }
-
   }
 
   reflectOnType(ew?: EventWindow) {
-
     if (ew && !this.hasMoved(ew)) {
       if (this.next !== undefined) this.confirmNext(ew);
       if (this.prev !== undefined) this.confirmPrev(ew);
@@ -56,7 +52,6 @@ export class LinkedList extends Elem {
       this.color = 0xfe7f9c;
       this.linkType = "SWAPPER";
     }
-
   }
 
   isAtHead(): boolean {
@@ -72,7 +67,6 @@ export class LinkedList extends Elem {
   }
 
   confirmNext(ew: EventWindow): boolean {
-
     if (!(this.getNextElement(ew) instanceof LinkedList)) {
       console.log("no next");
       this.next = undefined;
@@ -80,7 +74,6 @@ export class LinkedList extends Elem {
     }
 
     return true;
-
   }
 
   confirmPrev(ew: EventWindow): boolean {
@@ -107,19 +100,16 @@ export class LinkedList extends Elem {
 
   getPrevElement(ew: EventWindow): LinkedList {
     const ps: Site = this.getPrevSite(ew);
-    return (ps && ps.atom && ps.atom.elem instanceof LinkedList) ? ps.atom.elem as LinkedList : undefined;
+    return ps && ps.atom && ps.atom.elem instanceof LinkedList ? (ps.atom.elem as LinkedList) : undefined;
   }
 
   getNextElement(ew: EventWindow): LinkedList {
     const ns: Site = this.getNextSite(ew);
-    return (ns && ns.atom && ns.atom.elem instanceof LinkedList) ? ns.atom.elem as LinkedList : undefined;
+    return ns && ns.atom && ns.atom.elem instanceof LinkedList ? (ns.atom.elem as LinkedList) : undefined;
   }
-
-
 
   //swap this element with it's previous link
   swapPrev(ew: EventWindow) {
-
     const prevSite: Site = this.getPrevSite(ew);
 
     if (this.prev) {
@@ -127,12 +117,10 @@ export class LinkedList extends Elem {
       this.swapLinks(swapper);
       ew.origin.swapAtoms(prevSite);
     }
-
   }
 
   //swap this element with it's next link
   swapNext(ew: EventWindow) {
-
     const nextSite: Site = this.getNextSite(ew);
 
     if (nextSite) {
@@ -142,8 +130,6 @@ export class LinkedList extends Elem {
       //ew.swap(this.next);
       ew.origin.swapAtoms(nextSite);
     }
-
-
   }
 
   //swap next/prev links with another LinkedList
@@ -158,8 +144,6 @@ export class LinkedList extends Elem {
 
   //remove self from the linked list, but don't let it fall apart
   unlink(ew: EventWindow) {
-
-
     const nextEl: LinkedList = this.getNextElement(ew);
     const prevEl: LinkedList = this.getPrevElement(ew);
 
@@ -173,14 +157,11 @@ export class LinkedList extends Elem {
       prevEl.next = undefined;
     }
 
-
     this.next = undefined;
     this.prev = undefined;
-
   }
 
   die(ew: EventWindow) {
-
     const nextEl: LinkedList = this.getNextElement(ew);
 
     if (nextEl) {
@@ -199,7 +180,6 @@ export class LinkedList extends Elem {
 
   //Allow a node to move, but do all the proper checking so that it doesn't pull itself apart
   moveTo(ew: EventWindow, relativeIndexToGoTo: number, leavingAtom?: Atom, maxIndex: number = 8): boolean {
-
     const iAmHead: boolean = this.isAtHead();
     const iAmTail: boolean = this.isAtTail();
     const iAmMiddle: boolean = this.isInMiddle();
@@ -208,43 +188,37 @@ export class LinkedList extends Elem {
     let earShotIndexToNext: number;
     let earShotIndexToPrev: number;
 
-
     //if goSite is an Empty
     if (goSite && goSite.atom.is(Empty.TYPE_DEF)) {
-
       //if we're adding a link
       if (leavingAtom) {
-
-        this.next = this.oppositeDirection(relativeIndexToGoTo);
+        // this.next = this.oppositeDirection(relativeIndexToGoTo);
 
         //if tail or middle, it needs to stay within bounds
         if (iAmTail) {
-
-
           earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, 0);
 
           if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
             return false; //no go
           }
 
-          console.log("I AM TAIL!")
+          // console.log("I AM TAIL!");
           this.next = undefined;
           this.prev = earShotIndexToPrev;
         } else if (iAmMiddle) {
-          console.log("I AM MIDDLE")
+          // console.log("I AM MIDDLE");
           earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
 
           if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
             return false; //no go
           }
-
           this.prev = earShotIndexToPrev;
         }
 
+        this.next = this.oppositeDirection(relativeIndexToGoTo);
         ew.move(relativeIndexToGoTo, leavingAtom);
 
         return true;
-
       }
       //we're not adding a link, just trying to move
       else {
@@ -252,7 +226,7 @@ export class LinkedList extends Elem {
         if (this.next) {
           earShotIndexToNext = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.next);
           if (!earShotIndexToNext || earShotIndexToNext > maxIndex) {
-            console.log("too far");
+            // console.log("too far");
             return false; //move is too far away, let's make like a tree
           }
         }
@@ -270,7 +244,6 @@ export class LinkedList extends Elem {
           this.getNextElement(ew).prev = ew.getRelativeIndexFromSiteToSite(this.next, relativeIndexToGoTo);
         }
 
-
         if (!this.getPrevElement(ew)) {
           return false;
         } else {
@@ -280,23 +253,20 @@ export class LinkedList extends Elem {
         ew.origin.moveAtom(goSite);
 
         if (earShotIndexToNext) {
-          console.log("next", earShotIndexToNext);
+          // console.log("next", earShotIndexToNext);
           this.next = earShotIndexToNext;
         }
 
         if (earShotIndexToPrev) {
-          console.log("prev", earShotIndexToPrev);
+          // console.log("prev", earShotIndexToPrev);
           this.prev = earShotIndexToPrev;
         }
 
         return true;
-
       }
-
     }
 
     return false;
-
   }
 
   hasMoved(ew: EventWindow): boolean {
@@ -304,8 +274,6 @@ export class LinkedList extends Elem {
   }
 
   exec(ew: EventWindow) {
-
-
     this.reflectOnType(ew);
 
     if (this.shouldDie) {
@@ -314,7 +282,7 @@ export class LinkedList extends Elem {
 
     //if swapper gets to end, unlink
     if (this.isSwapping && this.isAtTail()) {
-      console.log("unlink swapper");
+      // console.log("unlink swapper");
       this.unlink(ew);
     }
 
@@ -325,7 +293,6 @@ export class LinkedList extends Elem {
       } else {
         ew.origin.killSelf();
       }
-
     }
 
     //swapper, keep swapping

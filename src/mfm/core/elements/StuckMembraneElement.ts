@@ -8,8 +8,7 @@ import { DReg } from "./DRegElement";
 import { Actions } from "../../utils/MFMActions";
 
 export class StuckMembrane extends Elem {
-
-  static TYPE_DEF: IElementType = { name: "STUCK MEMBRANE", type: "Stm", class: StuckMembrane, color: 0x5e0066 }
+  static TYPE_DEF: IElementType = { name: "STUCK MEMBRANE", type: "Stm", class: StuckMembrane, color: 0x8e3557 };
   static CREATE = StuckMembrane.CREATOR();
 
   stickyType: IElementType;
@@ -21,11 +20,9 @@ export class StuckMembrane extends Elem {
     super(StuckMembrane.TYPE_DEF);
     this.stickyType = stickyType ? stickyType : undefined;
     this.maxRoam = maxRoam;
-
   }
 
   moveToSticker(ew: EventWindow) {
-
     const sites: number[] = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], this.stickyType, true);
 
     if (sites[0]) {
@@ -56,17 +53,20 @@ export class StuckMembrane extends Elem {
 
         this.roamCount++;
       }
-
     }
-
-
   }
-
 
   repelType(ew: EventWindow, type: IElementType) {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, type, true);
     const eightwaypushmap: Map<number, number> = new Map<number, number>([
-      [1, 37], [2, 38], [3, 39], [4, 40], [5, 25], [6, 26], [7, 27], [8, 28]
+      [1, 37],
+      [2, 38],
+      [3, 39],
+      [4, 40],
+      [5, 25],
+      [6, 26],
+      [7, 27],
+      [8, 28]
     ]);
 
     if (sites.length) {
@@ -80,7 +80,6 @@ export class StuckMembrane extends Elem {
   }
 
   uncrowd(ew: EventWindow) {
-
     if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 5) {
       ew.origin.killSelf();
     }
@@ -98,14 +97,11 @@ export class StuckMembrane extends Elem {
     return false;
   }
 
-
-
   exec(ew: EventWindow) {
-
     this.uncrowd(ew);
 
     //repel DREG as defensive move.
-    Actions.repel(ew, DReg.TYPE_DEF)
+    Actions.repel(ew, DReg.TYPE_DEF);
     //this.excreteMembrane(ew);
 
     //death is the greatest adventure
@@ -119,20 +115,14 @@ export class StuckMembrane extends Elem {
     }
 
     if (!this.stickyType || this.stickyType === StuckMembrane.TYPE_DEF) {
-
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
       const stickSite: Site = ew.getAdjacent8Way();
       if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
         this.stickyType = stickSite.atom.type;
       }
-
-
     }
 
     this.moveToSticker(ew);
-
-
-
 
     super.exec(ew);
   }

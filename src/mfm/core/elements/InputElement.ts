@@ -8,7 +8,6 @@ import { Data } from "./DataElement";
 import { Sorter } from "./SorterElement";
 
 export class Input extends Elem {
-
   static TYPE_DEF: IElementType = { name: "INPUT", type: "In", class: Input, color: 0x888888 };
   static CREATE = Input.CREATOR();
 
@@ -19,17 +18,14 @@ export class Input extends Elem {
     this.max = max;
   }
   exec(ew: EventWindow) {
-
     const indexes: number[] = [7, 4, 8];
 
-    indexes.forEach(index => {
-
+    indexes.forEach((index) => {
       if (ew.is(index, Empty.TYPE_DEF)) {
         //ew.mutate(index, new Atom(Data.TYPE_DEF, undefined, { value: Math.random() * this.max << 0 }));
-        ew.mutate(index, Data.CREATE([[Math.random() * this.max << 0]]));
+        ew.mutate(index, Data.CREATE([[(Math.random() * this.max) << 0], EventWindow.ADJACENT8WAY]));
       }
-
-    })
+    });
 
     if (ew.is(24, Empty.TYPE_DEF)) {
       ew.mutate(24, Sorter.CREATE([0, undefined, "E"]));
