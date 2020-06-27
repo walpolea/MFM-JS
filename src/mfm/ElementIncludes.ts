@@ -37,6 +37,8 @@ import { GridBuilder } from "./core/elements/GridBuilderElement";
 import { Builder } from "./core/elements/BuilderElement";
 import { Builders } from "./core/elements/Builders";
 import { SPLAT } from "./utils/SPLAT";
+import { SwapLine } from "./core/elements/SwapLineElement";
+import { Emitters } from "./core/elements/Emitters";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -51,9 +53,14 @@ export class ElementIncludes {
       ["SuperForkbomb", SuperForkBomb.CREATE],
       ["AntiForkBomb", AntiForkBomb.CREATE],
       ["Sentry", Sentry.CREATE],
+      ["SwapLine", SwapLine.CREATE],
+      ["SwapLine VLINE", Builders.VLINE_SL],
+      ["SwapLine Emitter", Emitters.SWAPLINE],
+      ["SwapLine Emitter", Emitters.SWAPLINE],
     ])
     .set("Structural", [
       ["Wall", Wall.CREATE],
+      ["Soft Wall", Wall.SOFT_WALL],
       ["Mason", Mason.CREATE],
       ["Super Mason", SuperMason.CREATE],
       // ["Super Mason Random", SuperMason.RANDOM_CREATE],
@@ -104,6 +111,7 @@ export class ElementIncludes {
     ])
     .set("Goopy Stuff", [
       ["StickyMembrane", StickyMembrane.CREATE],
+      ["StickyMembrane Emitter", Emitters.STICKYMEMBRANE],
       ["StuckMembrane", StuckMembrane.CREATE],
       ["Fireworks (Template)", Template.CREATE],
     ])
@@ -111,6 +119,7 @@ export class ElementIncludes {
       ["SwapWorm", SwapWorm.CREATE],
       ["Long SW", SwapWorm.CREATOR([24])],
       ["Short SW", SwapWorm.CREATOR([1])],
+      ["SW Emitter", Emitters.SWAPWORM],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE],
     ])

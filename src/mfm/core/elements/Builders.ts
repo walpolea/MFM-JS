@@ -3,9 +3,9 @@ import { Symmetries } from "../../utils/Symmetries";
 import { Builder } from "./BuilderElement";
 import { DecayWall } from "./DecayWallElement";
 import { Wall } from "./WallElement";
+import { SwapLine } from "./SwapLineElement";
 
 export class Splatish {
-
   static ELINE = SPLAT.splatToMap(`~@_`);
   static WLINE = SPLAT.splatToMap(`_@~`);
   static HLINE = SPLAT.splatToMap(`_@_`);
@@ -34,16 +34,10 @@ export class Splatish {
   ~@~
   _~~
   `);
-
-
 }
 
-
 export class Builders {
-
-
   //RULES
-
 
   //BUILDERS
   static LOOP = Builder.CREATOR([DecayWall.CREATE, Splatish.HLINE, Symmetries.ROTATIONS]);
@@ -54,5 +48,5 @@ export class Builders {
   static VDLINE = Builder.CREATOR([DecayWall.LIVE_100, Splatish.VLINE, Symmetries.NORMAL]);
   static HDLINE = Builder.CREATOR([DecayWall.LIVE_100, Splatish.HLINE, Symmetries.NORMAL]);
 
-
+  static VLINE_SL = Builder.CREATOR([SwapLine.CREATE, Splatish.VLINE, Symmetries.NORMAL]);
 }
