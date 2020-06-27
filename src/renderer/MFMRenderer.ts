@@ -84,7 +84,6 @@ export class MFMRenderer {
   }
 
   init() {
-    console.log("webgl supported? ", this.webGLSupported);
     this.keysHeld = new Set<string>();
 
     this.pixiapp = new Application({

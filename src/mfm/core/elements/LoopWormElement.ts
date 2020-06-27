@@ -10,6 +10,7 @@ import { StickyMembrane } from "./StickyMembraneElement";
 import { Res } from "./ResElement";
 import { StuckMembrane } from "./StuckMembraneElement";
 import { SPLAT } from "../../utils/SPLAT";
+import { Symmetries } from "../../utils/Symmetries";
 
 export class LoopWorm extends LinkedList {
   static TYPE_DEF: IElementType = { name: "LOOP WORM", type: "Tw", class: LoopWorm, color: 0xcc00cc };
@@ -26,6 +27,8 @@ export class LoopWorm extends LinkedList {
   eatCount: number = 0;
 
   mateCheck: Map<number, string>;
+  expandNW: Map<number, string>;
+  expandNE: Map<number, string>;
 
   constructor(size: number = 4, prev: number = undefined, next: number = undefined) {
     super(LoopWorm.TYPE_DEF, prev, next);
@@ -37,6 +40,18 @@ export class LoopWorm extends LinkedList {
           ~~##~
           ~#@~~
           ##~~~
+      `);
+
+    this.expandNW = SPLAT.splatToMap(`
+           ~~#
+           ~@~
+           #~~
+      `);
+
+    this.expandNE = SPLAT.splatToMap(`
+           #~~
+           ~@~
+           ~~#
       `);
   }
 
@@ -150,13 +165,17 @@ export class LoopWorm extends LinkedList {
         let choices: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF);
         let relativeSiteToGo: number = choices[(Math.random() * choices.length) >> 0];
 
-        if (this.expandCount > 0 && ew.getSites(EventWindow.ADJACENT8WAY, LoopWorm.TYPE_DEF, false).filter((site) => site).length < 3) {
+        // if (this.expandCount > 0 && ew.getSites(EventWindow.ADJACENT8WAY, LoopWorm.TYPE_DEF, false).filter((site) => site).length < 3) {
+        if (this.expandCount > 0 && ew.query(this.expandNE, 0, LoopWorm.SPLAT_MAP, Symmetries.ALL)) {
           const leavingAtom: Atom = new Atom(LoopWorm.TYPE_DEF, [0, relativeSiteToGo, this.next]);
           (leavingAtom.elem as LoopWorm).isConnected = true;
           const moved = this.moveTo(ew, relativeSiteToGo, leavingAtom);
 
           if (moved) {
+            console.log("moved", relativeSiteToGo, this.next);
             this.expandCount--;
+          } else {
+            // console.log("didnt move", leavingAtom);
           }
         } else {
           this.moveTo(ew, relativeSiteToGo, undefined);
@@ -195,7 +214,7 @@ export class LoopWorm extends LinkedList {
   excreteMembrane(ew: EventWindow) {
     if (this.shouldExcreteMembrane(ew)) {
       //ew.origin.mutateSite(ew.getAdjacent8Way(Empty.TYPE_DEF), new Atom(StickyMembrane.TYPE_DEF, [LoopWorm.TYPE_DEF, 0.5, 1]));
-      ew.origin.mutateSite(ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF, true)[0], StickyMembrane.CREATE([LoopWorm.TYPE_DEF, 0.1, 1]));
+      ew.origin.mutateSite(ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF, true)[0], StickyMembrane.CREATE([LoopWorm.TYPE_DEF, 0.5, 1]));
     }
   }
 }

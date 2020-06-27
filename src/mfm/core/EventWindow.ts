@@ -410,7 +410,6 @@ export class EventWindow {
 
   //get the site index by gridcoord offset { row: 1, col: 1} = 8
   getIndexByOffset(offset: GridCoord): number {
-    //console.log(offset);
     return EventWindow.WINDOW_OFFSETS.findIndex((gc) => {
       return gc.col === offset.col && gc.row === offset.row;
     });

@@ -9,8 +9,7 @@ import { LoopWorm } from "./LoopWormElement";
 import { Res } from "./ResElement";
 
 export class LoopNucleus extends Elem {
-
-  static TYPE_DEF: IElementType = { name: "LOOP NUCLEUS", type: "Ln", class: LoopNucleus, color: 0xcece24 }
+  static TYPE_DEF: IElementType = { name: "LOOP NUCLEUS", type: "Ln", class: LoopNucleus, color: 0xcece24 };
 
   pCREATE_RES: number = 4;
   pCREATE_MEMBRANE: number = 20;
@@ -23,11 +22,18 @@ export class LoopNucleus extends Elem {
   repelType(ew: EventWindow, type: IElementType) {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, type, true);
     const eightwaypushmap: Map<number, number> = new Map<number, number>([
-      [1, 37], [2, 38], [3, 39], [4, 40], [5, 25], [6, 26], [7, 27], [8, 28]
+      [1, 37],
+      [2, 38],
+      [3, 39],
+      [4, 40],
+      [5, 25],
+      [6, 26],
+      [7, 27],
+      [8, 28],
     ]);
 
     if (sites.length) {
-      sites.forEach(dreg => {
+      sites.forEach((dreg) => {
         const toSite: number = eightwaypushmap.get(dreg);
         if (ew.is(toSite, Empty.TYPE_DEF)) {
           ew.move(toSite, undefined, dreg);
@@ -37,13 +43,12 @@ export class LoopNucleus extends Elem {
   }
 
   eatStickyMembrane(ew: EventWindow) {
-    ew.getSites(EventWindow.ADJACENT8WAY, StickyMembrane.TYPE_DEF).forEach(st => {
+    ew.getSites(EventWindow.ADJACENT8WAY, StickyMembrane.TYPE_DEF).forEach((st) => {
       if (st) st.killSelf();
-    })
+    });
   }
 
   exec(ew: EventWindow) {
-
     //this.repelType(ew, StickyMembrane.TYPE_DEF);
     this.eatStickyMembrane(ew);
 
@@ -57,7 +62,6 @@ export class LoopNucleus extends Elem {
     if (this.aloneCount > 100) {
       ew.origin.killSelf();
     }
-
 
     if (Utils.oneIn(this.pCREATE_RES)) {
       ew.origin.mutateSite(ew.getAdjacent4Way(Empty.TYPE_DEF), new Atom(Res.TYPE_DEF, undefined, undefined, 0x336600));

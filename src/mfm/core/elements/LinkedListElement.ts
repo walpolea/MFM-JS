@@ -100,7 +100,8 @@ export class LinkedList extends Elem {
 
   getPrevElement(ew: EventWindow): LinkedList {
     const ps: Site = this.getPrevSite(ew);
-    return ps && ps.atom && ps.atom.elem instanceof LinkedList ? (ps.atom.elem as LinkedList) : undefined;
+    // console.log(this.prev, ps?.atom?.elem);
+    return ps?.atom?.elem instanceof LinkedList ? (ps.atom.elem as LinkedList) : undefined;
   }
 
   getNextElement(ew: EventWindow): LinkedList {
@@ -188,34 +189,44 @@ export class LinkedList extends Elem {
     let earShotIndexToNext: number;
     let earShotIndexToPrev: number;
 
+    let nextSet: boolean = false;
+
     //if goSite is an Empty
     if (goSite && goSite.atom.is(Empty.TYPE_DEF)) {
       //if we're adding a link
       if (leavingAtom) {
-        // this.next = this.oppositeDirection(relativeIndexToGoTo);
-
         //if tail or middle, it needs to stay within bounds
         if (iAmTail) {
+          console.log("I AM TAIL!");
+
           earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, 0);
 
           if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
             return false; //no go
           }
 
-          // console.log("I AM TAIL!");
-          this.next = undefined;
+          // this.next = undefined;
+          nextSet = true;
           this.prev = earShotIndexToPrev;
         } else if (iAmMiddle) {
-          // console.log("I AM MIDDLE");
+          console.log("I AM MIDDLE");
+
           earShotIndexToPrev = ew.getRelativeIndexFromSiteToSite(relativeIndexToGoTo, this.prev);
 
-          if (!earShotIndexToPrev || earShotIndexToPrev > maxIndex) {
+          if (!earShotIndexToPrev || earShotIndexToPrev >= maxIndex) {
             return false; //no go
           }
+
           this.prev = earShotIndexToPrev;
+          console.log("earShotIndexToPrev", this.prev);
+        } else {
+          console.log("I AM HEAD!");
         }
 
-        this.next = this.oppositeDirection(relativeIndexToGoTo);
+        if (!nextSet) {
+          this.next = this.oppositeDirection(relativeIndexToGoTo);
+        }
+
         ew.move(relativeIndexToGoTo, leavingAtom);
 
         return true;

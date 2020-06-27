@@ -33,7 +33,6 @@ let app = new Vue({
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
     },
     selectElement(name: string, func: Function) {
-      console.log("setting element", name);
       this.curSelectedElement = name;
       this.curSelectedFunc = func;
       this.mfmRenderer.curSelectedElement = this.curSelectedElement;
