@@ -56,7 +56,6 @@ export class ElementIncludes {
       ["SwapLine", SwapLine.CREATE],
       ["SwapLine VLINE", Builders.VLINE_SL],
       ["SwapLine Emitter", Emitters.SWAPLINE],
-      ["SwapLine Emitter", Emitters.SWAPLINE],
     ])
     .set("Structural", [
       ["Wall", Wall.CREATE],
