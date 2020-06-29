@@ -32,7 +32,7 @@ export class CellBrane extends Elem {
   directions: string[] = ["W", "N", "E", "S"];
   switchInterval: number = 500;
   intervalCounter: number = 0;
-  pSwitchDirection = 1000;
+  pSwitchDirection = 500;
 
   stickyType: IElementType;
   constructor() {

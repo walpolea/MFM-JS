@@ -8,10 +8,21 @@ import { DReg } from "./DRegElement";
 import { Actions } from "../../utils/MFMActions";
 import { Res } from "./ResElement";
 import { CellMembrane } from "./CellMembraneElement";
+import { Utils } from "../../utils/MFMUtils";
+import { SPLAT } from "../../utils/SPLAT";
+import { Symmetries } from "../../utils/Symmetries";
 
 export class CellOuterMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: CellOuterMembrane, color: 0x983acc };
+  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x983acc };
   static CREATE = CellOuterMembrane.CREATOR();
+
+  static CHECK_THIN = SPLAT.splatToMap(`
+    ~_@ii
+  `);
+
+  static CHECK_THIN2 = SPLAT.splatToMap(`
+    ~i@_o
+  `);
 
   stickyType: IElementType;
   idleCount: number = 0;
@@ -23,7 +34,7 @@ export class CellOuterMembrane extends Elem {
     super(CellMembrane.TYPE_DEF);
 
     this.stickyType = stickyType ? stickyType : undefined;
-    this.maxRoam = maxRoam ? maxRoam : 200;
+    this.maxRoam = maxRoam ? maxRoam : 1;
     this.setMembraneDensity(membraneDensity);
   }
 
@@ -111,7 +122,7 @@ export class CellOuterMembrane extends Elem {
     }
 
     if (this.idleCount > 100) {
-      // ew.origin.killSelf();
+      ew.origin.killSelf();
     }
 
     if (!this.stickyType || this.stickyType === CellOuterMembrane.TYPE_DEF) {
@@ -123,10 +134,39 @@ export class CellOuterMembrane extends Elem {
     }
 
     this.moveToSticker(ew);
-    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
+
+    if (Utils.oneIn(200)) {
+      Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
+    }
 
     //repel DREG as defensive move.
     Actions.repel(ew, DReg.TYPE_DEF);
+
+    const nearbyRes = ew.getIndexes(EventWindow.ADJACENT8WAY, Res.TYPE_DEF, false);
+    const nearbyEmpty = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, false);
+    const nearbyCM = ew.getIndexes(EventWindow.ADJACENT8WAY, CellMembrane.TYPE_DEF, false);
+
+    // if (nearbyCM.length > 4 && nearbyEmpty.length > 3) {
+    //   ew.mutate(Utils.oneRandom(nearbyEmpty), CellOuterMembrane.CREATE());
+    // }
+
+    const checkThin = ew.query(CellOuterMembrane.CHECK_THIN, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    if (checkThin) {
+      ew.mutate(checkThin.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE());
+    }
+
+    const checkThin2 = ew.query(CellOuterMembrane.CHECK_THIN2, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    if (checkThin2) {
+      ew.mutate(checkThin2.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE());
+    }
+
+    if (nearbyCM.length == 0 && nearbyEmpty.length < 3) {
+      ew.origin.killSelf();
+    }
+
+    while (nearbyRes.length) {
+      ew.mutate(nearbyRes.shift(), CellOuterMembrane.CREATE());
+    }
 
     super.exec(ew);
   }

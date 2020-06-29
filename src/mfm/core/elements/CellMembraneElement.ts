@@ -17,33 +17,39 @@ import { CellBrane } from "./CellBraneElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 
 export class CellMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0x983a75 };
+  static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0x4f2140 };
   static CREATE = CellMembrane.CREATOR();
 
+  // static MAKE_SHELL = SPLAT.splatToMap(`
+  //     ~
+  //    ~~_
+  //   ~~~__
+  //  ~~~~___
+  // ~~~~@~~~~
+  //  ~~i~~~~
+  //   ~~~~~
+  //    ~~~
+  //     ~
+  // `);
+
+  // static MAKE_SHELL = SPLAT.splatToMap(`
+  //   ~~~~___
+  //  ~iii@____
+  //   ~~~~~~~
+  // `);
+
   static MAKE_SHELL = SPLAT.splatToMap(`
-      ~
-     ~~~
-    ~~~__
-   ~~~~___
-  ~~~~@~~~~
-   ~~#~~~~
-    ~~~~~
-     ~~~
-      ~
+   iii@___
   `);
 
   static SHELL_GAP = SPLAT.splatToMap(`
-   ~~~s~  
-  ~~#@___
-   ~~~s~
+   ~~~o~  
+  ~~i@__~
+   ~~~o~
   `);
 
   static CHECK_SPLIT = SPLAT.splatToMap(`
-    ~~~@o##
-  `);
-
-  static CHECK_SQUEEZE = SPLAT.splatToMap(`
-    o@o
+    ~~~@oii
   `);
 
   idleCount: number = 0;
@@ -89,7 +95,6 @@ export class CellMembrane extends Elem {
         this.idleCount++;
       } else {
         this.idleCount = 0;
-
         this.roamCount++;
       }
     }
@@ -127,27 +132,21 @@ export class CellMembrane extends Elem {
   }
 
   repelDirection(ew: EventWindow, dir: string) {
-    let toMap: number[];
+    let toMap = new Map<string, Array<number>>([
+      ["E", [15, 16, 17, 18, 19, 20, 24]],
+      ["W", [13, 14, 15, 16, 17, 18, 21]],
+      ["N", [13, 14, 15, 17, 19, 20, 22]],
+      ["S", [13, 14, 16, 18, 19, 20, 23]],
+      ["", [13, 14, 15, 16, 17, 18, 19, 20]],
+    ]);
 
-    switch (dir) {
-      case "E":
-        toMap = [9, 10, 11, 12, 15, 16, 17, 18, 19, 20];
-        break;
-      case "W":
-        toMap = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
-        break;
-      case "N":
-        toMap = [9, 10, 11, 12, 13, 14, 15, 17, 19, 20];
-        break;
-      case "S":
-        toMap = [9, 10, 11, 12, 13, 14, 16, 18, 19, 20];
-        break;
-      default:
-        toMap = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-        break;
+    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, ...toMap.get(dir)]);
+  }
+
+  uncrowd(ew: EventWindow) {
+    if (ew.getAdjacent8Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false).filter((site) => site).length > 38) {
+      ew.origin.killSelf();
     }
-
-    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], toMap);
   }
 
   exec(ew: EventWindow) {
@@ -163,11 +162,16 @@ export class CellMembrane extends Elem {
     }
 
     this.moveToSticker(ew);
+    this.uncrowd(ew);
 
     const nearbyCellMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
     const nearbyOuterCellMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
     const nearbyEmpties = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, false);
     const nearbyBrane = ew.getRandomIndexOfType(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF);
+
+    if (nearbyEmpties.length == 0) {
+      this.shouldGrow = true;
+    }
 
     if (nearbyBrane !== undefined) {
       this.direction = (ew.getSiteByIndex(nearbyBrane).atom.elem as CellBrane).getDirection();
@@ -188,32 +192,33 @@ export class CellMembrane extends Elem {
       this.repelDirection(ew, this.direction);
     }
 
-    if (this.shouldGrow && nearbyCellMembranes.length < 24 && nearbyOuterCellMembranes.length == 0) {
+    if (this.shouldGrow && nearbyCellMembranes.length < 22 && nearbyOuterCellMembranes.length == 0) {
       ew.mutate(Utils.oneRandom(nearbyEmpties), CellMembrane.CREATE());
       return;
     } else {
       this.shouldGrow = false;
     }
 
-    const checkEdge = ew.query(CellMembrane.MAKE_SHELL, 0, CellMembrane.SPLAT_MAP, Symmetries.ALL);
+    const checkEdge = ew.query(CellMembrane.MAKE_SHELL, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     if (checkEdge) {
       const edgeEmpties = checkEdge.get(Empty.TYPE_DEF);
-
+      console.log("check edge");
       while (edgeEmpties.length) {
         ew.mutate(edgeEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
       }
     }
 
-    const checkSplit = ew.query(CellMembrane.CHECK_SPLIT, 0, CellMembrane.SPLAT_MAP, Symmetries.ALL);
+    const checkSplit = ew.query(CellMembrane.CHECK_SPLIT, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     if (checkSplit) {
-      console.log(checkSplit);
+      // console.log(checkSplit);
+      console.log("check split");
       const possibleSticky = checkSplit.get(CellOuterMembrane.TYPE_DEF);
       if (possibleSticky.length) {
         ew.destroy(possibleSticky[0]);
       }
     }
 
-    const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, CellMembrane.SPLAT_MAP, Symmetries.ALL);
+    const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     if (checkShellGap) {
       const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
 
@@ -221,15 +226,6 @@ export class CellMembrane extends Elem {
         ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
       }
     }
-
-    // const checkSqueeze = ew.query(CellMembrane.CHECK_SQUEEZE, 0, CellMembrane.SPLAT_MAP, Symmetries.FLIPS);
-    // if (checkSqueeze) {
-    //   this.repelDirection(ew, this.direction);
-    //   // const stickies = checkSqueeze.get(StickyMembrane.TYPE_DEF);
-    //   // while (stickies?.length) {
-    //   //   ew.mutate(stickies.shift(), CellMembrane.CREATE());
-    //   // }
-    // }
 
     //repel DREG as defensive move.
     Actions.repel(ew, DReg.TYPE_DEF);
@@ -245,4 +241,4 @@ export class CellMembrane extends Elem {
 CellMembrane.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
 ElementTypes.registerType(CellMembrane.TYPE_DEF);
-ElementTypes.registerSPLAT("i", CellOuterMembrane.TYPE_DEF);
+ElementTypes.registerSPLAT("i", CellMembrane.TYPE_DEF);
