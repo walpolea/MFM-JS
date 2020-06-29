@@ -17,9 +17,15 @@ export class CellBrane extends Elem {
   static CREATE = CellBrane.CREATOR();
 
   static CHECK_EDGE = SPLAT.splatToMap(`
-     _~~
-    _i@o~
-     _~~
+    ~~~
+    o@i
+    ~~~
+  `);
+
+  static CHECK_OUTSIDE = SPLAT.splatToMap(`
+    ~~~
+    _@_
+    ~_~
   `);
 
   direction: number = 0;
@@ -48,7 +54,7 @@ export class CellBrane extends Elem {
       }
     } else {
       //roam
-      let swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent8Way(Empty.TYPE_DEF));
+      let swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent8Way(CellMembrane.TYPE_DEF));
     }
   }
 
@@ -81,7 +87,7 @@ export class CellBrane extends Elem {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, type, true);
 
     if (sites[0]) {
-      ew.origin.swapAtoms(ew.getSites(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF)[0]);
+      ew.origin.swapAtoms(ew.getSites(EventWindow.ADJACENT8WAY, CellMembrane.TYPE_DEF)[0]);
     }
   }
 
@@ -89,7 +95,7 @@ export class CellBrane extends Elem {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, this.stickyType, true);
 
     if (sites[0]) {
-      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF)[0]);
+      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, CellMembrane.TYPE_DEF)[0]);
     }
   }
 
@@ -117,70 +123,60 @@ export class CellBrane extends Elem {
   }
 
   repelDirection(ew: EventWindow, dir: string) {
-    let toMap: number[];
+    let toMap = new Map<string, Array<number>>([
+      ["E", [12]],
+      ["W", [9]],
+      ["N", [10]],
+      ["S", [11]],
+    ]);
 
-    switch (dir) {
-      case "E":
-        toMap = [9, 10, 11, 12, 15, 16, 17, 18, 19, 20];
-        break;
-      case "W":
-        toMap = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
-        break;
-      case "N":
-        toMap = [9, 10, 11, 12, 13, 14, 15, 17, 19, 20];
-        break;
-      case "S":
-        toMap = [9, 10, 11, 12, 13, 14, 16, 18, 19, 20];
-        break;
-    }
-
-    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], toMap);
+    Actions.repelFrom(ew, Empty.TYPE_DEF, [1, 2, 3, 4], [5, 6, 7, 8, ...toMap.get(dir)]);
   }
 
   exec(ew: EventWindow) {
-    // if (++this.intervalCounter % this.switchInterval == 0) {
-    //   this.intervalCounter = 0;
-    //   this.direction = ++this.direction % this.directions.length;
-    // }
+    //the Big Bang
+    const nearbyMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
+    if (nearbyMembranes.length == 0) {
+      ew.mutate(ew.getNearestIndex(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF), CellMembrane.CREATE());
+      return;
+    }
 
+    //Possible Direction Change
     if (Utils.oneIn(this.pSwitchDirection)) {
       this.direction = ++this.direction % this.directions.length;
     } else {
       const nearbyCellBranes = ew.getIndexes(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF, false);
 
-      if (nearbyCellBranes.length > 0 && Utils.oneIn(10)) {
+      if (nearbyCellBranes.length > 0) {
         const otherBrane = ew.getSiteByIndex(Utils.oneRandom(nearbyCellBranes)).atom.elem as CellBrane;
-
         this.direction = otherBrane.direction;
-        // this.intervalCounter = otherBrane.intervalCounter;
+      }
+    }
+
+    const checkOutside = ew.query(CellBrane.CHECK_OUTSIDE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
+    if (checkOutside) {
+      const cms = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
+
+      if (cms.length) {
+        ew.swap(Utils.oneRandom(cms));
+        return;
       }
     }
 
     const checkEdge = ew.query(CellBrane.CHECK_EDGE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
     if (checkEdge) {
-      const empties = checkEdge.get(Empty.TYPE_DEF);
-      if (empties.length) {
-        ew.swap(Utils.oneRandom(empties));
+      const cms = checkEdge.get(CellMembrane.TYPE_DEF);
+      if (cms.length) {
+        ew.swap(Utils.oneRandom(cms));
+        return;
       }
     }
 
-    if (!this.stickyType || this.stickyType === CellBrane.TYPE_DEF) {
-      //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
-      const stickSite: Site = ew.getAdjacent8Way(CellBrane.TYPE_DEF);
-      if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
-        this.stickyType = stickSite.atom.type;
-      }
-    }
+    this.repelDirection(ew, this.directions[this.direction]);
 
-    this.moveToSticker(ew);
-    this.moveTo(ew, CellMembrane.TYPE_DEF);
-    // this.repelFromSticker(ew);
-
-    //repel DREG as defensive move.
-    Actions.repel(ew, DReg.TYPE_DEF);
-
-    //repel RES for experimenting...
-    //this.repelType(ew, Res.TYPE_DEF);
+    // this.moveToSticker(ew);
+    // this.moveTo(ew, CellBrane.TYPE_DEF);
+    // this.repelFrom(ew, CellOuterMembrane.TYPE_DEF);
 
     super.exec(ew);
   }

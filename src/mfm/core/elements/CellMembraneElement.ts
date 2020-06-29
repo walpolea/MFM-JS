@@ -14,6 +14,7 @@ import { utils } from "pixi.js";
 import { Utils } from "../../utils/MFMUtils";
 import { DecayWall } from "./DecayWallElement";
 import { CellBrane } from "./CellBraneElement";
+import { StickyMembrane } from "./StickyMembraneElement";
 
 export class CellMembrane extends Elem {
   static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0x983a75 };
@@ -39,6 +40,10 @@ export class CellMembrane extends Elem {
 
   static CHECK_SPLIT = SPLAT.splatToMap(`
     ~~~@o##
+  `);
+
+  static CHECK_SQUEEZE = SPLAT.splatToMap(`
+    o@o
   `);
 
   idleCount: number = 0;
@@ -216,6 +221,15 @@ export class CellMembrane extends Elem {
         ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
       }
     }
+
+    // const checkSqueeze = ew.query(CellMembrane.CHECK_SQUEEZE, 0, CellMembrane.SPLAT_MAP, Symmetries.FLIPS);
+    // if (checkSqueeze) {
+    //   this.repelDirection(ew, this.direction);
+    //   // const stickies = checkSqueeze.get(StickyMembrane.TYPE_DEF);
+    //   // while (stickies?.length) {
+    //   //   ew.mutate(stickies.shift(), CellMembrane.CREATE());
+    //   // }
+    // }
 
     //repel DREG as defensive move.
     Actions.repel(ew, DReg.TYPE_DEF);
