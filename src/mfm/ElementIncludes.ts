@@ -39,6 +39,8 @@ import { Builders } from "./core/elements/Builders";
 import { SPLAT } from "./utils/SPLAT";
 import { SwapLine } from "./core/elements/SwapLineElement";
 import { Emitters } from "./core/elements/Emitters";
+import { CellMembrane } from "./core/elements/CellMembraneElement";
+import { CellBrane } from "./core/elements/CellBraneElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -109,6 +111,8 @@ export class ElementIncludes {
       ["WNE→S", OnewayDoor.WNE_S],
     ])
     .set("Goopy Stuff", [
+      ["CellBrane", CellBrane.CREATE],
+      ["CellMembrane", CellMembrane.CREATE],
       ["StickyMembrane", StickyMembrane.CREATE],
       ["StickyMembrane Emitter", Emitters.STICKYMEMBRANE],
       ["StuckMembrane", StuckMembrane.CREATE],
@@ -124,6 +128,7 @@ export class ElementIncludes {
     ])
     .set("Data Stuff", [
       ["Data", Data.CREATE],
+      ["Data Emitter", Emitters.DATA_STREAM],
       ["Sorter", Sorter.CREATE],
       ["SortMaster", SortMaster.CREATE],
       ["Input", Input.CREATE],

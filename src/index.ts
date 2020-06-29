@@ -9,7 +9,7 @@ let app = new Vue({
   el: "#app",
   data: function () {
     return {
-      gridSize: "48x48" as string,
+      gridSize: "64x64" as string,
       timeSpeed: 5000 as number,
       g: undefined as Tile,
       mfmRenderer: MFMRenderer,

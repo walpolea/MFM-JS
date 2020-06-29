@@ -4,10 +4,7 @@ import { Empty } from "../core/elements/EmptyElement";
 import { IElementType } from "../core/IElementType";
 
 export class Actions {
-
-
   static patrol(ew: EventWindow, withinSet: number[] = EventWindow.ADJACENT4WAY, pChance: number = 1): boolean {
-
     if (Utils.oneIn(pChance)) {
       const ei: number = ew.getIndexes(withinSet, Empty.TYPE_DEF, true)[0];
 
@@ -23,21 +20,19 @@ export class Actions {
   }
 
   static repel(ew: EventWindow, type: IElementType, fromSet: number[] = [1, 2, 3, 4, 5, 6, 7, 8], toSet: number[] = [37, 38, 39, 40, 25, 26, 27, 28]) {
-
     if (fromSet.length > toSet.length) {
-      throw (new Error("fromSet must be less than or equal to length of toSet"))
+      throw new Error("fromSet must be less than or equal to length of toSet");
     }
 
     const sites: number[] = ew.getIndexes(fromSet, type);
     if (sites.length) {
-
       //make Repel Map
       const repelMap: Map<number, number> = new Map<number, number>();
       for (let i = 0; i < fromSet.length; i++) {
         repelMap.set(fromSet[i], toSet[i]);
       }
 
-      sites.forEach(target => {
+      sites.forEach((target) => {
         const toSite: number = repelMap.get(target);
         //try to repel in the opposing direction
         if (ew.is(toSite, Empty.TYPE_DEF)) {
@@ -49,19 +44,22 @@ export class Actions {
         }
       });
     }
-
   }
 
-  static repelFrom(ew: EventWindow, type: IElementType, fromSet: number[] = [1, 2, 3, 4, 5, 6, 7, 8], toSet: number[] = [9, 10, 11, 12, 25, 26, 27, 28], repellingTarget: number = 0): boolean {
-
+  static repelFrom(
+    ew: EventWindow,
+    type: IElementType,
+    fromSet: number[] = [1, 2, 3, 4, 5, 6, 7, 8],
+    toSet: number[] = [9, 10, 11, 12, 25, 26, 27, 28],
+    repellingTarget: number = 0
+  ): boolean {
     if (fromSet.length > toSet.length) {
-      throw (new Error("fromSet must be less than or equal to length of toSet"))
+      throw new Error("fromSet must be less than or equal to length of toSet");
     }
 
     const repellent: number = ew.getIndexes(fromSet, type, true)[0];
 
     if (repellent) {
-
       //make Repel Map
       const repelMap: Map<number, number> = new Map<number, number>();
       for (let i = 0; i < fromSet.length; i++) {
@@ -78,15 +76,13 @@ export class Actions {
       }
       //otherwise just repel it anywhere available in the toSet!
       else if (ew.getIndexes(toSet, Empty.TYPE_DEF).length) {
-        ew.move(ew.getIndexes(toSet, Empty.TYPE_DEF, true)[0], undefined, repellingTarget)
+        ew.move(ew.getIndexes(toSet, Empty.TYPE_DEF, true)[0], undefined, repellingTarget);
         return true;
       } else {
         return false;
       }
-
     } else {
       return false;
     }
-
   }
 }

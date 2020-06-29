@@ -8,7 +8,6 @@ import { Symmetries } from "../../utils/Symmetries";
 import { Utils } from "../../utils/MFMUtils";
 
 export class Res extends Elem {
-
   static TYPE_DEF: IElementType = { name: "RES", type: "R", class: Res, color: 0x0e5100 };
   static CREATE = Res.CREATOR();
   static CREATE_BLUE = Res.CREATOR(undefined, undefined, 0x0000ff);
@@ -20,8 +19,8 @@ export class Res extends Elem {
   constructor() {
     super(Res.TYPE_DEF);
   }
-  exec(ew: EventWindow) {
 
+  exec(ew: EventWindow) {
     //Res the SPLATish way... slightly less performant
     // const q = ew.query(Res.checkEmpty, 0, Res.SPLAT_MAP, Symmetries.ALL);
     // if (q) {
@@ -30,7 +29,6 @@ export class Res extends Elem {
 
     ew.swap(ew.getRandomIndexOfType(EventWindow.ADJACENT4WAY, Empty.TYPE_DEF));
     super.exec(ew);
-
   }
 }
 

@@ -8,8 +8,7 @@ import { DReg } from "./DRegElement";
 import { Actions } from "../../utils/MFMActions";
 
 export class StickyMembrane extends Elem {
-
-  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembrane, color: 0x611075 }
+  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembrane, color: 0x611075 };
   static CREATE = StickyMembrane.CREATOR();
 
   stickyType: IElementType;
@@ -19,21 +18,18 @@ export class StickyMembrane extends Elem {
   maxRoam: number;
 
   constructor(stickyType?: IElementType, membraneDensity?: number, maxRoam?: number) {
-
     super(StickyMembrane.TYPE_DEF);
 
     this.stickyType = stickyType ? stickyType : undefined;
     this.maxRoam = maxRoam ? maxRoam : 200;
     this.setMembraneDensity(membraneDensity);
-
   }
 
   setMembraneDensity(density: number = 1) {
-    this.membraneDensity = density * 40 >> 0;
+    this.membraneDensity = (density * 40) >> 0;
   }
 
   moveToSticker(ew: EventWindow) {
-
     const sites: number[] = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], this.stickyType, true);
 
     if (sites[0]) {
@@ -64,10 +60,7 @@ export class StickyMembrane extends Elem {
 
         this.roamCount++;
       }
-
     }
-
-
   }
 
   repelFromSticker(ew: EventWindow) {
@@ -81,11 +74,18 @@ export class StickyMembrane extends Elem {
   repelType(ew: EventWindow, type: IElementType) {
     const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, type, true);
     const eightwaypushmap: Map<number, number> = new Map<number, number>([
-      [1, 37], [2, 38], [3, 39], [4, 40], [5, 25], [6, 26], [7, 27], [8, 28]
+      [1, 37],
+      [2, 38],
+      [3, 39],
+      [4, 40],
+      [5, 25],
+      [6, 26],
+      [7, 27],
+      [8, 28],
     ]);
 
     if (sites.length) {
-      sites.forEach(dreg => {
+      sites.forEach((dreg) => {
         const toSite: number = eightwaypushmap.get(dreg);
         if (ew.is(toSite, Empty.TYPE_DEF)) {
           ew.move(toSite, undefined, dreg);
@@ -95,14 +95,15 @@ export class StickyMembrane extends Elem {
   }
 
   uncrowd(ew: EventWindow) {
-
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ALLADJACENT, StickyMembrane.TYPE_DEF, false).filter(site => site).length > this.membraneDensity) {
+    if (
+      ew.getAdjacent4Way(this.stickyType) &&
+      ew.getSites(EventWindow.ALLADJACENT, StickyMembrane.TYPE_DEF, false).filter((site) => site).length > this.membraneDensity
+    ) {
       ew.origin.killSelf();
     }
   }
 
   exec(ew: EventWindow) {
-
     if (this.roamCount > this.maxRoam) {
       ew.origin.killSelf();
     }
@@ -112,25 +113,22 @@ export class StickyMembrane extends Elem {
     }
 
     if (!this.stickyType || this.stickyType === StickyMembrane.TYPE_DEF) {
-
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
-      const stickSite: Site = ew.getAdjacent8Way();
+      const stickSite: Site = ew.getAdjacent8Way(StickyMembrane.TYPE_DEF);
       if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
         this.stickyType = stickSite.atom.type;
       }
-
-
     }
 
     this.moveToSticker(ew);
-    //this.repelFromSticker(ew);
+    this.repelFromSticker(ew);
     this.uncrowd(ew);
 
     //Repel self away from sticky, this is what makes this element magical
-    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 5, 6, 7, 8])
+    Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 5, 6, 7, 8]);
 
     //repel DREG as defensive move.
-    Actions.repel(ew, DReg.TYPE_DEF)
+    Actions.repel(ew, DReg.TYPE_DEF);
 
     //repel RES for experimenting...
     //this.repelType(ew, Res.TYPE_DEF);
