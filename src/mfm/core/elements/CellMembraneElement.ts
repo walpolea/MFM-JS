@@ -20,17 +20,17 @@ export class CellMembrane extends Elem {
   static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0x4f2140 };
   static CREATE = CellMembrane.CREATOR();
 
-  // static MAKE_SHELL = SPLAT.splatToMap(`
-  //     ~
-  //    ~~_
-  //   ~~~__
-  //  ~~~~___
-  // ~~~~@~~~~
-  //  ~~i~~~~
-  //   ~~~~~
-  //    ~~~
-  //     ~
-  // `);
+  static MAKE_SHELL = SPLAT.splatToMap(`
+      ~
+     ~~_
+    ~~~__
+   ~~~~___
+  ~~~~@~~~~
+   ~~i~~~~
+    ~~~~~
+     ~~~
+      ~
+  `);
 
   // static MAKE_SHELL = SPLAT.splatToMap(`
   //   ~~~~___
@@ -38,9 +38,9 @@ export class CellMembrane extends Elem {
   //   ~~~~~~~
   // `);
 
-  static MAKE_SHELL = SPLAT.splatToMap(`
-   iii@___
-  `);
+  // static MAKE_SHELL = SPLAT.splatToMap(`
+  //  iii@___
+  // `);
 
   static SHELL_GAP = SPLAT.splatToMap(`
    ~~~o~  
@@ -149,9 +149,29 @@ export class CellMembrane extends Elem {
     }
   }
 
+  setDirectionColor() {
+    switch (this.direction) {
+      case "E":
+        this.color = 0x990073;
+        break; //pink
+      case "W":
+        this.color = 0x009900;
+        break; //green
+      case "N":
+        this.color = 0x003d99;
+        break; //blue
+      case "S":
+        this.color = 0x997a00;
+        break; //yellow
+      default:
+        this.color = CellMembrane.TYPE_DEF.color;
+        break;
+    }
+  }
+
   exec(ew: EventWindow) {
-    this.directed = false;
-    this.direction = "";
+    //this.directed = false;
+    //this.direction = "";
 
     if (!this.stickyType || this.stickyType === CellMembrane.TYPE_DEF) {
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
@@ -162,17 +182,20 @@ export class CellMembrane extends Elem {
     }
 
     this.moveToSticker(ew);
-    this.uncrowd(ew);
 
     const nearbyCellMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
     const nearbyOuterCellMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
     const nearbyEmpties = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, false);
     const nearbyBrane = ew.getRandomIndexOfType(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF);
 
-    if (nearbyEmpties.length == 0) {
-      this.shouldGrow = true;
-    }
+    //grow if no empties around and outer is around - possibly too small to get moving.
+    // if (nearbyEmpties.length == 0 && nearbyOuterCellMembranes.length > 0) {
+    //   this.shouldGrow = true;
+    // }
 
+    this.setDirectionColor();
+
+    //find a direction to travel
     if (nearbyBrane !== undefined) {
       this.direction = (ew.getSiteByIndex(nearbyBrane).atom.elem as CellBrane).getDirection();
       this.directed = true;
@@ -187,51 +210,48 @@ export class CellMembrane extends Elem {
       }
     }
 
-    if (nearbyCellMembranes.length > 26) {
-      // Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18]);
+    //These should be closer to the center of the cell
+    if (nearbyCellMembranes.length > 27) {
       this.repelDirection(ew, this.direction);
     }
 
-    if (this.shouldGrow && nearbyCellMembranes.length < 22 && nearbyOuterCellMembranes.length == 0) {
-      ew.mutate(Utils.oneRandom(nearbyEmpties), CellMembrane.CREATE());
+    //am I small and undeveloped? grow!
+    if (this.shouldGrow && nearbyCellMembranes.length < 24 && nearbyOuterCellMembranes.length == 0) {
+      ew.mutate(nearbyEmpties.shift(), CellMembrane.CREATE());
       return;
     } else {
       this.shouldGrow = false;
     }
 
+    //am I an edge? Make some outer membrane please
     const checkEdge = ew.query(CellMembrane.MAKE_SHELL, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     if (checkEdge) {
       const edgeEmpties = checkEdge.get(Empty.TYPE_DEF);
-      console.log("check edge");
       while (edgeEmpties.length) {
         ew.mutate(edgeEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
       }
     }
 
+    //there's a gap in the outer membrane, help boost it up
+    const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    if (checkShellGap) {
+      const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
+      while (gapEmpties.length) {
+        ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
+      }
+    }
+
+    //eat outermembrane that got too close inside
     const checkSplit = ew.query(CellMembrane.CHECK_SPLIT, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     if (checkSplit) {
-      // console.log(checkSplit);
-      console.log("check split");
       const possibleSticky = checkSplit.get(CellOuterMembrane.TYPE_DEF);
       if (possibleSticky.length) {
         ew.destroy(possibleSticky[0]);
       }
     }
 
-    const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
-    if (checkShellGap) {
-      const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
-
-      while (gapEmpties.length) {
-        ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
-      }
-    }
-
     //repel DREG as defensive move.
     Actions.repel(ew, DReg.TYPE_DEF);
-
-    //repel RES for experimenting...
-    //this.repelType(ew, Res.TYPE_DEF);
 
     super.exec(ew);
   }

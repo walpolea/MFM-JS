@@ -16,6 +16,12 @@ export class CellBrane extends Elem {
   static TYPE_DEF: IElementType = { name: "CELL BRANE", type: "Cb", class: CellBrane, color: 0x128575 };
   static CREATE = CellBrane.CREATOR();
 
+  static CHECK_OUTER = SPLAT.splatToMap(`
+    ~o~
+    o@o
+    ~o~
+  `);
+
   static CHECK_EDGE = SPLAT.splatToMap(`
     ~~~
     o@i
@@ -30,9 +36,7 @@ export class CellBrane extends Elem {
 
   direction: number = 0;
   directions: string[] = ["W", "N", "E", "S"];
-  switchInterval: number = 500;
-  intervalCounter: number = 0;
-  pSwitchDirection = 500;
+  pSwitchDirection = 300;
 
   stickyType: IElementType;
   constructor() {
@@ -73,9 +77,6 @@ export class CellBrane extends Elem {
     } else {
       //roam
       let swapped: boolean = ew.origin.swapAtoms(ew.getAdjacent8Way(CellMembrane.TYPE_DEF));
-      // if (!swapped) {
-      //   ew.origin.swapAtoms(ew.getAdjacent4Way(Empty.TYPE_DEF));
-      // }
     }
   }
 
@@ -151,6 +152,12 @@ export class CellBrane extends Elem {
         const otherBrane = ew.getSiteByIndex(Utils.oneRandom(nearbyCellBranes)).atom.elem as CellBrane;
         this.direction = otherBrane.direction;
       }
+    }
+
+    const checkOuter = ew.query(CellBrane.CHECK_OUTER, 3, CellBrane.SPLAT_MAP, Symmetries.ALL);
+    if (checkOuter) {
+      ew.swap(Utils.oneRandom(nearbyMembranes));
+      return;
     }
 
     const checkOutside = ew.query(CellBrane.CHECK_OUTSIDE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
