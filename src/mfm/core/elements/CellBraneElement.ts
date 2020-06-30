@@ -36,12 +36,13 @@ export class CellBrane extends Elem {
 
   direction: number = 0;
   directions: string[] = ["W", "N", "E", "S"];
-  pSwitchDirection = 300;
+  pSwitchDirection = 500;
 
   stickyType: IElementType;
   constructor() {
     super(CellBrane.TYPE_DEF);
     this.stickyType = CellBrane.TYPE_DEF;
+    this.direction = Utils.oneRandom([0, 1, 2, 3]);
   }
 
   moveTo(ew: EventWindow, type: IElementType) {
@@ -134,6 +135,36 @@ export class CellBrane extends Elem {
     Actions.repelFrom(ew, Empty.TYPE_DEF, [1, 2, 3, 4], [5, 6, 7, 8, ...toMap.get(dir)]);
   }
 
+  getDirectionFromOuters(ew: EventWindow, nearbyOuters: number[]) {
+    const suggestedDirections = ew.getSites(nearbyOuters).map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection);
+
+    if (suggestedDirections.filter((sd) => sd === "").length > 2) {
+      return;
+    } else {
+      const directionMap: {} = {
+        N: suggestedDirections.filter((sd) => sd == "N").length,
+        S: suggestedDirections.filter((sd) => sd == "S").length,
+        E: suggestedDirections.filter((sd) => sd == "E").length,
+        W: suggestedDirections.filter((sd) => sd == "W").length,
+      };
+
+      let biggestDir: number = 0;
+
+      for (const [key, value] of Object.entries(directionMap)) {
+        if (value > 0 && value >= biggestDir) {
+          biggestDir = value as number;
+          this.direction = this.directions.indexOf(key);
+        }
+      }
+    }
+  }
+
+  getDirectionFromBranes(ew: EventWindow, nearbyCellBranes: number[]) {
+    const otherBrane = ew.getSiteByIndex(Utils.oneRandom(nearbyCellBranes)).atom.elem as CellBrane;
+    this.direction = otherBrane.direction % this.directions.length;
+    // this.direction = (otherBrane.direction +2) % this.directions.length; //Mitosis
+  }
+
   exec(ew: EventWindow) {
     //the Big Bang
     const nearbyMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
@@ -144,13 +175,16 @@ export class CellBrane extends Elem {
 
     //Possible Direction Change
     if (Utils.oneIn(this.pSwitchDirection)) {
-      this.direction = ++this.direction % this.directions.length;
+      // this.direction = ++this.direction % this.directions.length;
+      //this.direction = Utils.oneRandom([0, 1, 2, 3]);
     } else {
       const nearbyCellBranes = ew.getIndexes(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF, false);
+      const nearbyOuters = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
 
       if (nearbyCellBranes.length > 0) {
-        const otherBrane = ew.getSiteByIndex(Utils.oneRandom(nearbyCellBranes)).atom.elem as CellBrane;
-        this.direction = otherBrane.direction;
+        this.getDirectionFromBranes(ew, nearbyCellBranes);
+      } else if (nearbyOuters.length > 0) {
+        this.getDirectionFromOuters(ew, nearbyOuters);
       }
     }
 

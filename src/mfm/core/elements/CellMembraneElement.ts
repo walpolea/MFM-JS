@@ -169,6 +169,30 @@ export class CellMembrane extends Elem {
     }
   }
 
+  getDirectionFromOuters(ew: EventWindow, nearbyOuters: number[]) {
+    const suggestedDirections = ew.getSites(nearbyOuters).map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection);
+
+    if (suggestedDirections.filter((sd) => sd === "").length > 2) {
+      return;
+    } else {
+      const directionMap: {} = {
+        N: suggestedDirections.filter((sd) => sd == "N").length,
+        S: suggestedDirections.filter((sd) => sd == "S").length,
+        E: suggestedDirections.filter((sd) => sd == "E").length,
+        W: suggestedDirections.filter((sd) => sd == "W").length,
+      };
+
+      let biggestDir: number = 0;
+
+      for (const [key, value] of Object.entries(directionMap)) {
+        if (value > 0 && value >= biggestDir) {
+          biggestDir = value as number;
+          this.direction = key;
+        }
+      }
+    }
+  }
+
   exec(ew: EventWindow) {
     //this.directed = false;
     //this.direction = "";
@@ -208,6 +232,10 @@ export class CellMembrane extends Elem {
       } else {
         this.directed = false;
       }
+    }
+
+    if (nearbyOuterCellMembranes.length > 9) {
+      this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
     }
 
     //These should be closer to the center of the cell

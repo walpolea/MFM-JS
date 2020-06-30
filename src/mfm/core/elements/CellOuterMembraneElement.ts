@@ -35,6 +35,7 @@ export class CellOuterMembrane extends Elem {
   roamCount: number = 0;
   membraneDensity: number;
   maxRoam: number;
+  suggestedDirection: string = "";
 
   constructor(stickyType?: IElementType, membraneDensity?: number, maxRoam?: number) {
     super(CellMembrane.TYPE_DEF);
@@ -122,6 +123,47 @@ export class CellOuterMembrane extends Elem {
     }
   }
 
+  setDirectionColor() {
+    switch (this.suggestedDirection) {
+      case "E":
+        this.color = 0x550073;
+        break; //pink
+      case "W":
+        this.color = 0x005500;
+        break; //green
+      case "N":
+        this.color = 0x003d55;
+        break; //blue
+      case "S":
+        this.color = 0x557a00;
+        break; //yellow
+      default:
+        this.color = CellOuterMembrane.TYPE_DEF.color;
+        break;
+    }
+  }
+
+  calculateSuggestedDirection(ew: EventWindow, nearbyEmpties: number[]) {
+    const directionMap: {} = {
+      N: ew.getIntersection(nearbyEmpties, EventWindow.N_HEMISPHERE).length,
+      S: ew.getIntersection(nearbyEmpties, EventWindow.S_HEMISPHERE).length,
+      E: ew.getIntersection(nearbyEmpties, EventWindow.E_HEMISPHERE).length,
+      W: ew.getIntersection(nearbyEmpties, EventWindow.W_HEMISPHERE).length,
+    };
+
+    let biggestDir: number = 0;
+    this.suggestedDirection = "";
+
+    for (const [key, value] of Object.entries(directionMap)) {
+      if (value > 10 && value >= biggestDir) {
+        biggestDir = value as number;
+        this.suggestedDirection = key;
+      }
+    }
+
+    // console.log(this.suggestedDirection);
+  }
+
   exec(ew: EventWindow) {
     if (this.roamCount > this.maxRoam) {
       ew.origin.killSelf();
@@ -153,6 +195,7 @@ export class CellOuterMembrane extends Elem {
     const nearbyRes = ew.getIndexes(EventWindow.ADJACENT8WAY, Res.TYPE_DEF, false);
     const nearbyCM = ew.getIndexes(EventWindow.ADJACENT8WAY, CellMembrane.TYPE_DEF, false);
     const nearbyCOM = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
+    const nearbyEmpties = ew.getIndexes(EventWindow.ALLADJACENT, Empty.TYPE_DEF, false);
 
     //too many surrounding CellMembrane - die
     if (nearbyCM.length > 6) {
@@ -197,6 +240,11 @@ export class CellOuterMembrane extends Elem {
     //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[1], DecayWall.CREATE());
     //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[2], DecayWall.CREATE());
     // }
+
+    if (nearbyEmpties.length > 10) {
+      this.calculateSuggestedDirection(ew, nearbyEmpties);
+      this.setDirectionColor();
+    }
 
     super.exec(ew);
   }
