@@ -140,6 +140,14 @@ export class CellMembrane extends Elem {
       ["", [13, 14, 15, 16, 17, 18, 19, 20]],
     ]);
 
+    // let toMap = new Map<string, Array<number>>([
+    //   ["E", [17, 18, 19, 20, 24]],
+    //   ["W", [13, 14, 15, 16, 21]],
+    //   ["N", [13, 15, 17, 19, 22]],
+    //   ["S", [14, 16, 18, 20, 23]],
+    //   ["", [13, 14, 15, 16, 17, 18, 19, 20]],
+    // ]);
+
     Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, ...toMap.get(dir)]);
   }
 
@@ -210,14 +218,21 @@ export class CellMembrane extends Elem {
     const nearbyCellMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
     const nearbyOuterCellMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
     const nearbyEmpties = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, false);
-    const nearbyBrane = ew.getRandomIndexOfType(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF);
+
+    //am I small and undeveloped? grow!
+    if (this.shouldGrow && nearbyCellMembranes.length < 24 && nearbyOuterCellMembranes.length == 0) {
+      ew.mutate(nearbyEmpties.shift(), CellMembrane.CREATE());
+      return;
+    } else {
+      this.shouldGrow = false;
+    }
 
     //grow if no empties around and outer is around - possibly too small to get moving.
     // if (nearbyEmpties.length == 0 && nearbyOuterCellMembranes.length > 0) {
     //   this.shouldGrow = true;
     // }
 
-    this.setDirectionColor();
+    const nearbyBrane = ew.getRandomIndexOfType(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF);
 
     //find a direction to travel
     if (nearbyBrane !== undefined) {
@@ -232,23 +247,18 @@ export class CellMembrane extends Elem {
       } else {
         this.directed = false;
       }
+
+      if (nearbyOuterCellMembranes.length > 25) {
+        this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
+        // this.directed = true;
+      }
     }
 
-    if (nearbyOuterCellMembranes.length > 9) {
-      this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
-    }
+    this.setDirectionColor();
 
     //These should be closer to the center of the cell
-    if (nearbyCellMembranes.length > 27) {
+    if (nearbyCellMembranes.length > 25) {
       this.repelDirection(ew, this.direction);
-    }
-
-    //am I small and undeveloped? grow!
-    if (this.shouldGrow && nearbyCellMembranes.length < 24 && nearbyOuterCellMembranes.length == 0) {
-      ew.mutate(nearbyEmpties.shift(), CellMembrane.CREATE());
-      return;
-    } else {
-      this.shouldGrow = false;
     }
 
     //am I an edge? Make some outer membrane please
@@ -261,13 +271,13 @@ export class CellMembrane extends Elem {
     }
 
     //there's a gap in the outer membrane, help boost it up
-    const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
-    if (checkShellGap) {
-      const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
-      while (gapEmpties.length) {
-        ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
-      }
-    }
+    // const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    // if (checkShellGap) {
+    //   const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
+    //   while (gapEmpties.length) {
+    //     ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
+    //   }
+    // }
 
     //eat outermembrane that got too close inside
     const checkSplit = ew.query(CellMembrane.CHECK_SPLIT, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
@@ -279,7 +289,7 @@ export class CellMembrane extends Elem {
     }
 
     //repel DREG as defensive move.
-    Actions.repel(ew, DReg.TYPE_DEF);
+    // Actions.repel(ew, DReg.TYPE_DEF);
 
     super.exec(ew);
   }

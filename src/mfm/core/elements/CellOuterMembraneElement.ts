@@ -15,7 +15,7 @@ import { DecayWall } from "./DecayWallElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 
 export class CellOuterMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x983acc };
+  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x000000 };
   static CREATE = CellOuterMembrane.CREATOR();
 
   static CHECK_THIN = SPLAT.splatToMap(`
@@ -144,24 +144,47 @@ export class CellOuterMembrane extends Elem {
   }
 
   calculateSuggestedDirection(ew: EventWindow, nearbyEmpties: number[]) {
+    let smallestDir: number = 40;
+    let smallestDirKey: string = "";
     const directionMap: {} = {
-      N: ew.getIntersection(nearbyEmpties, EventWindow.N_HEMISPHERE).length,
-      S: ew.getIntersection(nearbyEmpties, EventWindow.S_HEMISPHERE).length,
-      E: ew.getIntersection(nearbyEmpties, EventWindow.E_HEMISPHERE).length,
-      W: ew.getIntersection(nearbyEmpties, EventWindow.W_HEMISPHERE).length,
+      N: ew.getIntersection(nearbyEmpties, EventWindow.N_QUADRANT).length,
+      S: ew.getIntersection(nearbyEmpties, EventWindow.S_QUADRANT).length,
+      E: ew.getIntersection(nearbyEmpties, EventWindow.E_QUADRANT).length,
+      W: ew.getIntersection(nearbyEmpties, EventWindow.W_QUADRANT).length,
     };
 
-    let biggestDir: number = 0;
-    this.suggestedDirection = "";
+    if (nearbyEmpties.length > 10) {
+      //get open directions
 
-    for (const [key, value] of Object.entries(directionMap)) {
-      if (value > 10 && value >= biggestDir) {
-        biggestDir = value as number;
-        this.suggestedDirection = key;
+      let biggestDir: number = 0;
+
+      this.suggestedDirection = "";
+
+      for (const [key, value] of Object.entries(directionMap)) {
+        if (value > 6 && value >= biggestDir) {
+          biggestDir = value as number;
+          this.suggestedDirection = key;
+        }
       }
     }
+    //try to see suggest going in the opposite direction - too much chaos here
+    // else if (nearbyEmpties.length < 4) {
+    //   for (const [key, value] of Object.entries(directionMap)) {
+    //     if (value < smallestDir) {
+    //       smallestDir = value as number;
+    //       smallestDirKey = key;
+    //     }
+    //   }
 
-    // console.log(this.suggestedDirection);
+    //   const opps: { [key: string]: string } = {
+    //     N: "S",
+    //     S: "N",
+    //     E: "W",
+    //     W: "E",
+    //   };
+    //   this.suggestedDirection = opps[smallestDirKey] as string;
+    //   // this.suggestedDirection = smallestDirKey;
+    // }
   }
 
   exec(ew: EventWindow) {
@@ -183,16 +206,20 @@ export class CellOuterMembrane extends Elem {
 
     this.moveToSticker(ew);
 
-    if (Utils.oneIn(50)) {
+    if (Utils.oneIn(100)) {
       // Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
       Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
       return;
     }
 
     //repel DREG as defensive move.
-    Actions.repel(ew, DReg.TYPE_DEF);
+    //Actions.repel(ew, DReg.TYPE_DEF);
 
-    const nearbyRes = ew.getIndexes(EventWindow.ADJACENT8WAY, Res.TYPE_DEF, false);
+    // const nearbyRes = ew.getIndexes(EventWindow.ADJACENT8WAY, Res.TYPE_DEF, false);
+    // while (nearbyRes.length) {
+    //   ew.mutate(nearbyRes.shift(), CellOuterMembrane.CREATE());
+    // }
+
     const nearbyCM = ew.getIndexes(EventWindow.ADJACENT8WAY, CellMembrane.TYPE_DEF, false);
     const nearbyCOM = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
     const nearbyEmpties = ew.getIndexes(EventWindow.ALLADJACENT, Empty.TYPE_DEF, false);
@@ -225,13 +252,8 @@ export class CellOuterMembrane extends Elem {
       ew.mutate(checkThin2.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE());
     }
 
-    // if (nearbyCM.length == 0 && nearbyEmpty.length < 3) {
-    //   ew.origin.killSelf();
-    // }
-
-    while (nearbyRes.length) {
-      ew.mutate(nearbyRes.shift(), CellOuterMembrane.CREATE());
-    }
+    this.calculateSuggestedDirection(ew, nearbyEmpties);
+    //this.setDirectionColor();
 
     // const checkForeign = ew.query(CellOuterMembrane.CHECK_FOREIGNCELL, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     // if (checkForeign) {
@@ -240,11 +262,6 @@ export class CellOuterMembrane extends Elem {
     //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[1], DecayWall.CREATE());
     //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[2], DecayWall.CREATE());
     // }
-
-    if (nearbyEmpties.length > 10) {
-      this.calculateSuggestedDirection(ew, nearbyEmpties);
-      this.setDirectionColor();
-    }
 
     super.exec(ew);
   }

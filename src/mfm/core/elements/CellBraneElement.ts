@@ -36,7 +36,7 @@ export class CellBrane extends Elem {
 
   direction: number = 0;
   directions: string[] = ["W", "N", "E", "S"];
-  pSwitchDirection = 500;
+  pSwitchDirection = 1;
 
   stickyType: IElementType;
   constructor() {
@@ -126,10 +126,10 @@ export class CellBrane extends Elem {
 
   repelDirection(ew: EventWindow, dir: string) {
     let toMap = new Map<string, Array<number>>([
-      ["E", [12]],
-      ["W", [9]],
-      ["N", [10]],
-      ["S", [11]],
+      ["E", [12, 19, 20]],
+      ["W", [9, 13, 14]],
+      ["N", [10, 15, 17]],
+      ["S", [11, 16, 18]],
     ]);
 
     Actions.repelFrom(ew, Empty.TYPE_DEF, [1, 2, 3, 4], [5, 6, 7, 8, ...toMap.get(dir)]);
@@ -173,21 +173,6 @@ export class CellBrane extends Elem {
       return;
     }
 
-    //Possible Direction Change
-    if (Utils.oneIn(this.pSwitchDirection)) {
-      // this.direction = ++this.direction % this.directions.length;
-      //this.direction = Utils.oneRandom([0, 1, 2, 3]);
-    } else {
-      const nearbyCellBranes = ew.getIndexes(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF, false);
-      const nearbyOuters = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
-
-      if (nearbyCellBranes.length > 0) {
-        this.getDirectionFromBranes(ew, nearbyCellBranes);
-      } else if (nearbyOuters.length > 0) {
-        this.getDirectionFromOuters(ew, nearbyOuters);
-      }
-    }
-
     const checkOuter = ew.query(CellBrane.CHECK_OUTER, 3, CellBrane.SPLAT_MAP, Symmetries.ALL);
     if (checkOuter) {
       ew.swap(Utils.oneRandom(nearbyMembranes));
@@ -210,6 +195,18 @@ export class CellBrane extends Elem {
       if (cms.length) {
         ew.swap(Utils.oneRandom(cms));
         return;
+      }
+    }
+
+    //Possible Direction Change
+    if (Utils.oneIn(this.pSwitchDirection)) {
+      const nearbyCellBranes = ew.getIndexes(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF, false);
+      const nearbyOuters = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
+
+      if (nearbyCellBranes.length > 0) {
+        this.getDirectionFromBranes(ew, nearbyCellBranes);
+      } else if (nearbyOuters.length > 2) {
+        this.getDirectionFromOuters(ew, nearbyOuters);
       }
     }
 
