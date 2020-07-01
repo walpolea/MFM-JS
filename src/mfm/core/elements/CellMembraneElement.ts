@@ -248,10 +248,10 @@ export class CellMembrane extends Elem {
         this.directed = false;
       }
 
-      if (nearbyOuterCellMembranes.length > 25) {
-        this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
-        // this.directed = true;
-      }
+      // if (nearbyOuterCellMembranes.length > 25) {
+      //   this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
+      //   // this.directed = true;
+      // }
     }
 
     this.setDirectionColor();

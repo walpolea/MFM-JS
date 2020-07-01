@@ -15,7 +15,7 @@ import { DecayWall } from "./DecayWallElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 
 export class CellOuterMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x000000 };
+  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x331a2f };
   static CREATE = CellOuterMembrane.CREATOR();
 
   static CHECK_THIN = SPLAT.splatToMap(`
@@ -153,7 +153,7 @@ export class CellOuterMembrane extends Elem {
       W: ew.getIntersection(nearbyEmpties, EventWindow.W_QUADRANT).length,
     };
 
-    if (nearbyEmpties.length > 10) {
+    if (nearbyEmpties.length > 15) {
       //get open directions
 
       let biggestDir: number = 0;
@@ -168,23 +168,23 @@ export class CellOuterMembrane extends Elem {
       }
     }
     //try to see suggest going in the opposite direction - too much chaos here
-    // else if (nearbyEmpties.length < 4) {
-    //   for (const [key, value] of Object.entries(directionMap)) {
-    //     if (value < smallestDir) {
-    //       smallestDir = value as number;
-    //       smallestDirKey = key;
-    //     }
-    //   }
+    if (nearbyEmpties.length < 5) {
+      for (const [key, value] of Object.entries(directionMap)) {
+        if (value < smallestDir) {
+          smallestDir = value as number;
+          smallestDirKey = key;
+        }
+      }
 
-    //   const opps: { [key: string]: string } = {
-    //     N: "S",
-    //     S: "N",
-    //     E: "W",
-    //     W: "E",
-    //   };
-    //   this.suggestedDirection = opps[smallestDirKey] as string;
-    //   // this.suggestedDirection = smallestDirKey;
-    // }
+      const opps: { [key: string]: string } = {
+        N: "S",
+        S: "N",
+        E: "W",
+        W: "E",
+      };
+      //this.suggestedDirection = opps[smallestDirKey] as string;
+      this.suggestedDirection = smallestDirKey;
+    }
   }
 
   exec(ew: EventWindow) {
@@ -252,8 +252,10 @@ export class CellOuterMembrane extends Elem {
       ew.mutate(checkThin2.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE());
     }
 
-    this.calculateSuggestedDirection(ew, nearbyEmpties);
-    //this.setDirectionColor();
+    if (nearbyCM.length == 0) {
+      this.calculateSuggestedDirection(ew, nearbyEmpties);
+      //this.setDirectionColor();
+    }
 
     // const checkForeign = ew.query(CellOuterMembrane.CHECK_FOREIGNCELL, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
     // if (checkForeign) {

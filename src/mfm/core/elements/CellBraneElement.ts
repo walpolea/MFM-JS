@@ -189,14 +189,14 @@ export class CellBrane extends Elem {
       }
     }
 
-    const checkEdge = ew.query(CellBrane.CHECK_EDGE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
-    if (checkEdge) {
-      const cms = checkEdge.get(CellMembrane.TYPE_DEF);
-      if (cms.length) {
-        ew.swap(Utils.oneRandom(cms));
-        return;
-      }
-    }
+    // const checkEdge = ew.query(CellBrane.CHECK_EDGE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
+    // if (checkEdge) {
+    //   const cms = checkEdge.get(CellMembrane.TYPE_DEF);
+    //   if (cms.length) {
+    //     ew.swap(Utils.oneRandom(cms));
+    //     return;
+    //   }
+    // }
 
     //Possible Direction Change
     if (Utils.oneIn(this.pSwitchDirection)) {
@@ -205,8 +205,10 @@ export class CellBrane extends Elem {
 
       if (nearbyCellBranes.length > 0) {
         this.getDirectionFromBranes(ew, nearbyCellBranes);
-      } else if (nearbyOuters.length > 2) {
+      } else if (nearbyOuters.length > 15) {
         this.getDirectionFromOuters(ew, nearbyOuters);
+      } else if (nearbyOuters.length == 0) {
+        this.direction = (this.direction + 2) % this.directions.length;
       }
     }
 
