@@ -17,7 +17,7 @@ import { CellBrane } from "./CellBraneElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 
 export class CellMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0x4f2140 };
+  static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0xc2c2c2 };
   static CREATE = CellMembrane.CREATOR();
 
   static MAKE_SHELL = SPLAT.splatToMap(`
@@ -59,12 +59,14 @@ export class CellMembrane extends Elem {
   directed: boolean = false;
   switchInterval: number = 10;
   intervalCounter: number = 0;
+  showColors: boolean;
 
   stickyType: IElementType;
-  constructor() {
+  constructor(_showColors: boolean = true) {
     super(CellMembrane.TYPE_DEF);
 
     this.stickyType = CellMembrane.TYPE_DEF;
+    this.showColors = _showColors;
   }
 
   moveToSticker(ew: EventWindow) {
@@ -160,16 +162,16 @@ export class CellMembrane extends Elem {
   setDirectionColor() {
     switch (this.direction) {
       case "E":
-        this.color = 0x990073;
+        this.color = 0x1c5183;
         break; //pink
       case "W":
-        this.color = 0x009900;
+        this.color = 0xb73a26;
         break; //green
       case "N":
-        this.color = 0x003d99;
+        this.color = 0x2a8240;
         break; //blue
       case "S":
-        this.color = 0x997a00;
+        this.color = 0x961c54;
         break; //yellow
       default:
         this.color = CellMembrane.TYPE_DEF.color;
@@ -178,11 +180,12 @@ export class CellMembrane extends Elem {
   }
 
   getDirectionFromOuters(ew: EventWindow, nearbyOuters: number[]) {
-    const suggestedDirections = ew.getSites(nearbyOuters).map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection);
+    const suggestedDirections = ew
+      .getSites(nearbyOuters, CellOuterMembrane.TYPE_DEF, false)
+      .map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection)
+      .filter((sd) => sd !== "");
 
-    if (suggestedDirections.filter((sd) => sd === "").length > 2) {
-      return;
-    } else {
+    if (suggestedDirections.length > 0) {
       const directionMap: {} = {
         N: suggestedDirections.filter((sd) => sd == "N").length,
         S: suggestedDirections.filter((sd) => sd == "S").length,
@@ -221,7 +224,7 @@ export class CellMembrane extends Elem {
 
     //am I small and undeveloped? grow!
     if (this.shouldGrow && nearbyCellMembranes.length < 24 && nearbyOuterCellMembranes.length == 0) {
-      ew.mutate(nearbyEmpties.shift(), CellMembrane.CREATE());
+      ew.mutate(nearbyEmpties.shift(), CellMembrane.CREATE([this.showColors]));
       return;
     } else {
       this.shouldGrow = false;
@@ -241,23 +244,21 @@ export class CellMembrane extends Elem {
     } else {
       const nearbyDirected = nearbyCellMembranes.filter((cm) => (ew.getSiteByIndex(cm).atom.elem as CellMembrane).directed);
 
-      if (nearbyDirected.length) {
+      if (nearbyOuterCellMembranes.length > 23) {
+        this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
+        this.directed = true;
+      } else if (nearbyDirected.length) {
         this.direction = (ew.getSiteByIndex(Utils.oneRandom(nearbyDirected)).atom.elem as CellMembrane).direction;
         this.directed = true;
       } else {
         this.directed = false;
       }
-
-      // if (nearbyOuterCellMembranes.length > 25) {
-      //   this.getDirectionFromOuters(ew, nearbyOuterCellMembranes);
-      //   // this.directed = true;
-      // }
     }
 
-    this.setDirectionColor();
+    if (this.showColors) this.setDirectionColor();
 
     //These should be closer to the center of the cell
-    if (nearbyCellMembranes.length > 25) {
+    if (nearbyCellMembranes.length > 20) {
       this.repelDirection(ew, this.direction);
     }
 
@@ -266,18 +267,18 @@ export class CellMembrane extends Elem {
     if (checkEdge) {
       const edgeEmpties = checkEdge.get(Empty.TYPE_DEF);
       while (edgeEmpties.length) {
-        ew.mutate(edgeEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
+        ew.mutate(edgeEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 3, this.showColors]));
       }
     }
 
     //there's a gap in the outer membrane, help boost it up
-    // const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
-    // if (checkShellGap) {
-    //   const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
-    //   while (gapEmpties.length) {
-    //     ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 10]));
-    //   }
-    // }
+    const checkShellGap = ew.query(CellMembrane.SHELL_GAP, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    if (checkShellGap) {
+      const gapEmpties = checkShellGap.get(Empty.TYPE_DEF);
+      while (gapEmpties.length) {
+        ew.mutate(gapEmpties.shift(), CellOuterMembrane.CREATE([CellMembrane.TYPE_DEF, 1, 3, this.showColors]));
+      }
+    }
 
     //eat outermembrane that got too close inside
     const checkSplit = ew.query(CellMembrane.CHECK_SPLIT, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);

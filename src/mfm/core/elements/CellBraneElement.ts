@@ -34,15 +34,35 @@ export class CellBrane extends Elem {
     ~_~
   `);
 
+  static CHECK_FOREIGN = SPLAT.splatToMap(`
+    ~~~~@xxxx
+  `);
+
+  showColors: boolean;
   direction: number = 0;
   directions: string[] = ["W", "N", "E", "S"];
   pSwitchDirection = 1;
+  changeDelay = 1;
+  changeCounter = 0;
 
   stickyType: IElementType;
-  constructor() {
+  constructor(_showColors: boolean = true) {
     super(CellBrane.TYPE_DEF);
+
+    CellBrane.SPLAT_MAP.set("i", CellMembrane.TYPE_DEF);
+    CellBrane.SPLAT_MAP.set("o", CellOuterMembrane.TYPE_DEF);
+
+    CellBrane.SPLAT_MAP.set("m", (t: IElementType) => {
+      return t === CellOuterMembrane.TYPE_DEF || t === CellMembrane.TYPE_DEF || t === CellBrane.TYPE_DEF ? t : undefined;
+    });
+
+    CellBrane.SPLAT_MAP.set("x", (t: IElementType) => {
+      return t !== Empty.TYPE_DEF && t !== CellOuterMembrane.TYPE_DEF && t !== CellMembrane.TYPE_DEF && t !== CellBrane.TYPE_DEF ? t : undefined;
+    });
+
     this.stickyType = CellBrane.TYPE_DEF;
     this.direction = Utils.oneRandom([0, 1, 2, 3]);
+    this.showColors = _showColors;
   }
 
   moveTo(ew: EventWindow, type: IElementType) {
@@ -136,11 +156,12 @@ export class CellBrane extends Elem {
   }
 
   getDirectionFromOuters(ew: EventWindow, nearbyOuters: number[]) {
-    const suggestedDirections = ew.getSites(nearbyOuters).map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection);
+    const suggestedDirections = ew
+      .getSites(nearbyOuters, CellOuterMembrane.TYPE_DEF, false)
+      .map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection)
+      .filter((sd) => sd !== "");
 
-    if (suggestedDirections.filter((sd) => sd === "").length > 2) {
-      return;
-    } else {
+    if (suggestedDirections.length > 0) {
       const directionMap: {} = {
         N: suggestedDirections.filter((sd) => sd == "N").length,
         S: suggestedDirections.filter((sd) => sd == "S").length,
@@ -162,15 +183,33 @@ export class CellBrane extends Elem {
   getDirectionFromBranes(ew: EventWindow, nearbyCellBranes: number[]) {
     const otherBrane = ew.getSiteByIndex(Utils.oneRandom(nearbyCellBranes)).atom.elem as CellBrane;
     this.direction = otherBrane.direction % this.directions.length;
-    // this.direction = (otherBrane.direction +2) % this.directions.length; //Mitosis
+    // this.direction = (otherBrane.direction + 2) % this.directions.length; //Mitosis
   }
 
   exec(ew: EventWindow) {
     //the Big Bang
     const nearbyMembranes = ew.getIndexes(EventWindow.ALLADJACENT, CellMembrane.TYPE_DEF, false);
     if (nearbyMembranes.length == 0) {
-      ew.mutate(ew.getNearestIndex(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF), CellMembrane.CREATE());
+      ew.mutate(ew.getNearestIndex(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF), CellMembrane.CREATE([this.showColors]));
       return;
+    }
+
+    this.changeCounter = ++this.changeCounter % this.changeDelay;
+
+    //Possible Direction Change
+    if (this.changeCounter == 0) {
+      const nearbyCellBranes = ew.getIndexes(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF, false);
+      const nearbyOuters = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
+
+      if (nearbyCellBranes.length > 0) {
+        this.getDirectionFromBranes(ew, nearbyCellBranes);
+      } else if (nearbyOuters.length > 18) {
+        console.log("get from outer", nearbyOuters.length);
+        this.getDirectionFromOuters(ew, nearbyOuters);
+      } else if (nearbyOuters.length < 2) {
+        console.log("switch");
+        this.direction = (this.direction + 2) % this.directions.length;
+      }
     }
 
     const checkOuter = ew.query(CellBrane.CHECK_OUTER, 3, CellBrane.SPLAT_MAP, Symmetries.ALL);
@@ -189,27 +228,18 @@ export class CellBrane extends Elem {
       }
     }
 
-    // const checkEdge = ew.query(CellBrane.CHECK_EDGE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
-    // if (checkEdge) {
-    //   const cms = checkEdge.get(CellMembrane.TYPE_DEF);
-    //   if (cms.length) {
-    //     ew.swap(Utils.oneRandom(cms));
-    //     return;
-    //   }
-    // }
-
-    //Possible Direction Change
-    if (Utils.oneIn(this.pSwitchDirection)) {
-      const nearbyCellBranes = ew.getIndexes(EventWindow.ALLADJACENT, CellBrane.TYPE_DEF, false);
-      const nearbyOuters = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
-
-      if (nearbyCellBranes.length > 0) {
-        this.getDirectionFromBranes(ew, nearbyCellBranes);
-      } else if (nearbyOuters.length > 15) {
-        this.getDirectionFromOuters(ew, nearbyOuters);
-      } else if (nearbyOuters.length == 0) {
-        this.direction = (this.direction + 2) % this.directions.length;
+    const checkEdge = ew.query(CellBrane.CHECK_EDGE, 0, CellBrane.SPLAT_MAP, Symmetries.ALL);
+    if (checkEdge) {
+      const cms = checkEdge.get(CellMembrane.TYPE_DEF);
+      if (cms.length) {
+        ew.swap(Utils.oneRandom(cms));
+        return;
       }
+    }
+
+    const checkForeign = ew.query(CellBrane.CHECK_FOREIGN, 1, CellBrane.SPLAT_MAP, Symmetries.ALL);
+    if (checkForeign) {
+      this.direction = (this.direction + 2) % this.directions.length;
     }
 
     this.repelDirection(ew, this.directions[this.direction]);

@@ -13,13 +13,14 @@ import { SPLAT } from "../../utils/SPLAT";
 import { Symmetries } from "../../utils/Symmetries";
 import { DecayWall } from "./DecayWallElement";
 import { StickyMembrane } from "./StickyMembraneElement";
+import { CellBrane } from "./CellBraneElement";
 
 export class CellOuterMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x331a2f };
+  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x5c5a5c };
   static CREATE = CellOuterMembrane.CREATOR();
 
   static CHECK_THIN = SPLAT.splatToMap(`
-    ~_@ii
+    ~i@_
   `);
 
   static CHECK_THIN2 = SPLAT.splatToMap(`
@@ -27,7 +28,11 @@ export class CellOuterMembrane extends Elem {
   `);
 
   static CHECK_FOREIGNCELL = SPLAT.splatToMap(`
-    i~~~@___o
+    mmoo@___x
+  `);
+
+  static CHECK_OUTERMOST = SPLAT.splatToMap(`
+    iooo@~~~~
   `);
 
   stickyType: IElementType;
@@ -36,13 +41,26 @@ export class CellOuterMembrane extends Elem {
   membraneDensity: number;
   maxRoam: number;
   suggestedDirection: string = "";
+  showColors: boolean = true;
 
-  constructor(stickyType?: IElementType, membraneDensity?: number, maxRoam?: number) {
+  constructor(stickyType: IElementType = CellMembrane.TYPE_DEF, membraneDensity: number = 1, maxRoam: number = 1, _showColors: boolean = true) {
     super(CellMembrane.TYPE_DEF);
 
-    this.stickyType = stickyType ? stickyType : undefined;
-    this.maxRoam = maxRoam ? maxRoam : 1;
+    CellOuterMembrane.SPLAT_MAP.set("i", CellMembrane.TYPE_DEF);
+    CellOuterMembrane.SPLAT_MAP.set("o", CellOuterMembrane.TYPE_DEF);
+
+    CellOuterMembrane.SPLAT_MAP.set("m", (t: IElementType) => {
+      return t === CellOuterMembrane.TYPE_DEF || t === CellMembrane.TYPE_DEF || t === CellBrane.TYPE_DEF ? t : undefined;
+    });
+
+    CellOuterMembrane.SPLAT_MAP.set("x", (t: IElementType) => {
+      return t !== Empty.TYPE_DEF && t !== CellOuterMembrane.TYPE_DEF ? t : undefined;
+    });
+
+    this.stickyType = stickyType;
+    this.maxRoam = maxRoam;
     this.setMembraneDensity(membraneDensity);
+    this.showColors = _showColors;
   }
 
   setMembraneDensity(density: number = 1) {
@@ -126,16 +144,16 @@ export class CellOuterMembrane extends Elem {
   setDirectionColor() {
     switch (this.suggestedDirection) {
       case "E":
-        this.color = 0x550073;
+        this.color = 0x3f6fb6;
         break; //pink
       case "W":
-        this.color = 0x005500;
+        this.color = 0xf26823;
         break; //green
       case "N":
-        this.color = 0x003d55;
+        this.color = 0x55ba5b;
         break; //blue
       case "S":
-        this.color = 0x557a00;
+        this.color = 0xcc2a6b;
         break; //yellow
       default:
         this.color = CellOuterMembrane.TYPE_DEF.color;
@@ -153,22 +171,19 @@ export class CellOuterMembrane extends Elem {
       W: ew.getIntersection(nearbyEmpties, EventWindow.W_QUADRANT).length,
     };
 
-    if (nearbyEmpties.length > 15) {
+    if (nearbyEmpties.length > 10) {
       //get open directions
-
       let biggestDir: number = 0;
-
       this.suggestedDirection = "";
 
       for (const [key, value] of Object.entries(directionMap)) {
-        if (value > 6 && value >= biggestDir) {
+        if (value > 2 && value >= biggestDir) {
           biggestDir = value as number;
           this.suggestedDirection = key;
         }
       }
-    }
-    //try to see suggest going in the opposite direction - too much chaos here
-    if (nearbyEmpties.length < 5) {
+    } else if (nearbyEmpties.length < 4) {
+      //try to see suggest going in the opposite direction - too much chaos here
       for (const [key, value] of Object.entries(directionMap)) {
         if (value < smallestDir) {
           smallestDir = value as number;
@@ -176,12 +191,12 @@ export class CellOuterMembrane extends Elem {
         }
       }
 
-      const opps: { [key: string]: string } = {
-        N: "S",
-        S: "N",
-        E: "W",
-        W: "E",
-      };
+      // const opps: { [key: string]: string } = {
+      //   N: "S",
+      //   S: "N",
+      //   E: "W",
+      //   W: "E",
+      // };
       //this.suggestedDirection = opps[smallestDirKey] as string;
       this.suggestedDirection = smallestDirKey;
     }
@@ -206,9 +221,9 @@ export class CellOuterMembrane extends Elem {
 
     this.moveToSticker(ew);
 
-    if (Utils.oneIn(100)) {
-      // Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
-      Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+    if (Utils.oneIn(50)) {
+      Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
+      //Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
       return;
     }
 
@@ -225,7 +240,7 @@ export class CellOuterMembrane extends Elem {
     const nearbyEmpties = ew.getIndexes(EventWindow.ALLADJACENT, Empty.TYPE_DEF, false);
 
     //too many surrounding CellMembrane - die
-    if (nearbyCM.length > 6) {
+    if (nearbyCM.length > 4) {
       ew.origin.killSelf();
       return;
     }
@@ -237,32 +252,38 @@ export class CellOuterMembrane extends Elem {
     }
 
     //too many nearby OuterMembrane - die
-    if (nearbyCOM.length > 25) {
+    if (nearbyCOM.length > 28) {
       ew.origin.killSelf();
       return;
     }
 
-    const checkThin = ew.query(CellOuterMembrane.CHECK_THIN, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    const checkThin = ew.query(CellOuterMembrane.CHECK_THIN, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
     if (checkThin) {
-      ew.mutate(checkThin.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE());
+      ew.mutate(checkThin.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE([this.stickyType, this.membraneDensity, this.maxRoam, this.showColors]));
     }
 
-    const checkThin2 = ew.query(CellOuterMembrane.CHECK_THIN2, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    const checkThin2 = ew.query(CellOuterMembrane.CHECK_THIN2, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
     if (checkThin2) {
-      ew.mutate(checkThin2.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE());
+      ew.mutate(checkThin2.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE([this.stickyType, this.membraneDensity, this.maxRoam, this.showColors]));
     }
 
-    if (nearbyCM.length == 0) {
+    const checkOutermost = ew.query(CellOuterMembrane.CHECK_OUTERMOST, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    if (checkOutermost) {
       this.calculateSuggestedDirection(ew, nearbyEmpties);
-      //this.setDirectionColor();
+    } else {
+      const nearbyDirected = (Utils.oneRandom(ew.getSites(EventWindow.ADJACENT8WAY, CellOuterMembrane.TYPE_DEF, false).filter((s) => s))?.atom
+        ?.elem as CellOuterMembrane)?.suggestedDirection; // nearbyCOM.filter((com) => (ew.getSiteByIndex(com).atom.elem as CellOuterMembrane).suggestedDirection !== "");
+      if (nearbyDirected && nearbyDirected !== "") {
+        this.suggestedDirection = nearbyDirected;
+      }
     }
 
-    // const checkForeign = ew.query(CellOuterMembrane.CHECK_FOREIGNCELL, 0, ElementTypes.SPLAT_MAP, Symmetries.ALL);
+    if (this.showColors) this.setDirectionColor();
+
+    // const checkForeign = ew.query(CellOuterMembrane.CHECK_FOREIGNCELL, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
     // if (checkForeign) {
-    //   // ew.mutate(checkForeign.get(CellOuterMembrane.TYPE_DEF)[0], DecayWall.CREATE([100]));
-    //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[0], DecayWall.CREATE());
-    //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[1], DecayWall.CREATE());
-    //   ew.mutate(checkForeign.get(Empty.TYPE_DEF)[2], DecayWall.CREATE());
+    //   const empties = checkForeign.get(Empty.TYPE_DEF);
+    //   while (empties.length) ew.mutate(empties.shift(), DecayWall.CREATE([20]));
     // }
 
     super.exec(ew);

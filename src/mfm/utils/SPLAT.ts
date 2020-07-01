@@ -8,18 +8,18 @@ export type SPLATEval = {
   (t: IElementType): IElementType | undefined;
 };
 
-
 export class SPLAT {
-
   static splatToMap(splatDiagram: string): Map<number, string> {
-
     //split map by lines
     let lines: string[] = splatDiagram.split("\n");
 
     //remove spaces and empty lines
-    let allLines: string[][] = lines.map(l => l.replace(/\s+/g, "")).filter(l => l !== "").map(l => {
-      return l.split("");
-    });
+    let allLines: string[][] = lines
+      .map((l) => l.replace(/\s+/g, ""))
+      .filter((l) => l !== "")
+      .map((l) => {
+        return l.split("");
+      });
 
     //arrange all rows middle-out
     allLines = Utils.processArrayMiddleOut(allLines);
@@ -27,7 +27,6 @@ export class SPLAT {
     //pad the splatDiagram with missing ew spots
     const lineLengths: number[] = [9, 7, 7, 5, 5, 3, 3, 1, 1];
     for (let i = 0; i < allLines.length; i++) {
-
       const lineLen = lineLengths[i];
       let line = allLines[i];
       let addSide = 0;
@@ -43,7 +42,6 @@ export class SPLAT {
       }
 
       allLines[i] = line;
-
     }
 
     //map the indexes
@@ -55,11 +53,8 @@ export class SPLAT {
           EWMAP.set(index, allLines[i][j]);
         }
       });
-    };
+    }
 
     return EWMAP;
-
   }
-
-
 }

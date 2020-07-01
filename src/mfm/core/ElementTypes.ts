@@ -1,7 +1,6 @@
 import { IElementType } from "./IElementType";
 
 export class ElementTypes {
-
   //This is mostly for the GUI to know all the types it can make
   //user registerType static method to add your element to the list
   static TYPES_MAP: Map<string, IElementType> = new Map<string, IElementType>();
@@ -17,4 +16,3 @@ export class ElementTypes {
     this.SPLAT_MAP.set(char, type);
   }
 }
-

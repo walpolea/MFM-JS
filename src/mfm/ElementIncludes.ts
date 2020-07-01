@@ -41,6 +41,7 @@ import { SwapLine } from "./core/elements/SwapLineElement";
 import { Emitters } from "./core/elements/Emitters";
 import { CellMembrane } from "./core/elements/CellMembraneElement";
 import { CellBrane } from "./core/elements/CellBraneElement";
+import { CellOuterMembrane } from "./core/elements/CellOuterMembraneElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -113,6 +114,9 @@ export class ElementIncludes {
     .set("Goopy Stuff", [
       ["CellBrane", CellBrane.CREATE],
       ["CellMembrane", CellMembrane.CREATE],
+      ["CellOuterMembrane", CellOuterMembrane.CREATE],
+      ["CellBrane (NO COLOR)", CellBrane.CREATOR([false])],
+      ["CellMembrane (NO COLOR)", CellMembrane.CREATOR([false])],
       ["StickyMembrane", StickyMembrane.CREATE],
       ["StickyMembrane Emitter", Emitters.STICKYMEMBRANE],
       ["StuckMembrane", StuckMembrane.CREATE],
