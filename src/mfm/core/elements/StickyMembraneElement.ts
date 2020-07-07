@@ -114,7 +114,7 @@ export class StickyMembrane extends Elem {
 
     if (!this.stickyType || this.stickyType === StickyMembrane.TYPE_DEF) {
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
-      const stickSite: Site = ew.getAdjacent8Way(StickyMembrane.TYPE_DEF);
+      const stickSite: Site = ew.getAdjacent8Way();
       if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
         this.stickyType = stickSite.atom.type;
       }

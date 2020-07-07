@@ -14,9 +14,10 @@ import { Symmetries } from "../../utils/Symmetries";
 import { DecayWall } from "./DecayWallElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 import { CellBrane } from "./CellBraneElement";
+import { Data } from "./DataElement";
 
 export class CellOuterMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x5c5a5c };
+  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x5c8a5c };
   static CREATE = CellOuterMembrane.CREATOR();
 
   static CHECK_THIN = SPLAT.splatToMap(`
@@ -27,12 +28,32 @@ export class CellOuterMembrane extends Elem {
     ~i@o_
   `);
 
+  static CHECK_THIN3 = SPLAT.splatToMap(`
+  ~i_@~~~
+  `);
+
+  static CHECK_THIN4 = SPLAT.splatToMap(`
+    ~~@_i
+  `);
+
   static CHECK_FOREIGNCELL = SPLAT.splatToMap(`
-    mmoo@___x
+    mmmm@~~_o
   `);
 
   static CHECK_OUTERMOST = SPLAT.splatToMap(`
-    iooo@~~~~
+    immm@~~~~
+  `);
+
+  static HOLD_IN1 = SPLAT.splatToMap(`
+    ~~~~@f~~i
+  `);
+
+  static HOLD_IN2 = SPLAT.splatToMap(`
+    ~~~~@f~i~
+  `);
+
+  static HOLD_IN3 = SPLAT.splatToMap(`
+    ~~~~@fi~
   `);
 
   stickyType: IElementType;
@@ -55,6 +76,10 @@ export class CellOuterMembrane extends Elem {
 
     CellOuterMembrane.SPLAT_MAP.set("x", (t: IElementType) => {
       return t !== Empty.TYPE_DEF && t !== CellOuterMembrane.TYPE_DEF ? t : undefined;
+    });
+
+    CellOuterMembrane.SPLAT_MAP.set("f", (t: IElementType) => {
+      return t !== Empty.TYPE_DEF && t !== CellOuterMembrane.TYPE_DEF && t !== CellMembrane.TYPE_DEF && t !== CellBrane.TYPE_DEF ? t : undefined;
     });
 
     this.stickyType = stickyType;
@@ -101,46 +126,6 @@ export class CellOuterMembrane extends Elem {
     }
   }
 
-  repelFromSticker(ew: EventWindow) {
-    const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, this.stickyType, true);
-
-    if (sites[0]) {
-      ew.origin.swapAtoms(ew.getSites(EventWindow.LAYER2, Empty.TYPE_DEF)[0]);
-    }
-  }
-
-  repelType(ew: EventWindow, type: IElementType) {
-    const sites: number[] = ew.getIndexes(EventWindow.ADJACENT8WAY, type, true);
-    const eightwaypushmap: Map<number, number> = new Map<number, number>([
-      [1, 37],
-      [2, 38],
-      [3, 39],
-      [4, 40],
-      [5, 25],
-      [6, 26],
-      [7, 27],
-      [8, 28],
-    ]);
-
-    if (sites.length) {
-      sites.forEach((dreg) => {
-        const toSite: number = eightwaypushmap.get(dreg);
-        if (ew.is(toSite, Empty.TYPE_DEF)) {
-          ew.move(toSite, undefined, dreg);
-        }
-      });
-    }
-  }
-
-  uncrowd(ew: EventWindow) {
-    if (
-      ew.getAdjacent4Way(this.stickyType) &&
-      ew.getSites(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false).filter((site) => site).length > this.membraneDensity
-    ) {
-      ew.origin.killSelf();
-    }
-  }
-
   setDirectionColor() {
     switch (this.suggestedDirection) {
       case "E":
@@ -159,6 +144,17 @@ export class CellOuterMembrane extends Elem {
         this.color = CellOuterMembrane.TYPE_DEF.color;
         break;
     }
+  }
+
+  reverseDirection() {
+    const opps: { [key: string]: string } = {
+      N: "S",
+      S: "N",
+      E: "W",
+      W: "E",
+    };
+
+    this.suggestedDirection = this.suggestedDirection !== "" ? opps[this.suggestedDirection] : this.suggestedDirection;
   }
 
   calculateSuggestedDirection(ew: EventWindow, nearbyEmpties: number[]) {
@@ -190,101 +186,133 @@ export class CellOuterMembrane extends Elem {
           smallestDirKey = key;
         }
       }
-
-      // const opps: { [key: string]: string } = {
-      //   N: "S",
-      //   S: "N",
-      //   E: "W",
-      //   W: "E",
-      // };
-      //this.suggestedDirection = opps[smallestDirKey] as string;
       this.suggestedDirection = smallestDirKey;
+    }
+  }
+
+  holdStuffInside(ew: EventWindow) {
+    const hold1 = ew.query(CellOuterMembrane.HOLD_IN1, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    if (hold1) {
+      ew.swap(hold1.get(Array.from(hold1.keys()).filter((type) => type !== CellMembrane.TYPE_DEF)[0])[0], hold1.get(CellMembrane.TYPE_DEF)[0]);
+    }
+
+    const hold2 = ew.query(CellOuterMembrane.HOLD_IN2, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    if (hold2) {
+      ew.swap(hold2.get(Array.from(hold2.keys()).filter((type) => type !== CellMembrane.TYPE_DEF)[0])[0], hold2.get(CellMembrane.TYPE_DEF)[0]);
+    }
+
+    const hold3 = ew.query(CellOuterMembrane.HOLD_IN3, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    if (hold3) {
+      ew.swap(hold3.get(Array.from(hold3.keys()).filter((type) => type !== CellMembrane.TYPE_DEF)[0])[0], hold3.get(CellMembrane.TYPE_DEF)[0]);
     }
   }
 
   exec(ew: EventWindow) {
     if (this.roamCount > this.maxRoam) {
       ew.origin.killSelf();
-    }
-
-    if (this.idleCount > 100) {
-      ew.origin.killSelf();
-    }
-
-    if (!this.stickyType || this.stickyType === CellOuterMembrane.TYPE_DEF) {
-      //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
-      const stickSite: Site = ew.getAdjacent8Way(CellOuterMembrane.TYPE_DEF);
-      if (stickSite && stickSite.atom.type !== Empty.TYPE_DEF) {
-        this.stickyType = stickSite.atom.type;
-      }
-    }
-
-    this.moveToSticker(ew);
-
-    if (Utils.oneIn(50)) {
-      Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
-      //Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
       return;
     }
 
-    //repel DREG as defensive move.
-    //Actions.repel(ew, DReg.TYPE_DEF);
+    this.holdStuffInside(ew);
 
-    // const nearbyRes = ew.getIndexes(EventWindow.ADJACENT8WAY, Res.TYPE_DEF, false);
-    // while (nearbyRes.length) {
-    //   ew.mutate(nearbyRes.shift(), CellOuterMembrane.CREATE());
-    // }
+    if (Utils.oneIn(8)) this.moveToSticker(ew);
+
+    if (Utils.oneIn(50)) {
+      //Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8]);
+      //Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11, 12]);
+      Actions.repelFrom(ew, this.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]);
+      return;
+    }
 
     const nearbyCM = ew.getIndexes(EventWindow.ADJACENT8WAY, CellMembrane.TYPE_DEF, false);
     const nearbyCOM = ew.getIndexes(EventWindow.ALLADJACENT, CellOuterMembrane.TYPE_DEF, false);
     const nearbyEmpties = ew.getIndexes(EventWindow.ALLADJACENT, Empty.TYPE_DEF, false);
 
-    //too many surrounding CellMembrane - die
-    if (nearbyCM.length > 4) {
+    /////////////////////
+    //Life is Short
+
+    //too many surrounding Empties - die
+    if (ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, false).length > 5) {
       ew.origin.killSelf();
       return;
     }
 
     //too many surrounding CellMembrane - die
-    if (ew.getIndexes(EventWindow.LAYER2, CellMembrane.TYPE_DEF, false).length > 6) {
+    if (nearbyCM.length > 3) {
       ew.origin.killSelf();
       return;
     }
 
-    //too many nearby OuterMembrane - die
+    // too many nearby OuterMembrane - die
     if (nearbyCOM.length > 28) {
       ew.origin.killSelf();
       return;
     }
+    //////////////////////
 
-    const checkThin = ew.query(CellOuterMembrane.CHECK_THIN, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    ///////////////////////
+    //Check for situations where the OuterMembrane wall is thin
+    const checkThin = ew.query(CellOuterMembrane.CHECK_THIN, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ROTATIONS);
     if (checkThin) {
       ew.mutate(checkThin.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE([this.stickyType, this.membraneDensity, this.maxRoam, this.showColors]));
     }
 
-    const checkThin2 = ew.query(CellOuterMembrane.CHECK_THIN2, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    const checkThin2 = ew.query(CellOuterMembrane.CHECK_THIN2, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ROTATIONS);
     if (checkThin2) {
       ew.mutate(checkThin2.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE([this.stickyType, this.membraneDensity, this.maxRoam, this.showColors]));
     }
 
-    const checkOutermost = ew.query(CellOuterMembrane.CHECK_OUTERMOST, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
-    if (checkOutermost) {
-      this.calculateSuggestedDirection(ew, nearbyEmpties);
-    } else {
-      const nearbyDirected = (Utils.oneRandom(ew.getSites(EventWindow.ADJACENT8WAY, CellOuterMembrane.TYPE_DEF, false).filter((s) => s))?.atom
-        ?.elem as CellOuterMembrane)?.suggestedDirection; // nearbyCOM.filter((com) => (ew.getSiteByIndex(com).atom.elem as CellOuterMembrane).suggestedDirection !== "");
-      if (nearbyDirected && nearbyDirected !== "") {
-        this.suggestedDirection = nearbyDirected;
-      }
+    const checkThin3 = ew.query(CellOuterMembrane.CHECK_THIN3, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ROTATIONS);
+    if (checkThin3) {
+      ew.mutate(checkThin3.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE([this.stickyType, this.membraneDensity, this.maxRoam, this.showColors]));
     }
 
-    if (this.showColors) this.setDirectionColor();
+    const checkThin4 = ew.query(CellOuterMembrane.CHECK_THIN4, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
+    if (checkThin4) {
+      ew.mutate(checkThin4.get(Empty.TYPE_DEF)[0], CellOuterMembrane.CREATE([this.stickyType, this.membraneDensity, this.maxRoam, this.showColors]));
+    }
+    ////////////////////////
+
+    //Check for a nearby CellOuterMembrane that has a direction
+    const nearbyDirected = (Utils.oneRandom(ew.getSites(EventWindow.ADJACENT8WAY, CellOuterMembrane.TYPE_DEF, false).filter((s) => s))?.atom
+      ?.elem as CellOuterMembrane)?.suggestedDirection;
+
+    //go with the flow
+    if (nearbyDirected) {
+      this.suggestedDirection = nearbyDirected;
+      //sense outside for stuff
+    } else if (ew.query(CellOuterMembrane.CHECK_OUTERMOST, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL)) {
+      this.calculateSuggestedDirection(ew, nearbyEmpties);
+      ew.mutateMany(ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF), CellOuterMembrane.CREATE, [
+        this.stickyType,
+        1,
+        this.membraneDensity,
+        this.showColors,
+      ]);
+    }
+
+    //
+    if (
+      ew.getAll().filter((s) => {
+        return s && !ew.is(s, [Empty.TYPE_DEF, CellBrane.TYPE_DEF, CellOuterMembrane.TYPE_DEF, CellMembrane.TYPE_DEF, Data.TYPE_DEF, Res.TYPE_DEF]);
+      }).length > 0
+    ) {
+      this.suggestedDirection = "";
+      nearbyCOM.forEach((i) => {
+        (ew.getSiteByIndex(i).atom.elem as CellOuterMembrane).suggestedDirection = "";
+      });
+    }
 
     // const checkForeign = ew.query(CellOuterMembrane.CHECK_FOREIGNCELL, 0, CellOuterMembrane.SPLAT_MAP, Symmetries.ALL);
     // if (checkForeign) {
-    //   const empties = checkForeign.get(Empty.TYPE_DEF);
-    //   while (empties.length) ew.mutate(empties.shift(), DecayWall.CREATE([20]));
+    //   // this.reverseDirection();
+    //   this.suggestedDirection = "";
+    //   nearbyCOM.forEach((i) => {
+    //     (ew.getSiteByIndex(i).atom.elem as CellOuterMembrane).suggestedDirection = "";
+    //   });
     // }
+
+    if (this.showColors) this.setDirectionColor();
 
     super.exec(ew);
   }

@@ -134,6 +134,7 @@ export class ElementIncludes {
       ["Data", Data.CREATE],
       ["Data Emitter", Emitters.DATA_STREAM],
       ["Sorter", Sorter.CREATE],
+      ["Sorter Emitter", Emitters.SORTER],
       ["SortMaster", SortMaster.CREATE],
       ["Input", Input.CREATE],
       ["Reducer", Reducer.CREATE],

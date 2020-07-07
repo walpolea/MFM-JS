@@ -27,6 +27,8 @@ import { Writer } from "../mfm/core/elements/WriterElement";
 import { SortMaster } from "../mfm/core/elements/SortMasterElement";
 import { OnewayDoor } from "../mfm/core/elements/OnewayDoorElement";
 import { IElementType } from "../mfm/core/IElementType";
+import { CellMembrane } from "../mfm/core/elements/CellMembraneElement";
+import { CellOuterMembrane } from "../mfm/core/elements/CellOuterMembraneElement";
 
 export class MFMRenderer {
   appX: number = 800;
@@ -148,6 +150,7 @@ export class MFMRenderer {
   }
 
   gameLoop(delta: number) {
+    // console.log("CM", Array.from(this.tile.sites).filter((s) => s[1]?.atom?.type == CellMembrane.TYPE_DEF).length);
     let ew: EventWindow;
     let renders: Set<SiteRenderer> = new Set<SiteRenderer>();
     let i = 0,

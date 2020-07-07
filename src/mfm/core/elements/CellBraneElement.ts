@@ -42,7 +42,7 @@ export class CellBrane extends Elem {
   direction: number = 0;
   directions: string[] = ["W", "N", "E", "S"];
   pSwitchDirection = 1;
-  changeDelay = 1;
+  changeDelay = 10;
   changeCounter = 0;
 
   stickyType: IElementType;
@@ -144,12 +144,24 @@ export class CellBrane extends Elem {
     }
   }
 
+  getReverse(dir: number): number {
+    const opps: { [key: string]: string } = {
+      N: "S",
+      S: "N",
+      E: "W",
+      W: "E",
+    };
+
+    return this.directions.indexOf(opps[this.directions[this.direction]]);
+  }
+
   repelDirection(ew: EventWindow, dir: string) {
     let toMap = new Map<string, Array<number>>([
       ["E", [12, 19, 20]],
       ["W", [9, 13, 14]],
       ["N", [10, 15, 17]],
       ["S", [11, 16, 18]],
+      ["empty", [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]],
     ]);
 
     Actions.repelFrom(ew, Empty.TYPE_DEF, [1, 2, 3, 4], [5, 6, 7, 8, ...toMap.get(dir)]);
@@ -158,8 +170,8 @@ export class CellBrane extends Elem {
   getDirectionFromOuters(ew: EventWindow, nearbyOuters: number[]) {
     const suggestedDirections = ew
       .getSites(nearbyOuters, CellOuterMembrane.TYPE_DEF, false)
-      .map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection)
-      .filter((sd) => sd !== "");
+      .map((co) => (co.atom.elem as CellOuterMembrane).suggestedDirection);
+    // .filter((sd) => sd !== "");
 
     if (suggestedDirections.length > 0) {
       const directionMap: {} = {
@@ -167,6 +179,7 @@ export class CellBrane extends Elem {
         S: suggestedDirections.filter((sd) => sd == "S").length,
         E: suggestedDirections.filter((sd) => sd == "E").length,
         W: suggestedDirections.filter((sd) => sd == "W").length,
+        empty: suggestedDirections.filter((sd) => sd == "").length,
       };
 
       let biggestDir: number = 0;
@@ -174,7 +187,7 @@ export class CellBrane extends Elem {
       for (const [key, value] of Object.entries(directionMap)) {
         if (value > 0 && value >= biggestDir) {
           biggestDir = value as number;
-          this.direction = this.directions.indexOf(key);
+          this.direction = key == "empty" ? this.getReverse(this.directions.indexOf(key)) : this.directions.indexOf(key);
         }
       }
     }
@@ -203,12 +216,12 @@ export class CellBrane extends Elem {
 
       if (nearbyCellBranes.length > 0) {
         this.getDirectionFromBranes(ew, nearbyCellBranes);
-      } else if (nearbyOuters.length > 18) {
-        console.log("get from outer", nearbyOuters.length);
+      } else if (nearbyOuters.length > 13) {
+        //console.log("get from outer", nearbyOuters.length);
         this.getDirectionFromOuters(ew, nearbyOuters);
       } else if (nearbyOuters.length < 2) {
-        console.log("switch");
-        this.direction = (this.direction + 2) % this.directions.length;
+        //console.log("switch");
+        this.repelDirection(ew, this.directions[(this.direction + 2) % this.directions.length]);
       }
     }
 
@@ -237,16 +250,18 @@ export class CellBrane extends Elem {
       }
     }
 
-    const checkForeign = ew.query(CellBrane.CHECK_FOREIGN, 1, CellBrane.SPLAT_MAP, Symmetries.ALL);
-    if (checkForeign) {
-      this.direction = (this.direction + 2) % this.directions.length;
-    }
+    // const checkForeign = ew.query(CellBrane.CHECK_FOREIGN, 1, CellBrane.SPLAT_MAP, Symmetries.ALL);
+    // if (checkForeign) {
+    //   this.direction = (this.direction + 2) % this.directions.length;
+    // }
 
     this.repelDirection(ew, this.directions[this.direction]);
 
     // this.moveToSticker(ew);
-    // this.moveTo(ew, CellBrane.TYPE_DEF);
-    // this.repelFrom(ew, CellOuterMembrane.TYPE_DEF);
+    //this.moveTo(ew, CellOuterMembrane.TYPE_DEF);
+    // this.repelFrom(ew, CellBrane.TYPE_DEF);
+
+    Actions.patrol(ew);
 
     super.exec(ew);
   }

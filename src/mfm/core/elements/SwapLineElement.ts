@@ -59,10 +59,10 @@ export class SwapLine extends Elem {
   exec(ew: EventWindow) {
     if (!ew.east || this.blockedCount > this.blockedMax) ew.origin.killSelf();
 
-    if (this.creationLimit > 0) {
-      const anySLNorth = ew.query(SwapLine.checkANY_NORTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
-      const anySLSouth = ew.query(SwapLine.checkANY_SOUTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
+    const anySLNorth = ew.query(SwapLine.checkANY_NORTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
+    const anySLSouth = ew.query(SwapLine.checkANY_SOUTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
 
+    if (this.creationLimit > 0) {
       if (!anySLNorth) {
         ew.mutate(2, SwapLine.CREATE([this.direction, this.creationLimit]));
       }
@@ -74,6 +74,10 @@ export class SwapLine extends Elem {
       this.creationLimit--;
     } else {
       this.readyToMove = true;
+
+      if (!anySLNorth && !anySLSouth) {
+        ew.origin.killSelf();
+      }
     }
 
     if (this.readyToMove) {
