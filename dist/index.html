@@ -197,30 +197,41 @@
         <div id="mfm-grid-container">
 
           <div id="mfm"></div>
-          <!-- Render? <input type="checkbox" v-model="shouldRender"> -->
-          <button @click="clearAllOfType()">Clear Type</button>
 
-          <button @click="reload()">Clear Grid</button>
-          Grid Size:
-          <select v-model=" gridSize">
-            <option value="32x32">32x32</option>
-            <option value="48x48">48x48</option>
-            <option value="60x40">60x40</option>
+          
 
-            <option value="64x64" selected>64x64</option>
-            <option value="96x96">96x96</option>
-            <option value="128x128">128x128</option>
-            <option value="196x196">196x196</option>
-          </select>
+          
+          <div style="display:grid;grid-template-columns: auto 1fr auto;">
+            <span>Speed: </span>
+            <input type="range" min="0" max="25000" v-model="timeSpeed" step="10" width="100%">
+            <span><input type="text" v-model="timeSpeed" size=7> <input type="checkbox" v-model="tenex">10x</span>
+          </div>
 
-          Speed: <input type="number" v-model="timeSpeed" size="6" max="100000" /> event windows per render cycle
+          <div style="margin-top:10px;">
+
+            <button @click="clearAllOfType()">Clear Type</button>
+            <button @click="reload()">Clear Grid</button>
+            Grid Size:
+            <select v-model=" gridSize">
+              <option value="32x32">32x32</option>
+              <option value="48x48">48x48</option>
+              <option value="60x40">60x40</option>
+              <option value="64x64" selected>64x64</option>
+              <option value="96x96">96x96</option>
+              <option value="128x128">128x128</option>
+              <option value="196x196">196x196</option>
+            </select>
+            <!-- Render? <input type="checkbox" v-model="shouldRender"> -->
+          </div>
         </div>
+
+        
 
       </div>
     </div>
     </div>
     <h3>Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
-    <ul id="instructions">
+    <!-- <ul id="instructions">
       <li>hold "t" - DREG</li>
       <li>hold "e" - EMPTY</li>
       <li>hold "w" - WALL</li>
@@ -245,7 +256,7 @@
       <li>hold "l" or "L (shift+l)" - LoopWorm, starts as a swapworm and if it finds its tail it becomes a loop</li>
       <li>hold "k" - LoopSeed, which will generate a cell-like loop structure that grows!</li>
       <li>hold "m" - Sticky Membrane will stick to the first thing it finds, or itself until it finds something</li>
-    </ul>
+    </ul> -->
     <section id="extras">
       <h1>Extras</h1>
       <h3>Here's some mfm.rocks propaganda</h3>

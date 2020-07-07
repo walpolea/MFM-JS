@@ -11,6 +11,7 @@ let app = new Vue({
     return {
       gridSize: "64x64" as string,
       timeSpeed: 5000 as number,
+      tenex: false as boolean,
       g: undefined as Tile,
       mfmRenderer: MFMRenderer,
       customSequence: "" as string,
@@ -58,8 +59,11 @@ let app = new Vue({
     },
   },
   watch: {
+    tenex(val: boolean) {
+      this.mfmRenderer.timeSpeed = this.tenex ? 10 * this.mfmRenderer.timeSpeed : this.mfmRenderer.timeSpeed / 10;
+    },
     timeSpeed(val: number) {
-      this.mfmRenderer.timeSpeed = val;
+      this.mfmRenderer.timeSpeed = this.tenex ? 10 * val : val;
     },
     gridSize(val: string) {
       this.mfmRenderer.deconstruct();

@@ -41,13 +41,13 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/preset-env": "^7.10.3",
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
     "babel-loader": "^8.1.0",
     "pixi-particles": "^4.2.1",
     "pixi.js": "^5.3.0",
     "ts-loader": "^5.4.5",
-    "typescript": "^3.9.5",
+    "typescript": "^3.9.6",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   },

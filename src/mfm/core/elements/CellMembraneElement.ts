@@ -248,11 +248,14 @@ export class CellMembrane extends Elem {
       this.stuckCounter = 0;
     }
 
-    if (this.stuckCounter >= 150 && nearbyOuterCellMembranes.length >= 2) {
+    if (this.stuckCounter >= 200 && nearbyOuterCellMembranes.length >= 2) {
       console.log("stuck");
       this.stuckCounter = 0;
-      ew.mutate(nearbyOuterCellMembranes[0], CellMembrane.CREATE([this.showColors]));
-      ew.mutate(nearbyOuterCellMembranes[1], CellMembrane.CREATE([this.showColors]));
+      // ew.mutate(nearbyOuterCellMembranes[0], CellMembrane.CREATE([this.showColors]));
+      // ew.mutate(nearbyOuterCellMembranes[1], CellMembrane.CREATE([this.showColors]));
+
+      ew.mutateMany(nearbyOuterCellMembranes, Empty.CREATE);
+      Actions.patrol(ew, [1, 2, 3, 4, 5, 6, 7, 8], 1);
     }
   }
 
