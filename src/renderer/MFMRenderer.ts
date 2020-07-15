@@ -151,11 +151,38 @@ export class MFMRenderer {
 
   gameLoop(delta: number) {
     // console.log("CM", Array.from(this.tile.sites).filter((s) => s[1]?.atom?.type == CellMembrane.TYPE_DEF).length);
-    let ew: EventWindow;
-    let renders: Set<SiteRenderer> = new Set<SiteRenderer>();
-    let i = 0,
-      j = 0;
-    let renderSites = [];
+    let ew: EventWindow,
+      renders: Set<SiteRenderer> = new Set<SiteRenderer>(),
+      i = 0,
+      j = 0,
+      renderSites = [];
+
+    // while (i < this.timeSpeed) {
+    //   ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
+
+    //   if (ew.window && !ew.origin.atom.is(Empty.TYPE_DEF)) {
+    //     ew.origin.atom.exec(ew);
+
+    //     const allSites = ew.getAll();
+    //     const len = allSites.length;
+    //     while (j < len) {
+    //       if (allSites[j]) {
+    //         renders.add(this.rendererMap.get(allSites[j]));
+    //       }
+    //       j++;
+    //     }
+    //     j = 0;
+    //   }
+    //   i++;
+    // }
+
+    // const arr = Array.from(renders.values());
+    // let k = 0;
+    // let len = arr.length;
+    // while (k < len) {
+    //   arr[k].update();
+    //   k++;
+    // }
 
     for (i; i < this.timeSpeed; i++) {
       ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
@@ -163,8 +190,8 @@ export class MFMRenderer {
       if (ew.window && !ew.origin.atom.is(Empty.TYPE_DEF)) {
         ew.origin.atom.exec(ew);
         if (this.shouldRender) {
-          const allSites = ew.getAll();
-          const len = allSites.length;
+          const allSites = ew.getAll(),
+            len = allSites.length;
           for (j = 0; j < len; j++) {
             if (allSites[j]) renders.add(this.rendererMap.get(allSites[j]));
           }
@@ -174,8 +201,8 @@ export class MFMRenderer {
 
     if (this.shouldRender) {
       const arr = Array.from(renders.values());
-      let k = 0;
-      let len = arr.length;
+      let k = 0,
+        len = arr.length;
       for (k; k < len; k++) {
         arr[k].update();
       }

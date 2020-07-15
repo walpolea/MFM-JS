@@ -13,6 +13,12 @@ export class SwapLine extends Elem {
   static CREATE = SwapLine.CREATOR();
   static CREATE_BLUE = SwapLine.CREATOR(undefined, undefined, 0x0000ff);
 
+  static checkMOVE = SPLAT.splatToMap(`
+  #~~  
+  ~@~
+  #~~
+  `);
+
   static checkANY_NORTH = SPLAT.splatToMap(`
   ###  
   ~@~
@@ -25,29 +31,18 @@ export class SwapLine extends Elem {
   ###
   `);
 
-  static checkMove_NORTH = SPLAT.splatToMap(`
-  ~##  
-  ~@~
-  ~~~
-  `);
-
-  static checkMove_SOUTH = SPLAT.splatToMap(`
-  ~~~  
-  ~@~
-  ~##
-  `);
-
   static checkForeignSL = SPLAT.splatToMap(`
   ~~~~#  
-  ~~@~#
+  ~~@##
   ~~~~#
   `);
 
   direction: string;
   creationLimit: number;
-  readyToMove: boolean = false;
   blockedCount: number = 0;
-  blockedMax: number = 100;
+  blockedMax: number = 10;
+
+  start: boolean = false;
 
   constructor(_direction: string = "E", _creationLimit: number = 0) {
     super(SwapLine.TYPE_DEF);
@@ -58,44 +53,32 @@ export class SwapLine extends Elem {
 
   exec(ew: EventWindow) {
     if (!ew.east || this.blockedCount > this.blockedMax) ew.origin.killSelf();
+    if (!ew.north || !ew.south) this.start = true;
 
-    const anySLNorth = ew.query(SwapLine.checkANY_NORTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
-    const anySLSouth = ew.query(SwapLine.checkANY_SOUTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
+    const checkForeignSL = ew.query(SwapLine.checkForeignSL, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
 
-    if (this.creationLimit > 0) {
-      if (!anySLNorth) {
-        ew.mutate(2, SwapLine.CREATE([this.direction, this.creationLimit]));
-      }
+    if (checkForeignSL) {
+      this.blockedCount++;
+    }
 
-      if (!anySLSouth) {
-        ew.mutate(3, SwapLine.CREATE([this.direction, this.creationLimit]));
-      }
+    if (!this.start) {
+      const anySLNorth = ew.query(SwapLine.checkANY_NORTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
+      const anySLSouth = ew.query(SwapLine.checkANY_SOUTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
 
-      this.creationLimit--;
-    } else {
-      this.readyToMove = true;
-
-      if (!anySLNorth && !anySLSouth) {
-        ew.origin.killSelf();
+      if ((anySLNorth && anySLSouth) || this.age > 10) {
+        this.start = true;
       }
     }
 
-    if (this.readyToMove) {
-      const checkMoveNorth = ew.query(SwapLine.checkMove_NORTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
-      const checkMoveSouth = ew.query(SwapLine.checkMove_SOUTH, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
-      const checkForeignSL = ew.query(SwapLine.checkForeignSL, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
+    const checkMove = ew.query(SwapLine.checkMOVE, 1, SwapLine.SPLAT_MAP, Symmetries.NORMAL);
 
-      if (!checkForeignSL && (!ew.north || checkMoveNorth) && (!ew.south || checkMoveSouth)) {
-        const swapped = ew.swap(4);
-
-        if (!swapped) {
-          this.blockedCount++;
-        } else {
-          this.blockedCount = 0;
-        }
-      } else {
-        this.blockedCount++;
+    if (checkMove) {
+      if ((ew.getSiteByIndex(checkMove.get(SwapLine.TYPE_DEF)[0]).atom.elem as SwapLine).start) {
+        this.start = true;
       }
+      return;
+    } else if (this.start && ew.getSiteByIndex(4)) {
+      ew.swap(4);
     }
 
     super.exec(ew);
