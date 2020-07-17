@@ -1,237 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>MFM.ROCKS - Movable Feast Machine Simulator</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #222;
+        color: #eee;
+      }
 
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #222;
-      color: #eee;
-    }
-
-    h3 {
-      color: #e1325e;
-      margin-bottom: 2px;
-      margin-top: 4px;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    #instructions {
-      font-size: 13px;
-      display: block;
-      margin-left: 20px;
-    }
-
-    #instructions ul {
-      display: block;
-      margin-left: 20px;
-    }
-
-    #instructions li {
-      text-align: left;
-      margin: 5px 0;
-    }
-
-    ul li {
-      flex: 1;
-      text-align: center;
-    }
-
-    ul li img {
-      text-align: center;
-      max-width: 395px;
-    }
-
-    a {
-      color: #e1325e;
-    }
-
-    footer,
-    header {
-      margin: 100px 0;
-      color: #aaa;
-      text-align: center;
-    }
-
-    #element-container {
-      margin: 10px 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      grid-gap: 1rem;
-
-    }
-
-    .element {
-      color: #fefefe;
-      user-select: none;
-      display: inline-block;
-      background-color: #444;
-      padding: 3px 6px;
-      margin: 2px;
-      font-size: 0.75rem;
-      border: 1px solid #000;
-      cursor: hand;
-      border-radius: 4px;
-    }
-
-    .alert {
-      user-select: none;
-      display: none;
-      background-color: #c52525;
-
-      padding: 12px;
-      padding-top: 24px;
-      padding-bottom: 24px;
-
-      margin: 12px;
-      margin-top: 24px;
-      margin-bottom: 24px;
-
-      font-size: 1.1rem;
-      font-weight: bold;
-      border: 4px solid #000;
-      cursor: hand;
-      border-radius: 8px;
-
-    }
-
-    .alert.show {
-      display: inline-block;
-    }
-
-    .element.selected {
-      background-color: #e000a6;
-    }
-
-    #mfm-grid-container {
-      margin-bottom: 20px;
-    }
-
-    @media only screen and (min-width:1300px) {
+      h3 {
+        color: #e1325e;
+        margin-bottom: 2px;
+        margin-top: 4px;
+      }
 
       main {
-        max-width: 1600px;
+        max-width: 800px;
         margin: 0 auto;
-        padding: 40px;
+      }
+
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      #instructions {
+        font-size: 13px;
+        display: block;
+        margin-left: 20px;
+      }
+
+      #instructions ul {
+        display: block;
+        margin-left: 20px;
+      }
+
+      #instructions li {
+        text-align: left;
+        margin: 5px 0;
+      }
+
+      ul li {
+        flex: 1;
+        text-align: center;
+      }
+
+      ul li img {
+        text-align: center;
+        max-width: 395px;
+      }
+
+      a {
+        color: #e1325e;
+      }
+
+      footer,
+      header {
+        margin: 100px 0;
+        color: #aaa;
+        text-align: center;
       }
 
       #element-container {
-        justify-items: center;
-
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-auto-rows: 1fr;
-        text-align: left;
-      }
-
-      #mfm-grid {
+        margin: 10px 0;
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        justify-items: right;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-gap: 1rem;
       }
 
-      #mfm {
-        margin: 0 auto;
+      .element {
+        color: #fefefe;
+        user-select: none;
+        display: inline-block;
+        background-color: #444;
+        padding: 3px 6px;
+        margin: 2px;
+        font-size: 0.75rem;
+        border: 1px solid #000;
+        cursor: hand;
+        border-radius: 4px;
       }
-    }
-  </style>
-</head>
 
-<body>
-  <main>
-    <header>
-      <img src="resources/mfmrocks-logo.png" alt="" width="800px" />
-      <nav>
-        <ul>
-          <li><a target="_blank" href="https://github.com/walpolea/MFM-JS?ref=mfmrocks">MFM-JS Github</a></li>
-          <li>
-            <a target="_blank" href="http://robust.cs.unm.edu/doku.php">Robust-First Wiki (what is all this?)</a>
-          </li>
-          <li>
-            <a target="_blank" href="https://www.youtube.com/channel/UC1M91QuLZfCzHjBMEKvIc-A?ref=mfmrocks">T2Tile
-              Project Youtube</a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <div id="app">
-      <div id="intro">
-        <h1>The Simulator</h1>
-        <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
-          Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to
-          function.
-        </h1>
-        <p>
-          Have fun playing with the following simulator. But before you get started, understand that this is not meant
-          to be a perfect copy of Dr. Dave Ackley's Movable Feast Machine. Instead, this project is intended to expose
-          you to what robust-first living computation is like. Also, the simulator currently only emulates a single
-          tile, and is not built in a way to grow indefinitely.
-        </p>
-      </div>
-      <div id="mfm-grid">
-        <div id="element-container">
-          <div v-for="groupName in Array.from(typeMap.keys())">
-            <h3>{{groupName}}</h3>
-            <span class="element" v-for="element in typeMap.get(groupName)"
-              :class="{selected: curSelectedElement === element[0]}" @click="selectElement(element[0], element[1]);">
-              {{element[0]}}
-            </span>
+      .alert {
+        user-select: none;
+        display: none;
+        background-color: #c52525;
+
+        padding: 12px;
+        padding-top: 24px;
+        padding-bottom: 24px;
+
+        margin: 12px;
+        margin-top: 24px;
+        margin-bottom: 24px;
+
+        font-size: 1.1rem;
+        font-weight: bold;
+        border: 4px solid #000;
+        cursor: hand;
+        border-radius: 8px;
+      }
+
+      .alert.show {
+        display: inline-block;
+      }
+
+      .element.selected {
+        background-color: #e000a6;
+      }
+
+      #mfm-grid-container {
+        margin-bottom: 20px;
+      }
+
+      @media only screen and (min-width: 1300px) {
+        main {
+          max-width: 1600px;
+          margin: 0 auto;
+          padding: 40px;
+        }
+
+        #element-container {
+          justify-items: center;
+
+          grid-template-columns: 1fr 1fr 1fr;
+          grid-auto-rows: 1fr;
+          text-align: left;
+        }
+
+        #mfm-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          justify-items: right;
+        }
+
+        #mfm {
+          margin: 0 auto;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div id="app">
+        <header v-show="!fullScreenMode">
+          <img src="resources/mfmrocks-logo.png" alt="" width="800px" />
+          <nav>
+            <ul>
+              <li><a target="_blank" href="https://github.com/walpolea/MFM-JS?ref=mfmrocks">MFM-JS Github</a></li>
+              <li>
+                <a target="_blank" href="http://robust.cs.unm.edu/doku.php">Robust-First Wiki (what is all this?)</a>
+              </li>
+              <li>
+                <a target="_blank" href="https://www.youtube.com/channel/UC1M91QuLZfCzHjBMEKvIc-A?ref=mfmrocks">T2Tile Project Youtube</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+
+        <div id="intro" v-show="!fullScreenMode">
+          <h1>The Simulator</h1>
+          <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
+            Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to function.
+          </h1>
+          <p>
+            Have fun playing with the following simulator. But before you get started, understand that this is not meant to be a perfect copy of Dr. Dave
+            Ackley's Movable Feast Machine. Instead, this project is intended to expose you to what robust-first living computation is like. Also, the simulator
+            currently only emulates a single tile, and is not built in a way to grow indefinitely.
+          </p>
+        </div>
+        <div id="mfm-grid">
+          <div id="element-container">
+            <div v-for="groupName in Array.from(typeMap.keys())">
+              <h3>{{groupName}}</h3>
+              <span
+                class="element"
+                v-for="element in typeMap.get(groupName)"
+                :class="{selected: curSelectedElement === element[0]}"
+                @click="selectElement(element[0], element[1]);"
+              >
+                {{element[0]}}
+              </span>
+            </div>
+          </div>
+          <div id="mfm-grid-container">
+            <div id="mfm"></div>
+
+            <div style="display: grid; grid-template-columns: auto 1fr auto;">
+              <span>Speed:</span>
+              <input type="range" min="0" max="25000" v-model="timeSpeed" step="10" width="100%" />
+              <span>
+                <input type="text" v-model="timeSpeed" size="7" />
+                <input type="checkbox" v-model="tenex" />
+                10x
+              </span>
+            </div>
+
+            <div style="margin-top: 10px;">
+              <button @click="clearAllOfType()">Clear Type</button>
+              <button @click="reload()">Clear Grid</button>
+              Grid Size:
+              <select v-model=" gridSize">
+                <option value="32x32">32x32</option>
+                <option value="48x48">48x48</option>
+                <option value="60x40">60x40</option>
+                <option value="64x64" selected>64x64</option>
+                <option value="96x96">96x96</option>
+                <option value="128x128">128x128</option>
+                <option value="196x196">196x196</option>
+              </select>
+              Render?
+              <input type="checkbox" v-model="shouldRender" />
+            </div>
           </div>
         </div>
-        <div id="mfm-grid-container">
-
-          <div id="mfm"></div>
-
-          
-
-          
-          <div style="display:grid;grid-template-columns: auto 1fr auto;">
-            <span>Speed: </span>
-            <input type="range" min="0" max="25000" v-model="timeSpeed" step="10" width="100%">
-            <span><input type="text" v-model="timeSpeed" size=7> <input type="checkbox" v-model="tenex">10x</span>
-          </div>
-
-          <div style="margin-top:10px;">
-
-            <button @click="clearAllOfType()">Clear Type</button>
-            <button @click="reload()">Clear Grid</button>
-            Grid Size:
-            <select v-model=" gridSize">
-              <option value="32x32">32x32</option>
-              <option value="48x48">48x48</option>
-              <option value="60x40">60x40</option>
-              <option value="64x64" selected>64x64</option>
-              <option value="96x96">96x96</option>
-              <option value="128x128">128x128</option>
-              <option value="196x196">196x196</option>
-            </select>
-            Render? <input type="checkbox" v-model="shouldRender">
-          </div>
-        </div>
-
-        
-
-      </div>
-    </div>
-    </div>
-    <h3>Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
-    <!-- <ul id="instructions">
+        <h3 v-show="!fullScreenMode">Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
+        <!-- <ul id="instructions">
       <li>hold "t" - DREG</li>
       <li>hold "e" - EMPTY</li>
       <li>hold "w" - WALL</li>
@@ -257,30 +250,33 @@
       <li>hold "k" - LoopSeed, which will generate a cell-like loop structure that grows!</li>
       <li>hold "m" - Sticky Membrane will stick to the first thing it finds, or itself until it finds something</li>
     </ul> -->
-    <section id="extras">
-      <h1>Extras</h1>
-      <h3>Here's some mfm.rocks propaganda</h3>
-      <ul>
-        <li><img src="resources/art/mfm-carpeeventwindow-web.jpg" alt="" /></li>
-        <li><img src="resources/art/mfm-compute-web.jpg" alt="" /></li>
-        <li><img src="resources/art/mfm-compute2-web.jpg" alt="" /></li>
-        <li><img src="resources/art/mfm-dregres-web.jpg" alt="" /></li>
-        <li><img src="resources/art/mfm-mason-web.jpg" alt="" /></li>
-        <li><img src="resources/art/mfm-forkbomb-web.jpg" alt="" /></li>
-      </ul>
-    </section>
-    <footer>
-      <nav>
-        <ul>
-          <li>Created by <a target="_blank" href="https://www.twitter.com/walpolea">Andrew Walpole</a></li>
-          <li>This project is open source, and contributors are welcomed!</li>
-        </ul>
-      </nav>
-    </footer>
-  </main>
+        <section id="extras" v-show="!fullScreenMode">
+          <h1>Extras</h1>
+          <h3>Here's some mfm.rocks propaganda</h3>
+          <ul>
+            <li><img src="resources/art/mfm-carpeeventwindow-web.jpg" alt="" /></li>
+            <li><img src="resources/art/mfm-compute-web.jpg" alt="" /></li>
+            <li><img src="resources/art/mfm-compute2-web.jpg" alt="" /></li>
+            <li><img src="resources/art/mfm-dregres-web.jpg" alt="" /></li>
+            <li><img src="resources/art/mfm-mason-web.jpg" alt="" /></li>
+            <li><img src="resources/art/mfm-forkbomb-web.jpg" alt="" /></li>
+          </ul>
+        </section>
+        <footer v-show="!fullScreenMode">
+          <nav>
+            <ul>
+              <li>
+                Created by
+                <a target="_blank" href="https://www.twitter.com/walpolea">Andrew Walpole</a>
+              </li>
+              <li>This project is open source, and contributors are welcomed!</li>
+            </ul>
+          </nav>
+        </footer>
+      </div>
+    </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-  <script src="./mfm.js"></script>
-</body>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="./mfm.js"></script>
+  </body>
 </html>

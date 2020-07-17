@@ -42,6 +42,7 @@ import { Emitters } from "./core/elements/Emitters";
 import { CellMembrane } from "./core/elements/CellMembraneElement";
 import { CellBrane } from "./core/elements/CellBraneElement";
 import { CellOuterMembrane } from "./core/elements/CellOuterMembraneElement";
+import { Sonar } from "./core/elements/SonarElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -57,8 +58,14 @@ export class ElementIncludes {
       ["AntiForkBomb", AntiForkBomb.CREATE],
       ["Sentry", Sentry.CREATE],
       ["SwapLine", SwapLine.CREATE],
-      ["SwapLine VLINE", Builders.VLINE_SL],
-      ["SwapLine Emitter", Emitters.SWAPLINE],
+      ["SL E", Builders.VLINE_SL_E],
+      ["SL W", Builders.VLINE_SL_W],
+      ["SL N", Builders.HLINE_SL_N],
+      ["SL S", Builders.HLINE_SL_S],
+      ["SL E Em", Emitters.SWAPLINE_E],
+      ["SL W Em", Emitters.SWAPLINE_W],
+      ["SL N Em", Emitters.SWAPLINE_N],
+      ["SL S Em", Emitters.SWAPLINE_S],
     ])
     .set("Structural", [
       ["Wall", Wall.CREATE],
@@ -145,7 +152,10 @@ export class ElementIncludes {
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
     ])
-    .set("Misc", [["Eraser", Eraser.CREATE]])
+    .set("Misc", [
+      ["Sonar", Sonar.CREATE],
+      ["Eraser", Eraser.CREATE],
+    ])
     .set("Sandbox Stuff", [
       ["Sand", Sand.CREATE],
       ["Water", Water.CREATE],

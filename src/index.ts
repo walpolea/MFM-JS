@@ -18,9 +18,15 @@ let app = new Vue({
       curSelectedElement: "" as string,
       curSelectedFunc: undefined as Function,
       shouldRender: true as boolean,
+      fullScreenMode: false as boolean,
     };
   },
   mounted() {
+    const params = this.getParams(window.location.href);
+    if (params.fullscreen) {
+      this.fullScreenMode = true;
+    }
+
     this.initTile();
   },
   methods: {
@@ -45,6 +51,19 @@ let app = new Vue({
     },
     clearAllOfType() {
       this.mfmRenderer.killType(this.curSelectedFunc().type);
+    },
+
+    getParams(url: string) {
+      var params: any = {};
+      var parser = document.createElement("a");
+      parser.href = url;
+      var query = parser.search.substring(1);
+      var vars = query.split("&");
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        params[pair[0]] = decodeURIComponent(pair[1]) as any;
+      }
+      return params;
     },
   },
   computed: {

@@ -9,7 +9,10 @@ import { Sorter } from "./SorterElement";
 
 export class Emitters {
   //Emitters
-  static SWAPLINE = Emitter.CREATOR([Builders.VLINE_SL, EventWindow.E, 80]);
+  static SWAPLINE_E = Emitter.CREATOR([Builders.VLINE_SL_E, EventWindow.E, 80]);
+  static SWAPLINE_W = Emitter.CREATOR([Builders.VLINE_SL_W, EventWindow.W, 80]);
+  static SWAPLINE_N = Emitter.CREATOR([Builders.HLINE_SL_N, EventWindow.N, 80]);
+  static SWAPLINE_S = Emitter.CREATOR([Builders.HLINE_SL_S, EventWindow.S, 80]);
   static STICKYMEMBRANE = Emitter.CREATOR([StickyMembrane.CREATE, EventWindow.ADJACENT8WAY, 50]);
   static SWAPWORM = Emitter.CREATOR([SwapWorm.CREATE, EventWindow.ADJACENT8WAY, 100]);
   static DATA_STREAM = Emitter.CREATOR([Data.CREATE, EventWindow.ADJACENT8WAY, 1]);

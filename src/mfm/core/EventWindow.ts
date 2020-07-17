@@ -368,7 +368,7 @@ export class EventWindow {
   private makeWindow(tile: Tile, origin: GridCoord) {
     this.origin = tile.getSiteByCoord(origin);
 
-    this.window = new Array<Site>();
+    this.window = new Array<Site>(41);
     this.tile = tile;
 
     //use event window template offsets to build the rest of the event window
@@ -380,7 +380,8 @@ export class EventWindow {
       offset = EventWindow.WINDOW_OFFSETS[i];
       site = tile.getSiteByCoord(this.offsetFromOrigin(origin, offset));
 
-      this.window.push(site);
+      // this.window.push(site);
+      this.window[i] = site;
     }
   }
 

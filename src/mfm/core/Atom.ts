@@ -5,7 +5,6 @@ import { ElementTypes } from "./ElementTypes";
 import { Empty } from "./elements/EmptyElement";
 
 export class Atom {
-
   type: IElementType;
   elem: Elem;
   data: any;
@@ -41,9 +40,8 @@ export class Atom {
   }
 
   exec(ew: EventWindow) {
-
     //profile?
-    //var t0 = performance.now();
+    // var t0 = performance.now();
 
     this.elem.exec(ew);
 

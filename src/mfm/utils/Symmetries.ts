@@ -1,7 +1,4 @@
-
 export class Symmetries {
-
-
   //SYMMETRIES
   static PSYM_DEG000L: number[][] = Symmetries.processArrayMiddleOut([
     [38],
@@ -38,7 +35,6 @@ export class Symmetries {
     [33, 22, 31],
     [38],
   ]);
-
 
   static PSYM_DEG270L: number[][] = Symmetries.processArrayMiddleOut([
     [37],
@@ -105,7 +101,6 @@ export class Symmetries {
   static PSYM_FLIPY = Symmetries.PSYM_DEG000R;
   static PSYM_FLIPXY = Symmetries.PSYM_DEG180L;
 
-
   static ALL: Map<number, number>[] = [
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG000L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG090L),
@@ -117,9 +112,11 @@ export class Symmetries {
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG270R),
   ];
 
-  static NORMAL: Map<number, number>[] = [
-    Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL)
-  ];
+  static NORMAL: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL)];
+
+  static FLIPY: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY)];
+
+  static FLIPX: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX)];
 
   static NONE: Map<number, number>[] = Symmetries.NORMAL;
 
@@ -128,28 +125,24 @@ export class Symmetries {
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG090L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG180L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG270L),
-  ]
-
-  static REFLECTX: Map<number, number>[] = [
-    Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL),
-    Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX),
   ];
 
-  static REFLECTY: Map<number, number>[] = [
-    Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL),
-    Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY),
-  ];
+  static ROTATE_90L: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG090R)];
+  static ROTATE_90R: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG090R)];
+  static ROTATE_270L: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG270R)];
+
+  static REFLECTX: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL), Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX)];
+  static REFLECTY: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL), Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY)];
 
   static FLIPS: Map<number, number>[] = [
     Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL),
     Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY),
     Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX),
     Symmetries.SYM_MAP(Symmetries.PSYM_FLIPXY),
-  ]
+  ];
 
   //this is what maps a symmetry to NORMAL, where key is normal index and value is symmetry index
   static SYM_MAP(sym: number[][]): Map<number, number> {
-
     const symmap: Map<number, number> = new Map<number, number>();
 
     const flatNormal = Symmetries.PSYM_NORMAL.flat();
@@ -160,15 +153,13 @@ export class Symmetries {
     });
 
     return symmap;
-
-
   }
 
   //DIY Symmetry sets with a bitmask
   static GET_SYMMETRIES(bitmask: number): Map<number, number>[] {
     return Symmetries.ALL.filter((sym, index) => {
       return bitmask & (1 << index);
-    })
+    });
   }
 
   //takes in an array of Event Window Indexes and maps them to a new symmetry
@@ -178,43 +169,38 @@ export class Symmetries {
     });
   }
 
-  static processArrayMiddleOut(array: any[], startIndex?: number, direction: string = 'left'): any[] {
-
+  static processArrayMiddleOut(array: any[], startIndex?: number, direction: string = "left"): any[] {
     if (!startIndex) {
-      startIndex = array.length * .5 >> 0;
+      startIndex = (array.length * 0.5) >> 0;
     }
     if (startIndex < 0) {
       startIndex = 0;
-    }
-    else if (startIndex > array.length) {
+    } else if (startIndex > array.length) {
       startIndex = array.length - 1;
-    };
+    }
 
     var newArray = [];
 
     var i = startIndex;
 
-    if (direction === 'right') {
+    if (direction === "right") {
       var j = i + 1;
       while (j < array.length || i >= 0) {
         if (i >= 0) newArray.push(array[i]);
         if (j < array.length) newArray.push(array[j]);
         i--;
         j++;
-      };
-    }
-    else if (direction === 'left') {
+      }
+    } else if (direction === "left") {
       var j = i - 1;
       while (j >= 0 || i < array.length) {
         if (i < array.length) newArray.push(array[i]);
         if (j >= 0) newArray.push(array[j]);
         i++;
         j--;
-      };
-    };
+      }
+    }
 
     return newArray;
   }
-
-
 }

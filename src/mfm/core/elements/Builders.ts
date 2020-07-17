@@ -48,5 +48,8 @@ export class Builders {
   static VDLINE = Builder.CREATOR([DecayWall.LIVE_100, Splatish.VLINE, Symmetries.NORMAL]);
   static HDLINE = Builder.CREATOR([DecayWall.LIVE_100, Splatish.HLINE, Symmetries.NORMAL]);
 
-  static VLINE_SL = Builder.CREATOR([SwapLine.CREATE, Splatish.VLINE, Symmetries.NORMAL]);
+  static VLINE_SL_E = Builder.CREATOR([SwapLine.CREATE_EAST, Splatish.VLINE, Symmetries.NORMAL]);
+  static VLINE_SL_W = Builder.CREATOR([SwapLine.CREATE_WEST, Splatish.VLINE, Symmetries.NORMAL]);
+  static HLINE_SL_N = Builder.CREATOR([SwapLine.CREATE_NORTH, Splatish.HLINE, Symmetries.NORMAL]);
+  static HLINE_SL_S = Builder.CREATOR([SwapLine.CREATE_SOUTH, Splatish.HLINE, Symmetries.NORMAL]);
 }
