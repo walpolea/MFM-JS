@@ -8,6 +8,7 @@ import { Symmetries } from "../../utils/Symmetries";
 import { Utils } from "../../utils/MFMUtils";
 import { Atom } from "../Atom";
 import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
+import { DecayWall } from "./DecayWallElement";
 
 export class DirectionalTraveler extends Elem {
   static TYPE_DEF: IElementType = { name: "DirectionalTraveler", type: "Dt", class: DirectionalTraveler, color: 0xffffaa };
@@ -20,6 +21,7 @@ export class DirectionalTraveler extends Elem {
   direction: Direction;
   counter = 0;
   max = 3;
+  lastMovedRight: boolean = false;
 
   constructor(_direction: Direction = "S") {
     super(DirectionalTraveler.TYPE_DEF);
@@ -35,10 +37,11 @@ export class DirectionalTraveler extends Elem {
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
     if (ew.is(travelTo, Empty.TYPE_DEF)) {
-      ew.swap(travelTo);
+      ew.move(travelTo, DecayWall.CREATE([5]));
       console.log(this.direction);
     } else {
-      this.direction = Wayfinder.slightRight(this.direction);
+      this.direction = Utils.oneIn(2) ? Wayfinder.slightRight(this.direction) : Wayfinder.slightLeft(this.direction);
+      this.lastMovedRight = true;
     }
 
     // if (this.counter % this.max == 0) {

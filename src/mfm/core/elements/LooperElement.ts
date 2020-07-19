@@ -8,6 +8,7 @@ import { Symmetries } from "../../utils/Symmetries";
 import { Utils } from "../../utils/MFMUtils";
 import { Atom } from "../Atom";
 import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
+import { DecayWall } from "./DecayWallElement";
 
 export class Looper extends Elem {
   static TYPE_DEF: IElementType = { name: "Looper", type: "Lo", class: Looper, color: 0xaaaaff };
@@ -37,10 +38,11 @@ export class Looper extends Elem {
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
     if (ew.is(travelTo, Empty.TYPE_DEF)) {
-      ew.swap(travelTo);
+      ew.move(travelTo, DecayWall.CREATE([10]));
+
       console.log(this.direction);
     } else {
-      this.direction = Wayfinder.turnRight(this.direction);
+      this.direction = Wayfinder.veerRight(this.direction);
     }
 
     if (this.counter % this.max == 0) {
