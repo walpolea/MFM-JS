@@ -23,7 +23,7 @@ export class DirectionalTraveler extends Elem {
 
   constructor(_direction: Direction = "S") {
     super(DirectionalTraveler.TYPE_DEF);
-    this.direction = _direction; //Wayfinder.DIRECTIONS[(Wayfinder.DIRECTIONS.length * Math.random()) >> 0];
+    this.direction = Wayfinder.DIRECTIONS[(Wayfinder.DIRECTIONS.length * Math.random()) >> 0];
   }
 
   reverse() {
@@ -38,15 +38,13 @@ export class DirectionalTraveler extends Elem {
       ew.swap(travelTo);
       console.log(this.direction);
     } else {
-      console.log("change direction");
-
-      this.direction = Wayfinder.turnLeft(this.direction);
+      this.direction = Wayfinder.slightRight(this.direction);
     }
 
-    if (this.counter % this.max == 0) {
-      this.counter = 0;
-      this.direction = Wayfinder.veerLeft(this.direction);
-    }
+    // if (this.counter % this.max == 0) {
+    //   this.counter = 0;
+    //   this.direction = Utils.oneIn(2) ? Wayfinder.veerRight(this.direction) : Wayfinder.veerLeft(this.direction);
+    // }
 
     super.exec(ew);
   }

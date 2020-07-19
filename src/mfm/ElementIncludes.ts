@@ -44,6 +44,7 @@ import { CellBrane } from "./core/elements/CellBraneElement";
 import { CellOuterMembrane } from "./core/elements/CellOuterMembraneElement";
 import { Sonar } from "./core/elements/SonarElement";
 import { DirectionalTraveler } from "./core/elements/DirectionalTravelerElement";
+import { Fly } from "./core/elements/FlyElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -160,6 +161,7 @@ export class ElementIncludes {
       ["Eraser", Eraser.CREATE],
     ])
     .set("Sandbox Stuff", [
+      ["Fly", Fly.CREATE],
       ["Sand", Sand.CREATE],
       ["Water", Water.CREATE],
       ["Sand Grid", GridBuilder.GRID_SAND],
