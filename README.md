@@ -20,5 +20,6 @@ Install
 - `npm install`
 - `npm run build`
 - serve up index.html to view in browser
-  - you can `npm install -g http-server`
-  - and then `http-server ./dist`
+  - you can `npm install -g serve`
+  - and then `serve ./dist`
+  - or even `npx serv ./dist`

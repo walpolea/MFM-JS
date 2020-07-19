@@ -9,6 +9,50 @@ import { Symmetries } from "../utils/Symmetries";
 import { Utils } from "../utils/MFMUtils";
 import { SPLATEval } from "../utils/SPLAT";
 
+export type EWIndexes = EWIndex[];
+export type EWIndex =
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23
+  | 24
+  | 25
+  | 26
+  | 27
+  | 28
+  | 29
+  | 30
+  | 31
+  | 32
+  | 33
+  | 34
+  | 35
+  | 36
+  | 37
+  | 38
+  | 39
+  | 40;
+
 //Event window as describbed here: http://robust.cs.unm.edu/lib/exe/fetch.php?w=300&tok=4c8f49&media=dev:event-window-10.png
 //Collection of sites which contain atoms, built from an origin (center) site
 export class EventWindow {

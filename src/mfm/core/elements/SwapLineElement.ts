@@ -56,6 +56,18 @@ export class SwapLine extends Elem {
     this.creationLimit = _creationLimit;
   }
 
+  reverseDirection() {
+    const directionMapBounce: Map<string, string> = new Map<string, string>([
+      ["E", "W"],
+      ["N", "S"],
+      ["W", "E"],
+      ["S", "N"],
+    ]);
+
+    // return directionMapBounce.get(this.direction);
+    this.direction = directionMapBounce.get(this.direction);
+  }
+
   getToDirection(ew: EventWindow): number {
     switch (this.direction) {
       case "E":
@@ -105,15 +117,22 @@ export class SwapLine extends Elem {
   }
 
   exec(ew: EventWindow) {
+    let swapped: boolean = false;
     const toDir = this.getToDirection(ew);
     const toSym = this.getToSymmetry(ew);
-    if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) ew.origin.killSelf();
+    //if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) ew.origin.killSelf();
     if (this.shouldStart(ew)) this.start = true;
 
-    const checkForeignSL = ew.query(SwapLine.checkForeignSL, 1, SwapLine.SPLAT_MAP, toSym);
+    const checkForeignSL = ew.query(SwapLine.checkForeignSL, 2, SwapLine.SPLAT_MAP, toSym);
 
     if (checkForeignSL) {
       this.blockedCount++;
+      //   // this.reverseDirection();
+    }
+
+    if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) {
+      this.reverseDirection();
+      this.blockedCount = 0;
     }
 
     if (!this.start) {
@@ -126,14 +145,23 @@ export class SwapLine extends Elem {
     }
 
     const checkMove = ew.query(SwapLine.checkMOVE, 1, SwapLine.SPLAT_MAP, toSym);
+    const SLCount = ew.getIndexes(EventWindow.ALLADJACENT, SwapLine.TYPE_DEF, false).length;
 
-    if (checkMove) {
-      if ((ew.getSiteByIndex(checkMove.get(SwapLine.TYPE_DEF)[0]).atom.elem as SwapLine).start) {
+    if (checkMove && SLCount <= 8) {
+      const neighborSL = ew.getSiteByIndex(checkMove.get(SwapLine.TYPE_DEF)[0]).atom.elem as SwapLine;
+      if (neighborSL.start) {
         this.start = true;
       }
+
+      this.direction = neighborSL.direction;
       return;
-    } else if (this.start && ew.getSiteByIndex(toDir)) {
-      ew.swap(toDir);
+    } else if ((this.start && ew.getSiteByIndex(toDir)) || SLCount > 8) {
+      swapped = ew.swap(toDir);
+
+      if (!swapped) {
+        console.log("rev");
+        this.reverseDirection();
+      }
     }
 
     super.exec(ew);

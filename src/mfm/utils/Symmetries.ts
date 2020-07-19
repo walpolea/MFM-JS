@@ -1,3 +1,5 @@
+export type Symmetry = Map<number, number>[];
+
 export class Symmetries {
   //SYMMETRIES
   static PSYM_DEG000L: number[][] = Symmetries.processArrayMiddleOut([
@@ -101,7 +103,7 @@ export class Symmetries {
   static PSYM_FLIPY = Symmetries.PSYM_DEG000R;
   static PSYM_FLIPXY = Symmetries.PSYM_DEG180L;
 
-  static ALL: Map<number, number>[] = [
+  static ALL: Symmetry = [
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG000L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG090L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG180L),
@@ -112,29 +114,29 @@ export class Symmetries {
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG270R),
   ];
 
-  static NORMAL: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL)];
+  static NORMAL: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL)];
 
-  static FLIPY: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY)];
+  static FLIPY: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY)];
 
-  static FLIPX: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX)];
+  static FLIPX: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX)];
 
-  static NONE: Map<number, number>[] = Symmetries.NORMAL;
+  static NONE: Symmetry = Symmetries.NORMAL;
 
-  static ROTATIONS: Map<number, number>[] = [
+  static ROTATIONS: Symmetry = [
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG000L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG090L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG180L),
     Symmetries.SYM_MAP(Symmetries.PSYM_DEG270L),
   ];
 
-  static ROTATE_90L: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG090R)];
-  static ROTATE_90R: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG090R)];
-  static ROTATE_270L: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG270R)];
+  static ROTATE_90L: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG090R)];
+  static ROTATE_90R: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG090R)];
+  static ROTATE_270L: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_DEG270R)];
 
-  static REFLECTX: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL), Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX)];
-  static REFLECTY: Map<number, number>[] = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL), Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY)];
+  static REFLECTX: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL), Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX)];
+  static REFLECTY: Symmetry = [Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL), Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY)];
 
-  static FLIPS: Map<number, number>[] = [
+  static FLIPS: Symmetry = [
     Symmetries.SYM_MAP(Symmetries.PSYM_NORMAL),
     Symmetries.SYM_MAP(Symmetries.PSYM_FLIPY),
     Symmetries.SYM_MAP(Symmetries.PSYM_FLIPX),
@@ -156,7 +158,7 @@ export class Symmetries {
   }
 
   //DIY Symmetry sets with a bitmask
-  static GET_SYMMETRIES(bitmask: number): Map<number, number>[] {
+  static GET_SYMMETRIES(bitmask: number): Symmetry {
     return Symmetries.ALL.filter((sym, index) => {
       return bitmask & (1 << index);
     });

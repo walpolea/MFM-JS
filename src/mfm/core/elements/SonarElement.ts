@@ -9,26 +9,27 @@ import { Utils } from "../../utils/MFMUtils";
 export class Sonar extends Elem {
   static TYPE_DEF: IElementType = { name: "Sonar", type: "Ra", class: Sonar, color: 0x559922 };
   static CREATE = Sonar.CREATOR();
+  static CREATE_BLUE = Sonar.CREATOR(undefined, undefined, 0x5599bb);
   static CREATE_EAST = Sonar.CREATOR(["E"]);
   static CREATE_WEST = Sonar.CREATOR(["W"]);
   static CREATE_NORTH = Sonar.CREATOR(["N"]);
   static CREATE_SOUTH = Sonar.CREATOR(["S"]);
 
   direction: string;
-  interval: number = 10;
+  interval: number;
   intervalCount: number = 0;
   intervalChange: number = 1;
-  intervalMax: number = 10;
-  intervalMin: number = 10;
+  intervalMax: number = 4;
+  intervalMin: number = 4;
 
   hitSomething: boolean = false;
 
   p_ChanceToDeviate: number = 20;
 
-  constructor(_direction: string = "S", _speed: number = 2) {
+  constructor(_direction: string = undefined) {
     super(Sonar.TYPE_DEF);
 
-    this.direction = _direction;
+    this.direction = _direction ?? ["N", "S", "E", "W"][(Math.random() * 4) >> 0];
     this.interval = this.intervalMin;
   }
 
@@ -91,24 +92,10 @@ export class Sonar extends Elem {
       ["S", "N"],
     ]);
 
+    // return directionMapBounce.get(this.direction);
     return directionMapClockwise.get(this.direction);
-    return Utils.oneIn(10) ? directionMapBounce.get(this.direction) : directionMapClockwise.get(this.direction);
+    return Utils.oneIn(10) ? directionMapClockwise.get(this.direction) : directionMapBounce.get(this.direction);
     return Utils.oneIn(2) ? directionMapClockwise.get(this.direction) : directionMapCounter.get(this.direction);
-
-    // switch (this.direction) {
-    //   case "E":
-    //     return Utils.oneIn(this.p_ChanceToDeviate) ? "N" : "W";
-    //     break;
-    //   case "W":
-    //     return Utils.oneIn(this.p_ChanceToDeviate) ? "S" : "E";
-    //     break;
-    //   case "N":
-    //     return Utils.oneIn(this.p_ChanceToDeviate) ? "W" : "S";
-    //     break;
-    //   case "S":
-    //     return Utils.oneIn(this.p_ChanceToDeviate) ? "E" : "N";
-    //     break;
-    // }
   }
 
   changeDirection() {
@@ -127,7 +114,6 @@ export class Sonar extends Elem {
 
   exec(ew: EventWindow) {
     const toDir = this.getToDirection(ew);
-    const toSym = this.getToSymmetry(ew);
 
     if (this.intervalCount % this.interval == 0) {
       this.changeDirection();
@@ -137,12 +123,22 @@ export class Sonar extends Elem {
     if (ew.is(toDir, Empty.TYPE_DEF)) {
       ew.swap(toDir);
     } else {
-      // this.direction = this.getNextDirection();
       this.changeDirection();
       this.hitSomething = true;
     }
 
     this.intervalCount++;
+
+    //sync up
+    // const nearbySonar = ew.getIndexes(EventWindow.ADJACENT8WAY, Sonar.TYPE_DEF, true)[0];
+
+    // if (nearbySonar) {
+    //   const n = ew.getSiteByIndex(nearbySonar).atom.elem as Sonar;
+    //   this.direction = n.direction;
+    //   this.interval = n.interval;
+    //   this.intervalCount = n.intervalCount;
+    //   this.intervalChange = n.intervalChange;
+    // }
 
     super.exec(ew);
   }
