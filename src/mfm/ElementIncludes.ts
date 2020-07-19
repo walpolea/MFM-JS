@@ -45,6 +45,7 @@ import { CellOuterMembrane } from "./core/elements/CellOuterMembraneElement";
 import { Sonar } from "./core/elements/SonarElement";
 import { DirectionalTraveler } from "./core/elements/DirectionalTravelerElement";
 import { Fly } from "./core/elements/FlyElement";
+import { Looper } from "./core/elements/LooperElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -156,6 +157,7 @@ export class ElementIncludes {
     ])
     .set("Misc", [
       ["Directional", DirectionalTraveler.CREATE],
+      ["Looper", Looper.CREATE],
       ["Sonar", Sonar.CREATE],
       ["Sonar Blue", Sonar.CREATE_BLUE],
       ["Eraser", Eraser.CREATE],
