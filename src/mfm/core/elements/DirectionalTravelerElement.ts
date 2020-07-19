@@ -32,7 +32,7 @@ export class DirectionalTraveler extends Elem {
 
   exec(ew: EventWindow) {
     this.counter++;
-    const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction);
+    const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
     if (ew.is(travelTo, Empty.TYPE_DEF)) {
       ew.swap(travelTo);
@@ -45,7 +45,7 @@ export class DirectionalTraveler extends Elem {
 
     if (this.counter % this.max == 0) {
       this.counter = 0;
-      this.direction = Wayfinder.slightLeft(this.direction);
+      this.direction = Wayfinder.veerLeft(this.direction);
     }
 
     super.exec(ew);
