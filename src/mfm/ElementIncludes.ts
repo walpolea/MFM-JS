@@ -46,6 +46,7 @@ import { Sonar } from "./core/elements/SonarElement";
 import { DirectionalTraveler } from "./core/elements/DirectionalTravelerElement";
 import { Fly } from "./core/elements/FlyElement";
 import { Looper } from "./core/elements/LooperElement";
+import { LoopMason } from "./core/elements/LoopMason";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -73,6 +74,7 @@ export class ElementIncludes {
     .set("Structural", [
       ["Wall", Wall.CREATE],
       ["Soft Wall", Wall.SOFT_WALL],
+      ["Loop Mason", LoopMason.CREATE],
       ["Mason", Mason.CREATE],
       ["Super Mason", SuperMason.CREATE],
       // ["Super Mason Random", SuperMason.RANDOM_CREATE],

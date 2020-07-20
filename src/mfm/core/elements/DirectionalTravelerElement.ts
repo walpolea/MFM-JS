@@ -37,8 +37,7 @@ export class DirectionalTraveler extends Elem {
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
     if (ew.is(travelTo, Empty.TYPE_DEF)) {
-      ew.move(travelTo, DecayWall.CREATE([5]));
-      console.log(this.direction);
+      ew.move(travelTo, DecayWall.CREATE([10]));
     } else {
       this.direction = Utils.oneIn(2) ? Wayfinder.slightRight(this.direction) : Wayfinder.slightLeft(this.direction);
       this.lastMovedRight = true;

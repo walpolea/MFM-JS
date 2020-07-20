@@ -5,22 +5,21 @@ import { ElementTypes } from "../ElementTypes";
 import { Empty } from "./EmptyElement";
 import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
 import { DecayWall } from "./DecayWallElement";
-import { Utils } from "../../utils/MFMUtils";
 
-export class Looper extends Elem {
-  static TYPE_DEF: IElementType = { name: "Looper", type: "Lo", class: Looper, color: 0xaaaaff };
-  static CREATE = Looper.CREATOR();
-  static CREATE_EAST = Looper.CREATOR(["E"]);
-  static CREATE_WEST = Looper.CREATOR(["W"]);
-  static CREATE_NORTH = Looper.CREATOR(["N"]);
-  static CREATE_SOUTH = Looper.CREATOR(["S"]);
+export class LoopMason extends Elem {
+  static TYPE_DEF: IElementType = { name: "LoopMason", type: "Lm", class: LoopMason, color: 0xaaaaff };
+  static CREATE = LoopMason.CREATOR();
+  static CREATE_EAST = LoopMason.CREATOR(["E"]);
+  static CREATE_WEST = LoopMason.CREATOR(["W"]);
+  static CREATE_NORTH = LoopMason.CREATOR(["N"]);
+  static CREATE_SOUTH = LoopMason.CREATOR(["S"]);
 
   direction: Direction;
   counter: number = 0;
   max: number;
 
   constructor(_direction?: Direction, _max?: number) {
-    super(Looper.TYPE_DEF);
+    super(LoopMason.TYPE_DEF);
 
     this.direction = _direction ? _direction : Wayfinder.DIRECTIONS[(Wayfinder.DIRECTIONS_PRIMARY.length * Math.random()) >> 0];
     this.max = _max ? _max : (3 + Math.random() * 4) >> 0;
@@ -35,51 +34,43 @@ export class Looper extends Elem {
 
     const makeWall: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
     if (ew.is(makeWall, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall, DecayWall.CREATE([50]));
+      ew.mutate(makeWall, DecayWall.CREATE([100]));
     }
 
     const makeWall2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
     if (ew.is(makeWall2, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall2, DecayWall.CREATE([50]));
+      ew.mutate(makeWall2, DecayWall.CREATE([100]));
     }
 
     const makeWall3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
     if (ew.is(makeWall3, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall3, DecayWall.CREATE([50]));
+      ew.mutate(makeWall3, DecayWall.CREATE([100]));
     }
 
     const makeWall4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
     if (ew.is(makeWall4, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall4, DecayWall.CREATE([50]));
+      ew.mutate(makeWall4, DecayWall.CREATE([100]));
     }
 
-    if (ew.is(travelTo, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.move(travelTo);
-    } else {
-      this.direction = Wayfinder.veerRight(this.direction);
+    if (ew.is(travelTo, [LoopMason.TYPE_DEF, Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
+      const lm = LoopMason.CREATE([this.direction, this.max]);
+      (lm.elem as LoopMason).counter = this.counter;
+
+      // ew.move(travelTo, DecayWall.CREATE([100]));
+      ew.move(travelTo, lm);
+      this.counter++;
+
+      if (this.counter % this.max == 0) {
+        this.counter = 0;
+        this.direction = Wayfinder.veerRight(this.direction);
+      }
     }
-
-    this.counter++;
-
-    if (this.counter % this.max == 0) {
-      this.counter = 0;
-      this.direction = Wayfinder.veerRight(this.direction);
-    }
-
-    // if (this.counter % this.max == 0) {
-    //   this.counter = 0;
-    //   if (Utils.oneIn(2)) {
-    //     this.direction = Wayfinder.slightRight(this.direction);
-    //   } else {
-    //     this.direction = Wayfinder.slightLeft(this.direction);
-    //   }
-    // }
 
     super.exec(ew);
   }
 }
 
 //Initialize Splat Map maps the # to to the self type
-Looper.INITIALIZE_SPLAT_MAP()();
+LoopMason.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementTypes.registerType(Looper.TYPE_DEF);
+ElementTypes.registerType(LoopMason.TYPE_DEF);
