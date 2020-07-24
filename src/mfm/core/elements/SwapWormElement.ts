@@ -1,4 +1,4 @@
-import { EventWindow } from "../EventWindow";
+import { EventWindow, EWIndex } from "../EventWindow";
 import { IElementType } from "../IElementType";
 import { ElementTypes } from "../ElementTypes";
 import { Empty } from "./EmptyElement";
@@ -9,6 +9,8 @@ import { Res } from "./ResElement";
 import { Wall } from "./WallElement";
 import { Data } from "./DataElement";
 import { StickyMembrane } from "./StickyMembraneElement";
+import { Direction, Wayfinder } from "../../utils/MFMWayfinder";
+import { Utils } from "../../utils/MFMUtils";
 
 export class SwapWorm extends LinkedList {
   static TYPE_DEF: IElementType = { name: "SWAP WORM", type: "Sw", class: SwapWorm, color: 0xcc0066 };
@@ -19,6 +21,8 @@ export class SwapWorm extends LinkedList {
   idleCount: number = 0;
   dazedCount: number = 0;
   growData: number;
+  useDirectionality: boolean = true;
+  direction: Direction = "W";
 
   constructor(size: number = 7, prev?: number, next?: number) {
     super(SwapWorm.TYPE_DEF, prev, next);
@@ -56,20 +60,67 @@ export class SwapWorm extends LinkedList {
     return false;
   }
 
+  slightLeft() {
+    this.direction = Wayfinder.slightLeft(this.direction);
+  }
+  veerLeft() {
+    this.direction = Wayfinder.veerLeft(this.direction);
+  }
+  turnLeft() {
+    this.direction = Wayfinder.turnLeft(this.direction);
+  }
+
+  slightRight() {
+    this.direction = Wayfinder.slightRight(this.direction);
+  }
+  veerRight() {
+    this.direction = Wayfinder.veerRight(this.direction);
+  }
+  turnRight() {
+    this.direction = Wayfinder.turnRight(this.direction);
+  }
+
   swapMove(ew: EventWindow, moveChoices?: number[]) {
-    //MAKE SWAPPER
-    const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
-    const relativeSiteToGoTo: number = choices[(Math.random() * choices.length) >> 0];
-    if (relativeSiteToGoTo) {
-      const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
+    const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+    let moved: boolean = false;
+
+    if (ew.is(travelTo, Empty.TYPE_DEF)) {
+      const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, travelTo, this.next]);
       (leavingAtom.elem as LinkedList).isSwapping = true;
 
-      const moved: boolean = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
+      moved = this.moveTo(ew, travelTo, leavingAtom);
+    } else {
+      const leftSite = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
+      const rightSite = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
 
-      return moved;
+      if (ew.is(rightSite, Empty.TYPE_DEF)) {
+        this.slightRight();
+      } else if (ew.is(leftSite, Empty.TYPE_DEF)) {
+        this.slightLeft();
+      } else {
+        const randChange: Function = [this.slightLeft, this.slightRight, this.veerLeft, this.veerRight, this.turnLeft, this.turnRight][
+          (Math.random() * 6) >> 0
+        ];
+        randChange.bind(this)();
+      }
     }
 
-    return false;
+    // const leftSlightSite = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
+    // const rightSlightSite = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
+    // const leftSite = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
+    // const rightSite = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
+
+    // const choices: number[] = ew.getIndexes(moveChoices || [travelTo, leftSlightSite, rightSlightSite, leftSite, rightSite], Empty.TYPE_DEF);
+    // // const choices: number[] = ew.getIndexes(moveChoices || EventWindow.ADJACENT4WAY, Empty.TYPE_DEF);
+    // const relativeSiteToGoTo: number = choices[(Math.random() * choices.length) >> 0];
+    // const leavingAtom: Atom = new Atom(SwapWorm.TYPE_DEF, [0, relativeSiteToGoTo, this.next]);
+    // (leavingAtom.elem as LinkedList).isSwapping = true;
+    // if (relativeSiteToGoTo) {
+    //   moved = this.moveTo(ew, relativeSiteToGoTo, leavingAtom);
+    //   this.direction = Wayfinder.indexToDirection(relativeSiteToGoTo as EWIndex, true);
+    // }
+
+    return moved;
   }
 
   //Eat res, and grow big and strong

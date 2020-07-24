@@ -138,6 +138,7 @@ export class ElementIncludes {
       ["SwapWorm", SwapWorm.CREATE],
       ["Long SW", SwapWorm.CREATOR([24])],
       ["Short SW", SwapWorm.CREATOR([1])],
+      ["Super SW", SwapWorm.CREATOR([255])],
       ["SW Emitter", Emitters.SWAPWORM],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE],

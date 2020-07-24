@@ -20,9 +20,7 @@ export class DirectionalTraveler extends Elem {
 
   direction: Direction;
   counter = 0;
-  max = 3;
-  lastMovedRight: boolean = false;
-
+  max = 20;
   constructor(_direction: Direction = "S") {
     super(DirectionalTraveler.TYPE_DEF);
     this.direction = Wayfinder.DIRECTIONS[(Wayfinder.DIRECTIONS.length * Math.random()) >> 0];
@@ -32,21 +30,49 @@ export class DirectionalTraveler extends Elem {
     this.direction = Wayfinder.reverse(this.direction);
   }
 
+  slightLeft() {
+    this.direction = Wayfinder.slightLeft(this.direction);
+  }
+
+  slightRight() {
+    this.direction = Wayfinder.slightRight(this.direction);
+  }
+
+  makeTrail(): Atom {
+    return DecayWall.CREATE([30], undefined, 0x68492d);
+  }
+
   exec(ew: EventWindow) {
     this.counter++;
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
+    const leftSite = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
+    const rightSite = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
+
     if (ew.is(travelTo, Empty.TYPE_DEF)) {
-      ew.move(travelTo, DecayWall.CREATE([10]));
+      if (ew.is(leftSite, Empty.TYPE_DEF)) ew.mutate(leftSite, this.makeTrail());
+      if (ew.is(rightSite, Empty.TYPE_DEF)) ew.mutate(rightSite, this.makeTrail());
+
+      ew.move(travelTo, this.makeTrail());
     } else {
-      this.direction = Utils.oneIn(2) ? Wayfinder.slightRight(this.direction) : Wayfinder.slightLeft(this.direction);
-      this.lastMovedRight = true;
+      const leftSite = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
+      const rightSite = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
+
+      if (ew.is(rightSite, Empty.TYPE_DEF)) {
+        this.slightRight();
+      } else if (ew.is(leftSite, Empty.TYPE_DEF)) {
+        this.slightLeft();
+      } else if (Utils.oneIn(2)) {
+        this.slightLeft();
+      } else {
+        this.slightRight();
+      }
     }
 
-    // if (this.counter % this.max == 0) {
-    //   this.counter = 0;
-    //   this.direction = Utils.oneIn(2) ? Wayfinder.veerRight(this.direction) : Wayfinder.veerLeft(this.direction);
-    // }
+    if (this.counter % this.max == 0) {
+      this.counter = 0;
+      this.direction = Utils.oneIn(2) ? Wayfinder.slightRight(this.direction) : Wayfinder.slightLeft(this.direction);
+    }
 
     super.exec(ew);
   }
