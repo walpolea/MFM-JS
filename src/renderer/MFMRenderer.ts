@@ -76,6 +76,13 @@ export class MFMRenderer {
     this.pixiapp.destroy(true);
   }
 
+  killAll() {
+    this.tile.sites.forEach((site) => {
+      site.killSelf();
+      this.rendererMap.get(site).update();
+    });
+  }
+
   killType(type: IElementType) {
     this.tile.sites.forEach((site) => {
       if (site?.atom?.type == type) {

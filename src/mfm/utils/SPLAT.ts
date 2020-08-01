@@ -57,4 +57,24 @@ export class SPLAT {
 
     return EWMAP;
   }
+
+  static MAP_NS: Map<number, string> = SPLAT.splatToMap(`
+  _
+  @
+  _
+  `);
+  static MAP_EW: Map<number, string> = SPLAT.splatToMap(`_@_`);
+
+  static MAP_E: Map<number, string> = SPLAT.splatToMap(`~@_`);
+  static MAP_W: Map<number, string> = SPLAT.splatToMap(`_@~`);
+  static MAP_S: Map<number, string> = SPLAT.splatToMap(`
+  ~
+  @
+  _
+  `);
+  static MAP_N: Map<number, string> = SPLAT.splatToMap(`
+  _
+  @
+  ~
+  `);
 }

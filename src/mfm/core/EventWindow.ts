@@ -802,6 +802,26 @@ export class EventWindow {
     return isIt;
   }
 
+  any(siteSet: number[], type: IElementType): boolean {
+    if (this.howMany(siteSet, type) > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  all(siteSet: number[], type: IElementType): boolean {
+    if (this.howMany(siteSet, type) == siteSet.length) {
+      return true;
+    }
+
+    return false;
+  }
+
+  howMany(siteSet: number[], type: IElementType): number {
+    return this.getIndexes(siteSet, type, false).length;
+  }
+
   //given a map of types that is keyed by Event Window index numbers
   //compare the indexes to the event window
   //this allows you to pass in a desired Event Window state and see if there's a match

@@ -11,6 +11,7 @@ import { Data } from "./DataElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 import { Direction, Wayfinder } from "../../utils/MFMWayfinder";
 import { Utils } from "../../utils/MFMUtils";
+import { SwapLine } from "./SwapLineElement";
 
 export class SwapWorm extends LinkedList {
   static TYPE_DEF: IElementType = { name: "SWAP WORM", type: "Sw", class: SwapWorm, color: 0xcc0066 };
@@ -198,6 +199,10 @@ export class SwapWorm extends LinkedList {
   }
 
   exec(ew: EventWindow) {
+    if (ew.any(EventWindow.ADJACENT8WAY, SwapLine.TYPE_DEF)) {
+      return;
+    }
+
     if (this.dazedCount > 0) {
       this.dazedCount--;
       return;

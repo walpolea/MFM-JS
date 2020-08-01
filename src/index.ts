@@ -46,8 +46,9 @@ let app = new Vue({
       this.mfmRenderer.curSelectedElementFunction = this.curSelectedFunc;
     },
     reload() {
-      this.mfmRenderer.deconstruct();
-      this.initTile();
+      // this.mfmRenderer.deconstruct();
+      // this.initTile();
+      this.mfmRenderer.killAll();
     },
     clearAllOfType() {
       this.mfmRenderer.killType(this.curSelectedFunc().type);

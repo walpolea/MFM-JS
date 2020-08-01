@@ -1,4 +1,4 @@
-import { EventWindow } from "../EventWindow";
+import { EventWindow, EWIndex } from "../EventWindow";
 import { Elem } from "../Elem";
 import { IElementType } from "../IElementType";
 import { ElementTypes } from "../ElementTypes";
@@ -7,14 +7,20 @@ import { SPLAT } from "../../utils/SPLAT";
 import { Symmetries } from "../../utils/Symmetries";
 import { Utils } from "../../utils/MFMUtils";
 import { Atom } from "../Atom";
+import { Site } from "../Site";
+import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
 
 export class SwapLine extends Elem {
   static TYPE_DEF: IElementType = { name: "SwapLine", type: "Sl", class: SwapLine, color: 0xffffaa };
   static CREATE = SwapLine.CREATOR();
-  static CREATE_EAST = SwapLine.CREATOR(["E"]);
-  static CREATE_WEST = SwapLine.CREATOR(["W"]);
-  static CREATE_NORTH = SwapLine.CREATOR(["N"]);
-  static CREATE_SOUTH = SwapLine.CREATOR(["S"]);
+  static CREATE_EAST = SwapLine.CREATOR(["E", 1]);
+  static CREATE_WEST = SwapLine.CREATOR(["W", 1]);
+  static CREATE_NORTH = SwapLine.CREATOR(["N", 2]);
+  static CREATE_SOUTH = SwapLine.CREATOR(["S", 2]);
+  static CREATE_NORTHEAST = SwapLine.CREATOR(["NE", 3]);
+  static CREATE_NORTHWEST = SwapLine.CREATOR(["NW", 3]);
+  static CREATE_SOUTHEAST = SwapLine.CREATOR(["SE", 3]);
+  static CREATE_SOUTHWEST = SwapLine.CREATOR(["SW", 3]);
 
   static CREATE_BLUE = SwapLine.CREATOR(undefined, undefined, 0x0000ff);
 
@@ -36,132 +42,65 @@ export class SwapLine extends Elem {
   ###
   `);
 
-  static checkForeignSL = SPLAT.splatToMap(`
-  ~~~~#  
-  ~~@##
-  ~~~~#
+  static checkForeignSL = SPLAT.splatToMap(`  
+  ~~~@~~#
   `);
 
-  direction: string;
-  creationLimit: number;
+  direction: Direction;
+  priority: number;
+  isReversing: boolean = false;
   blockedCount: number = 0;
   blockedMax: number = 10;
 
   start: boolean = false;
 
-  constructor(_direction: string = "S", _creationLimit: number = 0) {
+  constructor(_direction: Direction = "E", _priority: number = 1) {
     super(SwapLine.TYPE_DEF);
 
     this.direction = _direction;
-    this.creationLimit = _creationLimit;
-  }
-
-  reverseDirection() {
-    const directionMapBounce: Map<string, string> = new Map<string, string>([
-      ["E", "W"],
-      ["N", "S"],
-      ["W", "E"],
-      ["S", "N"],
-    ]);
-
-    // return directionMapBounce.get(this.direction);
-    this.direction = directionMapBounce.get(this.direction);
-  }
-
-  getToDirection(ew: EventWindow): number {
-    switch (this.direction) {
-      case "E":
-        return 4;
-        break;
-      case "W":
-        return 1;
-        break;
-      case "N":
-        return 2;
-        break;
-      case "S":
-        return 3;
-        break;
-    }
-  }
-
-  getToSymmetry(ew: EventWindow): Map<number, number>[] {
-    switch (this.direction) {
-      case "E":
-        return Symmetries.NORMAL;
-        break;
-      case "W":
-        return Symmetries.FLIPX;
-        break;
-      case "N":
-        return Symmetries.ROTATE_270L;
-        break;
-      case "S":
-        return Symmetries.ROTATE_90R;
-        break;
-    }
-  }
-
-  shouldStart(ew: EventWindow): boolean {
-    switch (this.direction) {
-      case "E":
-      case "W":
-        return !ew.north || !ew.south;
-        break;
-
-      case "N":
-      case "S":
-        return !ew.east || !ew.west;
-        break;
-    }
+    this.priority = _priority;
   }
 
   exec(ew: EventWindow) {
-    let swapped: boolean = false;
-    const toDir = this.getToDirection(ew);
-    const toSym = this.getToSymmetry(ew);
-    if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) ew.origin.killSelf();
-    if (this.shouldStart(ew)) this.start = true;
+    const higherPrioritySLs: Site[] = ew
+      .getSites(EventWindow.ALLADJACENT, SwapLine.TYPE_DEF, false)
+      .filter((sl) => sl && (sl.atom.elem as SwapLine).priority > this.priority);
 
-    const checkForeignSL = ew.query(SwapLine.checkForeignSL, 2, SwapLine.SPLAT_MAP, toSym);
-
-    if (checkForeignSL) {
-      this.blockedCount++;
-      //this.reverseDirection();
-    }
-
-    // if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) {
-    //   this.reverseDirection();
-    //   this.blockedCount = 0;
-    // }
-
-    if (!this.start) {
-      const anySLNorth = ew.query(SwapLine.checkANY_NORTH, 1, SwapLine.SPLAT_MAP, toSym);
-      const anySLSouth = ew.query(SwapLine.checkANY_SOUTH, 1, SwapLine.SPLAT_MAP, toSym);
-
-      if ((anySLNorth && anySLSouth) || this.age > 10) {
-        this.start = true;
-      }
-    }
-
-    const checkMove = ew.query(SwapLine.checkMOVE, 1, SwapLine.SPLAT_MAP, toSym);
-    //const SLCount = ew.getIndexes(EventWindow.ALLADJACENT, SwapLine.TYPE_DEF, false).length;
-
-    if (checkMove) {
-      const neighborSL = ew.getSiteByIndex(checkMove.get(SwapLine.TYPE_DEF)[0]).atom.elem as SwapLine;
-      if (neighborSL.start) {
-        this.start = true;
-      }
-
-      this.direction = neighborSL.direction;
+    if (higherPrioritySLs.length) {
       return;
-    } else if (this.start && ew.getSiteByIndex(toDir)) {
-      swapped = ew.swap(toDir);
+    }
 
-      // if (!swapped) {
-      //   console.log("rev");
-      //   this.reverseDirection();
-      // }
+    const toDir: number = Wayfinder.directionToIndex(this.direction, true);
+    if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) ew.origin.killSelf();
+
+    const swapsAhead: boolean = ew.any(Wayfinder.getInFront(this.direction), SwapLine.TYPE_DEF);
+
+    if (swapsAhead) {
+      // this.blockedCount++;
+      this.isReversing = true;
+    } else {
+      this.isReversing = false;
+    }
+
+    let finalToDirection = this.isReversing ? Wayfinder.directionToIndex(Wayfinder.reverse(this.direction)) : toDir;
+
+    if (!this.start && this.age > 10) {
+      this.start = true;
+    }
+
+    const lookLeft = Wayfinder.directionToIndex(Wayfinder.veerLeft(Wayfinder.veerLeft(Wayfinder.veerLeft(this.direction))), true);
+    const lookRight = Wayfinder.directionToIndex(Wayfinder.veerRight(Wayfinder.veerRight(Wayfinder.veerRight(this.direction))), true);
+    const shouldMove: boolean = ew.any([lookLeft, lookRight], SwapLine.TYPE_DEF);
+
+    let swapped: boolean = false;
+    if (shouldMove) {
+      return;
+    } else if (this.start && ew.getSiteByIndex(finalToDirection)) {
+      swapped = ew.swap(finalToDirection);
+
+      if (!swapped) {
+        ew.origin.killSelf();
+      }
     }
 
     super.exec(ew);

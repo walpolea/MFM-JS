@@ -5,6 +5,8 @@ import { ElementTypes } from "../ElementTypes";
 import { Empty } from "./EmptyElement";
 import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
 import { DecayWall } from "./DecayWallElement";
+import { Wall } from "./WallElement";
+import { SwapLine } from "./SwapLineElement";
 
 export class LoopMason extends Elem {
   static TYPE_DEF: IElementType = { name: "LoopMason", type: "Lm", class: LoopMason, color: 0xaaaaff };
@@ -30,33 +32,37 @@ export class LoopMason extends Elem {
   }
 
   exec(ew: EventWindow) {
+    if (ew.any(EventWindow.ADJACENT8WAY, SwapLine.TYPE_DEF)) {
+      return;
+    }
+
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
     const makeWall: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
-    if (ew.is(makeWall, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall, DecayWall.CREATE([100]));
+    if (ew.is(makeWall, [Empty.TYPE_DEF, Wall.TYPE_DEF])) {
+      ew.mutate(makeWall, Wall.SOFT_WALL());
     }
 
     const makeWall2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
-    if (ew.is(makeWall2, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall2, DecayWall.CREATE([100]));
+    if (ew.is(makeWall2, [Empty.TYPE_DEF, Wall.TYPE_DEF])) {
+      ew.mutate(makeWall2, Wall.SOFT_WALL());
     }
 
     const makeWall3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
-    if (ew.is(makeWall3, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall3, DecayWall.CREATE([100]));
+    if (ew.is(makeWall3, [Empty.TYPE_DEF, Wall.TYPE_DEF])) {
+      ew.mutate(makeWall3, Wall.SOFT_WALL());
     }
 
     const makeWall4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
-    if (ew.is(makeWall4, [Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
-      ew.mutate(makeWall4, DecayWall.CREATE([100]));
+    if (ew.is(makeWall4, [Empty.TYPE_DEF, Wall.TYPE_DEF])) {
+      ew.mutate(makeWall4, Wall.SOFT_WALL());
     }
 
-    if (ew.is(travelTo, [LoopMason.TYPE_DEF, Empty.TYPE_DEF, DecayWall.TYPE_DEF])) {
+    if (ew.is(travelTo, [LoopMason.TYPE_DEF, Empty.TYPE_DEF, Wall.TYPE_DEF])) {
       const lm = LoopMason.CREATE([this.direction, this.max]);
       (lm.elem as LoopMason).counter = this.counter;
 
-      // ew.move(travelTo, DecayWall.CREATE([100]));
+      // ew.move(travelTo, Wall.CREATE([100]));
       ew.move(travelTo, lm);
       this.counter++;
 

@@ -1,5 +1,6 @@
 import { EWIndex } from "../core/EventWindow";
 import { Utils } from "./MFMUtils";
+import { IElementType } from "../core/IElementType";
 
 export type DirectionMap = Map<Direction, Direction>;
 export type Direction = "N" | "E" | "S" | "W" | "NW" | "NE" | "SW" | "SE" | "NNW" | "WNW" | "SSW" | "WSW" | "NNE" | "ENE" | "SSE" | "ESE";
@@ -9,6 +10,36 @@ export class Wayfinder {
   static DIRECTIONS_SECONDARY: Direction[] = ["NW", "NE", "SW", "SE"];
   static DIRECTIONS_TERTIARY: Direction[] = ["NNW", "WNW", "SSW", "WSW", "NNE", "ENE", "SSE", "ESE"];
   static DIRECTIONS: Direction[] = [...Wayfinder.DIRECTIONS_PRIMARY, ...Wayfinder.DIRECTIONS_SECONDARY, ...Wayfinder.DIRECTIONS_TERTIARY];
+
+  static W_LINE: EWIndex[] = [1, 9, 21, 37];
+  static N_LINE: EWIndex[] = [2, 10, 22, 38];
+  static S_LINE: EWIndex[] = [3, 11, 23, 39];
+  static E_LINE: EWIndex[] = [4, 12, 24, 40];
+
+  static NW_LINE: EWIndex[] = [5, 25];
+  static SW_LINE: EWIndex[] = [6, 26];
+  static NE_LINE: EWIndex[] = [7, 27];
+  static SE_LINE: EWIndex[] = [8, 28];
+
+  static WNW_LINE: EWIndex[] = [13, 29];
+  static NNW_LINE: EWIndex[] = [15, 31];
+  static NNE_LINE: EWIndex[] = [17, 33];
+  static ENE_LINE: EWIndex[] = [19, 35];
+
+  static WSW_LINE: EWIndex[] = [14, 30];
+  static SSW_LINE: EWIndex[] = [16, 32];
+  static SSE_LINE: EWIndex[] = [18, 34];
+  static ESE_LINE: EWIndex[] = [20, 36];
+
+  static W_QUADRANT: EWIndex[] = [1, 9, 13, 14, 21, 29, 30, 37];
+  static N_QUADRANT: EWIndex[] = [2, 10, 15, 17, 22, 31, 33, 38];
+  static S_QUADRANT: EWIndex[] = [3, 11, 16, 18, 23, 32, 34, 39];
+  static E_QUADRANT: EWIndex[] = [4, 12, 19, 20, 24, 35, 36, 40];
+
+  static NW_QUADRANT: EWIndex[] = [5, 13, 15, 25, 29, 31];
+  static SW_QUADRANT: EWIndex[] = [6, 14, 16, 26, 30, 32];
+  static NE_QUADRANT: EWIndex[] = [7, 17, 19, 27, 33, 35];
+  static SE_QUADRANT: EWIndex[] = [8, 18, 20, 28, 34, 36];
 
   static DIRMAP_CLOCKWISE_PRIMARY: DirectionMap = new Map<Direction, Direction>([
     ["E", "S"],
@@ -114,35 +145,27 @@ export class Wayfinder {
     ["SE", 8],
   ]);
 
-  static W_LINE: number[] = [1, 9, 21, 37];
-  static N_LINE: number[] = [2, 10, 22, 38];
-  static S_LINE: number[] = [3, 11, 23, 39];
-  static E_LINE: number[] = [4, 12, 24, 40];
+  static DIRECTIONS_FRONT_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
+    ["W", Wayfinder.W_LINE],
+    ["N", Wayfinder.N_LINE],
+    ["S", Wayfinder.S_LINE],
+    ["E", Wayfinder.E_LINE],
+    ["NW", Wayfinder.NW_LINE],
+    ["SW", Wayfinder.SW_LINE],
+    ["NE", Wayfinder.NE_LINE],
+    ["SE", Wayfinder.SE_LINE],
+  ]);
 
-  static NW_LINE: number[] = [5, 25];
-  static SW_LINE: number[] = [6, 26];
-  static NE_LINE: number[] = [7, 27];
-  static SE_LINE: number[] = [8, 28];
-
-  static WNW_LINE: number[] = [13, 29];
-  static NNW_LINE: number[] = [15, 31];
-  static NNE_LINE: number[] = [17, 33];
-  static ENE_LINE: number[] = [19, 35];
-
-  static WSW_LINE: number[] = [14, 30];
-  static SSW_LINE: number[] = [16, 32];
-  static SSE_LINE: number[] = [18, 34];
-  static ESE_LINE: number[] = [20, 36];
-
-  static W_QUADRANT: number[] = [1, 9, 13, 14, 21, 29, 30, 37];
-  static N_QUADRANT: number[] = [2, 10, 15, 17, 22, 31, 33, 38];
-  static S_QUADRANT: number[] = [3, 11, 16, 18, 23, 32, 34, 39];
-  static E_QUADRANT: number[] = [4, 12, 19, 20, 24, 35, 36, 40];
-
-  static NW_QUADRANT: number[] = [5, 13, 15, 25, 29, 31];
-  static SW_QUADRANT: number[] = [6, 14, 16, 26, 30, 32];
-  static NE_QUADRANT: number[] = [7, 17, 19, 27, 33, 35];
-  static SE_QUADRANT: number[] = [8, 18, 20, 28, 34, 36];
+  static DIRECTIONS_BEHIND_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
+    ["W", Wayfinder.E_LINE],
+    ["N", Wayfinder.S_LINE],
+    ["S", Wayfinder.N_LINE],
+    ["E", Wayfinder.W_LINE],
+    ["NW", Wayfinder.SE_LINE],
+    ["SW", Wayfinder.NE_LINE],
+    ["NE", Wayfinder.SW_LINE],
+    ["SE", Wayfinder.NW_LINE],
+  ]);
 
   static INDEX_DIRECTION_MAP: Map<number, Direction> = new Map<EWIndex, Direction>([
     [1, "W"],
@@ -238,5 +261,13 @@ export class Wayfinder {
 
   static slightRight(dir: Direction): Direction {
     return Wayfinder.nextDirection(dir, Wayfinder.DIRMAP_CLOCKWISE_ALL);
+  }
+
+  static getInFront(dir: Direction): EWIndex[] {
+    return Wayfinder.DIRECTIONS_FRONT_MAP.get(dir);
+  }
+
+  static getBehind(dir: Direction): EWIndex[] {
+    return Wayfinder.DIRECTIONS_FRONT_MAP.get(dir);
   }
 }

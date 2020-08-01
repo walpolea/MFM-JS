@@ -39,7 +39,7 @@ export class DirectionalTraveler extends Elem {
   }
 
   makeTrail(): Atom {
-    return DecayWall.CREATE([30], undefined, 0x68492d);
+    return DecayWall.CREATE([5], undefined, 0x68492d);
   }
 
   exec(ew: EventWindow) {
@@ -69,10 +69,10 @@ export class DirectionalTraveler extends Elem {
       }
     }
 
-    if (this.counter % this.max == 0) {
-      this.counter = 0;
-      this.direction = Utils.oneIn(2) ? Wayfinder.slightRight(this.direction) : Wayfinder.slightLeft(this.direction);
-    }
+    // if (this.counter % this.max == 0) {
+    //   this.counter = 0;
+    //   this.direction = Utils.oneIn(2) ? Wayfinder.slightRight(this.direction) : Wayfinder.slightLeft(this.direction);
+    // }
 
     super.exec(ew);
   }
