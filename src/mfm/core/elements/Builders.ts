@@ -53,8 +53,8 @@ export class Builders {
   static VLINE_SL_W = Builder.CREATOR([SwapLine.CREATE_WEST, Splatish.VLINE, Symmetries.NORMAL]);
   static HLINE_SL_N = Builder.CREATOR([SwapLine.CREATE_NORTH, Splatish.HLINE, Symmetries.NORMAL]);
   static HLINE_SL_S = Builder.CREATOR([SwapLine.CREATE_SOUTH, Splatish.HLINE, Symmetries.NORMAL]);
-  static DLINE_SL_NW = ExpertBuilder.CREATOR([SwapLine.CREATE_NORTHWEST, [SPLAT.MAP_E, SPLAT.MAP_N, SPLAT.MAP_E, SPLAT.MAP_N]]);
-  static DLINE_SL_NE = ExpertBuilder.CREATOR([SwapLine.CREATE_NORTHEAST, [SPLAT.MAP_W, SPLAT.MAP_N, SPLAT.MAP_W, SPLAT.MAP_N]]);
-  static DLINE_SL_SW = ExpertBuilder.CREATOR([SwapLine.CREATE_SOUTHWEST, [SPLAT.MAP_E, SPLAT.MAP_S, SPLAT.MAP_E, SPLAT.MAP_S]]);
-  static DLINE_SL_SE = ExpertBuilder.CREATOR([SwapLine.CREATE_SOUTHEAST, [SPLAT.MAP_W, SPLAT.MAP_S, SPLAT.MAP_W, SPLAT.MAP_S]]);
+  static DLINE_SL_NW = ExpertBuilder.CREATOR([SwapLine.CREATE_NORTHWEST, [SPLAT.MAP_E, SPLAT.MAP_N]]);
+  static DLINE_SL_NE = ExpertBuilder.CREATOR([SwapLine.CREATE_NORTHEAST, [SPLAT.MAP_W, SPLAT.MAP_N]]);
+  static DLINE_SL_SW = ExpertBuilder.CREATOR([SwapLine.CREATE_SOUTHWEST, [SPLAT.MAP_E, SPLAT.MAP_S]]);
+  static DLINE_SL_SE = ExpertBuilder.CREATOR([SwapLine.CREATE_SOUTHEAST, [SPLAT.MAP_W, SPLAT.MAP_S]]);
 }
