@@ -97,6 +97,7 @@ export class ElementIncludes {
       ["DecayWall Grid", GridBuilder.CREATOR([DecayWall.LIVE_100])],
       ["Builder", Builder.CREATE],
       ["Fun", Builders.LOOP],
+      ["CA", Builders.CA],
       ["H Wall", Builders.HLINE],
       ["V Wall", Builders.VLINE],
       ["SE Diag Wall", Builders.DLINE_SE],

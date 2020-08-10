@@ -57,4 +57,7 @@ export class Builders {
   static DLINE_SL_NE = ExpertBuilder.CREATOR([SwapLine.CREATE_NORTHEAST, [SPLAT.MAP_W, SPLAT.MAP_N]]);
   static DLINE_SL_SW = ExpertBuilder.CREATOR([SwapLine.CREATE_SOUTHWEST, [SPLAT.MAP_E, SPLAT.MAP_S]]);
   static DLINE_SL_SE = ExpertBuilder.CREATOR([SwapLine.CREATE_SOUTHEAST, [SPLAT.MAP_W, SPLAT.MAP_S]]);
+
+  // static CA = ExpertBuilder.CREATOR([Wall.CREATE, [SPLAT.MAP_NSEW, SPLAT.MAP_NE, SPLAT.MAP_NSEW, SPLAT.MAP_SW]]);
+  static CA = ExpertBuilder.CREATOR([DecayWall.CREATE, [SPLAT.MAP_NSEW, SPLAT.MAP_NSEW, SPLAT.MAP_N, SPLAT.MAP_NSEW, SPLAT.MAP_E, SPLAT.MAP_NSEW]]);
 }

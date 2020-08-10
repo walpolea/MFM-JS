@@ -58,6 +58,42 @@ export class SPLAT {
     return EWMAP;
   }
 
+  static MAP_ALL_DIAGONALS: Map<number, string> = SPLAT.splatToMap(`
+  _~_
+  ~@~
+  _~_
+  `);
+
+  static MAP_NW: Map<number, string> = SPLAT.splatToMap(`
+  _~~
+  ~@~
+  ~~~
+  `);
+
+  static MAP_SW: Map<number, string> = SPLAT.splatToMap(`
+  ~~~
+  ~@~
+  _~~
+  `);
+
+  static MAP_SE: Map<number, string> = SPLAT.splatToMap(`
+  ~~~
+  ~@~
+  ~~_
+  `);
+
+  static MAP_NE: Map<number, string> = SPLAT.splatToMap(`
+  ~~_
+  ~@~
+  ~~~
+  `);
+
+  static MAP_NSEW: Map<number, string> = SPLAT.splatToMap(`
+  ~_~
+  _@_
+  ~_~
+  `);
+
   static MAP_NS: Map<number, string> = SPLAT.splatToMap(`
   _
   @
