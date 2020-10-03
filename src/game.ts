@@ -40,7 +40,7 @@ let app = new Vue({
   methods: {
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
-      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800);
+      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, false);
 
       this.mfmRenderer.timeSpeed = this.timeSpeed ? this.timeSpeed : 5000;
       this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DReg";

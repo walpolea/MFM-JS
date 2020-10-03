@@ -20,7 +20,7 @@
       }
 
       main {
-        max-width: 800px;
+        /* max-width: 800px; */
         margin: 0 auto;
       }
 
@@ -121,7 +121,7 @@
         margin-bottom: 20px;
       }
 
-      @media only screen and (min-width: 1300px) {
+     
         main {
           max-width: 1600px;
           margin: 0 auto;
@@ -142,40 +142,34 @@
         }
 
         #mfm {
-          width:1600px;
+          width:100%;
+          max-width:1600px;
           margin: 0 auto;
         }
-      }
+
+        canvas {
+          /* min-height: 800px !important; */
+          width: 100% !important;
+          max-width: 1600px !important;
+          height: calc(100%/2) !important;
+        }
+      
     </style>
   </head>
 
   <body>
     <main id="game">
         <div id="intro" v-show="!fullScreenMode">
-          <h1>The Simulator</h1>
+          <h1>Ludum Dare 47 - Stuck in a Loop</h1>
           <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
             Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to function.
           </h1>
           <p>
-            Have fun playing with the following simulator. But before you get started, understand that this is not meant to be a perfect copy of Dr. Dave
-            Ackley's Movable Feast Machine. Instead, this project is intended to expose you to what robust-first living computation is like. Also, the simulator
-            currently only emulates a single tile, and is not built in a way to grow indefinitely.
+            Use your LEFT and RIGHT arrow keys to move your bein's across the grid. Get as many as you can to the goal, but watch out for enemies!!
           </p>
         </div>
         <div id="mfm-grid">
-          <div id="element-container">
-            <div v-for="groupName in Array.from(typeMap.keys())">
-              <h3>{{groupName}}</h3>
-              <span
-                class="element"
-                v-for="element in typeMap.get(groupName)"
-                :class="{selected: curSelectedElement === element[0]}"
-                @click="selectElement(element[0], element[1]);"
-              >
-                {{element[0]}}
-              </span>
-            </div>
-          </div>
+          
           <div id="mfm-grid-container">
             <div id="mfm"></div>
 
@@ -208,7 +202,19 @@
             </div>
           </div>
         </div>
-        <h3 v-show="!fullScreenMode">Click and drag mouse to modify sites, hold keys down to generate different elements</h3>
+        <div id="element-container" style="display:none;">
+          <div v-for="groupName in Array.from(typeMap.keys())">
+            <h3>{{groupName}}</h3>
+            <span
+              class="element"
+              v-for="element in typeMap.get(groupName)"
+              :class="{selected: curSelectedElement === element[0]}"
+              @click="selectElement(element[0], element[1]);"
+            >
+              {{element[0]}}
+            </span>
+          </div>
+        </div>
         
         
         <footer v-show="!fullScreenMode">

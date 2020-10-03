@@ -49,6 +49,7 @@ export class MFMRenderer {
   curSelectedElement: string;
   curSelectedElementFunction: Function;
   webGLSupported: boolean = utils.isWebGLSupported();
+  mouseEnabled:boolean = true;
 
   ewCache: Map<GridCoord, EventWindow> = new Map<GridCoord, EventWindow>();
 
@@ -58,11 +59,12 @@ export class MFMRenderer {
 
   pixiapp: Application;
 
-  constructor(_tile: Tile, _container: Element, appX:number = 800, appY:number = 800) {
+  constructor(_tile: Tile, _container: Element, appX:number = 800, appY:number = 800, _mouseEnabled:boolean = true) {
     this.tile = _tile;
     this.container = _container;
     this.appX = appX;
     this.appY = appY;
+    this.mouseEnabled = _mouseEnabled;
     this.siteSize = Math.floor(this.appX / this.tile.width);
 
     this.init();
@@ -233,7 +235,7 @@ export class MFMRenderer {
 
     
 
-    if (this.pointerDown && e.target) {
+    if (this.mouseEnabled && this.pointerDown && e.target) {
       let p: Point = e.data.getLocalPosition(this.pixiapp.stage);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as Sprite);
       this.selectedSite = site;
