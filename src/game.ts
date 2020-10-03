@@ -8,6 +8,7 @@ import { Goal } from "./mfm/core/elements/game/Goal";
 import { MembraneWall } from "./mfm/core/elements/MembraneWallElement";
 import { Site } from "./mfm/core/Site";
 import {GridCoord} from "./mfm/core/IGridCoord";
+import { Enemy } from "./mfm/core/elements/game/Enemy";
 
 declare var Vue: any;
 
@@ -58,6 +59,10 @@ let app = new Vue({
 
       levelData.walls.forEach( (w:GridCoord )=> {
         this.g.getSiteByCoord(w).atom = MembraneWall.SW_XL();
+      })
+
+      levelData.enemies.forEach( (e:GridCoord )=> {
+        this.g.getSiteByCoord(e).atom = Enemy.CREATE();
       })
 
 
