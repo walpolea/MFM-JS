@@ -3,6 +3,11 @@ import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
 import { DReg } from "./mfm/core/elements/DRegElement";
 import { Emitters } from "./mfm/core/elements/Emitters";
+import { Levels } from "./mfm/core/elements/game/Levels";
+import { Goal } from "./mfm/core/elements/game/Goal";
+import { MembraneWall } from "./mfm/core/elements/MembraneWallElement";
+import { Site } from "./mfm/core/Site";
+import {GridCoord} from "./mfm/core/IGridCoord";
 
 declare var Vue: any;
 
@@ -20,6 +25,7 @@ let app = new Vue({
       curSelectedFunc: undefined as Function,
       shouldRender: true as boolean,
       fullScreenMode: false as boolean,
+      currentLevel: 0 as number,
     };
   },
   mounted() {
@@ -40,7 +46,32 @@ let app = new Vue({
       this.curSelectedFunc = this.curSelectedFunc ? this.curSelectedFunc : DReg.CREATE;
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
 
-      this.g.getRandomSite().atom = Emitters.PLAYER();
+
+      this.loadLevel();
+    },
+    loadLevel() {
+
+      const levelData = Levels[this.currentLevel];
+
+      this.g.getSiteByCoord(levelData.playerStart).atom = Emitters.PLAYER();
+      this.g.getSiteByCoord(levelData.goal).atom = Goal.CREATE();
+
+      levelData.walls.forEach( (w:GridCoord )=> {
+        this.g.getSiteByCoord(w).atom = MembraneWall.SW_XL();
+      })
+
+
+    },
+    outputWalls() {
+      let layout = "";
+      const tile = this.g as Tile;
+      tile.sites.forEach( (s) => {
+        if( s.atom?.type === MembraneWall.TYPE_DEF) {
+          layout += JSON.stringify(s.tilePos) + ",";
+        }
+      });
+
+      console.log( layout );
     },
     selectElement(name: string, func: Function) {
       this.curSelectedElement = name;
