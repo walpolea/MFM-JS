@@ -43,8 +43,8 @@ let app = new Vue({
       this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, false);
 
       this.mfmRenderer.timeSpeed = this.timeSpeed ? this.timeSpeed : 5000;
-      this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DReg";
-      this.curSelectedFunc = this.curSelectedFunc ? this.curSelectedFunc : DReg.CREATE;
+      this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "Enemy";
+      this.curSelectedFunc = this.curSelectedFunc ? this.curSelectedFunc : Enemy.CREATE;
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
 
 
@@ -69,14 +69,22 @@ let app = new Vue({
     },
     outputWalls() {
       let layout = "";
+      let enemies = "";
       const tile = this.g as Tile;
       tile.sites.forEach( (s) => {
-        if( s.atom?.type === MembraneWall.TYPE_DEF) {
-          layout += JSON.stringify(s.tilePos) + ",";
+
+        switch(s.atom?.type) {
+          case MembraneWall.TYPE_DEF: 
+            layout += JSON.stringify(s.tilePos) + ",";
+          break;
+          case Enemy.TYPE_DEF:
+            enemies+= JSON.stringify(s.tilePos) + ",";
+          break;
         }
+        
       });
 
-      console.log( layout );
+      console.log( `enemies:[${enemies}],walls:[${layout}]` );
     },
     selectElement(name: string, func: Function) {
       this.curSelectedElement = name;

@@ -51,6 +51,7 @@ import { Networker } from "./core/elements/NetworkerElement";
 import { Player } from "./core/elements/game/Player";
 import { Emitter } from "./core/elements/EmitterElement";
 import { Goal } from "./core/elements/game/Goal";
+import { Enemy } from "./core/elements/game/Enemy";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -170,6 +171,7 @@ export class ElementIncludes {
       ["Player", Player.CREATE],
       ["PlayerEmitter", Emitters.PLAYER],
       ["Goal", Goal.CREATE],
+      ["Enemy", Enemy.CREATE],
     ])
     .set("Misc", [
       ["Directional", DirectionalTraveler.CREATE],
