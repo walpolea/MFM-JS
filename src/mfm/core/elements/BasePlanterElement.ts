@@ -21,7 +21,7 @@ export class BasePlanter extends Elem {
 
     //there and gone in a flash
     ew.mutateBase(new Atom(this.PLANT_TYPE));
-    ew.origin.killSelf();
+    ew.origin.die();
     super.exec(ew);
   }
 }

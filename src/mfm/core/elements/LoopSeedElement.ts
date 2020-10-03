@@ -132,7 +132,7 @@ export class LoopSeed extends Elem {
     }
 
     if (this.cycles > 123) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
 
 

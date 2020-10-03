@@ -25,7 +25,7 @@ export class AntiForkBomb extends Elem {
 
     //randomly die if no fork bombs around
     if (!fb && Math.random() * this.pDIE < 1) {
-      ew.origin.killSelf();
+      ew.origin.die();
       return;
     }
 
@@ -58,7 +58,7 @@ export class AntiForkBomb extends Elem {
       });
     }
 
-    ew.origin.killSelf();
+    ew.origin.die();
 
     super.exec(ew);
   }

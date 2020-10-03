@@ -87,7 +87,7 @@ export class LoopWorm extends LinkedList {
       let possibleRes = ew.getAdjacent4Way(Res.TYPE_DEF);
 
       if (possibleRes) {
-        possibleRes.killSelf();
+        possibleRes.die();
         this.expandCount++;
         this.eatCount++;
       }
@@ -144,7 +144,7 @@ export class LoopWorm extends LinkedList {
       //check that our next and prev are actually loopworms, otherwise, we diconnected somewhere!
       if (!(this.getPrevElement(ew) instanceof LinkedList) && !(this.getNextElement(ew) instanceof LinkedList) && !this.hasMoved(ew)) {
         console.log("disconnected");
-        ew.origin.killSelf();
+        ew.origin.die();
         return;
       }
 

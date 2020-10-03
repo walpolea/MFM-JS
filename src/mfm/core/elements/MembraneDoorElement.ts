@@ -35,7 +35,7 @@ export class MembraneDoor extends MembraneWall {
     } else {
 
       ew.getAll(StickyMembrane.TYPE_DEF).filter(site => site).forEach(site => {
-        site.killSelf();
+        site.die();
       })
 
       this.openCycles++;

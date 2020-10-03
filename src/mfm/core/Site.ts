@@ -29,7 +29,7 @@ export class Site {
     }
   }
 
-  killSelf(leavingAtom: Atom = new Atom(Empty.TYPE_DEF)) {
+  die(leavingAtom: Atom = new Atom(Empty.TYPE_DEF)) {
     this.atom = leavingAtom;
   }
 

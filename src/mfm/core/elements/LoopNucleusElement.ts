@@ -44,7 +44,7 @@ export class LoopNucleus extends Elem {
 
   eatStickyMembrane(ew: EventWindow) {
     ew.getSites(EventWindow.ADJACENT8WAY, StickyMembrane.TYPE_DEF).forEach((st) => {
-      if (st) st.killSelf();
+      if (st) st.die();
     });
   }
 
@@ -60,7 +60,7 @@ export class LoopNucleus extends Elem {
 
     //if the loop dies the nucleus should die at some point, also if the loop gets too big
     if (this.aloneCount > 100) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
 
     if (Utils.oneIn(this.pCREATE_RES)) {

@@ -50,7 +50,7 @@ export class Reducer extends Elem {
       }
 
       //console.log("REDUCED", ew.origin.atom.data);
-      site.killSelf();
+      site.die();
     }
   }
 }

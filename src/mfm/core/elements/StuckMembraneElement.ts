@@ -81,7 +81,7 @@ export class StuckMembrane extends Elem {
 
   uncrowd(ew: EventWindow) {
     if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 5) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
   }
 
@@ -106,7 +106,7 @@ export class StuckMembrane extends Elem {
 
     //death is the greatest adventure
     if (this.roamCount > this.maxRoam || this.idleCount > 100) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
 
     //we're stuck on our stickyType, do nothing!

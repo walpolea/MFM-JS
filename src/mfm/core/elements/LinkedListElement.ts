@@ -302,7 +302,7 @@ export class LinkedList extends Elem {
       if (ew.origin.atom.data) {
         ew.origin.atom = Data.CREATE([ew.origin.atom.data.value]);
       } else {
-        ew.origin.killSelf();
+        ew.origin.die();
       }
     }
 

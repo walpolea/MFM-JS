@@ -47,6 +47,9 @@ import { DirectionalTraveler } from "./core/elements/DirectionalTravelerElement"
 import { Fly } from "./core/elements/FlyElement";
 import { Looper } from "./core/elements/LooperElement";
 import { LoopMason } from "./core/elements/LoopMason";
+import { Networker } from "./core/elements/NetworkerElement";
+import { Player } from "./core/elements/game/Player";
+import { Emitter } from "./core/elements/EmitterElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -147,6 +150,7 @@ export class ElementIncludes {
       ["SW Emitter", Emitters.SWAPWORM],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE],
+      ["Networker", Networker.CREATE],
     ])
     .set("Data Stuff", [
       ["Data", Data.CREATE],
@@ -162,6 +166,8 @@ export class ElementIncludes {
       ["Reader", Reader.CREATE],
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
+      ["Player", Player.CREATE],
+      ["PlayerEmitter", Emitters.PLAYER],
     ])
     .set("Misc", [
       ["Directional", DirectionalTraveler.CREATE],

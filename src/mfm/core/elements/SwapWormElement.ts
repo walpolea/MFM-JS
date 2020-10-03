@@ -132,7 +132,7 @@ export class SwapWorm extends LinkedList {
     if (possibleData?.atom?.data?.value !== undefined) {
       this.dazedCount = 50;
       this.growData = possibleData.atom.data.value;
-      possibleData.killSelf();
+      possibleData.die();
     }
   }
 
@@ -171,7 +171,7 @@ export class SwapWorm extends LinkedList {
   //Eat up the Stuck Membrane protecting the worm in order to improve chances of getting unstuck
   lowerDefenses(ew: EventWindow) {
     ew.getAll(StickyMembrane.TYPE_DEF).forEach((membraneSite) => {
-      membraneSite.killSelf();
+      membraneSite.die();
     });
 
     // ew.getAll(StuckMembrane.TYPE_DEF).forEach(membraneSite => {

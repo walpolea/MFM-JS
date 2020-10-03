@@ -15,20 +15,26 @@ export class Emitter extends Elem {
   interval: number;
   count: number = 0;
   emitMap: number[];
+  maxEmit:number;
+  emitted = 0;
 
-  constructor(_atomizer: Function, _emitMap: number[] = EventWindow.ADJACENT8WAY, _interval: number = 10) {
+  constructor(_atomizer: Function, _emitMap: number[] = EventWindow.ADJACENT8WAY, _interval: number = 10, _maxEmit:number = Infinity) {
     super(Emitter.TYPE_DEF);
 
     this.atomizer = _atomizer;
     this.interval = _interval;
     this.emitMap = _emitMap;
+    this.maxEmit = _maxEmit;
   }
   exec(ew: EventWindow) {
-    if (++this.count % this.interval === 0) {
+    if (this.emitted < this.maxEmit && ++this.count % this.interval === 0) {
       this.count = 0;
 
       const empty: number = ew.getIndexes(this.emitMap, Empty.TYPE_DEF, true)[0];
-      if (empty !== undefined) ew.mutate(empty, this.atomizer());
+      if (empty !== undefined) {
+        ew.mutate(empty, this.atomizer());
+        this.emitted++;
+      }
     }
 
     super.exec(ew);

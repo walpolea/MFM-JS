@@ -60,7 +60,7 @@ export class Text extends Elem {
 
       this.init = true;
     } else {
-      ew.origin.killSelf(new Atom(Eraser.TYPE_DEF, [0, 9]));
+      ew.origin.die(new Atom(Eraser.TYPE_DEF, [0, 9]));
     }
     super.exec(ew);
   }

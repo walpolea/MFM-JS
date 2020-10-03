@@ -99,17 +99,17 @@ export class StickyMembrane extends Elem {
       ew.getAdjacent4Way(this.stickyType) &&
       ew.getSites(EventWindow.ALLADJACENT, StickyMembrane.TYPE_DEF, false).filter((site) => site).length > this.membraneDensity
     ) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
   }
 
   exec(ew: EventWindow) {
     if (this.roamCount > this.maxRoam) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
 
     if (this.idleCount > 100) {
-      ew.origin.killSelf();
+      ew.origin.die();
     }
 
     if (!this.stickyType || this.stickyType === StickyMembrane.TYPE_DEF) {

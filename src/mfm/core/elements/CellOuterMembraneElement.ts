@@ -209,7 +209,7 @@ export class CellOuterMembrane extends Elem {
 
   exec(ew: EventWindow) {
     if (this.roamCount > this.maxRoam) {
-      ew.origin.killSelf();
+      ew.origin.die();
       return;
     }
 
@@ -233,19 +233,19 @@ export class CellOuterMembrane extends Elem {
 
     //too many surrounding Empties - die
     if (ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.TYPE_DEF, false).length > 5) {
-      ew.origin.killSelf();
+      ew.origin.die();
       return;
     }
 
     //too many surrounding CellMembrane - die
     if (nearbyCM.length > 3) {
-      ew.origin.killSelf();
+      ew.origin.die();
       return;
     }
 
     // too many nearby OuterMembrane - die
     if (nearbyCOM.length > 28) {
-      ew.origin.killSelf();
+      ew.origin.die();
       return;
     }
     //////////////////////

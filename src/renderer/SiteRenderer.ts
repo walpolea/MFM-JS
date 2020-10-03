@@ -26,22 +26,6 @@ export class SiteRenderer {
   }
 
   update() {
-
     this.visual.tint = this.site.atom.elem.color;
-
-    // if (!this.site.atom.data) {
-    //   this.visual.tint = this.site.atom.elem.color;
-    //   return;
-    // }
-
-
-    // if (this.site.atom.data && this.site.atom.data.value) {
-    //   this.visual.tint = this.rgbToHex((this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5, (this.site.atom.data.value) * 5);
-    // }
-
   }
-
-  // rgbToHex(r: number, g: number, b: number) {
-  //   return ((1 << 24) + (r << 16) + (g << 8) + b);
-  // }
 }

@@ -42,7 +42,7 @@ export class Sentry extends Elem {
 
     //Kinda boring and crowded around here, requesting honorable discharge, sir!
     if (!this.onHighAlert && totalNearbySentry > 2) {
-      ew.origin.killSelf(Res.CREATE_BLUE());
+      ew.origin.die(Res.CREATE_BLUE());
     }
 
     //Res nearby? Maybe recruit someone for the cause

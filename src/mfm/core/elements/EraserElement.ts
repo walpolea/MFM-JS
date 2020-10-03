@@ -24,7 +24,7 @@ export class Eraser extends Elem {
       ew.destroy(i);
     }
     //die
-    ew.origin.killSelf();
+    ew.origin.die();
 
     super.exec(ew);
   }

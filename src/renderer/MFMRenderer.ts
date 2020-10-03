@@ -1,6 +1,6 @@
 ///<reference types="pixi.js"/>
 
-import { ParticleContainer, Container, Texture, Sprite, Application, utils, Point, Rectangle } from "pixi.js";
+import { ParticleContainer, Container, Texture, Sprite, Application, utils, Point, Rectangle, TYPES } from "pixi.js";
 import "../mfm/ElementIncludes";
 import { Tile } from "../mfm/core/Tile";
 import { EventWindow } from "../mfm/core/EventWindow";
@@ -27,10 +27,10 @@ import { Writer } from "../mfm/core/elements/WriterElement";
 import { SortMaster } from "../mfm/core/elements/SortMasterElement";
 import { OnewayDoor } from "../mfm/core/elements/OnewayDoorElement";
 import { IElementType } from "../mfm/core/IElementType";
-import { CellMembrane } from "../mfm/core/elements/CellMembraneElement";
-import { CellOuterMembrane } from "../mfm/core/elements/CellOuterMembraneElement";
+import { Player } from "../mfm/core/elements/game/Player";
 
 export class MFMRenderer {
+  static SITE_TEXTURE: Texture = Texture.from("/resources/element.png");
   appX: number = 800;
   appY: number = 800;
   selectedSite: Site;
@@ -38,14 +38,13 @@ export class MFMRenderer {
   siteSize: number = 8;
   siteSpacing: number = 0;
   gridOffset: number = 10;
-  srContainer: ParticleContainer = new ParticleContainer(200000, { tint: true });
+  srContainer: ParticleContainer = new ParticleContainer(50000, { tint: true });
   siteRenderers: Map<Sprite, SiteRenderer> = new Map<Sprite, SiteRenderer>();
   rendererMap: Map<Site, SiteRenderer> = new Map<Site, SiteRenderer>();
   container: Element;
   keysHeld: Set<string>;
   pointerDown: boolean = false;
   shouldRender: boolean = true;
-  siteTexture: Texture = Texture.from("/resources/element.png");
   clickArea: Container;
   curSelectedElement: string;
   curSelectedElementFunction: Function;
@@ -59,9 +58,11 @@ export class MFMRenderer {
 
   pixiapp: Application;
 
-  constructor(_tile: Tile, _container: Element) {
+  constructor(_tile: Tile, _container: Element, appX:number = 800, appY:number = 800) {
     this.tile = _tile;
     this.container = _container;
+    this.appX = appX;
+    this.appY = appY;
     this.siteSize = Math.floor(this.appX / this.tile.width);
 
     this.init();
@@ -78,7 +79,7 @@ export class MFMRenderer {
 
   killAll() {
     this.tile.sites.forEach((site) => {
-      site.killSelf();
+      site.die();
       this.rendererMap.get(site).update();
     });
   }
@@ -86,7 +87,7 @@ export class MFMRenderer {
   killType(type: IElementType) {
     this.tile.sites.forEach((site) => {
       if (site?.atom?.type == type) {
-        site.killSelf();
+        site.die();
         this.rendererMap.get(site).update();
       }
     });
@@ -109,7 +110,7 @@ export class MFMRenderer {
     this.pixiapp.stage.addChild(this.srContainer);
 
     this.clickArea = new Container();
-    this.clickArea.hitArea = new Rectangle(0, 0, 800, 800);
+    this.clickArea.hitArea = new Rectangle(0, 0, this.appX, this.appY);
     this.clickArea.interactive = true;
     this.pixiapp.stage.addChild(this.clickArea);
 
@@ -145,7 +146,7 @@ export class MFMRenderer {
 
     for (let i = 0; i < siteLen; i++) {
       site = sitesArray[i];
-      let sr: SiteRenderer = new SiteRenderer(site, this.siteSize, this.siteSpacing, this.siteTexture);
+      let sr: SiteRenderer = new SiteRenderer(site, this.siteSize, this.siteSpacing, MFMRenderer.SITE_TEXTURE);
 
       this.srContainer.addChild(sr.visual);
       this.siteRenderers.set(sr.visual, sr);
@@ -195,6 +196,22 @@ export class MFMRenderer {
 
   onKeyDown(key: any) {
     this.keysHeld.add(key.key);
+
+    if( key.key === "ArrowRight") {
+      this.tile.sites.forEach( s => {
+        if( s.atom?.type === Player.TYPE_DEF ) {
+          (s.atom.elem as Player).slightRight();
+        }
+      })
+    }
+
+    if( key.key === "ArrowLeft") {
+      this.tile.sites.forEach( s => {
+        if( s.atom?.type === Player.TYPE_DEF ) {
+          (s.atom.elem as Player).slightLeft();
+        }
+      })
+    }
   }
 
   onKeyUp(key: any) {
@@ -213,6 +230,9 @@ export class MFMRenderer {
   }
 
   handleClick(e: PIXI.InteractionEvent) {
+
+    
+
     if (this.pointerDown && e.target) {
       let p: Point = e.data.getLocalPosition(this.pixiapp.stage);
       let site: Site = this.getSiteFromCanvasXY(p.x, p.y); //this.siteRenderers.get(e.target as Sprite);

@@ -71,7 +71,7 @@ export class SwapLine extends Elem {
     }
 
     const toDir: number = Wayfinder.directionToIndex(this.direction, true);
-    if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) ew.origin.killSelf();
+    if (!ew.getSiteByIndex(toDir) || this.blockedCount > this.blockedMax) ew.origin.die();
 
     const swapsAhead: boolean = ew.any(Wayfinder.getInFront(this.direction), SwapLine.TYPE_DEF);
 
@@ -99,7 +99,7 @@ export class SwapLine extends Elem {
       swapped = ew.swap(finalToDirection);
 
       if (!swapped) {
-        ew.origin.killSelf();
+        ew.origin.die();
       }
     }
 
