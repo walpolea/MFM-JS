@@ -30,7 +30,7 @@ let app = new Vue({
       curSelectedFunc: undefined as Function,
       shouldRender: true as boolean,
       fullScreenMode: false as boolean,
-      currentLevel: 4 as number,
+      currentLevel: 0 as number,
       gameLoopInterval:undefined as number,
       totalScore: 0 as number,
       allDone: false as boolean,
