@@ -14,6 +14,7 @@ import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
 import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
 
 declare var Vue: any;
+declare var Howl:any;
 
 let app = new Vue({
   el: "#game",
@@ -29,10 +30,14 @@ let app = new Vue({
       curSelectedFunc: undefined as Function,
       shouldRender: true as boolean,
       fullScreenMode: false as boolean,
-      currentLevel: 0 as number,
+      currentLevel: 4 as number,
       gameLoopInterval:undefined as number,
       totalScore: 0 as number,
-      allDone: false as boolean
+      allDone: false as boolean,
+      isDebug: false as boolean,
+      backgroundMusic: undefined as any,
+      endingMusic:undefined as any,
+
     };
   },
   mounted() {
@@ -41,12 +46,31 @@ let app = new Vue({
       this.fullScreenMode = true;
     }
 
+    if( params.debug ) {
+      this.isDebug = true;
+    }
+
+    this.backgroundMusic = new Howl({
+      src: ['/gameFiles/Dreaming.ogg'],
+      autoplay: true,
+      loop: true,
+      volume: 0.3
+    });
+
+    this.backgroundMusic.play();
+
+    
+
     this.initTile();
   },
   methods: {
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
-      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, true);
+      if( this.isDebug ) {
+        this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, true);
+      } else {
+        this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, false);
+      }
 
       this.mfmRenderer.timeSpeed = this.timeSpeed ? this.timeSpeed : 5000;
       this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "Enemy";
@@ -78,6 +102,19 @@ let app = new Vue({
     },
 
     loadEndScreen() {
+      this.backgroundMusic.fade(.3, 0, 1500);
+      setTimeout(
+        ()=> {
+          this.backgroundMusic = new Howl({
+            src: ['/gameFiles/VoicesFromHeaven.ogg'],
+            autoplay: true,
+            loop: true,
+            volume: 0.2
+          });
+          this.backgroundMusic.play();
+        }, 1500
+      )
+      
       loadLevel(this.g, EndScreen);
     },
     outputWalls() {
@@ -132,7 +169,7 @@ let app = new Vue({
         }
       });
 
-      this.g.getRandomSite().atom = Clearer.CREATE();
+      tile.getRandomSite().atom = Clearer.CREATE();
 
       if( goalCount > 0 ) {
         this.totalScore += goalCount;
@@ -174,8 +211,29 @@ let app = new Vue({
     gameLoop() {
       if( this.levelIsDone() ) {
         clearInterval(this.gameLoopInterval);
+        console.log("END");
         this.levelEnded();
       }
+    },
+
+    turnLeft() {
+      
+  
+      const tile = this.g as Tile;
+      tile.sites.forEach( s => {
+        if( s.atom?.type === Player.TYPE_DEF ) {
+          (s.atom.elem as Player).slightLeft();
+        }
+      })
+    },
+
+    turnRight() {
+      const tile = this.g as Tile;
+      tile.sites.forEach( s => {
+        if( s.atom?.type === Player.TYPE_DEF ) {
+          (s.atom.elem as Player).slightRight();
+        }
+      })
     },
 
 

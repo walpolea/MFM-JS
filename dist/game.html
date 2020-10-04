@@ -117,6 +117,15 @@
         background-color: #e000a6;
       }
 
+      .turn-button {
+        height:60px;
+        flex:1;
+        margin: 10px;
+        background-color:#333333;
+        border:2px solid black;
+        padding:20px;
+      }
+
       #mfm-grid-container {
         margin-bottom: 20px;
       }
@@ -153,12 +162,14 @@
           max-width: 1600px !important;
           height: calc(100%/2) !important;
         }
+
+        [v-cloak] {display: none}
       
     </style>
   </head>
 
   <body>
-    <main id="game">
+    <main id="game" v-cloak>
         <div id="intro" v-show="!fullScreenMode">
           <h1>Ludum Dare 47 - Stuck in a Loop</h1>
           <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
@@ -175,19 +186,27 @@
           <div id="mfm-grid-container">
             <div id="mfm"></div>
 
-            <div style="display: grid; grid-template-columns: auto 1fr auto;">
-              <span>Game Speed:</span>
-              <input type="range" min="0" max="10000" v-model="timeSpeed" step="100" width="100%" />
+            <div style="display:flex;">
+              <button class="turn-button" @click="turnLeft()"><<<<<<<< TURN LEFT <<<<<<<< </button>
+              <button class="turn-button" @click="turnRight()">>>>>>>> TURN RIGHT >>>>>>> </button>
             </div>
 
-            <div style="margin-top: 10px;">
-              <button @click="clearAllOfType()">Clear Type</button>
-              <button @click="reload()">Clear Grid</button>
-              <button @click="outputWalls()">Get Walls</button>
+            <div v-if="isDebug">
+              <div style="display: grid; grid-template-columns: auto 1fr auto;">
+                <span>Game Speed:</span>
+                <input type="range" min="0" max="10000" v-model="timeSpeed" step="100" width="100%" />
+              </div>
+
+              <div style="margin-top: 10px;">
+                <button @click="clearAllOfType()">Clear Type</button>
+                <button @click="reload()">Clear Grid</button>
+                <button @click="outputWalls()">Get Walls</button>
+              </div>
             </div>
           </div>
         </div>
-        <div id="element-container" style="display:grid;">
+
+        <div v-if="isDebug" id="element-container" style="display:grid;">
           <div v-for="groupName in Array.from(typeMap.keys())">
             <h3>{{groupName}}</h3>
             <span
@@ -209,7 +228,7 @@
                 Created by
                 <a target="_blank" href="https://www.twitter.com/walpolea">Andrew Walpole</a>
               </li>
-              <li>This project is open source, and contributors are welcomed!</li>
+              <li>Find this project on <a href="https://github.com/walpolea/MFM-JS" target="_blank">github</a></li>
             </ul>
           </nav>
         </footer>
@@ -228,6 +247,7 @@
       gtag("config", "UA-166290982-2");
     </script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="./game.js"></script>
   </body>
