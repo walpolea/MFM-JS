@@ -21,7 +21,7 @@ let app = new Vue({
   data: function () {
     return {
       gridSize: "128x64" as string,
-      timeSpeed: 5000 as number,
+      timeSpeed: 8000 as number,
       tenex: false as boolean,
       g: undefined as Tile,
       mfmRenderer: MFMRenderer,
