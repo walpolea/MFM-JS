@@ -171,7 +171,7 @@ export class MFMRenderer {
       ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
 
       //if the window exists and origin is not an empty site
-      if (ew.window && !ew.origin.atom.is(Empty.TYPE_DEF)) {
+      if (ew.window && !ew.origin.atom?.is(Empty.TYPE_DEF)) {
         //element behaves
         ew.origin.atom.exec(ew);
 

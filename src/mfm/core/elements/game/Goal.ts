@@ -3,16 +3,14 @@ import { Elem } from "../../Elem";
 import { IElementType } from "../../IElementType";
 import { ElementTypes } from "../../ElementTypes";
 import { Empty } from "../EmptyElement";
-import { Utils } from "../../../utils/MFMUtils";
-import { Atom } from "../../Atom";
-import { Wayfinder, Direction } from "../../../utils/MFMWayfinder";
-import { DecayWall } from "../DecayWallElement";
 import { Player } from "./Player";
-import { Wall } from "../WallElement";
+import { RescuedPlayer } from "./RescuedPlayer";
 
 export class Goal extends Elem {
   static TYPE_DEF: IElementType = { name: "Goal", type: "Pl", class: Goal, color: 0x99bb11 };
   static CREATE = Goal.CREATOR();
+
+  rescued:number = 0;
 
   
   constructor() {
@@ -31,8 +29,9 @@ export class Goal extends Elem {
       np.finish();
 
       if( nearestEmpty ) {
-        ew.mutate(nearbyPlayer, Wall.SOFT_WALL())
+        ew.mutate(nearbyPlayer, RescuedPlayer.CREATE() )
         ew.swap(nearbyPlayer, nearestEmpty);
+        this.rescued++;
       }
 
     }

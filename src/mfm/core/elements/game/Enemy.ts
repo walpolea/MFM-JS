@@ -23,11 +23,25 @@ export class Enemy extends Elem {
 
 
   exec(ew: EventWindow) {
+
+    const outerPlayer = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], Player.TYPE_DEF, true)[0];
+
+    if( outerPlayer && Utils.oneIn(30) ) {
+      ew.destroy(outerPlayer);
+
+      if( Utils.oneIn(2) ) {
+        ew.destroy();
+      }
+    }
     
     const nearbyPlayer = ew.getNearestIndex(EventWindow.ADJACENT8WAY, Player.TYPE_DEF);
 
-    if( nearbyPlayer  && Utils.oneIn(10) ) {
+    if( nearbyPlayer  && Utils.oneIn(5) ) {
       ew.destroy(nearbyPlayer);
+
+      if( Utils.oneIn(3) ) {
+        ew.destroy();
+      }
     }
 
     Actions.patrol(ew);

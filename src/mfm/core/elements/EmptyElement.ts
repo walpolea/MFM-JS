@@ -5,7 +5,7 @@ import { Elem } from "../Elem";
 
 export class Empty extends Elem {
 
-  static TYPE_DEF: IElementType = { name: "EMPTY", type: "E", class: Empty, color: 0x2a2a2a };
+  static TYPE_DEF: IElementType = { name: "EMPTY", type: "E", class: Empty, color: 0x222222 };
   static CREATE = Empty.CREATOR();
 
   constructor() {

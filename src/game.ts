@@ -3,12 +3,18 @@ import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
 import { DReg } from "./mfm/core/elements/DRegElement";
 import { Emitters } from "./mfm/core/elements/Emitters";
-import { Levels } from "./mfm/core/elements/game/Levels";
+import { loadLevel, Levels } from "./mfm/core/elements/game/Levels";
 import { Goal } from "./mfm/core/elements/game/Goal";
 import { MembraneWall } from "./mfm/core/elements/MembraneWallElement";
 import { Site } from "./mfm/core/Site";
 import {GridCoord} from "./mfm/core/IGridCoord";
 import { Enemy } from "./mfm/core/elements/game/Enemy";
+import { Player } from "./mfm/core/elements/game/Player";
+import { Clearer } from "./mfm/core/elements/game/Clearer";
+import { Emitter } from "./mfm/core/elements/EmitterElement";
+import { Empty } from "./mfm/core/elements/EmptyElement";
+import { Utils } from "./mfm/utils/MFMUtils";
+import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
 
 declare var Vue: any;
 
@@ -27,6 +33,8 @@ let app = new Vue({
       shouldRender: true as boolean,
       fullScreenMode: false as boolean,
       currentLevel: 0 as number,
+      gameLoopInterval:undefined as number,
+      totalScore: 0 as number
     };
   },
   mounted() {
@@ -40,7 +48,7 @@ let app = new Vue({
   methods: {
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
-      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, false);
+      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, true);
 
       this.mfmRenderer.timeSpeed = this.timeSpeed ? this.timeSpeed : 5000;
       this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "Enemy";
@@ -48,44 +56,111 @@ let app = new Vue({
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
 
 
-      this.loadLevel();
+      this.initGame();
     },
+
+    initGame() {
+      this.loadLevel();
+
+      setTimeout( () => {
+        this.startGameLoop();
+      }, 500)
+      
+    },
+    startGameLoop() {
+      clearInterval(this.gameLoopInterval);
+      this.gameLoopInterval = setInterval( this.gameLoop, 100 ); 
+    },
+
     loadLevel() {
 
       const levelData = Levels[this.currentLevel];
-
-      this.g.getSiteByCoord(levelData.playerStart).atom = Emitters.PLAYER();
-      this.g.getSiteByCoord(levelData.goal).atom = Goal.CREATE();
-
-      levelData.walls.forEach( (w:GridCoord )=> {
-        this.g.getSiteByCoord(w).atom = MembraneWall.SW_XL();
-      })
-
-      levelData.enemies.forEach( (e:GridCoord )=> {
-        this.g.getSiteByCoord(e).atom = Enemy.CREATE();
-      })
-
+      loadLevel(this.g, levelData);
 
     },
     outputWalls() {
-      let layout = "";
-      let enemies = "";
+
+
+      let atoms:any[] = [];
+
       const tile = this.g as Tile;
       tile.sites.forEach( (s) => {
-
+        
         switch(s.atom?.type) {
           case MembraneWall.TYPE_DEF: 
-            layout += JSON.stringify(s.tilePos) + ",";
-          break;
           case Enemy.TYPE_DEF:
-            enemies+= JSON.stringify(s.tilePos) + ",";
+          case PlayerEmitter.TYPE_DEF:
+          case Goal.TYPE_DEF:
+            atoms.push({
+              element: s.atom.type.name,
+              gridPos: s.tilePos
+            });
           break;
         }
         
       });
 
-      console.log( `enemies:[${enemies}],walls:[${layout}]` );
+      console.log( JSON.stringify(atoms) );
+
     },
+    levelIsDone():boolean {
+      
+      const tile = this.g as Tile;
+      let isDone = true;
+
+      tile.sites.forEach( (s) => {
+        if( s.atom.type == Player.TYPE_DEF || s.atom.type === PlayerEmitter.TYPE_DEF ) {
+          isDone = false;
+        }
+      });
+
+      console.log(isDone);
+      return isDone;
+
+    },
+
+    levelEnded() {
+      let goalCount = 0;
+      const tile = this.g as Tile;
+
+      tile.sites.forEach( (s:Site) => {
+        if( s.atom.type === Goal.TYPE_DEF ) {
+          goalCount += (s.atom.elem as Goal).rescued;
+        }
+      });
+
+      this.g.getRandomSite().atom = Clearer.CREATE();
+
+      if( goalCount > 0 ) {
+        this.totalScore += goalCount;
+        this.currentLevel++;
+      }
+
+      const waitInterval:number = setInterval( () => {
+        let stillClearing:boolean = false;
+        tile.sites.forEach( (s:Site) => {
+          if( s.atom.type === Clearer.TYPE_DEF ) {
+            stillClearing = true;
+          }
+        });
+
+        if( !stillClearing) {
+          clearInterval(waitInterval);
+          this.loadLevel();
+          this.startGameLoop();
+        }
+      }, 100)
+    },
+
+    gameLoop() {
+      if( this.levelIsDone() ) {
+        clearInterval(this.gameLoopInterval);
+        this.levelEnded();
+      }
+    },
+
+
+
     selectElement(name: string, func: Function) {
       this.curSelectedElement = name;
       this.curSelectedFunc = func;

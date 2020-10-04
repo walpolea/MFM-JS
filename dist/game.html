@@ -168,19 +168,15 @@
             Use your LEFT and RIGHT arrow keys to move your bein's across the grid. Get as many as you can to the goal, but watch out for enemies!!
           </p>
         </div>
+        <h1>Score: {{totalScore}}</h1>
         <div id="mfm-grid">
           
           <div id="mfm-grid-container">
             <div id="mfm"></div>
 
             <div style="display: grid; grid-template-columns: auto 1fr auto;">
-              <span>Speed:</span>
-              <input type="range" min="0" max="25000" v-model="timeSpeed" step="10" width="100%" />
-              <span>
-                <input type="text" v-model="timeSpeed" size="7" />
-                <input type="checkbox" v-model="tenex" />
-                10x
-              </span>
+              <span>Game Speed:</span>
+              <input type="range" min="0" max="10000" v-model="timeSpeed" step="100" width="100%" />
             </div>
 
             <div style="margin-top: 10px;">
@@ -202,7 +198,7 @@
             </div>
           </div>
         </div>
-        <div id="element-container" style="display:none;">
+        <div id="element-container" style="display:grid;">
           <div v-for="groupName in Array.from(typeMap.keys())">
             <h3>{{groupName}}</h3>
             <span

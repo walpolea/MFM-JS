@@ -52,6 +52,8 @@ import { Player } from "./core/elements/game/Player";
 import { Emitter } from "./core/elements/EmitterElement";
 import { Goal } from "./core/elements/game/Goal";
 import { Enemy } from "./core/elements/game/Enemy";
+import { Clearer } from "./core/elements/game/Clearer";
+import { PlayerEmitter } from "./core/elements/game/PlayerEmitter";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -169,9 +171,10 @@ export class ElementIncludes {
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
       ["Player", Player.CREATE],
-      ["PlayerEmitter", Emitters.PLAYER],
+      ["PlayerEmitter", PlayerEmitter.CREATE],
       ["Goal", Goal.CREATE],
       ["Enemy", Enemy.CREATE],
+      ["Clearer", Clearer.CREATE],
     ])
     .set("Misc", [
       ["Directional", DirectionalTraveler.CREATE],
