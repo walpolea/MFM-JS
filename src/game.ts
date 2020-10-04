@@ -1,7 +1,7 @@
 import { Tile } from "./mfm/core/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
-import { loadLevel, Levels, EndScreen } from "./mfm/core/elements/game/Levels";
+import { loadLevel, Levels, EndScreen, StartScreen } from "./mfm/core/elements/game/Levels";
 import { Goal } from "./mfm/core/elements/game/Goal";
 import { MembraneWall } from "./mfm/core/elements/MembraneWallElement";
 import { Site } from "./mfm/core/Site";
@@ -11,7 +11,7 @@ import { Clearer } from "./mfm/core/elements/game/Clearer";
 
 import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
 import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
-import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
+import { Wall } from "./mfm/core/elements/WallElement";
 
 declare var Vue: any;
 declare var Howl:any;
@@ -33,6 +33,7 @@ let app = new Vue({
       currentLevel: 0 as number,
       gameLoopInterval:undefined as number,
       totalScore: 0 as number,
+      isStarted:false as boolean,
       allDone: false as boolean,
       isDebug: false as boolean,
       backgroundMusic: undefined as any,
@@ -78,15 +79,18 @@ let app = new Vue({
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
 
 
-      this.initGame();
+      this.loadStartScreen();
     },
 
-    initGame() {
-      this.loadLevel();
+    startGame() {
+      // this.loadLevel();
 
-      setTimeout( () => {
-        this.startGameLoop();
-      }, 500)
+      // setTimeout( () => {
+      //   this.startGameLoop();
+      // }, 500)
+
+      this.isStarted = true;
+      this.levelEnded();
       
     },
     startGameLoop() {
@@ -99,6 +103,10 @@ let app = new Vue({
       const levelData = Levels[this.currentLevel];
       loadLevel(this.g, levelData);
 
+    },
+
+    loadStartScreen() {
+      loadLevel(this.g, StartScreen);
     },
 
     loadEndScreen() {
@@ -126,6 +134,7 @@ let app = new Vue({
       tile.sites.forEach( (s) => {
         
         switch(s.atom?.type) {
+          case Wall.TYPE_DEF:
           case MembraneWall.TYPE_DEF: 
           case Enemy.TYPE_DEF:
           case FlyingEnemy.TYPE_DEF:

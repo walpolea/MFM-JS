@@ -176,20 +176,30 @@
           <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
             Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to function.
           </h1>
-          <p>
-            Use your LEFT and RIGHT arrow keys to move your bein's across the grid. Get as many as you can to the goal, but watch out for enemies!!
-          </p>
+          <div>
+          <h3>HOW TO PLAY:</h3>
+          <ul style="text-align:left;display:block;list-style:circle;">
+            <li style="text-align:left;margin:5px 0;">Use the LEFT and RIGHT Arrow keys (or the buttons) to control all of your player bein's at once.</li>
+            <li style="text-align:left;margin:5px 0;">Navigate as many player beins as you can to the goal without being wiped out by enemies</li>
+            <li style="text-align:left;margin:5px 0;">You must get at least 1 bein to the goal in order to move to the next level!</li>
+          </ul>
         </div>
-        <h2>Level {{actualLevel}} of {{totalLevels}}</h2>
-        <h2>Score: {{totalScore}}</h2>
+        </div>
+        <div v-if="isStarted">
+          <h2>Level {{actualLevel}} of {{totalLevels}}</h2>
+          <h2>Score: {{totalScore}}</h2>
+        </div>
+        <div v-else>
+          <button class="turn-button" @click="startGame()">Start Game</button>
+        </div>
         <div id="mfm-grid">
           
           <div id="mfm-grid-container">
             <div id="mfm"></div>
 
             <div style="display:flex;">
-              <button class="turn-button" @click="turnLeft()"><<<<<<<< TURN LEFT <<<<<<<< </button>
-              <button class="turn-button" @click="turnRight()">>>>>>>> TURN RIGHT >>>>>>> </button>
+              <button class="turn-button" @click="turnLeft()"> TURN LEFT  </button>
+              <button class="turn-button" @click="turnRight()"> TURN RIGHT </button>
             </div>
 
             <div v-if="isDebug">
