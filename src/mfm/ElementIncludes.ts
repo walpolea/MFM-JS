@@ -54,6 +54,7 @@ import { Goal } from "./core/elements/game/Goal";
 import { Enemy } from "./core/elements/game/Enemy";
 import { Clearer } from "./core/elements/game/Clearer";
 import { PlayerEmitter } from "./core/elements/game/PlayerEmitter";
+import { FlyingEnemy } from "./core/elements/game/FlyingEnemy";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -174,6 +175,7 @@ export class ElementIncludes {
       ["PlayerEmitter", PlayerEmitter.CREATE],
       ["Goal", Goal.CREATE],
       ["Enemy", Enemy.CREATE],
+      ["FlyingEnemy", FlyingEnemy.CREATE],
       ["Clearer", Clearer.CREATE],
     ])
     .set("Misc", [

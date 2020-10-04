@@ -1,13 +1,14 @@
-import { EventWindow, EWIndex } from "../EventWindow";
-import { Elem } from "../Elem";
-import { IElementType } from "../IElementType";
-import { ElementTypes } from "../ElementTypes";
-import { Empty } from "./EmptyElement";
-import { SPLAT } from "../../utils/SPLAT";
-import { Symmetries } from "../../utils/Symmetries";
-import { Utils } from "../../utils/MFMUtils";
-import { Atom } from "../Atom";
-import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
+import { EventWindow, EWIndex } from "../../EventWindow";
+import { Elem } from "../../Elem";
+import { IElementType } from "../../IElementType";
+import { ElementTypes } from "../../ElementTypes";
+import { Empty } from "../EmptyElement";
+import { SPLAT } from "../../../utils/SPLAT";
+import { Symmetries } from "../../../utils/Symmetries";
+import { Utils } from "../../../utils/MFMUtils";
+import { Atom } from "../../Atom";
+import { Wayfinder, Direction } from "../../../utils/MFMWayfinder";
+import { Player } from "./Player";
 
 export class FlyingEnemy extends Elem {
   static TYPE_DEF: IElementType = { name: "FlyingEnemy", type: "Fl", class: FlyingEnemy, color: 0xff66cc };
@@ -30,22 +31,21 @@ export class FlyingEnemy extends Elem {
 
     const outerPlayer = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], Player.TYPE_DEF, true)[0];
 
-    if( outerPlayer && Utils.oneIn(30) ) {
+    if( outerPlayer && Utils.oneIn(60) ) {
       ew.destroy(outerPlayer);
-
-      if( Utils.oneIn(2) ) {
-        ew.destroy();
-      }
+      ew.destroy();
     }
     
     const nearbyPlayer = ew.getNearestIndex(EventWindow.ADJACENT8WAY, Player.TYPE_DEF);
 
-    if( nearbyPlayer  && Utils.oneIn(5) ) {
+    if( nearbyPlayer && Utils.oneIn(4) ) {
+      const p:Player = ew.getSiteByIndex(nearbyPlayer).atom.elem as Player;
+      p.direction = this.direction;
+    }
+
+    if( nearbyPlayer && Utils.oneIn(20) ) {
       ew.destroy(nearbyPlayer);
-      
-      if( Utils.oneIn(3) ) {
-        ew.destroy();
-      }
+      ew.destroy();
     }
 
     this.counter++;
@@ -53,7 +53,6 @@ export class FlyingEnemy extends Elem {
 
     if (ew.is(travelTo, Empty.TYPE_DEF)) {
       ew.swap(travelTo);
-      console.log(this.direction);
     } else {
       this.direction = Utils.oneIn(2) ? Wayfinder.turnRight(this.direction) : Wayfinder.turnLeft(this.direction);
     }

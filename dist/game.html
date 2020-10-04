@@ -168,7 +168,8 @@
             Use your LEFT and RIGHT arrow keys to move your bein's across the grid. Get as many as you can to the goal, but watch out for enemies!!
           </p>
         </div>
-        <h1>Score: {{totalScore}}</h1>
+        <h2>Level {{actualLevel}} of {{totalLevels}}</h2>
+        <h2>Score: {{totalScore}}</h2>
         <div id="mfm-grid">
           
           <div id="mfm-grid-container">
@@ -182,18 +183,6 @@
             <div style="margin-top: 10px;">
               <button @click="clearAllOfType()">Clear Type</button>
               <button @click="reload()">Clear Grid</button>
-              Grid Size:
-              <select v-model=" gridSize">
-                <option value="32x32">32x32</option>
-                <option value="48x48">48x48</option>
-                <option value="60x40">60x40</option>
-                <option value="64x64" selected>64x64</option>
-                <option value="96x96">96x96</option>
-                <option value="128x128">128x128</option>
-                <option value="196x196">196x196</option>
-              </select>
-              Render?
-              <input type="checkbox" v-model="shouldRender" />
               <button @click="outputWalls()">Get Walls</button>
             </div>
           </div>

@@ -1,20 +1,17 @@
 import { Tile } from "./mfm/core/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
-import { DReg } from "./mfm/core/elements/DRegElement";
-import { Emitters } from "./mfm/core/elements/Emitters";
-import { loadLevel, Levels } from "./mfm/core/elements/game/Levels";
+import { loadLevel, Levels, EndScreen } from "./mfm/core/elements/game/Levels";
 import { Goal } from "./mfm/core/elements/game/Goal";
 import { MembraneWall } from "./mfm/core/elements/MembraneWallElement";
 import { Site } from "./mfm/core/Site";
-import {GridCoord} from "./mfm/core/IGridCoord";
 import { Enemy } from "./mfm/core/elements/game/Enemy";
 import { Player } from "./mfm/core/elements/game/Player";
 import { Clearer } from "./mfm/core/elements/game/Clearer";
-import { Emitter } from "./mfm/core/elements/EmitterElement";
-import { Empty } from "./mfm/core/elements/EmptyElement";
-import { Utils } from "./mfm/utils/MFMUtils";
+
 import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
+import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
+import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
 
 declare var Vue: any;
 
@@ -34,7 +31,8 @@ let app = new Vue({
       fullScreenMode: false as boolean,
       currentLevel: 0 as number,
       gameLoopInterval:undefined as number,
-      totalScore: 0 as number
+      totalScore: 0 as number,
+      allDone: false as boolean
     };
   },
   mounted() {
@@ -78,6 +76,10 @@ let app = new Vue({
       loadLevel(this.g, levelData);
 
     },
+
+    loadEndScreen() {
+      loadLevel(this.g, EndScreen);
+    },
     outputWalls() {
 
 
@@ -89,6 +91,7 @@ let app = new Vue({
         switch(s.atom?.type) {
           case MembraneWall.TYPE_DEF: 
           case Enemy.TYPE_DEF:
+          case FlyingEnemy.TYPE_DEF:
           case PlayerEmitter.TYPE_DEF:
           case Goal.TYPE_DEF:
             atoms.push({
@@ -133,7 +136,16 @@ let app = new Vue({
 
       if( goalCount > 0 ) {
         this.totalScore += goalCount;
+
+        if( this.currentLevel < Levels.length-1 ) {
         this.currentLevel++;
+        } else {
+          this.allDone = true;
+        }
+      } else {
+        // if( this.currentLevel > 0 ) {
+        //   this.currentLevel--;
+        // }
       }
 
       const waitInterval:number = setInterval( () => {
@@ -145,9 +157,16 @@ let app = new Vue({
         });
 
         if( !stillClearing) {
-          clearInterval(waitInterval);
-          this.loadLevel();
-          this.startGameLoop();
+          if(!this.allDone ) {
+
+            clearInterval(waitInterval);
+            this.loadLevel();
+            this.startGameLoop();
+          } else {
+            //ALL DONE
+            clearInterval(waitInterval);
+            this.loadEndScreen();
+          }
         }
       }, 100)
     },
@@ -199,6 +218,12 @@ let app = new Vue({
     typeMap() {
       return ElementIncludes.ELEMENT_MENU_MAP;
     },
+    actualLevel() {
+      return this.currentLevel+1;
+    },
+    totalLevels() {
+      return Levels.length;
+    }
   },
   watch: {
     tenex(val: boolean) {
