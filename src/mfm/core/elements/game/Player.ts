@@ -9,18 +9,15 @@ import { Wayfinder, Direction } from "../../../utils/MFMWayfinder";
 import { DecayWall } from "../DecayWallElement";
 
 export class Player extends Elem {
-  static TYPE_DEF: IElementType = { name: "Player", type: "Pl", class: Player, color: 0xffffaa };
+  static TYPE_DEF: IElementType = { name: "Player", type: "Pl", class: Player, color: 0xffff44 };
   static CREATE = Player.CREATOR();
-  static CREATE_EAST = Player.CREATOR(["E"]);
-  static CREATE_WEST = Player.CREATOR(["W"]);
-  static CREATE_NORTH = Player.CREATOR(["N"]);
-  static CREATE_SOUTH = Player.CREATOR(["S"]);
+
 
   direction: Direction;
   counter = 0;
   max = 20;
   done = false;
-  constructor(_direction: Direction = "S") {
+  constructor() {
     super(Player.TYPE_DEF);
     this.direction = Wayfinder.DIRECTIONS[(Wayfinder.DIRECTIONS.length * Math.random()) >> 0];
   }
@@ -38,7 +35,7 @@ export class Player extends Elem {
   }
 
   makeTrail(): Atom {
-    return DecayWall.CREATE([5], undefined, 0x68492d);
+    return DecayWall.CREATE([5], undefined, [0x448888, 0x227777, 0x669999, 0x00bbbb][Math.random()*4 >> 0]);
   }
 
   finish() {
@@ -46,7 +43,7 @@ export class Player extends Elem {
   }
 
   exec(ew: EventWindow) {
-    
+
     if( !this.done ) {
       this.counter++;
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
