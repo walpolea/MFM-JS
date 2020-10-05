@@ -7,6 +7,7 @@ import { Utils } from "../../../utils/MFMUtils";
 import { Atom } from "../../Atom";
 import { Wayfinder, Direction } from "../../../utils/MFMWayfinder";
 import { DecayWall } from "../DecayWallElement";
+import { Enemy } from "./Enemy";
 
 export class Player extends Elem {
   static TYPE_DEF: IElementType = { name: "Player", type: "Pl", class: Player, color: 0xffff44 };
@@ -58,13 +59,25 @@ export class Player extends Elem {
         ew.move(travelTo, this.makeTrail());
       } 
 
-
       const nearbyPlayer = ew.getNearestIndex(EventWindow.ALLADJACENT, Player.TYPE_DEF);
 
       if( nearbyPlayer ) {
         const np:Player = ew.getSiteByIndex(nearbyPlayer).atom.elem as Player;
         np.direction = this.direction;
       }
+
+      const nearbyEnemy = ew.getNearestIndex([...EventWindow.LAYER1, ...EventWindow.LAYER2], Enemy.TYPE_DEF);
+
+      if( nearbyEnemy ) {
+
+        if(Utils.oneIn(4) ) {
+          (ew.getSiteByIndex(nearbyEnemy).atom.elem as Enemy).stun();
+        } else if(Utils.oneIn(30)) {
+          ew.destroy(nearbyEnemy);
+        }
+
+      }
+      
     }
     
     super.exec(ew);

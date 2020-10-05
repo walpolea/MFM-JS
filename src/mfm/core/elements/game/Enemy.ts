@@ -15,32 +15,54 @@ export class Enemy extends Elem {
   static TYPE_DEF: IElementType = { name: "Enemy", type: "En", class: Enemy, color: 0xff224f };
   static CREATE = Enemy.CREATOR();
 
-  
+  isStunned:boolean = false;
+
   constructor() {
     super(Enemy.TYPE_DEF);
-    
+  }
+
+  stun() {
+    this.color = 0x22aa44;
+    this.isStunned = true;
+  }
+
+  unstun() {
+    this.color = 0xff224f;
+    this.isStunned = false;
   }
 
 
   exec(ew: EventWindow) {
 
-    const outerPlayer = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], Player.TYPE_DEF, true)[0];
+    const nearbyDecayWall = ew.getNearestIndex(EventWindow.ADJACENT8WAY, DecayWall.TYPE_DEF);
 
-    if( outerPlayer && Utils.oneIn(30) ) {
-      ew.destroy(outerPlayer);
-
-      if( Utils.oneIn(2) ) {
-        ew.destroy();
-      }
+    if( nearbyDecayWall && Utils.oneIn(2) ) {
+      this.stun();
     }
-    
-    const nearbyPlayer = ew.getNearestIndex(EventWindow.ADJACENT8WAY, Player.TYPE_DEF);
 
-    if( nearbyPlayer  && Utils.oneIn(5) ) {
-      ew.destroy(nearbyPlayer);
+    if( this.isStunned ) {
+      if( Utils.oneIn(60) ) {
+        this.unstun();
+      }
+    } else {
+      const outerPlayer = ew.getIndexes([...EventWindow.LAYER3, ...EventWindow.LAYER4], Player.TYPE_DEF, true)[0];
 
-      if( Utils.oneIn(3) ) {
-        ew.destroy();
+      if( outerPlayer && Utils.oneIn(30) ) {
+        ew.destroy(outerPlayer);
+
+        if( Utils.oneIn(2) ) {
+          ew.destroy();
+        }
+      }
+      
+      const nearbyPlayer = ew.getNearestIndex(EventWindow.ADJACENT8WAY, Player.TYPE_DEF);
+
+      if( nearbyPlayer  && Utils.oneIn(6) ) {
+        ew.destroy(nearbyPlayer);
+
+        if( Utils.oneIn(3) ) {
+          ew.destroy();
+        }
       }
     }
 

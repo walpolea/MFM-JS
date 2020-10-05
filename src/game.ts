@@ -12,6 +12,7 @@ import { Clearer } from "./mfm/core/elements/game/Clearer";
 import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
 import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
 import { Wall } from "./mfm/core/elements/WallElement";
+import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
 
 declare var Vue: any;
 declare var Howl:any;
@@ -78,17 +79,11 @@ let app = new Vue({
       this.curSelectedFunc = this.curSelectedFunc ? this.curSelectedFunc : Enemy.CREATE;
       this.selectElement(this.curSelectedElement, this.curSelectedFunc);
 
-
       this.loadStartScreen();
     },
 
     startGame() {
-      // this.loadLevel();
-
-      // setTimeout( () => {
-      //   this.startGameLoop();
-      // }, 500)
-
+      
       this.isStarted = true;
       this.levelEnded();
       
@@ -233,6 +228,9 @@ let app = new Vue({
         if( s.atom?.type === Player.TYPE_DEF ) {
           (s.atom.elem as Player).slightLeft();
         }
+        // else if(s.atom?.type === SwapWorm.TYPE_DEF && (s.atom.elem as SwapWorm).isAtHead()) {
+        //   (s.atom.elem as SwapWorm).slightLeft();
+        // }
       })
     },
 
@@ -242,6 +240,9 @@ let app = new Vue({
         if( s.atom?.type === Player.TYPE_DEF ) {
           (s.atom.elem as Player).slightRight();
         }
+        // else if(s.atom?.type === SwapWorm.TYPE_DEF && (s.atom.elem as SwapWorm).isAtHead()) {
+        //   (s.atom.elem as SwapWorm).slightRight();
+        // }
       })
     },
 
