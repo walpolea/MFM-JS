@@ -166,6 +166,18 @@
           height: calc(100%/2) !important;
         }
 
+        .instructions {
+
+          text-align:left;
+          display:block;
+          list-style:circle;
+          padding-left:20px;
+        }
+
+        .instructions > li {
+          text-align:left;margin:5px 0;
+        }
+
         [v-cloak] {display: none}
       
     </style>
@@ -174,16 +186,18 @@
   <body>
     <main id="game" v-cloak>
         <div id="intro" v-show="!fullScreenMode">
-          <h1>Ludum Dare 47 - Stuck in a Loop</h1>
+          <h1>Welcome to Dungeon Grid</h1>
+          <h2>A <a href="https://ldjam.com/events/ludum-dare/47/dungeon-grid" target="_blank">Ludum Dare 47</a> gamejam game</h2>
           <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
             Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to function.
           </h1>
           <div>
           <h3>HOW TO PLAY:</h3>
-          <ul style="text-align:left;display:block;list-style:circle;">
-            <li style="text-align:left;margin:5px 0;">Use the LEFT and RIGHT Arrow keys (or the buttons) to control all of your player bein's at once.</li>
-            <li style="text-align:left;margin:5px 0;">Navigate as many player beins as you can to the goal without being wiped out by enemies</li>
-            <li style="text-align:left;margin:5px 0;">You must get at least 1 bein to the goal in order to move to the next level!</li>
+          <ul class="instructions" >
+            <li>Use the LEFT and RIGHT Arrow keys (or the buttons) to control all of your player bein's at once.</li>
+            <li>Navigate as many player beins as you can to the goal without being wiped out by enemies</li>
+            <li>You must get at least 1 bein to the goal in order to move to the next level!</li>
+            <li>HINT: Moving your players in packs together (while being hard to do) gives you an advantage over enemies.</li>
           </ul>
         </div>
         </div>
