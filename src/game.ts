@@ -153,8 +153,8 @@ let app = new Vue({
           case PlayerEmitter.TYPE_DEF:
           case Goal.TYPE_DEF:
             atoms.push({
-              element: s.atom.type.name,
-              gridPos: s.tilePos,
+              e: s.atom.type.name,
+              gp: s.tilePos,
             });
             break;
         }

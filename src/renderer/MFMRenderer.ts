@@ -224,8 +224,8 @@ export class MFMRenderer {
   }
 
   getSiteFromCanvasXY(x: number, y: number): Site {
-    x = x - this.gridOffset; //+ this.siteSize * 0.5;
-    y = y - this.gridOffset; //+ this.siteSize * 0.5;
+    //x = x - this.gridOffset; //+ this.siteSize * 0.5;
+    //y = y - this.gridOffset; //+ this.siteSize * 0.5;
 
     x = (x / this.siteSize) >> 0;
     y = (y / this.siteSize) >> 0;
