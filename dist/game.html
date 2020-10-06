@@ -203,9 +203,9 @@
         </div>
         <div v-if="isStarted">
           <h2>Level {{actualLevel}} of {{totalLevels}}</h2>
+          <h2 v-if="isCountdown">Time Left: {{countdownTimer}} seconds</h2>
+          <h2 v-if="!isCountdown">Timer inactive</h2>
           <h2>Score: {{totalScore}}</h2>
-          <h2 v-if="isCountdown">Time Left: {{countdownTimer}}</h2>
-          <h2 v-else> </h2>
         </div>
         <div v-else>
           <button class="turn-button" @click="startGame()">Start Game</button>
