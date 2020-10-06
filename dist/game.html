@@ -178,6 +178,29 @@
           text-align:left;margin:5px 0;
         }
 
+        .hud {
+          background-color:#111111;
+          padding:10px;
+          margin:20px auto 5px auto;
+          max-width:1600px;
+          display:grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          justify-content:space-between;
+          border-radius: 8px 8px 0px 0px;
+        }
+
+        .hud h2 {
+          margin:2px 0;
+          font-size:14px;
+        }
+        .hud h2:nth-child(2) {
+          justify-self:center;
+        }
+
+        .hud h2:nth-child(3) {
+          justify-self:end;
+        }
+
         [v-cloak] {display: none}
       
     </style>
@@ -186,22 +209,24 @@
   <body>
     <main id="game" v-cloak>
         <div id="intro" v-show="!fullScreenMode">
-          <h1>Welcome to Dungeon Grid</h1>
-          <h2>A <a href="https://ldjam.com/events/ludum-dare/47/dungeon-grid" target="_blank">Ludum Dare 47</a> gamejam game</h2>
+          <h1>Dungeon Grid</h1>
+          <h2>A <a href="https://ldjam.com/events/ludum-dare/47/dungeon-grid" target="_blank">Ludum Dare 47</a> game</h2>
           <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
             Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to function.
           </h1>
           <div>
           <h3>HOW TO PLAY:</h3>
           <ul class="instructions" >
-            <li>Use the LEFT and RIGHT Arrow keys (or the buttons) to control all of your player bein's at once.</li>
+            <li>Use the LEFT and RIGHT Arrow keys (or the buttons below) to turn all of your player bein's at once.</li>
+            <li>When player beings are near each other they will sync up their directions, making it easier to control them all as a herd.</li>
             <li>Navigate as many player beins as you can to the goal without being wiped out by enemies</li>
             <li>You must get at least 1 bein to the goal in order to move to the next level!</li>
-            <li>HINT: Moving your players in packs together (while being hard to do) gives you an advantage over enemies.</li>
+            <li>When you get your first bein to the goal, a 30 second timer counts down the end of the level, so move wisely if you're going for a high score.</li>
+            <li>HINT: Moving your players in packs together (while being hard to do) gives you an advantage over enemies and lets you score more points</li>
           </ul>
         </div>
         </div>
-        <div v-if="isStarted">
+        <div v-if="isStarted" class="hud">
           <h2>Level {{actualLevel}} of {{totalLevels}}</h2>
           <h2 v-if="isCountdown">Time Left: {{countdownTimer}} seconds</h2>
           <h2 v-if="!isCountdown">Timer inactive</h2>
