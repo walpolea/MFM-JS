@@ -8,11 +8,11 @@ import { Atom } from "../../Atom";
 import { Wayfinder, Direction } from "../../../utils/MFMWayfinder";
 import { DecayWall } from "../DecayWallElement";
 import { Enemy } from "./Enemy";
+import { Dirt } from "./Dirt";
 
 export class Player extends Elem {
   static TYPE_DEF: IElementType = { name: "Player", type: "Pl", class: Player, color: 0xffff44 };
   static CREATE = Player.CREATOR();
-
 
   direction: Direction;
   counter = 0;
@@ -36,7 +36,7 @@ export class Player extends Elem {
   }
 
   makeTrail(): Atom {
-    return DecayWall.CREATE([5], undefined, [0x448888, 0x227777, 0x669999, 0x00bbbb][Math.random()*4 >> 0]);
+    return DecayWall.CREATE([5], undefined, [0x448888, 0x227777, 0x669999, 0x00bbbb][(Math.random() * 4) >> 0]);
   }
 
   finish() {
@@ -44,10 +44,13 @@ export class Player extends Elem {
   }
 
   exec(ew: EventWindow) {
-
-    if( !this.done ) {
+    if (!this.done) {
       this.counter++;
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+
+      if (ew.is(travelTo, Dirt.TYPE_DEF)) {
+        ew.destroy(travelTo);
+      }
 
       const leftSite = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
       const rightSite = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
@@ -57,29 +60,26 @@ export class Player extends Elem {
         if (ew.is(rightSite, Empty.TYPE_DEF)) ew.mutate(rightSite, this.makeTrail());
 
         ew.move(travelTo, this.makeTrail());
-      } 
+      }
 
       const nearbyPlayer = ew.getNearestIndex(EventWindow.ALLADJACENT, Player.TYPE_DEF);
 
-      if( nearbyPlayer ) {
-        const np:Player = ew.getSiteByIndex(nearbyPlayer).atom.elem as Player;
+      if (nearbyPlayer) {
+        const np: Player = ew.getSiteByIndex(nearbyPlayer).atom.elem as Player;
         np.direction = this.direction;
       }
 
       const nearbyEnemy = ew.getNearestIndex([...EventWindow.LAYER1, ...EventWindow.LAYER2], Enemy.TYPE_DEF);
 
-      if( nearbyEnemy ) {
-
-        if(Utils.oneIn(4) ) {
+      if (nearbyEnemy) {
+        if (Utils.oneIn(4)) {
           (ew.getSiteByIndex(nearbyEnemy).atom.elem as Enemy).stun();
-        } else if(Utils.oneIn(30)) {
+        } else if (Utils.oneIn(30)) {
           ew.destroy(nearbyEnemy);
         }
-
       }
-      
     }
-    
+
     super.exec(ew);
   }
 }

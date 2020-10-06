@@ -13,9 +13,10 @@ import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
 import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
 import { Wall } from "./mfm/core/elements/WallElement";
 import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
+import { Dirt } from "./mfm/core/elements/game/Dirt";
 
 declare var Vue: any;
-declare var Howl:any;
+declare var Howl: any;
 
 let app = new Vue({
   el: "#game",
@@ -32,14 +33,16 @@ let app = new Vue({
       shouldRender: true as boolean,
       fullScreenMode: false as boolean,
       currentLevel: 0 as number,
-      gameLoopInterval:undefined as number,
+      gameLoopInterval: undefined as number,
       totalScore: 0 as number,
-      isStarted:false as boolean,
+      isStarted: false as boolean,
       allDone: false as boolean,
+      isCountdown: false as boolean,
+      countDownEnded: false as boolean,
+      countdownTimer: 0 as number,
       isDebug: false as boolean,
       backgroundMusic: undefined as any,
-      endingMusic:undefined as any,
-
+      endingMusic: undefined as any,
     };
   },
   mounted() {
@@ -48,27 +51,25 @@ let app = new Vue({
       this.fullScreenMode = true;
     }
 
-    if( params.debug ) {
+    if (params.debug) {
       this.isDebug = true;
     }
 
     this.backgroundMusic = new Howl({
-      src: ['/gameFiles/Dreaming.ogg'],
+      src: ["/gameFiles/Dreaming.ogg"],
       autoplay: true,
       loop: true,
-      volume: 0.3
+      volume: 0.3,
     });
 
     this.backgroundMusic.play();
-
-    
 
     this.initTile();
   },
   methods: {
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
-      if( this.isDebug ) {
+      if (this.isDebug) {
         this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, true);
       } else {
         this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), 1600, 800, false);
@@ -83,21 +84,35 @@ let app = new Vue({
     },
 
     startGame() {
-      
       this.isStarted = true;
       this.levelEnded();
-      
     },
     startGameLoop() {
       clearInterval(this.gameLoopInterval);
-      this.gameLoopInterval = setInterval( this.gameLoop, 100 ); 
+      this.gameLoopInterval = setInterval(this.gameLoop, 100);
+    },
+
+    ///COUNTDOWN
+
+    startCountdown() {
+      console.log("start countdown");
+      if (this.isCountdown && !this.countdownEnded) {
+        this.countdownTimer = 30;
+        this.tickCountdown();
+      }
+    },
+    tickCountdown() {
+      console.log("tick countdown");
+
+      this.countdownTimer -= 1;
+      if (this.isCountdown && this.countdownTimer > 0) {
+        setTimeout(this.tickCountdown, 1000);
+      }
     },
 
     loadLevel() {
-
       const levelData = Levels[this.currentLevel];
       loadLevel(this.g, levelData);
-
     },
 
     loadStartScreen() {
@@ -105,81 +120,83 @@ let app = new Vue({
     },
 
     loadEndScreen() {
-      this.backgroundMusic.fade(.3, 0, 1500);
-      setTimeout(
-        ()=> {
-          this.backgroundMusic = new Howl({
-            src: ['/gameFiles/VoicesFromHeaven.ogg'],
-            autoplay: true,
-            loop: true,
-            volume: 0.2
-          });
-          this.backgroundMusic.play();
-        }, 1500
-      )
-      
+      this.backgroundMusic.fade(0.3, 0, 1500);
+      setTimeout(() => {
+        this.backgroundMusic = new Howl({
+          src: ["/gameFiles/VoicesFromHeaven.ogg"],
+          autoplay: true,
+          loop: true,
+          volume: 0.2,
+        });
+        this.backgroundMusic.play();
+      }, 1500);
+
       loadLevel(this.g, EndScreen);
     },
     outputWalls() {
-
-
-      let atoms:any[] = [];
+      let atoms: any[] = [];
 
       const tile = this.g as Tile;
-      tile.sites.forEach( (s) => {
-        
-        switch(s.atom?.type) {
+      tile.sites.forEach((s) => {
+        switch (s.atom?.type) {
+          case Dirt.TYPE_DEF:
           case Wall.TYPE_DEF:
-          case MembraneWall.TYPE_DEF: 
+          case MembraneWall.TYPE_DEF:
           case Enemy.TYPE_DEF:
           case FlyingEnemy.TYPE_DEF:
           case PlayerEmitter.TYPE_DEF:
           case Goal.TYPE_DEF:
             atoms.push({
               element: s.atom.type.name,
-              gridPos: s.tilePos
+              gridPos: s.tilePos,
             });
-          break;
+            break;
         }
-        
       });
-
-      console.log( JSON.stringify(atoms) );
-
     },
-    levelIsDone():boolean {
-      
+    levelIsDone(): boolean {
       const tile = this.g as Tile;
       let isDone = true;
 
-      tile.sites.forEach( (s) => {
-        if( s.atom.type == Player.TYPE_DEF || s.atom.type === PlayerEmitter.TYPE_DEF ) {
+      if (this.isCountdown && this.countdownTimer <= 0) {
+        return true;
+      }
+
+      tile.sites.forEach((s) => {
+        if (s.atom.type == Player.TYPE_DEF || s.atom.type === PlayerEmitter.TYPE_DEF) {
           isDone = false;
+        }
+
+        if (!this.countDownEnded && !this.isCountdown && s.atom.type === Goal.TYPE_DEF && (s.atom.elem as Goal).rescued > 0) {
+          this.isCountdown = true;
+          this.startCountdown();
         }
       });
 
-      console.log(isDone);
       return isDone;
-
     },
 
     levelEnded() {
       let goalCount = 0;
       const tile = this.g as Tile;
 
-      tile.sites.forEach( (s:Site) => {
-        if( s.atom.type === Goal.TYPE_DEF ) {
+      this.countDownEnded = false;
+      this.isCountdown = false;
+      clearInterval(this.gameLoopInterval);
+
+      tile.sites.forEach((s: Site) => {
+        if (s.atom.type === Goal.TYPE_DEF) {
           goalCount += (s.atom.elem as Goal).rescued;
         }
       });
 
       tile.getRandomSite().atom = Clearer.CREATE();
 
-      if( goalCount > 0 ) {
+      if (goalCount > 0) {
         this.totalScore += goalCount;
 
-        if( this.currentLevel < Levels.length-1 ) {
-        this.currentLevel++;
+        if (this.currentLevel < Levels.length - 1) {
+          this.currentLevel++;
         } else {
           this.allDone = true;
         }
@@ -189,17 +206,16 @@ let app = new Vue({
         // }
       }
 
-      const waitInterval:number = setInterval( () => {
-        let stillClearing:boolean = false;
-        tile.sites.forEach( (s:Site) => {
-          if( s.atom.type === Clearer.TYPE_DEF ) {
+      const waitInterval: number = setInterval(() => {
+        let stillClearing: boolean = false;
+        tile.sites.forEach((s: Site) => {
+          if (s.atom.type === Clearer.TYPE_DEF) {
             stillClearing = true;
           }
         });
 
-        if( !stillClearing) {
-          if(!this.allDone ) {
-
+        if (!stillClearing) {
+          if (!this.allDone) {
             clearInterval(waitInterval);
             this.loadLevel();
             this.startGameLoop();
@@ -209,44 +225,39 @@ let app = new Vue({
             this.loadEndScreen();
           }
         }
-      }, 100)
+      }, 100);
     },
 
     gameLoop() {
-      if( this.levelIsDone() ) {
-        clearInterval(this.gameLoopInterval);
+      if (this.levelIsDone()) {
         console.log("END");
         this.levelEnded();
       }
     },
 
     turnLeft() {
-      
-  
       const tile = this.g as Tile;
-      tile.sites.forEach( s => {
-        if( s.atom?.type === Player.TYPE_DEF ) {
+      tile.sites.forEach((s) => {
+        if (s.atom?.type === Player.TYPE_DEF) {
           (s.atom.elem as Player).slightLeft();
         }
         // else if(s.atom?.type === SwapWorm.TYPE_DEF && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightLeft();
         // }
-      })
+      });
     },
 
     turnRight() {
       const tile = this.g as Tile;
-      tile.sites.forEach( s => {
-        if( s.atom?.type === Player.TYPE_DEF ) {
+      tile.sites.forEach((s) => {
+        if (s.atom?.type === Player.TYPE_DEF) {
           (s.atom.elem as Player).slightRight();
         }
         // else if(s.atom?.type === SwapWorm.TYPE_DEF && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightRight();
         // }
-      })
+      });
     },
-
-
 
     selectElement(name: string, func: Function) {
       this.curSelectedElement = name;
@@ -287,11 +298,11 @@ let app = new Vue({
       return ElementIncludes.ELEMENT_MENU_MAP;
     },
     actualLevel() {
-      return this.currentLevel+1;
+      return this.currentLevel + 1;
     },
     totalLevels() {
       return Levels.length;
-    }
+    },
   },
   watch: {
     tenex(val: boolean) {

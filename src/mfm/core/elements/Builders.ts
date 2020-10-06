@@ -5,6 +5,7 @@ import { DecayWall } from "./DecayWallElement";
 import { Wall } from "./WallElement";
 import { SwapLine } from "./SwapLineElement";
 import { ExpertBuilder } from "./ExpertBuilderElement";
+import { Dirt } from "./game/Dirt";
 
 export class Splatish {
   static ELINE = SPLAT.splatToMap(`~@_`);
@@ -60,4 +61,7 @@ export class Builders {
 
   // static CA = ExpertBuilder.CREATOR([Wall.CREATE, [SPLAT.MAP_NSEW, SPLAT.MAP_NE, SPLAT.MAP_NSEW, SPLAT.MAP_SW]]);
   static CA = ExpertBuilder.CREATOR([DecayWall.CREATE, [SPLAT.MAP_NSEW, SPLAT.MAP_NSEW, SPLAT.MAP_N, SPLAT.MAP_NSEW, SPLAT.MAP_E, SPLAT.MAP_NSEW]]);
+
+  static DIRT_HLINE = Builder.CREATOR([Dirt.CREATE, Splatish.HLINE, Symmetries.NORMAL]);
+  static DIRT_VLINE = Builder.CREATOR([Dirt.CREATE, Splatish.VLINE, Symmetries.NORMAL]);
 }

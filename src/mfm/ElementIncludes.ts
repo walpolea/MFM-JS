@@ -55,6 +55,7 @@ import { Enemy } from "./core/elements/game/Enemy";
 import { Clearer } from "./core/elements/game/Clearer";
 import { PlayerEmitter } from "./core/elements/game/PlayerEmitter";
 import { FlyingEnemy } from "./core/elements/game/FlyingEnemy";
+import { Dirt } from "./core/elements/game/Dirt";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -166,17 +167,22 @@ export class ElementIncludes {
       ["Input", Input.CREATE],
       ["Reducer", Reducer.CREATE],
     ])
-    .set("Input", [
-      ["KeyboardPlanter", BasePlanter.CREATE],
-      ["Reader", Reader.CREATE],
-      ["Writer", Writer.CREATE],
-      ["Text", Text.CREATE],
+    .set("Game", [
       ["Player", Player.CREATE],
       ["PlayerEmitter", PlayerEmitter.CREATE],
       ["Goal", Goal.CREATE],
       ["Enemy", Enemy.CREATE],
       ["FlyingEnemy", FlyingEnemy.CREATE],
       ["Clearer", Clearer.CREATE],
+      ["Dirt", Dirt.CREATE],
+      ["Dirt HLine", Builders.DIRT_HLINE],
+      ["Dirt VLine", Builders.DIRT_VLINE],
+    ])
+    .set("Input", [
+      ["KeyboardPlanter", BasePlanter.CREATE],
+      ["Reader", Reader.CREATE],
+      ["Writer", Writer.CREATE],
+      ["Text", Text.CREATE],
     ])
     .set("Misc", [
       ["Directional", DirectionalTraveler.CREATE],
