@@ -49,6 +49,12 @@ let app = new Vue({
         loop: false,
         volume: 0.08,
       }),
+      clockTick: new Howl({
+        src: ["/gameFiles/tick.wav"],
+        autoplay: false,
+        loop: false,
+        volume: 0.1,
+      }),
     };
   },
   mounted() {
@@ -112,6 +118,9 @@ let app = new Vue({
 
       this.countdownTimer -= 1;
       if (this.isCountdown && this.countdownTimer > 0) {
+        if (this.countdownTimer < 10) {
+          this.clockTick.play();
+        }
         setTimeout(this.tickCountdown, 1000);
       }
     },
