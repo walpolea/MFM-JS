@@ -159,6 +159,8 @@ let app = new Vue({
             break;
         }
       });
+
+      console.log(JSON.stringify(atoms));
     },
     levelIsDone(): boolean {
       const tile = this.g as Tile;
