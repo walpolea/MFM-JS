@@ -43,6 +43,12 @@ let app = new Vue({
       isDebug: false as boolean,
       backgroundMusic: undefined as any,
       endingMusic: undefined as any,
+      levelEndSound: new Howl({
+        src: ["/gameFiles/levelend.mp3"],
+        autoplay: false,
+        loop: false,
+        volume: 0.1,
+      }),
     };
   },
   mounted() {
@@ -177,6 +183,8 @@ let app = new Vue({
     },
 
     levelEnded() {
+      this.levelEndSound.play();
+
       let goalCount = 0;
       const tile = this.g as Tile;
 

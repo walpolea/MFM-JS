@@ -201,6 +201,12 @@
           justify-self:end;
         }
 
+        .start-button {
+          margin:0;
+          
+          width:100%;
+        }
+
         [v-cloak] {display: none}
       
     </style>
@@ -233,7 +239,7 @@
           <h2>Score: {{totalScore}}</h2>
         </div>
         <div v-else>
-          <button class="turn-button" @click="startGame()">Start Game</button>
+          <button class="start-button turn-button" @click="startGame()">Start Game</button>
         </div>
         <div id="mfm-grid">
           
