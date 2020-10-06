@@ -167,7 +167,7 @@
         }
 
         .instructions {
-
+          margin:20px 0;
           text-align:left;
           display:block;
           list-style:circle;
@@ -203,8 +203,13 @@
 
         .start-button {
           margin:0;
-          
+
           width:100%;
+        }
+
+        .title {
+          font-size:5rem;
+          text-align: center;
         }
 
         [v-cloak] {display: none}
@@ -215,7 +220,7 @@
   <body>
     <main id="game" v-cloak>
         <div id="intro" v-show="!fullScreenMode">
-          <h1>Dungeon Grid</h1>
+          <h1 class="title">Dungeon Grid</h1>
           <h2>A <a href="https://ldjam.com/events/ludum-dare/47/dungeon-grid" target="_blank">Ludum Dare 47</a> game</h2>
           <h1 class="alert" :class="{show:!mfmRenderer.webGLSupported}">
             Your Browser does not have Hardware Acceleration turned on or it is not available. This app requires it to function.
@@ -224,7 +229,7 @@
           <h3>HOW TO PLAY:</h3>
           <ul class="instructions" >
             <li>Use the LEFT and RIGHT Arrow keys (or the buttons below) to turn all of your player bein's at once.</li>
-            <li>When player beings are near each other they will sync up their directions, making it easier to control them all as a herd.</li>
+            <li>When player beins are near each other they will sync up their directions, making it easier to control them all as a herd.</li>
             <li>Navigate as many player beins as you can to the goal without being wiped out by enemies</li>
             <li>You must get at least 1 bein to the goal in order to move to the next level!</li>
             <li>When you get your first bein to the goal, a 30 second timer counts down the end of the level, so move wisely if you're going for a high score.</li>
