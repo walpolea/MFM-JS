@@ -10,9 +10,18 @@ import { DecayWall } from "../DecayWallElement";
 import { Enemy } from "./Enemy";
 import { Dirt } from "./Dirt";
 
+declare var Howl: any;
+
 export class Player extends Elem {
   static TYPE_DEF: IElementType = { name: "Player", type: "Pl", class: Player, color: 0xffff44 };
   static CREATE = Player.CREATOR();
+
+  turnBlip = new Howl({
+    src: ["/gameFiles/turnblip.wav"],
+    autoplay: false,
+    loop: false,
+    volume: 0.05,
+  });
 
   direction: Direction;
   counter = 0;
@@ -29,10 +38,14 @@ export class Player extends Elem {
 
   slightLeft() {
     this.direction = Wayfinder.slightLeft(this.direction);
+    this.turnBlip.volume(0.1);
+    this.turnBlip.play();
   }
 
   slightRight() {
     this.direction = Wayfinder.slightRight(this.direction);
+    this.turnBlip.volume(0.1);
+    this.turnBlip.play();
   }
 
   makeTrail(): Atom {

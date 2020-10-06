@@ -47,7 +47,7 @@ let app = new Vue({
         src: ["/gameFiles/levelend.mp3"],
         autoplay: false,
         loop: false,
-        volume: 0.1,
+        volume: 0.08,
       }),
     };
   },
@@ -65,7 +65,7 @@ let app = new Vue({
       src: ["/gameFiles/Dreaming.ogg"],
       autoplay: true,
       loop: true,
-      volume: 0.3,
+      volume: 0.2,
     });
 
     this.backgroundMusic.play();
