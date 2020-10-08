@@ -13,6 +13,9 @@ import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
 import { Wall } from "./mfm/core/elements/WallElement";
 import { Dirt } from "./mfm/core/elements/game/Dirt";
 import { EventWindow } from "./mfm/core/EventWindow";
+import { Water } from "./mfm/core/elements/WaterElement";
+import { Sand } from "./mfm/core/elements/SandElement";
+import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
 
 declare var Vue: any;
 declare var Howl: any;
@@ -153,6 +156,9 @@ let app = new Vue({
           case Enemy.TYPE_DEF:
           case FlyingEnemy.TYPE_DEF:
           case Goal.TYPE_DEF:
+
+          case Sand.TYPE_DEF:
+          case Water.TYPE_DEF:
             atoms.push({
               e: s.atom.type.name,
               gp: s.tilePos,
@@ -164,6 +170,14 @@ let app = new Vue({
               gp: s.tilePos,
               params: [EventWindow.ADJACENT8WAY, 10, 10, true],
             });
+            break;
+          case SwapWorm.TYPE_DEF:
+            if ((s.atom.elem as SwapWorm).isAtHead()) {
+              atoms.push({
+                e: s.atom.type.name,
+                gp: s.tilePos,
+              });
+            }
             break;
         }
       });
@@ -309,15 +323,21 @@ let app = new Vue({
         .flat()
         .filter((e) => {
           const name = e[0];
+          console.log(name);
           switch (name) {
             case "PlayerEmitter":
             case "Goal":
             case "Enemy":
             case "FlyingEnemy":
+            case "Clearer":
             case "Dirt":
+            case "Dirt HLine":
+            case "Dirt VLine":
             case "Wall":
-            case "MembraneWallXL":
-            case "Player Emitter":
+            case "MembraneWall":
+            case "Sand":
+            case "Water":
+            case "SwapWorm":
             case "Empty":
               return true;
               break;
