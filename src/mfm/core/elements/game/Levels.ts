@@ -13596,7 +13596,7 @@ export const Levels: Array<any> = [
       { e: "MEMBRANE WALL", gp: { row: 17, col: 3 } },
       { e: "MEMBRANE WALL", gp: { row: 16, col: 4 } },
       { e: "MEMBRANE WALL", gp: { row: 17, col: 4 } },
-      { e: "PLAYER EMITTER", gp: { row: 5, col: 5 }, params: [EventWindow.ADJACENT8WAY, 10, 20] },
+      { e: "PLAYER EMITTER", gp: { row: 5, col: 5 }, params: [EventWindow.ADJACENT8WAY, 10, 20, true] },
       { e: "MEMBRANE WALL", gp: { row: 16, col: 5 } },
       { e: "MEMBRANE WALL", gp: { row: 16, col: 6 } },
       { e: "MEMBRANE WALL", gp: { row: 16, col: 7 } },
