@@ -5,44 +5,34 @@ import { ElementTypes } from "../../ElementTypes";
 import { Utils } from "../../../utils/MFMUtils";
 
 export class Clearer extends Elem {
-
-  static TYPE_DEF: IElementType = { name: "FORK BOMB", type: "Cl", class: Clearer, color: 0xaaff20 };
+  static TYPE_DEF: IElementType = { name: "CLEARER", type: "Cl", class: Clearer, color: 0xaaff20 };
   static CREATE = Clearer.CREATOR();
 
-  lifeSpan = 25;
+  lifeSpan = 20;
   isSpreader = true;
 
-  constructor( _isSpreader:boolean = true) {
+  constructor(_isSpreader: boolean = true) {
     super(Clearer.TYPE_DEF);
 
     this.isSpreader = _isSpreader;
   }
   exec(ew: EventWindow) {
+    //let nextVictim: number = ew.getRandomIndex(EventWindow.ADJACENT8WAY);
+    let nextVictims = ew.getIndexes([0, 1, 2, 3, 4, 5, 6, 7, 8], undefined, false);
 
-
-      //let nextVictim: number = ew.getRandomIndex(EventWindow.ADJACENT8WAY);
-      let nextVictims = ew.getIndexes(EventWindow.ADJACENT4WAY, undefined, false );
-
-      nextVictims.forEach( nextVictim => {
-
-        if (Utils.oneIn(2) && this.isSpreader && nextVictim && ew.getSiteByIndex(nextVictim).atom.type !== Clearer.TYPE_DEF) {
-
-          if(this.age > 3 ) {
-            ew.mutate(nextVictim, Clearer.CREATE([false]));
-            ew.destroy()
-          } else {
-            ew.mutate(nextVictim, Clearer.CREATE());
-          }
+    nextVictims.forEach((nextVictim) => {
+      if (Utils.oneIn(2) && this.isSpreader && nextVictim && ew.getSiteByIndex(nextVictim).atom.type !== Clearer.TYPE_DEF) {
+        if (this.age > 3) {
+          ew.mutate(nextVictim, Clearer.CREATE([false]));
+        } else {
+          ew.mutate(nextVictim, Clearer.CREATE());
         }
-      })
-      
-
-
-      if(this.age > this.lifeSpan ) {
-        
-        ew.destroy()
       }
-    
+    });
+
+    if (this.age > this.lifeSpan) {
+      ew.destroy();
+    }
 
     super.exec(ew);
   }

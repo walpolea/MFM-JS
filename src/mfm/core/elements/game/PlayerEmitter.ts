@@ -12,29 +12,35 @@ export class PlayerEmitter extends Elem {
   interval: number;
   count: number = 0;
   emitMap: number[];
-  maxEmit:number;
-  emitted = 0;
+  maxEmit: number;
+  emitted: number = 0;
+  isActive: boolean = false;
 
-  constructor( _emitMap: number[] = EventWindow.ADJACENT8WAY, _interval: number = 10, _maxEmit:number = 10) {
+  constructor(_emitMap: number[] = EventWindow.ADJACENT8WAY, _interval: number = 10, _maxEmit: number = 10, _isActive: boolean = false) {
     super(PlayerEmitter.TYPE_DEF);
 
     this.interval = _interval;
     this.emitMap = _emitMap;
     this.maxEmit = _maxEmit;
+    this.isActive = _isActive;
+  }
+
+  activate() {
+    this.isActive = true;
   }
 
   exec(ew: EventWindow) {
-    if (this.emitted < this.maxEmit && ++this.count % this.interval === 0) {
+    if (this.isActive && this.emitted < this.maxEmit && ++this.count % this.interval === 0) {
       this.count = 0;
 
       const empty: number = ew.getIndexes(this.emitMap, Empty.TYPE_DEF, true)[0];
       if (empty !== undefined) {
-        ew.mutate(empty, Player.CREATE() );
+        ew.mutate(empty, Player.CREATE());
         this.emitted++;
       }
     }
 
-    if( this.emitted === this.maxEmit ) {
+    if (this.emitted === this.maxEmit) {
       ew.destroy();
     }
 

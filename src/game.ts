@@ -225,7 +225,7 @@ let app = new Vue({
         // }
       }
 
-      const waitInterval: number = setInterval(() => {
+      const waitInterval: any = setInterval(() => {
         let stillClearing: boolean = false;
         tile.sites.forEach((s: Site) => {
           if (s.atom.type === Clearer.TYPE_DEF) {
