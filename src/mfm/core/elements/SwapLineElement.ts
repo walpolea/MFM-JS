@@ -11,7 +11,7 @@ import { Site } from "../Site";
 import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
 
 export class SwapLine extends Elem {
-  static TYPE_DEF: IElementType = { name: "SwapLine", type: "Sl", class: SwapLine, color: 0xffffaa };
+  static TYPE_DEF: IElementType = { name: "SWAPLINE", type: "Sl", class: SwapLine, color: 0xffffaa };
   static CREATE = SwapLine.CREATOR();
   static CREATE_EAST = SwapLine.CREATOR(["E", 1]);
   static CREATE_WEST = SwapLine.CREATOR(["W", 1]);

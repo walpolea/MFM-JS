@@ -7,7 +7,7 @@ import { Symmetries } from "../../utils/Symmetries";
 import { Utils } from "../../utils/MFMUtils";
 
 export class Sonar extends Elem {
-  static TYPE_DEF: IElementType = { name: "Sonar", type: "Ra", class: Sonar, color: 0x559922 };
+  static TYPE_DEF: IElementType = { name: "SONAR", type: "Ra", class: Sonar, color: 0x559922 };
   static CREATE = Sonar.CREATOR();
   static CREATE_BLUE = Sonar.CREATOR(undefined, undefined, 0x5599bb);
   static CREATE_EAST = Sonar.CREATOR(["E"]);

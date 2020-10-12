@@ -6,16 +6,15 @@ import { Site } from "../Site";
 import { Atom } from "../Atom";
 
 export class SuperForkBomb extends Elem {
-  static TYPE_DEF: IElementType = { name: "SUPER FORK BOMB", type: "SFb", class: SuperForkBomb, color: 0xaa0000 };
+  static TYPE_DEF: IElementType = { name: "SUPERFORKBOMB", type: "SFb", class: SuperForkBomb, color: 0xaa0000 };
   static CREATE = SuperForkBomb.CREATOR();
-
 
   constructor() {
     super(SuperForkBomb.TYPE_DEF);
   }
   exec(ew: EventWindow) {
     //SUPER FORKBOMB
-    ew.getIndexes(EventWindow.ALLADJACENT).forEach(nextVictim => {
+    ew.getIndexes(EventWindow.ALLADJACENT).forEach((nextVictim) => {
       nextVictim ? ew.mutate(nextVictim, SuperForkBomb.CREATE()) : null;
     });
 

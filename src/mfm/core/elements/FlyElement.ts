@@ -10,7 +10,7 @@ import { Atom } from "../Atom";
 import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
 
 export class Fly extends Elem {
-  static TYPE_DEF: IElementType = { name: "Fly", type: "Fl", class: Fly, color: 0xff66cc };
+  static TYPE_DEF: IElementType = { name: "FLY", type: "Fl", class: Fly, color: 0xff66cc };
   static CREATE = Fly.CREATOR();
   static CREATE_EAST = Fly.CREATOR(["E"]);
   static CREATE_WEST = Fly.CREATOR(["W"]);

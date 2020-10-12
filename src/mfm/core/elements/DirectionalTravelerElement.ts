@@ -11,7 +11,7 @@ import { Wayfinder, Direction } from "../../utils/MFMWayfinder";
 import { DecayWall } from "./DecayWallElement";
 
 export class DirectionalTraveler extends Elem {
-  static TYPE_DEF: IElementType = { name: "DirectionalTraveler", type: "Dt", class: DirectionalTraveler, color: 0xffffaa };
+  static TYPE_DEF: IElementType = { name: "DIRECTIONALTRAVELER", type: "Dt", class: DirectionalTraveler, color: 0xffffaa };
   static CREATE = DirectionalTraveler.CREATOR();
   static CREATE_EAST = DirectionalTraveler.CREATOR(["E"]);
   static CREATE_WEST = DirectionalTraveler.CREATOR(["W"]);

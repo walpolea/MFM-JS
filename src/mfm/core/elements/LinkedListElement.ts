@@ -7,7 +7,7 @@ import { Empty } from "./EmptyElement";
 import { Data } from "./DataElement";
 
 export class LinkedList extends Elem {
-  static TYPE_DEF: IElementType = { name: "LINKED LIST ELEMENT", type: "Ll", class: LinkedList, color: 0xcc0066 };
+  static TYPE_DEF: IElementType = { name: "LINKEDLISTELEMENT", type: "Ll", class: LinkedList, color: 0xcc0066 };
 
   next: number;
   prev: number;

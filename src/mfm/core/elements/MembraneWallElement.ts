@@ -8,7 +8,7 @@ import { StuckMembrane } from "./StuckMembraneElement";
 import { Data } from "./DataElement";
 
 export class MembraneWall extends Elem {
-  static TYPE_DEF: IElementType = { name: "MEMBRANE WALL", type: "Mw", class: MembraneWall, color: 0x2020ff };
+  static TYPE_DEF: IElementType = { name: "MEMBRANEWALL", type: "Mw", class: MembraneWall, color: 0x2020ff };
   static CREATE = MembraneWall.CREATOR();
 
   static SW_XL = MembraneWall.CREATOR([1, [...EventWindow.LAYER1, ...EventWindow.LAYER2, EventWindow.LAYER3]]);

@@ -8,8 +8,7 @@ import { Empty } from "./EmptyElement";
 import { ForkBomb } from "./ForkBombElement";
 
 export class AntiForkBomb extends Elem {
-
-  static TYPE_DEF: IElementType = { name: "ANTI FORK BOMB", type: "Af", class: AntiForkBomb, color: 0x7f7f20 };
+  static TYPE_DEF: IElementType = { name: "ANTIFORKBOMB", type: "Af", class: AntiForkBomb, color: 0x7f7f20 };
   static CREATE = AntiForkBomb.CREATOR();
 
   birthedIndex: number;
@@ -39,7 +38,7 @@ export class AntiForkBomb extends Elem {
     //RED ALERT! Make new anti fork bombs in all EMPTY directions
     if (!this.birthedIndex) {
       //this is the first
-      [...Array(40).keys()].forEach(index => {
+      [...Array(40).keys()].forEach((index) => {
         let site = ew.getSiteByIndex(index);
         if (site && site.atom.type === Empty.TYPE_DEF) {
           ew.origin.mutateSite(site, new Atom(AntiForkBomb.TYPE_DEF, [index]));
@@ -47,7 +46,7 @@ export class AntiForkBomb extends Elem {
       });
     } else {
       //this is a child, just continue that way
-      [ew.getSiteByIndex(this.birthedIndex)].forEach(site => {
+      [ew.getSiteByIndex(this.birthedIndex)].forEach((site) => {
         if (site && site.atom.type === Empty.TYPE_DEF) {
           if (Math.random() * this.pEXPLODE < 1) {
             ew.origin.mutateSite(site, new Atom(AntiForkBomb.TYPE_DEF)); //explode

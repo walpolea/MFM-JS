@@ -8,7 +8,7 @@ import { DReg } from "./DRegElement";
 import { Actions } from "../../utils/MFMActions";
 
 export class StuckMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "STUCK MEMBRANE", type: "Stm", class: StuckMembrane, color: 0x8e3557 };
+  static TYPE_DEF: IElementType = { name: "STUCKMEMBRANE", type: "Stm", class: StuckMembrane, color: 0x8e3557 };
   static CREATE = StuckMembrane.CREATOR();
 
   stickyType: IElementType;
@@ -66,11 +66,11 @@ export class StuckMembrane extends Elem {
       [5, 25],
       [6, 26],
       [7, 27],
-      [8, 28]
+      [8, 28],
     ]);
 
     if (sites.length) {
-      sites.forEach(dreg => {
+      sites.forEach((dreg) => {
         const toSite: number = eightwaypushmap.get(dreg);
         if (ew.is(toSite, Empty.TYPE_DEF)) {
           ew.move(toSite, undefined, dreg);
@@ -80,7 +80,7 @@ export class StuckMembrane extends Elem {
   }
 
   uncrowd(ew: EventWindow) {
-    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter(site => site).length > 5) {
+    if (ew.getAdjacent4Way(this.stickyType) && ew.getSites(EventWindow.ADJACENT8WAY, StuckMembrane.TYPE_DEF, false).filter((site) => site).length > 5) {
       ew.origin.die();
     }
   }
@@ -90,7 +90,7 @@ export class StuckMembrane extends Elem {
     //   return true;
     // }
 
-    if (ew.getSites([...EventWindow.LAYER1, ...EventWindow.LAYER2], this.stickyType).filter(s => s).length) {
+    if (ew.getSites([...EventWindow.LAYER1, ...EventWindow.LAYER2], this.stickyType).filter((s) => s).length) {
       return true;
     }
 

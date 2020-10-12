@@ -11,7 +11,7 @@ import { StuckMembrane } from "./StuckMembraneElement";
 import { Data } from "./DataElement";
 
 export class SuperMason extends Elem {
-  static TYPE_DEF: IElementType = { name: "SUPER MASON", type: "SMa", class: SuperMason, color: 0x20cccc };
+  static TYPE_DEF: IElementType = { name: "SUPERMASON", type: "SMa", class: SuperMason, color: 0x20cccc };
   static CREATE = SuperMason.CREATOR();
   static RANDOM_CREATE = SuperMason.CREATOR([SuperMason.randomPath(20)]);
 

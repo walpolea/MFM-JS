@@ -17,7 +17,7 @@ import { CellBrane } from "./CellBraneElement";
 import { Data } from "./DataElement";
 
 export class CellOuterMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL OUTER MEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x5c8a5c };
+  static TYPE_DEF: IElementType = { name: "CELLOUTERMEMBRANE", type: "Co", class: CellOuterMembrane, color: 0x5c8a5c };
   static CREATE = CellOuterMembrane.CREATOR();
 
   static CHECK_THIN = SPLAT.splatToMap(`

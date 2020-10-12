@@ -13,7 +13,7 @@ import { SPLAT } from "../../utils/SPLAT";
 import { Symmetries } from "../../utils/Symmetries";
 
 export class LoopWorm extends LinkedList {
-  static TYPE_DEF: IElementType = { name: "LOOP WORM", type: "Tw", class: LoopWorm, color: 0xcc00cc };
+  static TYPE_DEF: IElementType = { name: "LOOPWORM", type: "Tw", class: LoopWorm, color: 0xcc00cc };
   static CREATE = LoopWorm.CREATOR();
 
   pCHANCE_TO_EAT: number = 1000;

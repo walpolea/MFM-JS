@@ -8,7 +8,7 @@ import { DecayWall } from "./DecayWallElement";
 import { Utils } from "../../utils/MFMUtils";
 
 export class Looper extends Elem {
-  static TYPE_DEF: IElementType = { name: "Looper", type: "Lo", class: Looper, color: 0xaaaaff };
+  static TYPE_DEF: IElementType = { name: "LOOPER", type: "Lo", class: Looper, color: 0xaaaaff };
   static CREATE = Looper.CREATOR();
   static CREATE_EAST = Looper.CREATOR(["E"]);
   static CREATE_WEST = Looper.CREATOR(["W"]);

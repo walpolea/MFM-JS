@@ -10,15 +10,13 @@ import { Data } from "./DataElement";
 import { Builder } from "./BuilderElement";
 
 export class GridBuilder extends Builder {
-
-  static TYPE_DEF: IElementType = { name: "GRID BUILDER", type: "Gb", class: GridBuilder, color: 0x44ccaa };
+  static TYPE_DEF: IElementType = { name: "GRIDBUILDER", type: "Gb", class: GridBuilder, color: 0x44ccaa };
   static CREATE = GridBuilder.CREATOR();
 
   static GRID_WALL = GridBuilder.CREATOR([Wall.CREATE]);
   static GRID_SORTER = GridBuilder.CREATOR([Sorter.CREATE]);
   static GRID_SAND = GridBuilder.CREATOR([Sand.CREATE]);
   static GRID_DATA = GridBuilder.CREATOR([Data.CREATE]);
-
 
   static gridPath: Map<number, string> = SPLAT.splatToMap(`
   _~_
@@ -34,7 +32,6 @@ export class GridBuilder extends Builder {
   exec(ew: EventWindow) {
     super.exec(ew);
   }
-
 }
 
 GridBuilder.INITIALIZE_SPLAT_MAP()();

@@ -8,7 +8,7 @@ import { DReg } from "./DRegElement";
 import { Actions } from "../../utils/MFMActions";
 
 export class StickyMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "STICKY MEMBRANE", type: "Sm", class: StickyMembrane, color: 0x611075 };
+  static TYPE_DEF: IElementType = { name: "STICKYMEMBRANE", type: "Sm", class: StickyMembrane, color: 0x611075 };
   static CREATE = StickyMembrane.CREATOR();
 
   stickyType: IElementType;

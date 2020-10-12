@@ -5,11 +5,9 @@ import { MembraneWall } from "./MembraneWallElement";
 import { StickyMembrane } from "./StickyMembraneElement";
 
 export class MembraneDoor extends MembraneWall {
+  static TYPE_DEF: IElementType = { name: "MEMBRANEDOOR", type: "Md", class: MembraneDoor, color: 0x6060ff };
 
-  static TYPE_DEF: IElementType = { name: "MEMBRANE DOOR", type: "Md", class: MembraneDoor, color: 0x6060ff };
-
-
-  openCycles: number = 0
+  openCycles: number = 0;
   closedCycles: number = 0;
   openCycleLimit: number;
   closedCycleLimit: number;
@@ -19,29 +17,25 @@ export class MembraneDoor extends MembraneWall {
 
     this.openCycleLimit = openTime;
     this.closedCycleLimit = closedTime;
-
   }
   exec(ew: EventWindow) {
-
     if (this.activated) {
-
       this.closedCycles++;
 
       if (this.closedCycles > this.closedCycleLimit) {
-
         this.activated = false;
         this.closedCycles = 0;
       }
     } else {
-
-      ew.getAll(StickyMembrane.TYPE_DEF).filter(site => site).forEach(site => {
-        site.die();
-      })
+      ew.getAll(StickyMembrane.TYPE_DEF)
+        .filter((site) => site)
+        .forEach((site) => {
+          site.die();
+        });
 
       this.openCycles++;
 
       if (this.openCycles > this.openCycleLimit) {
-
         this.activated = true;
         this.openCycles = 0;
       }

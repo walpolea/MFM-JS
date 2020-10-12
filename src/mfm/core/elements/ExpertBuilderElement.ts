@@ -8,7 +8,7 @@ import { Actions } from "../../utils/MFMActions";
 import { Symmetries } from "../../utils/Symmetries";
 
 export class ExpertBuilder extends Elem {
-  static TYPE_DEF: IElementType = { name: "EXPERT BUILDER", type: "Xb", class: ExpertBuilder, color: 0x44ccaa };
+  static TYPE_DEF: IElementType = { name: "EXPERTBUILDER", type: "Xb", class: ExpertBuilder, color: 0x44ccaa };
   static CREATE = ExpertBuilder.CREATOR();
 
   buildPaths: Map<number, string>[];

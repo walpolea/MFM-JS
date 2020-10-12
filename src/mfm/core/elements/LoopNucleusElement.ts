@@ -9,7 +9,7 @@ import { LoopWorm } from "./LoopWormElement";
 import { Res } from "./ResElement";
 
 export class LoopNucleus extends Elem {
-  static TYPE_DEF: IElementType = { name: "LOOP NUCLEUS", type: "Ln", class: LoopNucleus, color: 0xcece24 };
+  static TYPE_DEF: IElementType = { name: "LOOPNUCLEUS", type: "Ln", class: LoopNucleus, color: 0xcece24 };
 
   pCREATE_RES: number = 4;
   pCREATE_MEMBRANE: number = 20;

@@ -9,7 +9,7 @@ import { Wall } from "./WallElement";
 import { SwapLine } from "./SwapLineElement";
 
 export class LoopMason extends Elem {
-  static TYPE_DEF: IElementType = { name: "LoopMason", type: "Lm", class: LoopMason, color: 0xaaaaff };
+  static TYPE_DEF: IElementType = { name: "LOOPMASON", type: "Lm", class: LoopMason, color: 0xaaaaff };
   static CREATE = LoopMason.CREATOR();
   static CREATE_EAST = LoopMason.CREATOR(["E"]);
   static CREATE_WEST = LoopMason.CREATOR(["W"]);
