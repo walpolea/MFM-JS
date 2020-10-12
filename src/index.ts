@@ -43,11 +43,14 @@ let app = new Vue({
       this.seedData = seeds.map((s: string) => {
         const seed: string[] = s.split(",");
         if (!seed.length) return null;
-        return {
-          e: seed[0],
+
+        const data = {
+          e: seed[0].toUpperCase(),
           col: seed[1] ? parseInt(seed[1]) : (Math.random() * this.g.width) >> 0,
           row: seed[2] ? parseInt(seed[2]) : (Math.random() * this.g.height) >> 0,
         };
+
+        return data;
       });
     },
 
