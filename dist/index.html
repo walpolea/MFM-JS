@@ -180,7 +180,7 @@
         </div>
         <div id="mfm-grid">
           <div id="element-container">
-            <div v-for="groupName in Array.from(typeMap.keys())">
+            <div v-if="groupName !== 'Game'" v-for="groupName in Array.from(typeMap.keys())">
               <h3>{{groupName}}</h3>
               <span
                 class="element"

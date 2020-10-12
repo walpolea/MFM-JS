@@ -48,6 +48,7 @@ let app = new Vue({
           e: seed[0].toUpperCase(),
           col: seed[1] ? parseInt(seed[1]) : (Math.random() * this.g.width) >> 0,
           row: seed[2] ? parseInt(seed[2]) : (Math.random() * this.g.height) >> 0,
+          params: seed[3] ? JSON.parse(seed[3]) : null,
         };
 
         return data;
@@ -58,7 +59,11 @@ let app = new Vue({
       console.log(this.seedData);
       if (this.seedData.length) {
         this.seedData.forEach((seed: any) => {
-          this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementTypes.TYPES_MAP.get(seed.e)?.class.CREATE();
+          if (seed.params) {
+            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementTypes.TYPES_MAP.get(seed.e)?.class.CREATE(seed.params);
+          } else {
+            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementTypes.TYPES_MAP.get(seed.e)?.class.CREATE();
+          }
         });
       }
     },
