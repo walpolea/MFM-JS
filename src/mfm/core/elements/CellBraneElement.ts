@@ -13,7 +13,7 @@ import { Symmetries } from "../../utils/Symmetries";
 import { Utils } from "../../utils/MFMUtils";
 
 export class CellBrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL BRANE", type: "Cb", class: CellBrane, color: 0x128575 };
+  static TYPE_DEF: IElementType = { name: "CELLBRANE", type: "Cb", class: CellBrane, color: 0x128575 };
   static CREATE = CellBrane.CREATOR();
 
   static CHECK_OUTER = SPLAT.splatToMap(`

@@ -12,7 +12,6 @@ import { Clearer } from "./mfm/core/elements/game/Clearer";
 import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
 import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
 import { Wall } from "./mfm/core/elements/WallElement";
-import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
 import { Dirt } from "./mfm/core/elements/game/Dirt";
 
 declare var Vue: any;

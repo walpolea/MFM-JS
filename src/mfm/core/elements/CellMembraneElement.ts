@@ -18,7 +18,7 @@ import { StickyMembrane } from "./StickyMembraneElement";
 import { Res } from "./ResElement";
 
 export class CellMembrane extends Elem {
-  static TYPE_DEF: IElementType = { name: "CELL MEMBRANE", type: "Cm", class: CellMembrane, color: 0xc2f3c2 };
+  static TYPE_DEF: IElementType = { name: "CELLMEMBRANE", type: "Cm", class: CellMembrane, color: 0xc2f3c2 };
   static CREATE = CellMembrane.CREATOR();
 
   static MAKE_SHELL = SPLAT.splatToMap(`

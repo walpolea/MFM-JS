@@ -2,6 +2,7 @@ import { Tile } from "./mfm/core/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
 import { DReg } from "./mfm/core/elements/DRegElement";
+import { ElementTypes } from "./mfm/core/ElementTypes";
 
 declare var Vue: any;
 
@@ -19,6 +20,7 @@ let app = new Vue({
       curSelectedFunc: undefined as Function,
       shouldRender: true as boolean,
       fullScreenMode: false as boolean,
+      seedData: undefined as any[],
     };
   },
   mounted() {
@@ -28,8 +30,36 @@ let app = new Vue({
     }
 
     this.initTile();
+
+    if (params.seed) {
+      this.initSeedData(params.seed);
+      this.loadSeeds();
+    }
   },
   methods: {
+    initSeedData(data: string) {
+      const seeds = data.split(";");
+
+      this.seedData = seeds.map((s: string) => {
+        const seed: string[] = s.split(",");
+        if (!seed.length) return null;
+        return {
+          e: seed[0],
+          col: seed[1] ? parseInt(seed[1]) : (Math.random() * this.g.width) >> 0,
+          row: seed[2] ? parseInt(seed[2]) : (Math.random() * this.g.height) >> 0,
+        };
+      });
+    },
+
+    loadSeeds() {
+      console.log(this.seedData);
+      if (this.seedData.length) {
+        this.seedData.forEach((seed: any) => {
+          this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementTypes.TYPES_MAP.get(seed.e)?.class.CREATE();
+        });
+      }
+    },
+
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
       this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"));
