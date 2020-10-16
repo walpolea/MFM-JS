@@ -20,7 +20,7 @@ export class Utils {
   }
 
   static oneIn(n: number): boolean {
-    return Math.random() * n < 1;
+    return n === 0 ? false : Math.random() * n < 1;
   }
 
   static oneRandom(arr: any[]): any {

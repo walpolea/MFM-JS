@@ -6,6 +6,8 @@ import { Empty } from "./EmptyElement";
 import { Wayfinder, Direction } from "../utils/MFMWayfinder";
 import { DecayWall } from "./DecayWallElement";
 import { Utils } from "../utils/MFMUtils";
+import { DecayDirector } from "./DecayDirectorElement";
+import { Atom } from "../core/Atom";
 
 export class Looper extends Element {
   static BASE_TYPE: IElementType = { name: "LOOPER", symbol: "Lo", class: Looper, color: 0xaaaaff };
@@ -32,31 +34,32 @@ export class Looper extends Element {
 
   exec(ew: EventWindow) {
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+    const dd: Function = DecayDirector.CREATOR({ params: [Wayfinder.turnRight(this.direction), 30] });
 
     const makeWall: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
-    if (ew.is(makeWall, [Empty.BASE_TYPE, DecayWall.BASE_TYPE])) {
-      ew.mutate(makeWall, DecayWall.CREATE({ params: [50] }));
+    if (ew.is(makeWall, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(makeWall, dd());
     }
 
     const makeWall2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
-    if (ew.is(makeWall2, [Empty.BASE_TYPE, DecayWall.BASE_TYPE])) {
-      ew.mutate(makeWall2, DecayWall.CREATE({ params: [50] }));
+    if (ew.is(makeWall2, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(makeWall2, dd());
     }
 
     const makeWall3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
-    if (ew.is(makeWall3, [Empty.BASE_TYPE, DecayWall.BASE_TYPE])) {
-      ew.mutate(makeWall3, DecayWall.CREATE({ params: [50] }));
+    if (ew.is(makeWall3, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(makeWall3, dd());
     }
 
     const makeWall4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
-    if (ew.is(makeWall4, [Empty.BASE_TYPE, DecayWall.BASE_TYPE])) {
-      ew.mutate(makeWall4, DecayWall.CREATE({ params: [50] }));
+    if (ew.is(makeWall4, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(makeWall4, dd());
     }
 
-    if (ew.is(travelTo, [Empty.BASE_TYPE, DecayWall.BASE_TYPE])) {
-      ew.move(travelTo);
+    if (ew.is(travelTo, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.move(travelTo, dd());
     } else {
-      this.direction = Wayfinder.veerRight(this.direction);
+      // this.direction = Wayfinder.veerRight(this.direction);
     }
 
     this.counter++;

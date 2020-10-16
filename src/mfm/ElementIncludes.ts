@@ -57,6 +57,7 @@ import { FlyingEnemy } from "./elements/game/FlyingEnemy";
 import { Dirt } from "./elements/game/Dirt";
 import { Mosquito } from "./elements/MosquitoElement";
 import { Director } from "./elements/DirectorElement";
+import { DecayDirector } from "./elements/DecayDirectorElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -86,10 +87,6 @@ export class ElementIncludes {
       ["SL S Em", Emitters.SWAPLINE_S],
     ])
     .set("Structural", [
-      ["Director E", Director.DIRECTOR_EAST],
-      ["Director W", Director.DIRECTOR_WEST],
-      ["Director N", Director.DIRECTOR_NORTH],
-      ["Director S", Director.DIRECTOR_SOUTH],
       ["Wall", Wall.CREATE],
       ["Soft Wall", Wall.SOFT_WALL],
       ["Loop Mason", LoopMason.CREATE],
@@ -190,6 +187,15 @@ export class ElementIncludes {
       ["Text", Text.CREATE],
     ])
     .set("Misc", [
+      ["DecayDirector E", DecayDirector.DECAYDIRECTOR_EAST],
+      ["Director E", Director.DIRECTOR_EAST],
+      ["Director W", Director.DIRECTOR_WEST],
+      ["Director N", Director.DIRECTOR_NORTH],
+      ["Director S", Director.DIRECTOR_SOUTH],
+      ["Director NE", Director.DIRECTOR_NORTHEAST],
+      ["Director NW", Director.DIRECTOR_NORTHWEST],
+      ["Director SE", Director.DIRECTOR_SOUTHEAST],
+      ["Director SW", Director.DIRECTOR_SOUTHWEST],
       ["Directional", DirectionalTraveler.CREATE],
       ["Looper", Looper.CREATE],
       ["Looper EAST", Looper.CREATE_EAST],

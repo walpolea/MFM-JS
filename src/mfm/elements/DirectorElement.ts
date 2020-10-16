@@ -12,6 +12,10 @@ export class Director extends Element {
   static DIRECTOR_WEST = Director.CREATOR({ name: "DIRECTOR_WEST", params: ["W"] });
   static DIRECTOR_NORTH = Director.CREATOR({ name: "DIRECTOR_NORTH", params: ["N"] });
   static DIRECTOR_SOUTH = Director.CREATOR({ name: "DIRECTOR_SOUTH", params: ["S"] });
+  static DIRECTOR_NORTHEAST = Director.CREATOR({ name: "DIRECTOR_EAST", params: ["NE"] });
+  static DIRECTOR_NORTHWEST = Director.CREATOR({ name: "DIRECTOR_WEST", params: ["NW"] });
+  static DIRECTOR_SOUTHEAST = Director.CREATOR({ name: "DIRECTOR_NORTH", params: ["SE"] });
+  static DIRECTOR_SOUTHWEST = Director.CREATOR({ name: "DIRECTOR_SOUTH", params: ["SW"] });
 
   direction: Direction;
 

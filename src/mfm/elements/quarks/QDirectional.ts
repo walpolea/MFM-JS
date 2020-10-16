@@ -4,6 +4,7 @@ import { Utils } from "../../utils/MFMUtils";
 import { Quark } from "../../core/Quark";
 import { Direction, Wayfinder } from "../../utils/MFMWayfinder";
 import { IElementType } from "../../core/IElementType";
+import { Atom } from "../../core/Atom";
 
 export class QDirectional extends Quark {
   static CLASS: string = "DIRECTIONAL";
@@ -54,11 +55,11 @@ export class QDirectional extends Quark {
     this.isDirected = true;
   }
 
-  moveDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE) {
+  moveDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom: Atom = Empty.CREATE()) {
     const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
     if (ew.is(travelTo, types)) {
-      return ew.move(travelTo, Empty.CREATE());
+      return ew.move(travelTo, leavingAtom);
     }
 
     return false;
@@ -74,13 +75,13 @@ export class QDirectional extends Quark {
     return false;
   }
 
-  swapIfDirected(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE): boolean {
-    this.isDirected = this.isDirected ? (this.swapDirectionally(ew, types) ? true : false) : false;
+  swapIfDirected(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, chanceToUndirect: number = 1): boolean {
+    this.isDirected = this.isDirected ? (this.swapDirectionally(ew, types) ? true : Utils.oneIn(chanceToUndirect) ? false : true) : false;
     return this.isDirected;
   }
 
-  moveIfDirected(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE): boolean {
-    this.isDirected = this.isDirected ? (this.moveDirectionally(ew, types) ? true : false) : false;
+  moveIfDirected(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom = Empty.CREATE(), chanceToUndirect: number = 1): boolean {
+    this.isDirected = this.isDirected ? (this.moveDirectionally(ew, types, leavingAtom) ? true : Utils.oneIn(chanceToUndirect) ? false : true) : false;
     return this.isDirected;
   }
 }
