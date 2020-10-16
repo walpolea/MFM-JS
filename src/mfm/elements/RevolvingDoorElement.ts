@@ -80,4 +80,3 @@ export class RevolvingDoor extends Element {
 }
 
 RevolvingDoor.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(RevolvingDoor.BASE_TYPE);

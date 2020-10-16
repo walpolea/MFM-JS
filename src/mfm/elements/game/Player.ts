@@ -100,4 +100,3 @@ export class Player extends Element {
 //Initialize Splat Map maps the # to to the self type
 Player.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Player.BASE_TYPE);

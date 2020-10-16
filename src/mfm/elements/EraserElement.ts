@@ -31,4 +31,3 @@ export class Eraser extends Element {
 //Initialize Splat Map maps the # to to the self type
 Eraser.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Eraser.BASE_TYPE);

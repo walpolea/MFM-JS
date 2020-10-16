@@ -57,4 +57,3 @@ export class MembraneWall extends Element {
 //Initialize Splat Map maps the # to to the self type
 MembraneWall.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(MembraneWall.BASE_TYPE);

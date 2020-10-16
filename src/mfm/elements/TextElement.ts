@@ -69,4 +69,3 @@ export class Text extends Element {
 //Initialize Splat Map maps the # to to the self type
 Text.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Text.BASE_TYPE);

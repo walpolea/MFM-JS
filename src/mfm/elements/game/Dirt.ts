@@ -21,6 +21,6 @@ export class Dirt extends Element {
 //Initialize Splat Map maps the # to to the self type
 Dirt.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Dirt.BASE_TYPE);
+
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("w", Dirt.BASE_TYPE);

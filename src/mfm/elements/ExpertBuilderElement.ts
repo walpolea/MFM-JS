@@ -68,4 +68,3 @@ export class ExpertBuilder extends Element {
 }
 
 ExpertBuilder.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(ExpertBuilder.BASE_TYPE);

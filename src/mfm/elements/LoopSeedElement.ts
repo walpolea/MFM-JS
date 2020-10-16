@@ -123,4 +123,3 @@ export class LoopSeed extends Element {
 //Initialize Splat Map maps the # to to the self type
 LoopSeed.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(LoopSeed.BASE_TYPE);

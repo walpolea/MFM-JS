@@ -3,6 +3,7 @@ import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
 import { DReg } from "./mfm/elements/DRegElement";
 import { ElementRegistry } from "./mfm/core/ElementRegistry";
+import { Empty } from "./mfm/elements/EmptyElement";
 
 declare var Vue: any;
 
@@ -66,6 +67,23 @@ let app = new Vue({
           }
         });
       }
+    },
+
+    getSeedLink() {
+      const t: Tile = this.g;
+      const link =
+        "https://" +
+        window.location.host +
+        "?seed=" +
+        Array.from(t.sites.values())
+          .filter((s) => !s.atom.is(Empty.BASE_TYPE))
+          .map((s) => {
+            return `${s.atom.type.name},${s.tilePos.col},${s.tilePos.row}`;
+          })
+          .join(";");
+
+      console.log(link);
+      return link;
     },
 
     initTile() {

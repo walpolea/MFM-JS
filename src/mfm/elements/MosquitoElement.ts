@@ -9,7 +9,7 @@ import { QDirectional } from "./quarks/QDirectional";
 export interface Mosquito extends QPatroller, QDirectional {}
 
 export class Mosquito extends Element {
-  static BASE_TYPE: IElementType = { name: "Mosquito", symbol: "p", class: Mosquito, color: 0xd1b0b0 };
+  static BASE_TYPE: IElementType = { name: "MOSQUITO", symbol: "p", class: Mosquito, color: 0xd1b0b0 };
   static CREATE = Mosquito.CREATOR();
 
   constructor() {
@@ -44,7 +44,7 @@ export class Mosquito extends Element {
 //Initialize Splat Map maps the # to to the self type
 Mosquito.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Mosquito.BASE_TYPE);
+//
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("w", Mosquito.BASE_TYPE);
 

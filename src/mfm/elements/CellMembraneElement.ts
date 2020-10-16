@@ -390,5 +390,5 @@ export class CellMembrane extends Element {
 //Initialize Splat Map maps the # to to the self type
 CellMembrane.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(CellMembrane.BASE_TYPE);
+
 ElementRegistry.registerSPLAT("i", CellMembrane.BASE_TYPE);

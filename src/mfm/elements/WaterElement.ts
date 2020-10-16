@@ -47,5 +47,5 @@ export class Water extends Element {
 }
 
 Water.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(Water.BASE_TYPE);
+
 ElementRegistry.registerSPLAT(Water.BASE_TYPE.symbol, Water.BASE_TYPE);

@@ -120,4 +120,8 @@ export class Utils {
   static rgbToHex(r: number, g: number, b: number): number {
     return (1 << 24) + (r << 16) + (g << 8) + b;
   }
+
+  static classOf<T>(o: T): any {
+    return o.constructor;
+  }
 }

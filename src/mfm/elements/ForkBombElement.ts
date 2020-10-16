@@ -24,4 +24,3 @@ export class ForkBomb extends Element {
 //Initialize Splat Map maps the # to to the self type
 ForkBomb.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(ForkBomb.BASE_TYPE);

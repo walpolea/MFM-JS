@@ -86,4 +86,3 @@ export class Networker extends Element {
 //Initialize Splat Map maps the # to to the self type
 Networker.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Networker.BASE_TYPE);

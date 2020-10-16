@@ -271,6 +271,5 @@ export class SwapWorm extends LinkedList {
 //Initialize Splat Map maps the # to to the self type
 SwapWorm.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(SwapWorm.BASE_TYPE);
 
 Element.applyMixins(SwapWorm, [QDirectional]);

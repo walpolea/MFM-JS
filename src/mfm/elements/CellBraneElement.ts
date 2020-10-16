@@ -270,5 +270,5 @@ export class CellBrane extends Element {
 //Initialize Splat Map maps the # to to the self type
 CellBrane.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(CellBrane.BASE_TYPE);
+
 ElementRegistry.registerSPLAT("b", CellBrane.BASE_TYPE);

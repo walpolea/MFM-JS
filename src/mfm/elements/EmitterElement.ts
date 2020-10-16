@@ -44,4 +44,3 @@ export class Emitter extends Element {
 //Initialize Splat Map maps the # to to the self type
 Emitter.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Emitter.BASE_TYPE);

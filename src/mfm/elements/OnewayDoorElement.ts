@@ -91,4 +91,3 @@ export class OnewayDoor extends Element {
 }
 
 OnewayDoor.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(OnewayDoor.BASE_TYPE);

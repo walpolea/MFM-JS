@@ -51,4 +51,3 @@ export class PlayerEmitter extends Element {
 //Initialize Splat Map maps the # to to the self type
 PlayerEmitter.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(PlayerEmitter.BASE_TYPE);

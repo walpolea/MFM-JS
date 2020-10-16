@@ -6,8 +6,12 @@ import { QDirectional } from "./quarks/QDirectional";
 import { Direction } from "../utils/MFMWayfinder";
 
 export class Director extends Element {
-  static BASE_TYPE: IElementType = { name: "Director", symbol: "Di", class: Director, color: 0xcc20ff };
+  static BASE_TYPE: IElementType = { name: "DIRECTOR", symbol: "Di", class: Director, color: 0xcc20ff };
   static CREATE = Director.CREATOR();
+  static DIRECTOR_EAST = Director.CREATOR({ name: "DIRECTOR_EAST", params: ["E"] });
+  static DIRECTOR_WEST = Director.CREATOR({ name: "DIRECTOR_WEST", params: ["W"] });
+  static DIRECTOR_NORTH = Director.CREATOR({ name: "DIRECTOR_NORTH", params: ["N"] });
+  static DIRECTOR_SOUTH = Director.CREATOR({ name: "DIRECTOR_SOUTH", params: ["S"] });
 
   direction: Direction;
 
@@ -36,6 +40,6 @@ export class Director extends Element {
 //Initialize Splat Map maps the # to to the self type
 Director.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Director.BASE_TYPE);
+
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("w", Director.BASE_TYPE);

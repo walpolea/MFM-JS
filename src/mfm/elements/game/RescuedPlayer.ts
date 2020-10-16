@@ -18,6 +18,6 @@ export class RescuedPlayer extends Element {
 //Initialize Splat Map maps the # to to the self type
 RescuedPlayer.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(RescuedPlayer.BASE_TYPE);
+
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("w", RescuedPlayer.BASE_TYPE);

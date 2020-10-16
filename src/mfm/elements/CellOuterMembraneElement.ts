@@ -342,5 +342,5 @@ export class CellOuterMembrane extends Element {
 //Initialize Splat Map maps the # to to the self type
 CellOuterMembrane.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(CellOuterMembrane.BASE_TYPE);
+
 ElementRegistry.registerSPLAT("o", CellOuterMembrane.BASE_TYPE);

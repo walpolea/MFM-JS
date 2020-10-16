@@ -35,4 +35,3 @@ export class GridBuilder extends Builder {
 }
 
 GridBuilder.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(GridBuilder.BASE_TYPE);

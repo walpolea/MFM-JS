@@ -60,4 +60,3 @@ export class Data extends Element {
 //Initialize Splat Map maps the # to to the self type
 Data.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Data.BASE_TYPE);

@@ -218,4 +218,3 @@ export class SuperMason extends Element {
 //Initialize Splat Map maps the # to to the self type
 SuperMason.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(SuperMason.BASE_TYPE);

@@ -67,4 +67,3 @@ export class Sand extends Element {
 }
 
 Sand.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(Sand.BASE_TYPE);

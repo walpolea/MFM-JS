@@ -131,4 +131,3 @@ export class StuckMembrane extends Element {
 //Initialize Splat Map maps the # to to the self type
 StuckMembrane.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(StuckMembrane.BASE_TYPE);

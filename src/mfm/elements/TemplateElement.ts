@@ -82,7 +82,6 @@ export class Template extends Element {
 //Initialize Splat Map maps the # to to the self type
 Template.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Template.BASE_TYPE);
 
 console.log(Template.BASE_TYPE);
 

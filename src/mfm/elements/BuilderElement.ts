@@ -63,4 +63,3 @@ export class Builder extends Element {
 }
 
 Builder.INITIALIZE_SPLAT_MAP()();
-ElementRegistry.registerType(Builder.BASE_TYPE);

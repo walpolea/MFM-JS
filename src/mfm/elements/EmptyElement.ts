@@ -18,6 +18,6 @@ export class Empty extends Element {
 //Initialize Splat Map maps the # to to the self type
 Empty.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Empty.BASE_TYPE);
+
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("_", Empty.BASE_TYPE);

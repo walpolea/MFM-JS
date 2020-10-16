@@ -23,6 +23,6 @@ export class Wall extends Element {
 //Initialize Splat Map maps the # to to the self type
 Wall.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
-ElementRegistry.registerType(Wall.BASE_TYPE);
+
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("w", Wall.BASE_TYPE);
