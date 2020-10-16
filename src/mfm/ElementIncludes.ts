@@ -86,8 +86,10 @@ export class ElementIncludes {
       ["SL S Em", Emitters.SWAPLINE_S],
     ])
     .set("Structural", [
-      ["Director East", Director.CREATE],
-      ["Director West", Director.CREATOR({ params: ["W"] })],
+      ["Director E", Director.CREATE],
+      ["Director W", Director.CREATOR({ params: ["W"] })],
+      ["Director N", Director.CREATOR({ params: ["N"] })],
+      ["Director S", Director.CREATOR({ params: ["S"] })],
       ["Wall", Wall.CREATE],
       ["Soft Wall", Wall.SOFT_WALL],
       ["Loop Mason", LoopMason.CREATE],
