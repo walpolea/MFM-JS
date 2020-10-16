@@ -1,8 +1,8 @@
 import { Tile } from "./mfm/core/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
-import { DReg } from "./mfm/core/elements/DRegElement";
-import { ElementTypes } from "./mfm/core/ElementTypes";
+import { DReg } from "./mfm/elements/DRegElement";
+import { ElementRegistry } from "./mfm/core/ElementRegistry";
 
 declare var Vue: any;
 
@@ -60,9 +60,9 @@ let app = new Vue({
       if (this.seedData.length) {
         this.seedData.forEach((seed: any) => {
           if (seed.params) {
-            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementTypes.TYPES_MAP.get(seed.e)?.class.CREATE(seed.params);
+            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE(seed.params);
           } else {
-            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementTypes.TYPES_MAP.get(seed.e)?.class.CREATE();
+            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE();
           }
         });
       }

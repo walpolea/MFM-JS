@@ -1,21 +1,21 @@
 import { Tile } from "./mfm/core/Tile";
 import { MFMRenderer } from "./renderer/MFMRenderer";
 import { ElementIncludes } from "./mfm/ElementIncludes";
-import { Goal } from "./mfm/core/elements/game/Goal";
-import { MembraneWall } from "./mfm/core/elements/MembraneWallElement";
+import { Goal } from "./mfm/elements/game/Goal";
+import { MembraneWall } from "./mfm/elements/MembraneWallElement";
 import { Site } from "./mfm/core/Site";
-import { Enemy } from "./mfm/core/elements/game/Enemy";
-import { Player } from "./mfm/core/elements/game/Player";
-import { Clearer } from "./mfm/core/elements/game/Clearer";
-import { loadLevel } from "./mfm/core/elements/game/Levels";
-import { PlayerEmitter } from "./mfm/core/elements/game/PlayerEmitter";
-import { FlyingEnemy } from "./mfm/core/elements/game/FlyingEnemy";
-import { Wall } from "./mfm/core/elements/WallElement";
-import { Dirt } from "./mfm/core/elements/game/Dirt";
+import { Enemy } from "./mfm/elements/game/Enemy";
+import { Player } from "./mfm/elements/game/Player";
+import { Clearer } from "./mfm/elements/game/Clearer";
+import { loadLevel } from "./mfm/elements/game/Levels";
+import { PlayerEmitter } from "./mfm/elements/game/PlayerEmitter";
+import { FlyingEnemy } from "./mfm/elements/game/FlyingEnemy";
+import { Wall } from "./mfm/elements/WallElement";
+import { Dirt } from "./mfm/elements/game/Dirt";
 import { EventWindow } from "./mfm/core/EventWindow";
-import { Water } from "./mfm/core/elements/WaterElement";
-import { Sand } from "./mfm/core/elements/SandElement";
-import { SwapWorm } from "./mfm/core/elements/SwapWormElement";
+import { Water } from "./mfm/elements/WaterElement";
+import { Sand } from "./mfm/elements/SandElement";
+import { SwapWorm } from "./mfm/elements/SwapWormElement";
 
 declare var Vue: any;
 declare var Howl: any;
@@ -150,28 +150,28 @@ let app = new Vue({
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
         switch (s.atom?.type) {
-          case Dirt.TYPE_DEF:
-          case Wall.TYPE_DEF:
-          case MembraneWall.TYPE_DEF:
-          case Enemy.TYPE_DEF:
-          case FlyingEnemy.TYPE_DEF:
-          case Goal.TYPE_DEF:
+          case Dirt.BASE_TYPE:
+          case Wall.BASE_TYPE:
+          case MembraneWall.BASE_TYPE:
+          case Enemy.BASE_TYPE:
+          case FlyingEnemy.BASE_TYPE:
+          case Goal.BASE_TYPE:
 
-          case Sand.TYPE_DEF:
-          case Water.TYPE_DEF:
+          case Sand.BASE_TYPE:
+          case Water.BASE_TYPE:
             atoms.push({
               e: s.atom.type.name,
               gp: s.tilePos,
             });
             break;
-          case PlayerEmitter.TYPE_DEF:
+          case PlayerEmitter.BASE_TYPE:
             atoms.push({
               e: s.atom.type.name,
               gp: s.tilePos,
               params: [EventWindow.ADJACENT8WAY, 10, 10, true],
             });
             break;
-          case SwapWorm.TYPE_DEF:
+          case SwapWorm.BASE_TYPE:
             if ((s.atom.elem as SwapWorm).isAtHead()) {
               atoms.push({
                 e: s.atom.type.name,
@@ -194,11 +194,11 @@ let app = new Vue({
       }
 
       tile.sites.forEach((s) => {
-        if (s.atom.type == Player.TYPE_DEF || s.atom.type === PlayerEmitter.TYPE_DEF) {
+        if (s.atom.type == Player.BASE_TYPE || s.atom.type === PlayerEmitter.BASE_TYPE) {
           isDone = false;
         }
 
-        if (!this.countDownEnded && !this.isCountdown && s.atom.type === Goal.TYPE_DEF && (s.atom.elem as Goal).rescued > 0) {
+        if (!this.countDownEnded && !this.isCountdown && s.atom.type === Goal.BASE_TYPE && (s.atom.elem as Goal).rescued > 0) {
           this.isCountdown = true;
           this.startCountdown();
         }
@@ -218,7 +218,7 @@ let app = new Vue({
       clearInterval(this.gameLoopInterval);
 
       tile.sites.forEach((s: Site) => {
-        if (s.atom.type === Goal.TYPE_DEF) {
+        if (s.atom.type === Goal.BASE_TYPE) {
           goalCount += (s.atom.elem as Goal).rescued;
         }
       });
@@ -232,7 +232,7 @@ let app = new Vue({
       const waitInterval: any = setInterval(() => {
         let stillClearing: boolean = false;
         tile.sites.forEach((s: Site) => {
-          if (s.atom.type === Clearer.TYPE_DEF) {
+          if (s.atom.type === Clearer.BASE_TYPE) {
             stillClearing = true;
           }
         });
@@ -259,10 +259,10 @@ let app = new Vue({
     turnLeft() {
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.TYPE_DEF) {
+        if (s.atom?.type === Player.BASE_TYPE) {
           (s.atom.elem as Player).slightLeft();
         }
-        // else if(s.atom?.type === SwapWorm.TYPE_DEF && (s.atom.elem as SwapWorm).isAtHead()) {
+        // else if(s.atom?.type === SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightLeft();
         // }
       });
@@ -271,10 +271,10 @@ let app = new Vue({
     turnRight() {
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.TYPE_DEF) {
+        if (s.atom?.type === Player.BASE_TYPE) {
           (s.atom.elem as Player).slightRight();
         }
-        // else if(s.atom?.type === SwapWorm.TYPE_DEF && (s.atom.elem as SwapWorm).isAtHead()) {
+        // else if(s.atom?.type === SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightRight();
         // }
       });

@@ -1,12 +1,12 @@
 import { EventWindow } from "../core/EventWindow";
 import { Utils } from "./MFMUtils";
-import { Empty } from "../core/elements/EmptyElement";
+import { Empty } from "../elements/EmptyElement";
 import { IElementType } from "../core/IElementType";
 
 export class Actions {
   static patrol(ew: EventWindow, withinSet: number[] = EventWindow.ADJACENT4WAY, pChance: number = 1): boolean {
     if (Utils.oneIn(pChance)) {
-      const ei: number = ew.getIndexes(withinSet, Empty.TYPE_DEF, true)[0];
+      const ei: number = ew.getIndexes(withinSet, Empty.BASE_TYPE, true)[0];
 
       if (ei) {
         ew.move(ei);
@@ -35,7 +35,7 @@ export class Actions {
       sites.forEach((target) => {
         const toSite: number = repelMap.get(target);
         //try to repel in the opposing direction
-        if (ew.is(toSite, Empty.TYPE_DEF)) {
+        if (ew.is(toSite, Empty.BASE_TYPE)) {
           ew.move(toSite, undefined, target);
         }
         //otherwise just repel it anywhere available in the toSet!
@@ -70,13 +70,13 @@ export class Actions {
       const destinationIndex: number = repelMap.get(targetIndexFromRepellent);
 
       //try to repel in the opposing direction
-      if (destinationIndex !== undefined && ew.is(destinationIndex, Empty.TYPE_DEF)) {
+      if (destinationIndex !== undefined && ew.is(destinationIndex, Empty.BASE_TYPE)) {
         ew.move(repelMap.get(destinationIndex), undefined, repellingTarget);
         return true;
       }
       //otherwise just repel it anywhere available in the toSet!
-      else if (ew.getIndexes(toSet, Empty.TYPE_DEF).length) {
-        ew.move(ew.getIndexes(toSet, Empty.TYPE_DEF, true)[0], undefined, repellingTarget);
+      else if (ew.getIndexes(toSet, Empty.BASE_TYPE).length) {
+        ew.move(ew.getIndexes(toSet, Empty.BASE_TYPE, true)[0], undefined, repellingTarget);
         return true;
       } else {
         return false;

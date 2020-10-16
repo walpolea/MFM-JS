@@ -7,27 +7,27 @@ import { EventWindow } from "../mfm/core/EventWindow";
 import { Site } from "../mfm/core/Site";
 import { SiteRenderer } from "./SiteRenderer";
 import { Atom } from "../mfm/core/Atom";
-import { Mason } from "../mfm/core/elements/MasonElement";
+import { Mason } from "../mfm/elements/MasonElement";
 import { GridCoord } from "../mfm/core/IGridCoord";
-import { Empty } from "../mfm/core/elements/EmptyElement";
-import { SwapWorm } from "../mfm/core/elements/SwapWormElement";
-import { StickyMembrane } from "../mfm/core/elements/StickyMembraneElement";
-import { Res } from "../mfm/core/elements/ResElement";
-import { DReg } from "../mfm/core/elements/DRegElement";
-import { Wall } from "../mfm/core/elements/WallElement";
-import { ForkBomb } from "../mfm/core/elements/ForkBombElement";
-import { SuperForkBomb } from "../mfm/core/elements/SuperForkBomb";
-import { AntiForkBomb } from "../mfm/core/elements/AntiForkBombElement";
-import { Sentry } from "../mfm/core/elements/SentryElement";
-import { Data } from "../mfm/core/elements/DataElement";
-import { Reducer } from "../mfm/core/elements/ReducerElement";
-import { LoopWorm } from "../mfm/core/elements/LoopWormElement";
-import { LoopSeed } from "../mfm/core/elements/LoopSeedElement";
-import { Writer } from "../mfm/core/elements/WriterElement";
-import { SortMaster } from "../mfm/core/elements/SortMasterElement";
-import { OnewayDoor } from "../mfm/core/elements/OnewayDoorElement";
+import { Empty } from "../mfm/elements/EmptyElement";
+import { SwapWorm } from "../mfm/elements/SwapWormElement";
+import { StickyMembrane } from "../mfm/elements/StickyMembraneElement";
+import { Res } from "../mfm/elements/ResElement";
+import { DReg } from "../mfm/elements/DRegElement";
+import { Wall } from "../mfm/elements/WallElement";
+import { ForkBomb } from "../mfm/elements/ForkBombElement";
+import { SuperForkBomb } from "../mfm/elements/SuperForkBomb";
+import { AntiForkBomb } from "../mfm/elements/AntiForkBombElement";
+import { Sentry } from "../mfm/elements/SentryElement";
+import { Data } from "../mfm/elements/DataElement";
+import { Reducer } from "../mfm/elements/ReducerElement";
+import { LoopWorm } from "../mfm/elements/LoopWormElement";
+import { LoopSeed } from "../mfm/elements/LoopSeedElement";
+import { Writer } from "../mfm/elements/WriterElement";
+import { SortMaster } from "../mfm/elements/SortMasterElement";
+import { OnewayDoor } from "../mfm/elements/OnewayDoorElement";
 import { IElementType } from "../mfm/core/IElementType";
-import { Player } from "../mfm/core/elements/game/Player";
+import { Player } from "../mfm/elements/game/Player";
 
 export class MFMRenderer {
   static SITE_TEXTURE: Texture = Texture.from("/resources/element.png");
@@ -89,12 +89,14 @@ export class MFMRenderer {
   }
 
   killType(type: IElementType) {
-    this.tile.sites.forEach((site) => {
-      if (site?.atom?.type == type) {
-        site.die();
-        this.rendererMap.get(site).update();
-      }
-    });
+    Array.from(this.tile.sites.values())
+      .filter((site: Site) => site?.atom?.type.name !== Empty.BASE_TYPE.name)
+      .forEach((site: Site) => {
+        if (site?.atom?.type.name == type.name) {
+          site.die();
+          this.rendererMap.get(site).update();
+        }
+      });
   }
 
   init() {
@@ -162,7 +164,7 @@ export class MFMRenderer {
   }
 
   gameLoop(delta: number) {
-    // console.log("CM", Array.from(this.tile.sites).filter((s) => s[1]?.atom?.type == CellMembrane.TYPE_DEF).length);
+    // console.log("CM", Array.from(this.tile.sites).filter((s) => s[1]?.atom?.type == CellMembrane.BASE_TYPE).length);
     let ew: EventWindow,
       renders: Set<SiteRenderer> = new Set<SiteRenderer>(),
       i = 0,
@@ -173,7 +175,7 @@ export class MFMRenderer {
       ew = this.ewCache.get(this.tile.getRandomSite().tilePos);
 
       //if the window exists and origin is not an empty site
-      if (ew.window && !ew.origin.atom?.is(Empty.TYPE_DEF)) {
+      if (ew.window && !ew.origin.atom?.is(Empty.BASE_TYPE)) {
         //element behaves
         ew.origin.atom.exec(ew);
 
@@ -203,7 +205,7 @@ export class MFMRenderer {
 
     if (key.key === "ArrowRight") {
       this.tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.TYPE_DEF || s.atom?.type === SwapWorm.TYPE_DEF) {
+        if (s.atom?.type === Player.BASE_TYPE || s.atom?.type === SwapWorm.BASE_TYPE) {
           (s.atom.elem as Player).slightRight();
         }
       });
@@ -211,7 +213,7 @@ export class MFMRenderer {
 
     if (key.key === "ArrowLeft") {
       this.tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.TYPE_DEF || s.atom?.type === SwapWorm.TYPE_DEF) {
+        if (s.atom?.type === Player.BASE_TYPE || s.atom?.type === SwapWorm.BASE_TYPE) {
           (s.atom.elem as Player).slightLeft();
         }
       });
@@ -243,52 +245,52 @@ export class MFMRenderer {
         if (this.keysHeld.has("r")) {
           site.atom = Res.CREATE();
         } else if (this.keysHeld.has("t")) {
-          site.atom = new Atom(DReg.TYPE_DEF);
+          site.atom = new Atom(DReg.BASE_TYPE);
         } else if (this.keysHeld.has("w")) {
-          site.atom = new Atom(Wall.TYPE_DEF);
+          site.atom = new Atom(Wall.BASE_TYPE);
         } else if (this.keysHeld.has("z")) {
-          site.atom = new Atom(Mason.TYPE_DEF, [Mason.boxPath(12)]);
+          site.atom = new Atom(Mason.BASE_TYPE, [Mason.boxPath(12)]);
         } else if (this.keysHeld.has("Z")) {
-          site.atom = new Atom(Mason.TYPE_DEF, [Mason.boxPath(24)]);
+          site.atom = new Atom(Mason.BASE_TYPE, [Mason.boxPath(24)]);
         } else if (this.keysHeld.has("x")) {
-          site.atom = new Atom(Mason.TYPE_DEF, [Mason.linePath(48, "E")]);
+          site.atom = new Atom(Mason.BASE_TYPE, [Mason.linePath(48, "E")]);
         } else if (this.keysHeld.has("c")) {
-          site.atom = new Atom(Mason.TYPE_DEF, [Mason.linePath(48, "S")]);
+          site.atom = new Atom(Mason.BASE_TYPE, [Mason.linePath(48, "S")]);
         } else if (this.keysHeld.has("e")) {
-          site.atom = new Atom(Empty.TYPE_DEF);
+          site.atom = new Atom(Empty.BASE_TYPE);
         } else if (this.keysHeld.has("b")) {
-          site.atom = new Atom(ForkBomb.TYPE_DEF);
+          site.atom = new Atom(ForkBomb.BASE_TYPE);
         } else if (this.keysHeld.has("B")) {
-          site.atom = new Atom(SuperForkBomb.TYPE_DEF);
+          site.atom = new Atom(SuperForkBomb.BASE_TYPE);
         } else if (this.keysHeld.has("a")) {
-          site.atom = new Atom(AntiForkBomb.TYPE_DEF);
+          site.atom = new Atom(AntiForkBomb.BASE_TYPE);
         } else if (this.keysHeld.has("s")) {
-          site.atom = new Atom(Sentry.TYPE_DEF);
+          site.atom = new Atom(Sentry.BASE_TYPE);
         } else if (this.keysHeld.has("d")) {
           const rval = (Math.random() * 40) >> 0;
           site.atom = Data.CREATE(undefined, {
             value: rval,
           });
         } else if (this.keysHeld.has("i")) {
-          site.atom = new Atom(Reducer.TYPE_DEF);
+          site.atom = new Atom(Reducer.BASE_TYPE);
         } else if (this.keysHeld.has("n")) {
-          site.atom = new Atom(SwapWorm.TYPE_DEF, [7]);
+          site.atom = new Atom(SwapWorm.BASE_TYPE, [7]);
         } else if (this.keysHeld.has("N")) {
-          site.atom = new Atom(SwapWorm.TYPE_DEF, [16]);
+          site.atom = new Atom(SwapWorm.BASE_TYPE, [16]);
         } else if (this.keysHeld.has("l")) {
-          site.atom = new Atom(LoopWorm.TYPE_DEF, [7]);
+          site.atom = new Atom(LoopWorm.BASE_TYPE, [7]);
         } else if (this.keysHeld.has("L")) {
-          site.atom = new Atom(LoopWorm.TYPE_DEF, [16]);
+          site.atom = new Atom(LoopWorm.BASE_TYPE, [16]);
         } else if (this.keysHeld.has("k")) {
-          site.atom = new Atom(LoopSeed.TYPE_DEF);
+          site.atom = new Atom(LoopSeed.BASE_TYPE);
         } else if (this.keysHeld.has("m")) {
-          site.atom = new Atom(StickyMembrane.TYPE_DEF);
+          site.atom = new Atom(StickyMembrane.BASE_TYPE);
         } else if (this.keysHeld.has("u")) {
           site.atom = SortMaster.CREATE();
         } else if (this.keysHeld.has("q")) {
           console.log("DEBUG SITE:", site);
         } else if (this.keysHeld.has("C")) {
-          site.atom = new Atom(Writer.TYPE_DEF, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
+          site.atom = new Atom(Writer.BASE_TYPE, ["FIRST BE ROBUST  THEN AS CORRECT AS POSSIBLE  AND AS EFFICIENT AS NEEDED"]);
         } else if (this.keysHeld.has("1")) {
           site.atom = OnewayDoor.E_W();
         } else if (this.keysHeld.has("2")) {

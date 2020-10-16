@@ -3,11 +3,12 @@ import { Tile } from "./Tile";
 import { Site } from "./Site";
 import { Atom } from "./Atom";
 import { IElementType } from "./IElementType";
-import { ElementTypes } from "./ElementTypes";
-import { Empty } from "./elements/EmptyElement";
+import { ElementRegistry } from "./ElementRegistry";
+import { Empty } from "../elements/EmptyElement";
 import { Symmetries } from "../utils/Symmetries";
 import { Utils } from "../utils/MFMUtils";
 import { SPLATEval } from "../utils/SPLAT";
+import { Quark } from "./Quark";
 
 export type EWIndexes = EWIndex[];
 export type EWIndex =
@@ -715,10 +716,42 @@ export class EventWindow {
     });
   }
 
+  getClassIndexes(subset: number[], type: typeof Quark, oneRandom: boolean = false): number[] {
+    let candidates: number[] = this.getSubsetIndexes(subset);
+
+    //proxy for getSubset I guess
+    if (!type && !oneRandom) {
+      return candidates;
+    }
+
+    //filter by type
+    if (type) {
+      candidates = this.filterIndexesByClass(candidates, type);
+    }
+
+    //return array of just 1 random site from filtered
+    if (oneRandom) {
+      return [this.getRandomIndex(candidates)];
+    }
+
+    return candidates;
+  }
+
   filterIndexesByType(indexes: number[], type: IElementType): number[] {
     return indexes.filter((siteIndex) => {
       const site: Site = this.getSiteByIndex(siteIndex);
       if (site && site.atom.is(type)) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  filterIndexesByClass(indexes: number[], type: typeof Quark): number[] {
+    return indexes.filter((siteIndex) => {
+      const site: Site = this.getSiteByIndex(siteIndex);
+      if (site && site.atom.isClass(type)) {
         return true;
       }
 
@@ -790,13 +823,13 @@ export class EventWindow {
     }
 
     if (Array.isArray(type)) {
-      const filtered: IElementType[] = type.filter((type) => {
-        return checkSite.atom.type === type;
+      const filtered: IElementType[] = type.filter((t: IElementType) => {
+        return checkSite.atom.type?.name === t?.name;
       });
 
       isIt = filtered.length ? true : false;
     } else {
-      isIt = checkSite.atom.type === type;
+      isIt = checkSite.atom.type?.name === type?.name;
     }
 
     return isIt;
@@ -882,9 +915,7 @@ export class EventWindow {
 
       if (leavingAtom) {
         fromSite.atom = leavingAtom;
-        // console.log("set leaving", leavingAtom, fromSite);
       } else {
-        // console.log("leaving an empty");
         fromSite.atom = Empty.CREATE();
       }
       return true;
@@ -898,8 +929,6 @@ export class EventWindow {
     const fromSite: Site = this.getSiteByIndex(fromIndex);
 
     if (toSite && fromSite && toSite.canMove() && fromSite.canMove()) {
-      //console.log("SWAP", toSite, fromSite);
-
       [toSite.atom, fromSite.atom] = [fromSite.atom, toSite.atom];
       return true;
     }
@@ -925,7 +954,7 @@ export class EventWindow {
   }
 
   destroy(targetIndex: number = 0): boolean {
-    return this.mutate(targetIndex, new Atom(Empty.TYPE_DEF));
+    return this.mutate(targetIndex, new Atom(Empty.BASE_TYPE));
   }
 
   //////////////////////
@@ -935,7 +964,7 @@ export class EventWindow {
     this.origin.baseAtom = newAtom;
   }
 
-  killBase(leavingAtom: Atom = new Atom(Empty.TYPE_DEF)): void {
+  killBase(leavingAtom: Atom = new Atom(Empty.BASE_TYPE)): void {
     this.origin.baseAtom = leavingAtom;
   }
 
@@ -947,12 +976,12 @@ export class EventWindow {
   query(
     ewMap: Map<number, string>,
     fuzziness: number = 0,
-    typesMap: Map<string, IElementType | SPLATEval> = ElementTypes.SPLAT_MAP,
+    typesMap: Map<string, IElementType | SPLATEval> = ElementRegistry.SPLAT_MAP,
     symmetries: Map<number, number>[] = Symmetries.NORMAL
-  ) {
+  ): Map<string, number[]> {
     const symmetry = Utils.oneRandom(symmetries);
 
-    const matches: Map<IElementType, number[]> = new Map<IElementType, number[]>();
+    const matches: Map<string, number[]> = new Map<string, number[]>();
     let matchCount: number = 0;
 
     const keys = Symmetries.APPLY(Array.from(ewMap.keys()), symmetry);
@@ -971,20 +1000,20 @@ export class EventWindow {
 
           if (t !== undefined) {
             matchCount++;
-            if (matches.has(t)) {
-              matches.set(t, [...matches.get(t), cursn]);
+            if (matches.has(t.name)) {
+              matches.set(t.name, [...matches.get(t.name), cursn]);
             } else {
-              matches.set(t, [cursn]);
+              matches.set(t.name, [cursn]);
             }
           }
         }
       } else {
-        if (this.window[cursn] && type && this.window[cursn].atom.type === type) {
+        if (this.window[cursn] && type && this.window[cursn].atom.is(type)) {
           matchCount++;
-          if (matches.has(type)) {
-            matches.set(type, [...matches.get(type), cursn]);
+          if (matches.has(type.name)) {
+            matches.set(type.name, [...matches.get(type.name), cursn]);
           } else {
-            matches.set(type, [cursn]);
+            matches.set(type.name, [cursn]);
           }
         }
       }

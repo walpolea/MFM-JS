@@ -1,61 +1,62 @@
 //For the time being, you need to add your Element here to make it show up in the GUI
-import { Mason } from "./core/elements/MasonElement";
-import { Empty } from "./core/elements/EmptyElement";
-import { SwapWorm } from "./core/elements/SwapWormElement";
-import { StickyMembrane } from "./core/elements/StickyMembraneElement";
-import { Res } from "./core/elements/ResElement";
-import { DReg } from "./core/elements/DRegElement";
-import { Wall } from "./core/elements/WallElement";
-import { ForkBomb } from "./core/elements/ForkBombElement";
-import { SuperForkBomb } from "./core/elements/SuperForkBomb";
-import { AntiForkBomb } from "./core/elements/AntiForkBombElement";
-import { Sentry } from "./core/elements/SentryElement";
-import { Data } from "./core/elements/DataElement";
-import { Reducer } from "./core/elements/ReducerElement";
-import { LoopWorm } from "./core/elements/LoopWormElement";
-import { LoopSeed } from "./core/elements/LoopSeedElement";
-import { Writer } from "./core/elements/WriterElement";
-import { Sorter } from "./core/elements/SorterElement";
-import { SortMaster } from "./core/elements/SortMasterElement";
-import { Template } from "./core/elements/TemplateElement";
-import { SuperMason } from "./core/elements/SuperMasonElement";
-import { StuckMembrane } from "./core/elements/StuckMembraneElement";
-import { Input } from "./core/elements/InputElement";
-import { Keyboard } from "./core/elements/KeyboardElement";
-import { BasePlanter } from "./core/elements/BasePlanterElement";
-import { Text } from "./core/elements/TextElement";
-import { Reader } from "./core/elements/ReaderElement";
-import { RevolvingDoor } from "./core/elements/RevolvingDoorElement";
-import { OnewayDoor } from "./core/elements/OnewayDoorElement";
-import { MembraneWall } from "./core/elements/MembraneWallElement";
-import { MembraneDoor } from "./core/elements/MembraneDoorElement";
-import { Eraser } from "./core/elements/EraserElement";
-import { Sand } from "./core/elements/SandElement";
-import { Water } from "./core/elements/WaterElement";
-import { DecayWall } from "./core/elements/DecayWallElement";
-import { GridBuilder } from "./core/elements/GridBuilderElement";
-import { Builder } from "./core/elements/BuilderElement";
-import { Builders } from "./core/elements/Builders";
+import { Mason } from "./elements/MasonElement";
+import { Empty } from "./elements/EmptyElement";
+import { SwapWorm } from "./elements/SwapWormElement";
+import { StickyMembrane } from "./elements/StickyMembraneElement";
+import { Res } from "./elements/ResElement";
+import { DReg } from "./elements/DRegElement";
+import { Wall } from "./elements/WallElement";
+import { ForkBomb } from "./elements/ForkBombElement";
+import { SuperForkBomb } from "./elements/SuperForkBomb";
+import { AntiForkBomb } from "./elements/AntiForkBombElement";
+import { Sentry } from "./elements/SentryElement";
+import { Data } from "./elements/DataElement";
+import { Reducer } from "./elements/ReducerElement";
+import { LoopWorm } from "./elements/LoopWormElement";
+import { LoopSeed } from "./elements/LoopSeedElement";
+import { Writer } from "./elements/WriterElement";
+import { Sorter } from "./elements/SorterElement";
+import { SortMaster } from "./elements/SortMasterElement";
+import { Template } from "./elements/TemplateElement";
+import { SuperMason } from "./elements/SuperMasonElement";
+import { StuckMembrane } from "./elements/StuckMembraneElement";
+import { Input } from "./elements/InputElement";
+import { Keyboard } from "./elements/KeyboardElement";
+import { BasePlanter } from "./elements/BasePlanterElement";
+import { Text } from "./elements/TextElement";
+import { Reader } from "./elements/ReaderElement";
+import { RevolvingDoor } from "./elements/RevolvingDoorElement";
+import { OnewayDoor } from "./elements/OnewayDoorElement";
+import { MembraneWall } from "./elements/MembraneWallElement";
+import { MembraneDoor } from "./elements/MembraneDoorElement";
+import { Eraser } from "./elements/EraserElement";
+import { Sand } from "./elements/SandElement";
+import { Water } from "./elements/WaterElement";
+import { DecayWall } from "./elements/DecayWallElement";
+import { GridBuilder } from "./elements/GridBuilderElement";
+import { Builder } from "./elements/BuilderElement";
+import { Builders } from "./elements/Builders";
 import { SPLAT } from "./utils/SPLAT";
-import { SwapLine } from "./core/elements/SwapLineElement";
-import { Emitters } from "./core/elements/Emitters";
-import { CellMembrane } from "./core/elements/CellMembraneElement";
-import { CellBrane } from "./core/elements/CellBraneElement";
-import { CellOuterMembrane } from "./core/elements/CellOuterMembraneElement";
-import { Sonar } from "./core/elements/SonarElement";
-import { DirectionalTraveler } from "./core/elements/DirectionalTravelerElement";
-import { Fly } from "./core/elements/FlyElement";
-import { Looper } from "./core/elements/LooperElement";
-import { LoopMason } from "./core/elements/LoopMason";
-import { Networker } from "./core/elements/NetworkerElement";
-import { Player } from "./core/elements/game/Player";
-import { Emitter } from "./core/elements/EmitterElement";
-import { Goal } from "./core/elements/game/Goal";
-import { Enemy } from "./core/elements/game/Enemy";
-import { Clearer } from "./core/elements/game/Clearer";
-import { PlayerEmitter } from "./core/elements/game/PlayerEmitter";
-import { FlyingEnemy } from "./core/elements/game/FlyingEnemy";
-import { Dirt } from "./core/elements/game/Dirt";
+import { SwapLine } from "./elements/SwapLineElement";
+import { Emitters } from "./elements/Emitters";
+import { CellMembrane } from "./elements/CellMembraneElement";
+import { CellBrane } from "./elements/CellBraneElement";
+import { CellOuterMembrane } from "./elements/CellOuterMembraneElement";
+import { Sonar } from "./elements/SonarElement";
+import { DirectionalTraveler } from "./elements/DirectionalTravelerElement";
+import { Fly } from "./elements/FlyElement";
+import { Looper } from "./elements/LooperElement";
+import { LoopMason } from "./elements/LoopMason";
+import { Networker } from "./elements/NetworkerElement";
+import { Player } from "./elements/game/Player";
+import { Goal } from "./elements/game/Goal";
+import { Enemy } from "./elements/game/Enemy";
+import { Clearer } from "./elements/game/Clearer";
+import { PlayerEmitter } from "./elements/game/PlayerEmitter";
+import { FlyingEnemy } from "./elements/game/FlyingEnemy";
+import { Dirt } from "./elements/game/Dirt";
+import { Mosquito } from "./elements/MosquitoElement";
+import { Director } from "./elements/DirectorElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -85,6 +86,8 @@ export class ElementIncludes {
       ["SL S Em", Emitters.SWAPLINE_S],
     ])
     .set("Structural", [
+      ["Director East", Director.CREATE],
+      ["Director West", Director.CREATOR({ params: ["W"] })],
       ["Wall", Wall.CREATE],
       ["Soft Wall", Wall.SOFT_WALL],
       ["Loop Mason", LoopMason.CREATE],
@@ -103,7 +106,7 @@ export class ElementIncludes {
       ["Wall Grid", GridBuilder.GRID_WALL],
       ["Sorter Grid", GridBuilder.GRID_SORTER],
       ["Data Grid", GridBuilder.GRID_DATA],
-      ["DecayWall Grid", GridBuilder.CREATOR([DecayWall.LIVE_100])],
+      ["DecayWall Grid", GridBuilder.CREATOR({ params: [DecayWall.LIVE_100] })],
       ["Builder", Builder.CREATE],
       ["Fun", Builders.LOOP],
       ["CA", Builders.CA],
@@ -141,8 +144,8 @@ export class ElementIncludes {
       ["CellBrane", CellBrane.CREATE],
       ["CellMembrane", CellMembrane.CREATE],
       ["CellOuterMembrane", CellOuterMembrane.CREATE],
-      ["CellBrane (NO COLOR)", CellBrane.CREATOR([false])],
-      ["CellMembrane (NO COLOR)", CellMembrane.CREATOR([false])],
+      ["CellBrane (NO COLOR)", CellBrane.CREATOR({ params: [false] })],
+      ["CellMembrane (NO COLOR)", CellMembrane.CREATOR({ params: [false] })],
       ["StickyMembrane", StickyMembrane.CREATE],
       ["StickyMembrane Emitter", Emitters.STICKYMEMBRANE],
       ["StuckMembrane", StuckMembrane.CREATE],
@@ -150,9 +153,9 @@ export class ElementIncludes {
     ])
     .set("Worms", [
       ["SwapWorm", SwapWorm.CREATE],
-      ["Long SW", SwapWorm.CREATOR([24])],
-      ["Short SW", SwapWorm.CREATOR([1])],
-      ["Super SW", SwapWorm.CREATOR([255])],
+      ["Long SW", SwapWorm.CREATOR({ params: [24] })],
+      ["Short SW", SwapWorm.CREATOR({ params: [1] })],
+      ["Super SW", SwapWorm.CREATOR({ params: [255] })],
       ["SW Emitter", Emitters.SWAPWORM],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE],
@@ -187,15 +190,17 @@ export class ElementIncludes {
     .set("Misc", [
       ["Directional", DirectionalTraveler.CREATE],
       ["Looper", Looper.CREATE],
+      ["Looper EAST", Looper.CREATE_EAST],
       ["Sonar", Sonar.CREATE],
       ["Sonar Blue", Sonar.CREATE_BLUE],
       ["Eraser", Eraser.CREATE],
     ])
     .set("Sandbox Stuff", [
       ["Fly", Fly.CREATE],
+      ["Mosquito", Mosquito.CREATE],
       ["Sand", Sand.CREATE],
       ["Water", Water.CREATE],
       ["Sand Grid", GridBuilder.GRID_SAND],
-      ["Water Grid", GridBuilder.CREATOR([Water.CREATE])],
+      ["Water Grid", GridBuilder.CREATOR({ name: "WATER GRID", params: [Water.CREATE] })],
     ]);
 }
