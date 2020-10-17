@@ -205,7 +205,7 @@ export class MFMRenderer {
 
     if (key.key === "ArrowRight") {
       this.tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.BASE_TYPE || s.atom?.type === SwapWorm.BASE_TYPE) {
+        if (s.atom?.is(Player.BASE_TYPE) || s.atom?.is(SwapWorm.BASE_TYPE)) {
           (s.atom.elem as Player).slightRight();
         }
       });
@@ -213,7 +213,7 @@ export class MFMRenderer {
 
     if (key.key === "ArrowLeft") {
       this.tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.BASE_TYPE || s.atom?.type === SwapWorm.BASE_TYPE) {
+        if (s.atom?.is(Player.BASE_TYPE) || s.atom?.is(SwapWorm.BASE_TYPE)) {
           (s.atom.elem as Player).slightLeft();
         }
       });

@@ -6,7 +6,7 @@ export const loadLevel = (tile: Tile, levelData: any) => {
   levelData.atoms.forEach((a: any) => {
     if (ElementRegistry.TYPES.get(a.e)) {
       if (a.params) {
-        tile.getSiteByCoord(a.gp).atom = ElementRegistry.TYPES.get(a.e)?.class.CREATE(a.params);
+        tile.getSiteByCoord(a.gp).atom = ElementRegistry.TYPES.get(a.e)?.class.CREATE({ params: a.params });
       } else {
         tile.getSiteByCoord(a.gp).atom = ElementRegistry.TYPES.get(a.e)?.class.CREATE();
       }

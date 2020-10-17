@@ -149,29 +149,29 @@ let app = new Vue({
 
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        switch (s.atom?.type) {
-          case Dirt.BASE_TYPE:
-          case Wall.BASE_TYPE:
-          case MembraneWall.BASE_TYPE:
-          case Enemy.BASE_TYPE:
-          case FlyingEnemy.BASE_TYPE:
-          case Goal.BASE_TYPE:
+        switch (s.atom?.type.name) {
+          case Dirt.BASE_TYPE.name:
+          case Wall.BASE_TYPE.name:
+          case MembraneWall.BASE_TYPE.name:
+          case Enemy.BASE_TYPE.name:
+          case FlyingEnemy.BASE_TYPE.name:
+          case Goal.BASE_TYPE.name:
 
-          case Sand.BASE_TYPE:
-          case Water.BASE_TYPE:
+          case Sand.BASE_TYPE.name:
+          case Water.BASE_TYPE.name:
             atoms.push({
               e: s.atom.type.name,
               gp: s.tilePos,
             });
             break;
-          case PlayerEmitter.BASE_TYPE:
+          case PlayerEmitter.BASE_TYPE.name:
             atoms.push({
               e: s.atom.type.name,
               gp: s.tilePos,
               params: [EventWindow.ADJACENT8WAY, 10, 10, true],
             });
             break;
-          case SwapWorm.BASE_TYPE:
+          case SwapWorm.BASE_TYPE.name:
             if ((s.atom.elem as SwapWorm).isAtHead()) {
               atoms.push({
                 e: s.atom.type.name,
@@ -194,11 +194,11 @@ let app = new Vue({
       }
 
       tile.sites.forEach((s) => {
-        if (s.atom.type == Player.BASE_TYPE || s.atom.type === PlayerEmitter.BASE_TYPE) {
+        if (s.atom.is(Player.BASE_TYPE) || s.atom.is(PlayerEmitter.BASE_TYPE)) {
           isDone = false;
         }
 
-        if (!this.countDownEnded && !this.isCountdown && s.atom.type === Goal.BASE_TYPE && (s.atom.elem as Goal).rescued > 0) {
+        if (!this.countDownEnded && !this.isCountdown && s.atom.is(Goal.BASE_TYPE) && (s.atom.elem as Goal).rescued > 0) {
           this.isCountdown = true;
           this.startCountdown();
         }
@@ -218,7 +218,7 @@ let app = new Vue({
       clearInterval(this.gameLoopInterval);
 
       tile.sites.forEach((s: Site) => {
-        if (s.atom.type === Goal.BASE_TYPE) {
+        if (s.atom.is(Goal.BASE_TYPE)) {
           goalCount += (s.atom.elem as Goal).rescued;
         }
       });
@@ -232,7 +232,7 @@ let app = new Vue({
       const waitInterval: any = setInterval(() => {
         let stillClearing: boolean = false;
         tile.sites.forEach((s: Site) => {
-          if (s.atom.type === Clearer.BASE_TYPE) {
+          if (s.atom.is(Clearer.BASE_TYPE)) {
             stillClearing = true;
           }
         });
@@ -259,10 +259,10 @@ let app = new Vue({
     turnLeft() {
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.BASE_TYPE) {
+        if (s.atom?.is(Player.BASE_TYPE)) {
           (s.atom.elem as Player).slightLeft();
         }
-        // else if(s.atom?.type === SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
+        // else if(s.atom?.is(SwapWorm.BASE_TYPE) && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightLeft();
         // }
       });
@@ -271,10 +271,10 @@ let app = new Vue({
     turnRight() {
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.BASE_TYPE) {
+        if (s.atom?.is(Player.BASE_TYPE)) {
           (s.atom.elem as Player).slightRight();
         }
-        // else if(s.atom?.type === SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
+        // else if(s.atom?.is(SwapWorm.BASE_TYPE) && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightRight();
         // }
       });

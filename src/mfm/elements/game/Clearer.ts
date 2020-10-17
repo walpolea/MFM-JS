@@ -21,7 +21,7 @@ export class Clearer extends Element {
     let nextVictims = ew.getIndexes([0, 1, 2, 3, 4, 5, 6, 7, 8], undefined, false);
 
     nextVictims.forEach((nextVictim) => {
-      if (Utils.oneIn(2) && this.isSpreader && nextVictim && ew.getSiteByIndex(nextVictim).atom.type !== Clearer.BASE_TYPE) {
+      if (Utils.oneIn(2) && this.isSpreader && nextVictim && !ew.getSiteByIndex(nextVictim).atom.is(Clearer.BASE_TYPE)) {
         if (this.age > 3) {
           ew.mutate(nextVictim, Clearer.CREATE({ params: [false] }));
         } else {

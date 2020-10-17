@@ -179,11 +179,11 @@ let app = new Vue({
       }
 
       tile.sites.forEach((s) => {
-        if (s.atom.type == Player.BASE_TYPE || s.atom.type === PlayerEmitter.BASE_TYPE) {
+        if (s.atom.is(Player.BASE_TYPE) || s.atom.is(PlayerEmitter.BASE_TYPE)) {
           isDone = false;
         }
 
-        if (!this.countDownEnded && !this.isCountdown && s.atom.type === Goal.BASE_TYPE && (s.atom.elem as Goal).rescued > 0) {
+        if (!this.countDownEnded && !this.isCountdown && s.atom.is(Goal.BASE_TYPE) && (s.atom.elem as Goal).rescued > 0) {
           this.isCountdown = true;
           this.startCountdown();
         }
@@ -203,7 +203,7 @@ let app = new Vue({
       clearInterval(this.gameLoopInterval);
 
       tile.sites.forEach((s: Site) => {
-        if (s.atom.type === Goal.BASE_TYPE) {
+        if (s.atom.is(Goal.BASE_TYPE)) {
           goalCount += (s.atom.elem as Goal).rescued;
         }
       });
@@ -227,7 +227,7 @@ let app = new Vue({
       const waitInterval: any = setInterval(() => {
         let stillClearing: boolean = false;
         tile.sites.forEach((s: Site) => {
-          if (s.atom.type === Clearer.BASE_TYPE) {
+          if (s.atom.is(Clearer.BASE_TYPE)) {
             stillClearing = true;
           }
         });
@@ -256,22 +256,19 @@ let app = new Vue({
     turnLeft() {
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.BASE_TYPE) {
+        if (s.atom?.is(Player.BASE_TYPE)) {
           (s.atom.elem as Player).slightLeft();
         }
-        // else if(s.atom?.type === SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
-        //   (s.atom.elem as SwapWorm).slightLeft();
-        // }
       });
     },
 
     turnRight() {
       const tile = this.g as Tile;
       tile.sites.forEach((s) => {
-        if (s.atom?.type === Player.BASE_TYPE) {
+        if (s.atom?.is(Player.BASE_TYPE)) {
           (s.atom.elem as Player).slightRight();
         }
-        // else if(s.atom?.type === SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
+        // else if(s.atom?.is( SwapWorm.BASE_TYPE && (s.atom.elem as SwapWorm).isAtHead()) {
         //   (s.atom.elem as SwapWorm).slightRight();
         // }
       });

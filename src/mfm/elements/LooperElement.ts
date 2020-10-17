@@ -8,65 +8,82 @@ import { DecayWall } from "./DecayWallElement";
 import { Utils } from "../utils/MFMUtils";
 import { DecayDirector } from "./DecayDirectorElement";
 import { Atom } from "../core/Atom";
+import { QDirectional } from "./quarks/QDirectional";
+
+export interface Looper extends QDirectional {}
 
 export class Looper extends Element {
-  static BASE_TYPE: IElementType = { name: "LOOPER", symbol: "Lo", class: Looper, color: 0xaaaaff };
+  static BASE_TYPE: IElementType = { name: "LOOPER", symbol: "Lo", class: Looper, color: 0x574b31 };
   static CREATE = Looper.CREATOR();
   static CREATE_EAST = Looper.CREATOR({ name: "LOOPER EAST", params: ["E"] });
   static CREATE_WEST = Looper.CREATOR({ params: ["W"] });
   static CREATE_NORTH = Looper.CREATOR({ params: ["N"] });
   static CREATE_SOUTH = Looper.CREATOR({ params: ["S"] });
 
-  direction: Direction;
   counter: number = 0;
+  turns: number = 0;
+  rotations: number = 0;
   max: number;
 
   constructor(_direction?: Direction, _max?: number) {
     super(Looper.BASE_TYPE);
 
-    this.direction = _direction ? _direction : Wayfinder.DIRECTIONS[(Wayfinder.DIRECTIONS_PRIMARY.length * Math.random()) >> 0];
-    this.max = _max ? _max : (3 + Math.random() * 4) >> 0;
-  }
-
-  reverse() {
-    this.direction = Wayfinder.reverse(this.direction);
+    this.setRandomDirection();
+    this.max = _max ? _max : 3 + 2 * ((Math.random() * 3) >> 0);
   }
 
   exec(ew: EventWindow) {
-    const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
-    const dd: Function = DecayDirector.CREATOR({ params: [Wayfinder.turnRight(this.direction), 30] });
+    let forceDirection: Direction = Wayfinder.turnRight(this.direction);
+    let directorLifeSpan: number = 100;
+    let directorColor: number = 0xf2c25a;
 
-    const makeWall: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
-    if (ew.is(makeWall, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(makeWall, dd());
+    if (this.counter % 3) {
+      directorLifeSpan = 5;
     }
 
-    const makeWall2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
-    if (ew.is(makeWall2, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(makeWall2, dd());
+    if (this.rotations % 2) {
+      directorColor = 0x574b31;
+      directorLifeSpan = 1;
+      forceDirection = Wayfinder.turnLeft(this.direction);
     }
 
-    const makeWall3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
-    if (ew.is(makeWall3, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(makeWall3, dd());
+    const makeDecayDirector: Function = DecayDirector.CREATOR({ params: [forceDirection, directorLifeSpan] }, undefined, directorColor);
+
+    const shouldMakeDirector: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
+    if (ew.is(shouldMakeDirector, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(shouldMakeDirector, makeDecayDirector());
     }
 
-    const makeWall4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
-    if (ew.is(makeWall4, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(makeWall4, dd());
+    const shouldMakeDirector2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
+    if (ew.is(shouldMakeDirector2, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(shouldMakeDirector2, makeDecayDirector());
     }
 
-    if (ew.is(travelTo, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.move(travelTo, dd());
-    } else {
-      // this.direction = Wayfinder.veerRight(this.direction);
+    const shouldMakeDirector3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
+    if (ew.is(shouldMakeDirector3, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(shouldMakeDirector3, makeDecayDirector());
+    }
+
+    const shouldMakeDirector4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
+    if (ew.is(shouldMakeDirector4, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+      ew.mutate(shouldMakeDirector4, makeDecayDirector());
+    }
+
+    if (!this.moveDirectionally(ew, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE], makeDecayDirector())) {
+      return;
     }
 
     this.counter++;
 
-    if (this.counter % this.max == 0) {
+    if (this.counter % this.max === 0) {
+      this.turns++;
       this.counter = 0;
       this.direction = Wayfinder.veerRight(this.direction);
+    }
+
+    if (this.turns % 32 === 0) {
+      this.rotations++;
+      this.turns = 0;
     }
 
     // if (this.counter % this.max == 0) {
@@ -85,3 +102,5 @@ export class Looper extends Element {
 //Initialize Splat Map maps the # to to the self type
 Looper.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
+
+Element.applyMixins(Looper, [QDirectional]);

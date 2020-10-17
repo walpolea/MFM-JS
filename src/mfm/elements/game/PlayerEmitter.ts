@@ -1,7 +1,6 @@
 import { EventWindow } from "../../core/EventWindow";
 import { Element } from "../../core/Element";
 import { IElementType } from "../../core/IElementType";
-import { ElementRegistry } from "../../core/ElementRegistry";
 import { Empty } from "../EmptyElement";
 import { Player } from "./Player";
 
@@ -34,6 +33,7 @@ export class PlayerEmitter extends Element {
       this.count = 0;
 
       const empty: number = ew.getIndexes(this.emitMap, Empty.BASE_TYPE, true)[0];
+      console.log(empty);
       if (empty !== undefined) {
         ew.mutate(empty, Player.CREATE());
         this.emitted++;
@@ -48,6 +48,4 @@ export class PlayerEmitter extends Element {
   }
 }
 
-//Initialize Splat Map maps the # to to the self type
 PlayerEmitter.INITIALIZE_SPLAT_MAP()();
-//Tells the App/GUI that this element exists
