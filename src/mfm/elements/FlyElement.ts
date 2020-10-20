@@ -27,6 +27,12 @@ export class Fly extends Element {
   }
 
   leavePheromones(ew: EventWindow) {
+    //don't pheromone on the edges
+    if (ew.getAll().filter((s) => s).length < 30) {
+      this.reverse();
+      return;
+    }
+
     const behindEmpty = ew.getIndexes(ew.getMinus(Wayfinder.DIRECTIONS_BEHIND_MAP.get(this.direction), EventWindow.ADJACENT8WAY), Empty.BASE_TYPE, true);
     const behindEmptyLeft = ew.getIndexes(
       ew.getMinus(Wayfinder.DIRECTIONS_BEHIND_MAP.get(Wayfinder.slightLeft(this.direction)), EventWindow.ADJACENT8WAY),
@@ -40,18 +46,21 @@ export class Fly extends Element {
     );
 
     const decayDirectorLifeSpan = 5;
+    const allBehindEmpties = [...behindEmpty, ...behindEmptyLeft, ...behindEmptyRight];
 
-    if (behindEmpty.length) {
-      ew.mutate(behindEmpty[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+    if (allBehindEmpties.length) {
+      allBehindEmpties.forEach((b) => {
+        ew.mutate(b, DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+      });
     }
 
-    if (behindEmptyLeft.length) {
-      ew.mutate(behindEmptyLeft[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
-    }
+    // if (behindEmptyLeft.length) {
+    //   ew.mutate(behindEmptyLeft[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+    // }
 
-    if (behindEmptyRight.length) {
-      ew.mutate(behindEmptyRight[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
-    }
+    // if (behindEmptyRight.length) {
+    //   ew.mutate(behindEmptyRight[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+    // }
   }
 
   behave(ew: EventWindow) {
@@ -59,7 +68,7 @@ export class Fly extends Element {
 
     //Am I being directed?
     if (this.swapIfDirected(ew, swimTypes)) {
-      const nearbyDirectors = ew.getIndexes(EventWindow.ALLADJACENT, DecayDirector.BASE_TYPE);
+      const nearbyDirectors = ew.getIndexes([...EventWindow.LAYER1, ...EventWindow.LAYER2], DecayDirector.BASE_TYPE);
 
       this.color = 0x8348c1;
 
@@ -68,6 +77,8 @@ export class Fly extends Element {
         this.color = 0xff66cc;
       }
       return;
+    } else {
+      this.color = 0xff66cc;
     }
 
     this.leavePheromones(ew);

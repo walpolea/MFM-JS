@@ -58,6 +58,7 @@ import { Dirt } from "./elements/game/Dirt";
 import { Mosquito } from "./elements/MosquitoElement";
 import { Director } from "./elements/DirectorElement";
 import { DecayDirector } from "./elements/DecayDirectorElement";
+import { EventWindow } from "./core/EventWindow";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -187,6 +188,8 @@ export class ElementIncludes {
       ["Text", Text.CREATE],
     ])
     .set("Misc", [
+      ["Director", Director.CREATOR({ params: ["E", EventWindow.ALLADJACENT, 100] })],
+      ["DecayDirector", DecayDirector.CREATOR({ params: ["E", 10, EventWindow.ALLADJACENT, 1] })],
       ["DecayDirector E", DecayDirector.DECAYDIRECTOR_EAST],
       ["Director E", Director.DIRECTOR_EAST],
       ["Director W", Director.DIRECTOR_WEST],

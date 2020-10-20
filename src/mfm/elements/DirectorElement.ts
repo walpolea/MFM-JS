@@ -3,7 +3,9 @@ import { Element } from "../core/Element";
 import { IElementType } from "../core/IElementType";
 import { ElementRegistry } from "../core/ElementRegistry";
 import { QDirectional } from "./quarks/QDirectional";
-import { Direction } from "../utils/MFMWayfinder";
+import { Direction, Wayfinder } from "../utils/MFMWayfinder";
+import { DirectionalDirector } from "./DirectionalDirector";
+import { Empty } from "./EmptyElement";
 
 export class Director extends Element {
   static BASE_TYPE: IElementType = { name: "DIRECTOR", symbol: "Di", class: Director, color: 0xcc20ff };
@@ -19,15 +21,28 @@ export class Director extends Element {
 
   direction: Direction;
   directingStrength: number[];
+  emitBeforeAge: number;
 
-  constructor(_direction: Direction = "E", _directingStrength = EventWindow.ALLADJACENT) {
+  constructor(_direction: Direction = "E", _directingStrength = EventWindow.ALLADJACENT, _emitBeforeAge: number = 0) {
     super(Director.BASE_TYPE);
 
     this.direction = _direction;
     this.directingStrength = _directingStrength;
+    this.emitBeforeAge = _emitBeforeAge;
   }
 
   behave(ew: EventWindow) {
+    if (this.age < this.emitBeforeAge) {
+      const nearbyEmpties = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.BASE_TYPE);
+
+      if (nearbyEmpties.length) {
+        nearbyEmpties.forEach((e) => {
+          const dir: Direction = Wayfinder.indexToDirection(e as EWIndex);
+          ew.mutate(e, DirectionalDirector.CREATE({ params: [dir] }));
+        });
+      }
+    }
+
     const directables: number[] = ew.getClassIndexes(this.directingStrength, QDirectional);
 
     if (directables.length) {

@@ -24,30 +24,38 @@ export class Looper extends Element {
   turns: number = 0;
   rotations: number = 0;
   max: number;
+  pulse: number;
 
-  constructor(_direction?: Direction, _max?: number) {
+  constructor(_direction?: Direction, _max?: number, _pulse: number = 0) {
     super(Looper.BASE_TYPE);
 
     this.setRandomDirection();
     this.max = _max ? _max : 3 + 2 * ((Math.random() * 3) >> 0);
+    this.pulse = _pulse;
   }
 
   exec(ew: EventWindow) {
     let forceDirection: Direction = Wayfinder.turnRight(this.direction);
     let directorLifeSpan: number = 100;
     let directorColor: number = 0xf2c25a;
+    let emitBeforeAge: number = 1;
 
     if (this.counter % 3) {
       directorLifeSpan = 5;
     }
 
-    if (this.rotations % 2) {
+    if (this.pulse && this.rotations % this.pulse) {
       directorColor = 0x574b31;
       directorLifeSpan = 1;
+      emitBeforeAge = 0;
       forceDirection = Wayfinder.turnLeft(this.direction);
     }
 
-    const makeDecayDirector: Function = DecayDirector.CREATOR({ params: [forceDirection, directorLifeSpan] }, undefined, directorColor);
+    const makeDecayDirector: Function = DecayDirector.CREATOR(
+      { params: [forceDirection, directorLifeSpan, EventWindow.ALLADJACENT, emitBeforeAge] },
+      undefined,
+      directorColor
+    );
 
     const shouldMakeDirector: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
     if (ew.is(shouldMakeDirector, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
@@ -81,7 +89,7 @@ export class Looper extends Element {
       this.direction = Wayfinder.veerRight(this.direction);
     }
 
-    if (this.turns % 32 === 0) {
+    if (this.turns % (this.pulse * 8) === 0) {
       this.rotations++;
       this.turns = 0;
     }
