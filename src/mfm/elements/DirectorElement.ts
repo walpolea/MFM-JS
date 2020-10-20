@@ -1,4 +1,4 @@
-import { EventWindow } from "../core/EventWindow";
+import { EventWindow, EWIndex } from "../core/EventWindow";
 import { Element } from "../core/Element";
 import { IElementType } from "../core/IElementType";
 import { ElementRegistry } from "../core/ElementRegistry";
@@ -18,15 +18,17 @@ export class Director extends Element {
   static DIRECTOR_SOUTHWEST = Director.CREATOR({ name: "DIRECTOR_SOUTH", params: ["SW"] });
 
   direction: Direction;
+  directingStrength: number[];
 
-  constructor(_direction: Direction = "E") {
+  constructor(_direction: Direction = "E", _directingStrength = EventWindow.ALLADJACENT) {
     super(Director.BASE_TYPE);
 
     this.direction = _direction;
+    this.directingStrength = _directingStrength;
   }
 
   behave(ew: EventWindow) {
-    const directables: number[] = ew.getClassIndexes(EventWindow.ALLADJACENT, QDirectional);
+    const directables: number[] = ew.getClassIndexes(this.directingStrength, QDirectional);
 
     if (directables.length) {
       directables.forEach((d) => {

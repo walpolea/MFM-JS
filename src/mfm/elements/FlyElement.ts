@@ -4,6 +4,8 @@ import { IElementType } from "../core/IElementType";
 import { QDirectional } from "./quarks/QDirectional";
 import { Sand } from "./SandElement";
 import { Empty } from "./EmptyElement";
+import { DecayDirector } from "./DecayDirectorElement";
+import { Direction, Wayfinder } from "../utils/MFMWayfinder";
 
 //Tell TypeScript what Quarks this Element will Inherit from
 export interface Fly extends QDirectional {}
@@ -24,13 +26,51 @@ export class Fly extends Element {
     this.registerClass(QDirectional);
   }
 
+  leavePheromones(ew: EventWindow) {
+    const behindEmpty = ew.getIndexes(ew.getMinus(Wayfinder.DIRECTIONS_BEHIND_MAP.get(this.direction), EventWindow.ADJACENT8WAY), Empty.BASE_TYPE, true);
+    const behindEmptyLeft = ew.getIndexes(
+      ew.getMinus(Wayfinder.DIRECTIONS_BEHIND_MAP.get(Wayfinder.slightLeft(this.direction)), EventWindow.ADJACENT8WAY),
+      Empty.BASE_TYPE,
+      true
+    );
+    const behindEmptyRight = ew.getIndexes(
+      ew.getMinus(Wayfinder.DIRECTIONS_BEHIND_MAP.get(Wayfinder.slightRight(this.direction)), EventWindow.ADJACENT8WAY),
+      Empty.BASE_TYPE,
+      true
+    );
+
+    const decayDirectorLifeSpan = 5;
+
+    if (behindEmpty.length) {
+      ew.mutate(behindEmpty[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+    }
+
+    if (behindEmptyLeft.length) {
+      ew.mutate(behindEmptyLeft[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+    }
+
+    if (behindEmptyRight.length) {
+      ew.mutate(behindEmptyRight[0], DecayDirector.CREATE({ params: [this.direction, decayDirectorLifeSpan, EventWindow.ADJACENT8WAY] }, undefined, 0x444f44));
+    }
+  }
+
   behave(ew: EventWindow) {
-    const swimTypes: IElementType[] = [Empty.BASE_TYPE, Sand.BASE_TYPE];
+    const swimTypes: IElementType[] = [Empty.BASE_TYPE, Sand.BASE_TYPE, DecayDirector.BASE_TYPE, Fly.BASE_TYPE];
 
     //Am I being directed?
     if (this.swapIfDirected(ew, swimTypes)) {
+      const nearbyDirectors = ew.getIndexes(EventWindow.ALLADJACENT, DecayDirector.BASE_TYPE);
+
+      this.color = 0x8348c1;
+
+      if (!nearbyDirectors.length) {
+        this.isDirected = false;
+        this.color = 0xff66cc;
+      }
       return;
     }
+
+    this.leavePheromones(ew);
 
     this.counter++;
 

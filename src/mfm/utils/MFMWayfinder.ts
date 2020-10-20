@@ -143,6 +143,14 @@ export class Wayfinder {
     ["SW", 6],
     ["NE", 7],
     ["SE", 8],
+    ["WNW", 13],
+    ["WSW", 14],
+    ["NNW", 15],
+    ["SSW", 16],
+    ["NNE", 17],
+    ["SSE", 18],
+    ["ENE", 19],
+    ["ESE", 20],
   ]);
 
   static DIRECTIONS_FRONT_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
@@ -154,6 +162,14 @@ export class Wayfinder {
     ["SW", Wayfinder.SW_LINE],
     ["NE", Wayfinder.NE_LINE],
     ["SE", Wayfinder.SE_LINE],
+    ["WNW", Wayfinder.WNW_LINE],
+    ["NNW", Wayfinder.NNW_LINE],
+    ["NNE", Wayfinder.NNE_LINE],
+    ["ENE", Wayfinder.ENE_LINE],
+    ["WSW", Wayfinder.WSW_LINE],
+    ["SSW", Wayfinder.SSW_LINE],
+    ["SSE", Wayfinder.SSE_LINE],
+    ["ESE", Wayfinder.ESE_LINE],
   ]);
 
   static DIRECTIONS_BEHIND_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
@@ -165,6 +181,14 @@ export class Wayfinder {
     ["SW", Wayfinder.NE_LINE],
     ["NE", Wayfinder.SW_LINE],
     ["SE", Wayfinder.NW_LINE],
+    ["WNW", Wayfinder.ESE_LINE],
+    ["NNW", Wayfinder.SSE_LINE],
+    ["NNE", Wayfinder.SSW_LINE],
+    ["ENE", Wayfinder.WSW_LINE],
+    ["WSW", Wayfinder.ENE_LINE],
+    ["SSW", Wayfinder.NNE_LINE],
+    ["SSE", Wayfinder.NNW_LINE],
+    ["ESE", Wayfinder.WNW_LINE],
   ]);
 
   static INDEX_DIRECTION_MAP: Map<number, Direction> = new Map<EWIndex, Direction>([

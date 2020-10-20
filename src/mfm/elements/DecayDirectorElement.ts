@@ -19,8 +19,8 @@ export class DecayDirector extends Director {
   static DECAYDIRECTOR_SOUTHEAST = DecayDirector.CREATOR({ name: "DECAYDIRECTOR_NORTH", params: ["SE"] });
   static DECAYDIRECTOR_SOUTHWEST = DecayDirector.CREATOR({ name: "DECAYDIRECTOR_SOUTH", params: ["SW"] });
 
-  constructor(_direction: Direction, _lifeSpan: number = 10) {
-    super(_direction);
+  constructor(_direction: Direction, _lifeSpan: number = 10, _directingStrength: number[] = EventWindow.ALLADJACENT) {
+    super(_direction, _directingStrength);
 
     this.lifeSpan = _lifeSpan;
 
