@@ -13,25 +13,25 @@ export class QDirectional extends Quark {
   isDirected: boolean = true;
 
   reverse() {
-    this.direction = Wayfinder.reverse(this.direction);
+    if (this.direction) this.direction = Wayfinder.reverse(this.direction);
   }
   slightLeft() {
-    this.direction = Wayfinder.slightLeft(this.direction);
+    if (this.direction) this.direction = Wayfinder.slightLeft(this.direction);
   }
   veerLeft() {
-    this.direction = Wayfinder.veerLeft(this.direction);
+    if (this.direction) this.direction = Wayfinder.veerLeft(this.direction);
   }
   turnLeft() {
-    this.direction = Wayfinder.turnLeft(this.direction);
+    if (this.direction) this.direction = Wayfinder.turnLeft(this.direction);
   }
   slightRight() {
-    this.direction = Wayfinder.slightRight(this.direction);
+    if (this.direction) this.direction = Wayfinder.slightRight(this.direction);
   }
   veerRight() {
-    this.direction = Wayfinder.veerRight(this.direction);
+    if (this.direction) this.direction = Wayfinder.veerRight(this.direction);
   }
   turnRight() {
-    this.direction = Wayfinder.turnRight(this.direction);
+    if (this.direction) this.direction = Wayfinder.turnRight(this.direction);
   }
   slightRandomly() {
     Utils.oneIn(2) ? this.slightLeft() : this.slightRight();
@@ -46,6 +46,7 @@ export class QDirectional extends Quark {
   setDirection(d: Direction) {
     this.direction = d;
   }
+
   setRandomDirection(possibleDirections: Direction[] = Wayfinder.DIRECTIONS_SECONDARY) {
     this.direction = possibleDirections[(possibleDirections.length * Math.random()) >> 0];
   }
@@ -55,33 +56,47 @@ export class QDirectional extends Quark {
     this.isDirected = true;
   }
 
-  moveDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom: Atom = Empty.CREATE()) {
-    const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+  stop() {
+    this.direction = undefined;
+  }
 
-    if (ew.is(travelTo, types)) {
-      return ew.move(travelTo, leavingAtom);
+  moveDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom: Atom = Empty.CREATE()): boolean {
+    if (this.direction) {
+      const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+
+      if (ew.is(travelTo, types)) {
+        return ew.move(travelTo, leavingAtom);
+      }
     }
 
     return false;
   }
 
-  swapDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE) {
-    const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+  swapDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE): boolean {
+    if (this.direction) {
+      const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
 
-    if (ew.is(travelTo, types)) {
-      return ew.swap(travelTo);
+      if (ew.is(travelTo, types)) {
+        return ew.swap(travelTo);
+      }
     }
 
     return false;
   }
 
   swapIfDirected(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, chanceToUndirect: number = 1): boolean {
-    this.isDirected = this.isDirected ? (this.swapDirectionally(ew, types) ? true : Utils.oneIn(chanceToUndirect) ? false : true) : false;
-    return this.isDirected;
+    if (this.direction) {
+      this.isDirected = this.isDirected ? (this.swapDirectionally(ew, types) ? true : Utils.oneIn(chanceToUndirect) ? false : true) : false;
+      return this.isDirected;
+    }
+    return false;
   }
 
   moveIfDirected(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom = Empty.CREATE(), chanceToUndirect: number = 1): boolean {
-    this.isDirected = this.isDirected ? (this.moveDirectionally(ew, types, leavingAtom) ? true : Utils.oneIn(chanceToUndirect) ? false : true) : false;
-    return this.isDirected;
+    if (this.direction) {
+      this.isDirected = this.isDirected ? (this.moveDirectionally(ew, types, leavingAtom) ? true : Utils.oneIn(chanceToUndirect) ? false : true) : false;
+      return this.isDirected;
+    }
+    return false;
   }
 }

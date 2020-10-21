@@ -12,10 +12,4 @@ export class QPatroller extends Quark {
       emptyIndex !== undefined ? ew.move(emptyIndex) : null;
     }
   }
-
-  is(el: Element): boolean {
-    return "patrol" in el !== undefined;
-  }
 }
-
-// QPatroller.registerCapability("patrol", QPatroller.patrol);

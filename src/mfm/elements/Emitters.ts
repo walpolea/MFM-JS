@@ -7,6 +7,7 @@ import { SwapWorm } from "./SwapWormElement";
 import { Data } from "./DataElement";
 import { Sorter } from "./SorterElement";
 import { Player } from "./game/Player";
+import { DecayDirector } from "./DecayDirectorElement";
 
 export class Emitters {
   //Emitters
@@ -18,6 +19,7 @@ export class Emitters {
   static SWAPWORM = Emitter.CREATOR({ params: [SwapWorm.CREATE, EventWindow.ADJACENT8WAY, 100] });
   static DATA_STREAM = Emitter.CREATOR({ params: [Data.CREATE, EventWindow.ADJACENT8WAY, 1] });
   static SORTER = Emitter.CREATOR({ params: [Sorter.CREATE, [5, 6, 7, 8], 1] });
+  static DECAY_DIRECTOR = Emitter.CREATOR({ params: [DecayDirector.CREATOR({ params: ["E", 10, EventWindow.ALLADJACENT, 1] }), EventWindow.ADJACENT8WAY, 10] });
 
   static PLAYER = Emitter.CREATOR({ params: [Player.CREATE, [5, 6, 7, 8], 1, 10] });
 }

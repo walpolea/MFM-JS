@@ -3,10 +3,9 @@ import { Element } from "../core/Element";
 import { IElementType } from "../core/IElementType";
 import { ElementRegistry } from "../core/ElementRegistry";
 import { Utils } from "../utils/MFMUtils";
-import { QPatroller } from "./quarks/QPatroller";
 import { QDirectional } from "./quarks/QDirectional";
 
-export interface Mosquito extends QPatroller, QDirectional {}
+export interface Mosquito extends QDirectional {}
 
 export class Mosquito extends Element {
   static BASE_TYPE: IElementType = { name: "MOSQUITO", symbol: "p", class: Mosquito, color: 0xd1b0b0 };
@@ -17,7 +16,6 @@ export class Mosquito extends Element {
 
     this.setRandomDirection();
 
-    this.registerClass(QPatroller);
     this.registerClass(QDirectional);
   }
 
@@ -48,4 +46,4 @@ Mosquito.INITIALIZE_SPLAT_MAP()();
 //Register a SPLAT symbol
 ElementRegistry.registerSPLAT("w", Mosquito.BASE_TYPE);
 
-Element.applyMixins(Mosquito, [QPatroller, QDirectional]);
+Element.applyMixins(Mosquito, [QDirectional]);

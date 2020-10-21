@@ -30,7 +30,7 @@ export class Looper extends Element {
     super(Looper.BASE_TYPE);
 
     this.setRandomDirection();
-    this.max = _max ? _max : 3 + 2 * ((Math.random() * 3) >> 0);
+    this.max = _max ? _max : 3 + 2 * ((Math.random() * 4) >> 0);
     this.pulse = _pulse;
   }
 
@@ -40,7 +40,7 @@ export class Looper extends Element {
     let directorColor: number = 0xf2c25a;
     let emitBeforeAge: number = 1;
 
-    if (this.counter % 3) {
+    if (this.counter % 2) {
       directorLifeSpan = 5;
     }
 
@@ -57,25 +57,25 @@ export class Looper extends Element {
       directorColor
     );
 
-    const shouldMakeDirector: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
-    if (ew.is(shouldMakeDirector, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(shouldMakeDirector, makeDecayDirector());
-    }
+    // const shouldMakeDirector: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnLeft(this.direction), true);
+    // if (ew.is(shouldMakeDirector, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+    //   ew.mutate(shouldMakeDirector, makeDecayDirector());
+    // }
 
-    const shouldMakeDirector2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
-    if (ew.is(shouldMakeDirector2, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(shouldMakeDirector2, makeDecayDirector());
-    }
+    // const shouldMakeDirector2: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerLeft(this.direction), true);
+    // if (ew.is(shouldMakeDirector2, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+    //   ew.mutate(shouldMakeDirector2, makeDecayDirector());
+    // }
 
-    const shouldMakeDirector3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
-    if (ew.is(shouldMakeDirector3, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(shouldMakeDirector3, makeDecayDirector());
-    }
+    // const shouldMakeDirector3: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.veerRight(this.direction), true);
+    // if (ew.is(shouldMakeDirector3, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+    //   ew.mutate(shouldMakeDirector3, makeDecayDirector());
+    // }
 
-    const shouldMakeDirector4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
-    if (ew.is(shouldMakeDirector4, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
-      ew.mutate(shouldMakeDirector4, makeDecayDirector());
-    }
+    // const shouldMakeDirector4: EWIndex = Wayfinder.getDirectionalMove(Wayfinder.turnRight(this.direction), true);
+    // if (ew.is(shouldMakeDirector4, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE])) {
+    //   ew.mutate(shouldMakeDirector4, makeDecayDirector());
+    // }
 
     if (!this.moveDirectionally(ew, [Empty.BASE_TYPE, DecayDirector.BASE_TYPE], makeDecayDirector())) {
       return;

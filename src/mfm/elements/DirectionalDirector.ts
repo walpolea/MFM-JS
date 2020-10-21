@@ -37,8 +37,10 @@ export class DirectionalDirector extends Element {
       directables.forEach((d) => {
         ((ew.getSiteByIndex(d).atom.elem as unknown) as QDirectional).direct(Wayfinder.reverse(this.direction));
       });
-      ew.destroy();
-    } else if (!this.moveDirectionally(ew)) {
+      // ew.destroy();
+    }
+
+    if (!this.moveDirectionally(ew)) {
       ew.destroy();
     }
   }

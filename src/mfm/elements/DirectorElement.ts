@@ -14,10 +14,10 @@ export class Director extends Element {
   static DIRECTOR_WEST = Director.CREATOR({ name: "DIRECTOR_WEST", params: ["W"] });
   static DIRECTOR_NORTH = Director.CREATOR({ name: "DIRECTOR_NORTH", params: ["N"] });
   static DIRECTOR_SOUTH = Director.CREATOR({ name: "DIRECTOR_SOUTH", params: ["S"] });
-  static DIRECTOR_NORTHEAST = Director.CREATOR({ name: "DIRECTOR_EAST", params: ["NE"] });
-  static DIRECTOR_NORTHWEST = Director.CREATOR({ name: "DIRECTOR_WEST", params: ["NW"] });
-  static DIRECTOR_SOUTHEAST = Director.CREATOR({ name: "DIRECTOR_NORTH", params: ["SE"] });
-  static DIRECTOR_SOUTHWEST = Director.CREATOR({ name: "DIRECTOR_SOUTH", params: ["SW"] });
+  static DIRECTOR_NORTHEAST = Director.CREATOR({ name: "DIRECTOR_NORTHEAST", params: ["NE"] });
+  static DIRECTOR_NORTHWEST = Director.CREATOR({ name: "DIRECTOR_NORTHWEST", params: ["NW"] });
+  static DIRECTOR_SOUTHEAST = Director.CREATOR({ name: "DIRECTOR_SOUTHEAST", params: ["SE"] });
+  static DIRECTOR_SOUTHWEST = Director.CREATOR({ name: "DIRECTOR_SOUTHWEST", params: ["SW"] });
 
   direction: Direction;
   directingStrength: number[];
@@ -33,7 +33,7 @@ export class Director extends Element {
 
   behave(ew: EventWindow) {
     if (this.age < this.emitBeforeAge) {
-      const nearbyEmpties = ew.getIndexes(EventWindow.ADJACENT8WAY, Empty.BASE_TYPE);
+      const nearbyEmpties = ew.getIndexes(Array.from(Wayfinder.DIRECTIONS_INDEX_MAP.values()), Empty.BASE_TYPE);
 
       if (nearbyEmpties.length) {
         nearbyEmpties.forEach((e) => {
