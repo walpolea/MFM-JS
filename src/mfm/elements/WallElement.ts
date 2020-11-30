@@ -6,7 +6,7 @@ import { ElementRegistry } from "../core/ElementRegistry";
 export class Wall extends Element {
   static BASE_TYPE: IElementType = { name: "WALL", symbol: "w", class: Wall, color: 0x2020ff };
   static CREATE = Wall.CREATOR();
-  static SOFT_WALL = Wall.CREATOR({ params: [100, 0] }, undefined, 0x4499cc);
+  static SOFT_WALL = Wall.CREATOR({ name: "SOFTWALL", params: [100, 0] }, undefined, 0x4499cc);
 
   constructor(_moveability: number = 0, _destroyability: number = 100) {
     super(Wall.BASE_TYPE, _moveability, _destroyability);
