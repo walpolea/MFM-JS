@@ -11,10 +11,10 @@ export class MembraneWall extends Element {
   static BASE_TYPE: IElementType = { name: "MEMBRANEWALL", symbol: "Mw", class: MembraneWall, color: 0x2020ff };
   static CREATE = MembraneWall.CREATOR();
 
-  static SW_XL = MembraneWall.CREATOR({ params: [1, [...EventWindow.LAYER1, ...EventWindow.LAYER2, EventWindow.LAYER3]] });
-  static SW_LRG = MembraneWall.CREATOR({ params: [1, [...EventWindow.LAYER1, ...EventWindow.LAYER2]] });
+  static SW_XL = MembraneWall.CREATOR({ name: "MEMBRANEWALLXL", params: [1, [...EventWindow.LAYER1, ...EventWindow.LAYER2, EventWindow.LAYER3]] });
+  static SW_LRG = MembraneWall.CREATOR({ name: "MEMBRANEWALLL", params: [1, [...EventWindow.LAYER1, ...EventWindow.LAYER2]] });
   static SW_MED = MembraneWall.CREATOR();
-  static SW_SM = MembraneWall.CREATOR({ params: [1, EventWindow.ADJACENT4WAY] });
+  static SW_SM = MembraneWall.CREATOR({ name: "MEMBRANEWALLS", params: [1, EventWindow.ADJACENT4WAY] });
 
   static D_SM = MembraneWall.CREATOR({ params: [1, EventWindow.ADJACENT4WAY, Data.BASE_TYPE] });
   static D_MED = MembraneWall.CREATOR({ params: [1, EventWindow.ADJACENT8WAY, Data.BASE_TYPE] });

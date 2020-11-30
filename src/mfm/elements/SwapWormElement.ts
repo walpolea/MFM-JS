@@ -20,6 +20,7 @@ export interface SwapWorm extends QDirectional {}
 export class SwapWorm extends LinkedList {
   static BASE_TYPE: IElementType = { name: "SWAPWORM", symbol: "Sw", class: SwapWorm, color: 0xcc0066 };
   static CREATE = SwapWorm.CREATOR();
+  static SW_SMALL = SwapWorm.CREATOR({ name: "SWAPWORM_SMALL", params: [2] });
 
   WORMSIZE: number;
   birthCount: number;

@@ -45,6 +45,8 @@ let app = new Vue({
         const seed: string[] = s.split(",");
         if (!seed.length) return null;
 
+        console.log(seed[3]);
+
         const data = {
           e: seed[0].toUpperCase(),
           col: seed[1] ? parseInt(seed[1]) : (Math.random() * this.g.width) >> 0,
@@ -57,11 +59,11 @@ let app = new Vue({
     },
 
     loadSeeds() {
-      console.log(this.seedData);
       if (this.seedData.length) {
         this.seedData.forEach((seed: any) => {
           if (seed.params) {
-            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE(seed.params);
+            console.log("SEED", { seed });
+            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE({ params: seed.params });
           } else {
             this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE();
           }
