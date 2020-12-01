@@ -4,17 +4,12 @@ import { IElementType } from "../core/IElementType";
 import { ElementRegistry } from "../core/ElementRegistry";
 import { Site } from "../core/Site";
 import { Empty } from "./EmptyElement";
-import { DReg } from "./DRegElement";
 import { Actions } from "../utils/MFMActions";
-import { Res } from "./ResElement";
 import { CellMembrane } from "./CellMembraneElement";
 import { Utils } from "../utils/MFMUtils";
 import { SPLAT } from "../utils/SPLAT";
 import { Symmetries } from "../utils/Symmetries";
-import { DecayWall } from "./DecayWallElement";
-import { StickyMembrane } from "./StickyMembraneElement";
 import { CellBrane } from "./CellBraneElement";
-import { Data } from "./DataElement";
 
 export class CellOuterMembrane extends Element {
   static BASE_TYPE: IElementType = { name: "CELLOUTERMEMBRANE", symbol: "Co", class: CellOuterMembrane, color: 0x5c8a5c };

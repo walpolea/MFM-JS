@@ -15,6 +15,7 @@ import { Utils } from "../utils/MFMUtils";
 export class CellBrane extends Element {
   static BASE_TYPE: IElementType = { name: "CELLBRANE", symbol: "Cb", class: CellBrane, color: 0x128575 };
   static CREATE = CellBrane.CREATOR();
+  static COLORLESS = CellBrane.CREATOR({ name: "CELLBRANE_NOCOLOR", params: [false] });
 
   static CHECK_OUTER = SPLAT.splatToMap(`
     ~o~

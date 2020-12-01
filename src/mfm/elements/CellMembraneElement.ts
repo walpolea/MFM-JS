@@ -4,22 +4,18 @@ import { IElementType } from "../core/IElementType";
 import { ElementRegistry } from "../core/ElementRegistry";
 import { Site } from "../core/Site";
 import { Empty } from "./EmptyElement";
-import { DReg } from "./DRegElement";
 import { Actions } from "../utils/MFMActions";
-import { StuckMembrane } from "./StuckMembraneElement";
 import { SPLAT } from "../utils/SPLAT";
 import { Symmetries } from "../utils/Symmetries";
 import { CellOuterMembrane } from "./CellOuterMembraneElement";
-import { utils } from "pixi.js";
 import { Utils } from "../utils/MFMUtils";
-import { DecayWall } from "./DecayWallElement";
 import { CellBrane } from "./CellBraneElement";
-import { StickyMembrane } from "./StickyMembraneElement";
 import { Res } from "./ResElement";
 
 export class CellMembrane extends Element {
   static BASE_TYPE: IElementType = { name: "CELLMEMBRANE", symbol: "Cm", class: CellMembrane, color: 0xc2f3c2 };
   static CREATE = CellMembrane.CREATOR();
+  static COLORLESS = CellMembrane.CREATOR({ name: "CELLMEMBRANE_NOCOLOR", params: [false] });
 
   static MAKE_SHELL = SPLAT.splatToMap(`
       ~
