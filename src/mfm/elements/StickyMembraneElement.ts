@@ -112,10 +112,11 @@ export class StickyMembrane extends Element {
       ew.origin.die();
     }
 
-    if (!this.stickyType || this.stickyType === StickyMembrane.BASE_TYPE) {
+    if (!this.stickyType || this.stickyType.name === StickyMembrane.BASE_TYPE.name) {
       //glom on to the first thing that's not empty and also maybe don't stick to self if something else is nearby
       const stickSite: Site = ew.getAdjacent8Way();
-      if (stickSite && stickSite.atom.type !== Empty.BASE_TYPE) {
+      if (stickSite && stickSite.atom.type.name !== Empty.BASE_TYPE.name) {
+        console.log("GLOM", stickSite.atom.type);
         this.stickyType = stickSite.atom.type;
       }
     }

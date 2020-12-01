@@ -60,6 +60,7 @@ import { Director } from "./elements/DirectorElement";
 import { DecayDirector } from "./elements/DecayDirectorElement";
 import { EventWindow } from "./core/EventWindow";
 import { DirectionalData } from "./elements/DirectionalData";
+import { DirectorSwitch } from "./elements/DirectorSwitch";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -154,9 +155,9 @@ export class ElementIncludes {
     ])
     .set("Worms", [
       ["SwapWorm", SwapWorm.CREATE],
-      ["Long SW", SwapWorm.CREATOR({ params: [24] })],
-      ["Short SW", SwapWorm.CREATOR({ params: [1] })],
-      ["Super SW", SwapWorm.CREATOR({ params: [255] })],
+      ["Long SW", SwapWorm.SW_LONG],
+      ["Short SW", SwapWorm.SW_SMALL],
+      ["Super SW", SwapWorm.SW_SUPER],
       ["SW Emitter", Emitters.SWAPWORM],
       ["LoopWorm", LoopWorm.CREATE],
       ["LoopSeed", LoopSeed.CREATE],
@@ -207,6 +208,10 @@ export class ElementIncludes {
       ["Sonar", Sonar.CREATE],
       ["Sonar Blue", Sonar.CREATE_BLUE],
       ["Eraser", Eraser.CREATE],
+      ["DSwitch E", DirectorSwitch.DIRECTORSWITCH_EAST],
+      ["DSwitch W", DirectorSwitch.DIRECTORSWITCH_WEST],
+      ["DSwitch N", DirectorSwitch.DIRECTORSWITCH_NORTH],
+      ["DSwitch S", DirectorSwitch.DIRECTORSWITCH_SOUTH],
     ])
     .set("Sandbox Stuff", [
       ["Fly", Fly.CREATE],

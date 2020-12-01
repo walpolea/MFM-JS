@@ -65,7 +65,7 @@ let app = new Vue({
             console.log("SEED", { seed });
             this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE({ params: seed.params });
           } else {
-            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE();
+            this.g.getSiteByCoord({ row: seed.row, col: seed.col }).atom = ElementRegistry.TYPES.get(seed.e)?.CREATE({ params: null });
           }
         });
       }

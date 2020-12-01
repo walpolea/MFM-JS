@@ -21,6 +21,8 @@ export class SwapWorm extends LinkedList {
   static BASE_TYPE: IElementType = { name: "SWAPWORM", symbol: "Sw", class: SwapWorm, color: 0xcc0066 };
   static CREATE = SwapWorm.CREATOR();
   static SW_SMALL = SwapWorm.CREATOR({ name: "SWAPWORM_SMALL", params: [2] });
+  static SW_LONG = SwapWorm.CREATOR({ name: "SWAPWORM_LONG", params: [24] });
+  static SW_SUPER = SwapWorm.CREATOR({ name: "SWAPWORM_SUPER", params: [255] });
 
   WORMSIZE: number;
   birthCount: number;
