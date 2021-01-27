@@ -11,7 +11,7 @@ let app = new Vue({
   el: "#app",
   data: function () {
     return {
-      gridSize: "64x64" as string,
+      gridSize: "128x64" as string,
       timeSpeed: 5000 as number,
       tenex: false as boolean,
       g: undefined as Tile,
@@ -88,9 +88,27 @@ let app = new Vue({
       return link;
     },
 
+    getTileCanvasSize() {
+      const maxHeight = document.documentElement.clientHeight * 0.9;
+      const maxWidth = document.documentElement.clientWidth * 0.9;
+
+      let w = (this.gridCols / this.gridRows) * maxHeight;
+      let h = maxHeight;
+
+      if (w > maxWidth) {
+        w = maxWidth;
+        h = (this.gridRows / this.gridCols) * maxWidth;
+      }
+
+      return {
+        width: w,
+        height: h,
+      };
+    },
+
     initTile() {
       this.g = new Tile(this.gridCols, this.gridRows);
-      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"));
+      this.mfmRenderer = new MFMRenderer(this.g, document.querySelector("#mfm"), this.getTileCanvasSize().width, this.getTileCanvasSize().height);
 
       this.mfmRenderer.timeSpeed = this.timeSpeed ? this.timeSpeed : 5000;
       this.curSelectedElement = this.curSelectedElement ? this.curSelectedElement : "DReg";
@@ -104,8 +122,6 @@ let app = new Vue({
       this.mfmRenderer.curSelectedElementFunction = this.curSelectedFunc;
     },
     reload() {
-      // this.mfmRenderer.deconstruct();
-      // this.initTile();
       this.mfmRenderer.killAll();
     },
     clearAllOfType() {

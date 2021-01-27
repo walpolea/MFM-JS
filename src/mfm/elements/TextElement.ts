@@ -1,7 +1,6 @@
 import { EventWindow } from "../core/EventWindow";
 import { Element } from "../core/Element";
 import { IElementType } from "../core/IElementType";
-import { ElementRegistry } from "../core/ElementRegistry";
 import { Font } from "../utils/MFMFont";
 import { Atom } from "../core/Atom";
 import { Wall } from "./WallElement";

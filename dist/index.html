@@ -20,7 +20,7 @@
       }
 
       main {
-        max-width: 800px;
+        /* max-width: 800px; */
         margin: 0 auto;
       }
 
@@ -69,11 +69,61 @@
         text-align: center;
       }
 
+      #mfm-grid-container {
+        width:100%;
+        max-height:95vh;
+
+        
+      }
+
+      #mfm {
+        display:grid;
+        grid-template-columns: 1fr;
+        justify-content: center;
+      }
+
+      #mfm > canvas {
+        justify-self: center;
+      }
+
       #element-container {
-        margin: 10px 0;
+        /* margin: 10px 0;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        grid-gap: 1rem;
+        grid-gap: 1rem; */
+        max-width:600px;
+        background:#000000dd;
+        padding:20px;
+
+        position:fixed;
+        left:100%;
+        top:50%;
+        transform: translate(0px, -50%);
+        width:50%;
+
+        transition: all 0.5s ease 0.3s;
+      }
+
+      #element-container:hover {
+        transform: translate(-100%, -50%);
+        transition: all 0.5s ease;
+      }
+
+      #element-container #eltab {
+        font-size:12px;
+        box-sizing: border-box;
+        padding-right:15px;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        text-align: center;
+        vertical-align: middle;
+        width:50px;
+        height:150px;
+        background: #cccccc66;
+        position:absolute;
+        left:-50px;
+        top:0;
+        border-radius: 10px 0 0 10px;
       }
 
       .element {
@@ -117,10 +167,6 @@
         background-color: #e000a6;
       }
 
-      #mfm-grid-container {
-        margin-bottom: 20px;
-      }
-
       @media only screen and (min-width: 1300px) {
         main {
           max-width: 1600px;
@@ -128,7 +174,7 @@
           padding: 40px;
         }
 
-        #element-container {
+        /* #element-container {
           justify-items: center;
 
           grid-template-columns: 1fr 1fr 1fr;
@@ -138,13 +184,15 @@
 
         #mfm-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr;
           justify-items: right;
         }
 
+        
+
         #mfm {
           margin: 0 auto;
-        }
+        } */
       }
     </style>
   </head>
@@ -180,6 +228,7 @@
         </div>
         <div id="mfm-grid">
           <div id="element-container">
+            <div id="eltab">ELEMENTS</div>
             <div v-if="groupName !== 'Game'" v-for="groupName in Array.from(typeMap.keys())">
               <h3>{{groupName}}</h3>
               <span
@@ -214,8 +263,11 @@
                 <option value="48x48">48x48</option>
                 <option value="60x40">60x40</option>
                 <option value="64x64" selected>64x64</option>
+                <option value="128x64" selected>128x64</option>
                 <option value="96x96">96x96</option>
+                <option value="192x96">192x96</option>
                 <option value="128x128">128x128</option>
+                <option value="256x128">256x128</option>
                 <option value="196x196">196x196</option>
               </select>
               Render?
@@ -252,7 +304,7 @@
       <li>hold "k" - LoopSeed, which will generate a cell-like loop structure that grows!</li>
       <li>hold "m" - Sticky Membrane will stick to the first thing it finds, or itself until it finds something</li>
     </ul> -->
-        <section id="extras" v-show="!fullScreenMode">
+        <!-- <section id="extras" v-show="!fullScreenMode">
           <h1>Extras</h1>
           <h3>Here's some mfm.rocks propaganda</h3>
           <ul>
@@ -263,7 +315,7 @@
             <li><img src="resources/art/mfm-mason-web.jpg" alt="" /></li>
             <li><img src="resources/art/mfm-forkbomb-web.jpg" alt="" /></li>
           </ul>
-        </section>
+        </section> -->
         <footer v-show="!fullScreenMode">
           <nav>
             <ul>

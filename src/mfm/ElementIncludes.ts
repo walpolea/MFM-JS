@@ -61,6 +61,7 @@ import { DecayDirector } from "./elements/DecayDirectorElement";
 import { EventWindow } from "./core/EventWindow";
 import { DirectionalData } from "./elements/DirectionalData";
 import { DirectorSwitch } from "./elements/DirectorSwitch";
+import { Char } from "./elements/CharElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -146,8 +147,8 @@ export class ElementIncludes {
       ["CellBrane", CellBrane.CREATE],
       ["CellMembrane", CellMembrane.CREATE],
       ["CellOuterMembrane", CellOuterMembrane.CREATE],
-      ["CellBrane (NO COLOR)", CellBrane.CREATOR({ params: [false] })],
-      ["CellMembrane (NO COLOR)", CellMembrane.CREATOR({ params: [false] })],
+      ["CellBrane (NO COLOR)", CellBrane.COLORLESS],
+      ["CellMembrane (NO COLOR)", CellMembrane.COLORLESS],
       ["StickyMembrane", StickyMembrane.CREATE],
       ["StickyMembrane Emitter", Emitters.STICKYMEMBRANE],
       ["StuckMembrane", StuckMembrane.CREATE],
@@ -189,6 +190,7 @@ export class ElementIncludes {
       ["Reader", Reader.CREATE],
       ["Writer", Writer.CREATE],
       ["Text", Text.CREATE],
+      ["Char", Char.CREATE],
     ])
     .set("Misc", [
       ["DecayDirector", DecayDirector.CREATOR({ params: ["E", 10, EventWindow.ALLADJACENT, 1] })],

@@ -41,17 +41,17 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1",
-    "babel-loader": "^8.1.0",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
     "pixi-particles": "^4.3.0",
-    "pixi.js": "^5.3.3",
+    "pixi.js": "^5.3.7",
     "ts-loader": "^5.4.5",
     "typescript": "^3.9.7",
-    "webpack": "^4.44.2",
+    "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "vue": "^3.0.2"
+    "vue": "^3.0.5"
   }
 }

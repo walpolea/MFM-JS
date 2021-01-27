@@ -1,11 +1,9 @@
 import { EventWindow } from "../core/EventWindow";
 import { Element } from "../core/Element";
 import { IElementType } from "../core/IElementType";
-import { ElementRegistry } from "../core/ElementRegistry";
 
 export class Keyboard extends Element {
   static BASE_TYPE: IElementType = { name: "KEYBOARD", symbol: "Kb", class: Keyboard, color: 0xeeee22 };
-
   data: any = undefined;
 
   constructor() {
@@ -13,6 +11,7 @@ export class Keyboard extends Element {
 
     window.addEventListener("keyup", (e) => {
       this.onKey(e);
+      e.preventDefault();
     });
   }
 

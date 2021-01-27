@@ -444,6 +444,13 @@ export class EventWindow {
   //but not from Sites
   /////////////////////////////////////
 
+  siteExists(index: number): boolean {
+    if (this.window[index]?.atom) {
+      return true;
+    }
+    return false;
+  }
+
   //get a site in the event window by it's row/col offset
   getSiteByOffset(offset: GridCoord): Site {
     return this.window[this.getIndexByOffset(offset)];

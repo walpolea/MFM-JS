@@ -9,7 +9,7 @@ import { QDecayable } from "./quarks/QDecayable";
 export interface DirectionalDirector extends QDirectional, QDecayable {}
 
 export class DirectionalDirector extends Element {
-  static BASE_TYPE: IElementType = { name: "DIRECTIONALDIRECTOR", symbol: "Ddi", class: DirectionalDirector, color: 0xaa44ff };
+  static BASE_TYPE: IElementType = { name: "DIRECTIONALDIRECTOR", symbol: "Ddi", class: DirectionalDirector, color: 0x222222 };
   static CREATE = DirectionalDirector.CREATOR();
   static DIRECTIONALDIRECTOR_EAST = DirectionalDirector.CREATOR({ name: "DIRECTIONALDIRECTOR_EAST", params: ["E"] });
   static DIRECTIONALDIRECTOR_WEST = DirectionalDirector.CREATOR({ name: "DIRECTIONALDIRECTOR_WEST", params: ["W"] });

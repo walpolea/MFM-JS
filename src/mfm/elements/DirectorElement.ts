@@ -1,11 +1,12 @@
 import { EventWindow, EWIndex } from "../core/EventWindow";
 import { Element } from "../core/Element";
 import { IElementType } from "../core/IElementType";
-import { ElementRegistry } from "../core/ElementRegistry";
-import { QDirectional } from "./quarks/QDirectional";
 import { Direction, Wayfinder } from "../utils/MFMWayfinder";
 import { DirectionalDirector } from "./DirectionalDirector";
 import { Empty } from "./EmptyElement";
+import { QDirector } from "./quarks/QDirector";
+
+export interface Director extends QDirector {}
 
 export class Director extends Element {
   static BASE_TYPE: IElementType = { name: "DIRECTOR", symbol: "Di", class: Director, color: 0xcc20ff };
@@ -19,8 +20,6 @@ export class Director extends Element {
   static DIRECTOR_SOUTHEAST = Director.CREATOR({ name: "DIRECTOR_SOUTHEAST", params: ["SE"] });
   static DIRECTOR_SOUTHWEST = Director.CREATOR({ name: "DIRECTOR_SOUTHWEST", params: ["SW"] });
 
-  direction: Direction;
-  directingStrength: number[];
   emitBeforeAge: number;
 
   constructor(_direction: Direction = "E", _directingStrength = EventWindow.ALLADJACENT, _emitBeforeAge: number = 0) {
@@ -29,6 +28,8 @@ export class Director extends Element {
     this.direction = _direction;
     this.directingStrength = _directingStrength;
     this.emitBeforeAge = _emitBeforeAge;
+
+    this.registerClass(QDirector);
   }
 
   behave(ew: EventWindow) {
@@ -43,13 +44,9 @@ export class Director extends Element {
       }
     }
 
-    const directables: number[] = ew.getClassIndexes(this.directingStrength, QDirectional);
+    this.directDirectionals(ew);
 
-    if (directables.length) {
-      directables.forEach((d) => {
-        ((ew.getSiteByIndex(d).atom.elem as unknown) as QDirectional).direct(this.direction);
-      });
-    }
+    this.setColor();
   }
 
   exec(ew: EventWindow) {
@@ -62,5 +59,4 @@ export class Director extends Element {
 Director.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
 
-//Register a SPLAT symbol
-ElementRegistry.registerSPLAT("w", Director.BASE_TYPE);
+Element.applyMixins(Director, [QDirector]);

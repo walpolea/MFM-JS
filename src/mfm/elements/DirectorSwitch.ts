@@ -5,6 +5,10 @@ import { ElementRegistry } from "../core/ElementRegistry";
 import { QDirectional } from "./quarks/QDirectional";
 import { Direction, Wayfinder } from "../utils/MFMWayfinder";
 import { Empty } from "./EmptyElement";
+import { Director } from "./DirectorElement";
+import { QDirector } from "./quarks/QDirector";
+
+export interface DirectorSwitch extends QDirector {}
 
 export class DirectorSwitch extends Element {
   static BASE_TYPE: IElementType = { name: "DIRECTORSWITCH", symbol: "Di", class: DirectorSwitch, color: 0xcc20ff };
@@ -18,34 +22,17 @@ export class DirectorSwitch extends Element {
   static DIRECTORSWITCH_SOUTHEAST = DirectorSwitch.CREATOR({ name: "DIRECTORSWITCH_SOUTHEAST", params: ["SE"] });
   static DIRECTORSWITCH_SOUTHWEST = DirectorSwitch.CREATOR({ name: "DIRECTORSWITCH_SOUTHWEST", params: ["SW"] });
 
-  direction: Direction;
-  originalDirection: Direction;
-  directingStrength: number[];
-  checkInterval: number = 300;
+  checkInterval: number = 150;
   checkCounter: number = 0;
+  isReady: boolean = false;
 
   constructor(_direction: Direction = "E", _directingStrength = EventWindow.ALLADJACENT, _emitBeforeAge: number = 0) {
     super(DirectorSwitch.BASE_TYPE);
 
-    this.direction = this.originalDirection = _direction;
+    this.direction = _direction;
     this.directingStrength = _directingStrength;
-  }
 
-  setColor() {
-    switch (this.direction) {
-      case "E":
-        this.color = 0x20ccff;
-        break;
-      case "W":
-        this.color = 0xccff20;
-        break;
-      case "N":
-        this.color = 0xcc20ff;
-        break;
-      case "S":
-        this.color = 0x4466aa;
-        break;
-    }
+    this.registerClass(QDirector);
   }
 
   getDirectionQuadrant(d: Direction): number[] {
@@ -85,7 +72,7 @@ export class DirectorSwitch extends Element {
     const checkQuadrant: number[] = this.getDirectionQuadrant(this.direction);
     const reverseCheckQuadrant: number[] = this.getReverseDirectionQuadrant(this.direction);
 
-    if (ew.getClassIndexes(checkQuadrant, QDirectional).length > ew.getClassIndexes(reverseCheckQuadrant, QDirectional).length) {
+    if (ew.getClassIndexes(reverseCheckQuadrant, QDirectional).length > 2) {
       return true;
     }
 
@@ -93,36 +80,47 @@ export class DirectorSwitch extends Element {
   }
 
   behave(ew: EventWindow) {
-    const nearbySwitches = ew.getSites(EventWindow.ALLADJACENT, DirectorSwitch.BASE_TYPE, false);
+    // this.checkCounter++;
 
-    if (nearbySwitches.length) {
-      const eldest = nearbySwitches.sort((a, b) => (a.atom.elem as DirectorSwitch).age - (b.atom.elem as DirectorSwitch).age)[0].atom.elem as DirectorSwitch;
+    // if (this.checkCounter % this.checkInterval === 0) {
+    //   this.isReady = true;
+    //   this.checkCounter = 0;
+    //   this.direction = Wayfinder.reverse(this.direction);
+    // }
 
-      this.direction = eldest.direction;
-      this.checkCounter = eldest.checkCounter;
-      nearbySwitches.forEach((s) => {
-        (s.atom.elem as DirectorSwitch).checkCounter = eldest.checkCounter;
-        (s.atom.elem as DirectorSwitch).direction = eldest.direction;
-      });
-    }
+    // if (this.hasLoad(ew)) {
+    //   this.isReady = true;
+    //   this.checkCounter = 0;
+    //   this.direction = Wayfinder.reverse(this.direction);
+    // }
 
-    this.checkCounter++;
+    // if (this.isReady) {
+    //   this.isReady = false;
 
-    if (this.checkCounter % this.checkInterval === 0 /*&& this.hasLoad(ew)*/) {
-      this.checkCounter = 0;
-      this.direction = Wayfinder.reverse(this.direction);
-      console.log("SWITCH", this.direction);
-    }
+    //   const nearbySwitches = ew.getSites(EventWindow.ALLADJACENT, this.TYPE, false);
 
-    const directables: number[] = ew.getClassIndexes(this.directingStrength, QDirectional);
+    //   console.log("switching", nearbySwitches.length);
+    //   nearbySwitches.forEach((s) => {
+    //     const ds: DirectorSwitch = s.atom.elem as DirectorSwitch;
+    //     ds.checkCounter = this.checkCounter;
+    //     ds.direction = this.direction;
+    //   });
+    // }
 
-    if (directables.length) {
-      directables.forEach((d) => {
-        ((ew.getSiteByIndex(d).atom.elem as unknown) as QDirectional).direct(this.direction);
-      });
-    }
+    // const emitMap = [37, 9, 12, 40];
 
+    // const emits = [...ew.getIndexes(emitMap, Empty.BASE_TYPE, false), ...ew.getClassIndexes(emitMap, QDirector, false)];
+
+    // emits.forEach((e) => {
+    //   ew.mutate(e, Director.CREATE({ params: [this.direction, this.directingStrength] }));
+    // });
     this.setColor();
+
+    if (this.hasLoad(ew)) {
+      this.directDirectionals(ew);
+    } else {
+      this.color = 0x000000;
+    }
   }
 
   exec(ew: EventWindow) {
@@ -135,5 +133,4 @@ export class DirectorSwitch extends Element {
 DirectorSwitch.INITIALIZE_SPLAT_MAP()();
 //Tells the App/GUI that this element exists
 
-//Register a SPLAT symbol
-ElementRegistry.registerSPLAT("w", DirectorSwitch.BASE_TYPE);
+Element.applyMixins(DirectorSwitch, [QDirector]);
