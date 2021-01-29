@@ -38,13 +38,14 @@ export class MFMRenderer {
   siteSize: number = 8;
   siteSpacing: number = 0;
   gridOffset: number = 10;
-  srContainer: ParticleContainer = new ParticleContainer(50000, { tint: true });
+  srContainer: ParticleContainer = new ParticleContainer(39000, { tint: true });
   siteRenderers: Map<Sprite, SiteRenderer> = new Map<Sprite, SiteRenderer>();
   rendererMap: Map<Site, SiteRenderer> = new Map<Site, SiteRenderer>();
   container: Element;
   keysHeld: Set<string>;
   pointerDown: boolean = false;
   shouldRender: boolean = true;
+  shouldExecute: boolean = true;
   clickArea: Container;
   curSelectedElement: string;
   curSelectedElementFunction: Function;
@@ -164,7 +165,6 @@ export class MFMRenderer {
   }
 
   gameLoop(delta: number) {
-    // console.log("CM", Array.from(this.tile.sites).filter((s) => s[1]?.atom?.type == CellMembrane.BASE_TYPE).length);
     let ew: EventWindow,
       renders: Set<SiteRenderer> = new Set<SiteRenderer>(),
       i = 0,
@@ -177,23 +177,16 @@ export class MFMRenderer {
       //if the window exists and origin is not an empty site
       if (ew.window && !ew.origin.atom?.is(Empty.BASE_TYPE)) {
         //element behaves
-        ew.origin.atom.exec(ew);
-
-        if (this.shouldRender) {
-          const allSites = ew.getAll(),
-            len = allSites.length;
-          for (j = 0; j < len; j++) {
-            if (allSites[j]) renders.add(this.rendererMap.get(allSites[j]));
-          }
+        if (this.shouldExecute) {
+          ew.origin.atom.exec(ew);
         }
       }
     }
 
     if (this.shouldRender) {
-      const arr = [...renders],
-        len = arr.length;
-      let k = 0;
-
+      let k = 0,
+        len = this.rendererMap.size,
+        arr = [...this.rendererMap.values()];
       for (k; k < len; k++) {
         arr[k].update();
       }

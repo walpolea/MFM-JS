@@ -12,7 +12,7 @@ let app = new Vue({
   data: function () {
     return {
       gridSize: "128x64" as string,
-      timeSpeed: 5000 as number,
+      timeSpeed: 25000 as number,
       tenex: false as boolean,
       g: undefined as Tile,
       mfmRenderer: MFMRenderer,
@@ -20,6 +20,7 @@ let app = new Vue({
       curSelectedElement: "" as string,
       curSelectedFunc: undefined as Function,
       shouldRender: true as boolean,
+      shouldExecute: true as boolean,
       fullScreenMode: false as boolean,
       seedData: undefined as any[],
     };
@@ -169,6 +170,10 @@ let app = new Vue({
     shouldRender(val: boolean) {
       console.log("should render", val);
       this.mfmRenderer.shouldRender = val;
+    },
+    shouldExecute(val: boolean) {
+      console.log("should execute", val);
+      this.mfmRenderer.shouldExecute = val;
     },
   },
 });

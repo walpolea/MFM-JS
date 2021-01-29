@@ -246,7 +246,7 @@
 
             <div style="display: grid; grid-template-columns: auto 1fr auto;">
               <span>Speed:</span>
-              <input type="range" min="0" max="25000" v-model="timeSpeed" step="10" width="100%" />
+              <input type="range" min="0" max="50000" v-model="timeSpeed" step="10" width="100%" />
               <span>
                 <input type="text" v-model="timeSpeed" size="7" />
                 <input type="checkbox" v-model="tenex" />
@@ -272,6 +272,8 @@
               </select>
               Render?
               <input type="checkbox" v-model="shouldRender" />
+              Execute?
+              <input type="checkbox" v-model="shouldExecute" />
 
               <button @click="getSeedLink()">Get Link</button>
             </div>
