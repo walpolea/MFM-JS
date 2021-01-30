@@ -172,6 +172,17 @@ export class Wayfinder {
     ["ESE", Wayfinder.ESE_LINE],
   ]);
 
+  static DIRECTIONS_FRONT_QUADRANT_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
+    ["W", Wayfinder.W_QUADRANT],
+    ["N", Wayfinder.N_QUADRANT],
+    ["S", Wayfinder.S_QUADRANT],
+    ["E", Wayfinder.E_QUADRANT],
+    ["NW", Wayfinder.NW_QUADRANT],
+    ["SW", Wayfinder.SW_QUADRANT],
+    ["NE", Wayfinder.NE_QUADRANT],
+    ["SE", Wayfinder.SE_QUADRANT],
+  ]);
+
   static DIRECTIONS_BEHIND_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
     ["W", Wayfinder.E_LINE],
     ["N", Wayfinder.S_LINE],
@@ -189,6 +200,17 @@ export class Wayfinder {
     ["SSW", Wayfinder.NNE_LINE],
     ["SSE", Wayfinder.NNW_LINE],
     ["ESE", Wayfinder.WNW_LINE],
+  ]);
+
+  static DIRECTIONS_BEHIND_QUADRANT_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
+    ["W", Wayfinder.E_QUADRANT],
+    ["N", Wayfinder.S_QUADRANT],
+    ["S", Wayfinder.N_QUADRANT],
+    ["E", Wayfinder.W_QUADRANT],
+    ["NW", Wayfinder.SE_QUADRANT],
+    ["SW", Wayfinder.NE_QUADRANT],
+    ["NE", Wayfinder.SW_QUADRANT],
+    ["SE", Wayfinder.NW_QUADRANT],
   ]);
 
   static INDEX_DIRECTION_MAP: Map<number, Direction> = new Map<EWIndex, Direction>([
@@ -287,11 +309,17 @@ export class Wayfinder {
     return Wayfinder.nextDirection(dir, Wayfinder.DIRMAP_CLOCKWISE_ALL);
   }
 
-  static getInFront(dir: Direction): EWIndex[] {
+  static getInFront(dir: Direction, getQuadrant: boolean = false): EWIndex[] {
+    if (getQuadrant) {
+      return Wayfinder.DIRECTIONS_FRONT_QUADRANT_MAP.get(dir);
+    }
     return Wayfinder.DIRECTIONS_FRONT_MAP.get(dir);
   }
 
-  static getBehind(dir: Direction): EWIndex[] {
-    return Wayfinder.DIRECTIONS_FRONT_MAP.get(dir);
+  static getBehind(dir: Direction, getQuadrant: boolean = false): EWIndex[] {
+    if (getQuadrant) {
+      return Wayfinder.DIRECTIONS_BEHIND_QUADRANT_MAP.get(dir);
+    }
+    return Wayfinder.DIRECTIONS_BEHIND_MAP.get(dir);
   }
 }

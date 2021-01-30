@@ -62,6 +62,7 @@ import { EventWindow } from "./core/EventWindow";
 import { DirectionalData } from "./elements/DirectionalData";
 import { DirectorSwitch } from "./elements/DirectorSwitch";
 import { Char } from "./elements/CharElement";
+import { HiveSorter } from "./elements/HiveSorterElement";
 
 //[Mason, SuperMason, StuckMembrane, Input, Data, Reader, Keyboard, BasePlanter, Text, Empty, SwapWorm, StickyMembrane, Res, DReg, Wall, ForkBomb, SuperForkBomb, AntiForkBomb, Sentry, Data, Reducer, LoopWorm, LoopSeed, Writer, SortMaster, Sorter, Template, RevolvingDoor, OnewayDoor];
 
@@ -206,7 +207,7 @@ export class ElementIncludes {
       ["Director SW", Director.DIRECTOR_SOUTHWEST],
       ["Directional", DirectionalTraveler.CREATE],
       ["Looper", Looper.CREATE],
-      ["Looper EAST", Looper.CREATE_EAST],
+      ["HiveSorter", HiveSorter.CREATE],
       ["Sonar", Sonar.CREATE],
       ["Sonar Blue", Sonar.CREATE_BLUE],
       ["Eraser", Eraser.CREATE],

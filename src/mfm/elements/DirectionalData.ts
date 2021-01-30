@@ -20,6 +20,7 @@ export class DirectionalData extends Element {
     super(DirectionalData.BASE_TYPE);
 
     this.direction = _initialDirection;
+    this.isStubborn = true;
 
     this.registerClass(QDirectional);
     this.registerClass(QData);
@@ -47,8 +48,6 @@ export class DirectionalData extends Element {
       this.moveDirectionally(ew);
       this.counter = 0;
     }
-
-    this.stop();
   }
 
   exec(ew: EventWindow) {

@@ -11,6 +11,7 @@ export class QDirectional extends Quark {
 
   direction: Direction;
   isDirected: boolean = true;
+  isStubborn: boolean = false;
 
   reverse() {
     if (this.direction) this.direction = Wayfinder.reverse(this.direction);
@@ -60,9 +61,25 @@ export class QDirectional extends Quark {
     this.direction = undefined;
   }
 
+  makeStubborn() {
+    this.isStubborn = true;
+  }
+
+  makeManipulable() {
+    this.isStubborn = false;
+  }
+
+  setStubborn(stubborn: boolean) {
+    this.isStubborn = stubborn;
+  }
+
   moveDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom: Atom = Empty.CREATE()): boolean {
     if (this.direction) {
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+
+      if (this.isStubborn) {
+        this.stop();
+      }
 
       if (ew.is(travelTo, types)) {
         return ew.move(travelTo, leavingAtom);
@@ -75,6 +92,10 @@ export class QDirectional extends Quark {
   swapDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE): boolean {
     if (this.direction) {
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.direction, true);
+
+      if (this.isStubborn) {
+        this.stop();
+      }
 
       if (ew.is(travelTo, types)) {
         return ew.swap(travelTo);
