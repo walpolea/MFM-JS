@@ -1,11 +1,31 @@
 import { EWIndex } from "../core/EventWindow";
 import { Utils } from "./MFMUtils";
 import { IElementType } from "../core/IElementType";
+import { Director } from "../elements/DirectorElement";
 
 export type DirectionMap = Map<Direction, Direction>;
 export type Direction = "N" | "E" | "S" | "W" | "NW" | "NE" | "SW" | "SE" | "NNW" | "WNW" | "SSW" | "WSW" | "NNE" | "ENE" | "SSE" | "ESE";
 
 export class Wayfinder {
+  static NORTH: Direction = "N";
+  static SOUTH: Direction = "S";
+  static EAST: Direction = "E";
+  static WEST: Direction = "W";
+
+  static NORTHWEST: Direction = "NW";
+  static NORTHEAST: Direction = "NE";
+  static SOUTHWEST: Direction = "SW";
+  static SOUTHEAST: Direction = "SE";
+
+  static NORTHNORTHWEST: Direction = "NNW";
+  static WESTNORTHWEST: Direction = "WNW";
+  static NORTHNORTHEAST: Direction = "NNE";
+  static EASTNORTHEAST: Direction = "ENE";
+  static SOUTHSOUTHWEST: Direction = "SSW";
+  static WESTWOUTHWEST: Direction = "WSW";
+  static SOUTHSOUTHEAST: Direction = "SSE";
+  static EASTSOUTHEAST: Direction = "ESE";
+
   static DIRECTIONS_PRIMARY: Direction[] = ["N", "E", "S", "W"];
   static DIRECTIONS_SECONDARY: Direction[] = ["NW", "NE", "SW", "SE"];
   static DIRECTIONS_TERTIARY: Direction[] = ["NNW", "WNW", "SSW", "WSW", "NNE", "ENE", "SSE", "ESE"];
@@ -321,5 +341,17 @@ export class Wayfinder {
       return Wayfinder.DIRECTIONS_BEHIND_QUADRANT_MAP.get(dir);
     }
     return Wayfinder.DIRECTIONS_BEHIND_MAP.get(dir);
+  }
+
+  static slightRandom(dir: Direction): Direction {
+    return Utils.oneIn(2) ? this.slightRight(dir) : this.slightLeft(dir);
+  }
+
+  static veerRandom(dir: Direction): Direction {
+    return Utils.oneIn(2) ? this.veerRight(dir) : this.veerLeft(dir);
+  }
+
+  static turnRandom(dir: Direction): Direction {
+    return Utils.oneIn(2) ? this.turnRight(dir) : this.turnLeft(dir);
   }
 }

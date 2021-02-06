@@ -5,6 +5,7 @@ import { Quark } from "../../core/Quark";
 import { Direction, Wayfinder } from "../../utils/MFMWayfinder";
 import { IElementType } from "../../core/IElementType";
 import { Atom } from "../../core/Atom";
+import { Director } from "../DirectorElement";
 
 export class QDirectional extends Quark {
   static CLASS: string = "DIRECTIONAL";
@@ -59,6 +60,7 @@ export class QDirectional extends Quark {
 
   stop() {
     this.direction = undefined;
+    this.isDirected = false;
   }
 
   makeStubborn() {
@@ -71,6 +73,14 @@ export class QDirectional extends Quark {
 
   setStubborn(stubborn: boolean) {
     this.isStubborn = stubborn;
+  }
+
+  moveInDirection(ew: EventWindow, direction: Direction, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom: Atom = Empty.CREATE()): boolean {
+    const curDir: Direction = this.direction;
+    this.direction = direction;
+    const didIt: boolean = this.moveDirectionally(ew, types, leavingAtom);
+    this.direction = curDir;
+    return didIt;
   }
 
   moveDirectionally(ew: EventWindow, types: IElementType | IElementType[] = Empty.BASE_TYPE, leavingAtom: Atom = Empty.CREATE()): boolean {

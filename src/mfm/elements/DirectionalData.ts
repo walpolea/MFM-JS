@@ -2,11 +2,9 @@ import { IElementType } from "../core/IElementType";
 import { QDirectional } from "./quarks/QDirectional";
 import { EventWindow, EWIndex } from "../core/EventWindow";
 import { Element } from "../core/Element";
-import { Direction } from "../utils/MFMWayfinder";
+import { Direction, Wayfinder } from "../utils/MFMWayfinder";
 import { Utils } from "../utils/MFMUtils";
 import { QData } from "./quarks/QData";
-import { Empty } from "./EmptyElement";
-import { Data } from "./DataElement";
 
 export interface DirectionalData extends QData, QDirectional {}
 
@@ -20,7 +18,7 @@ export class DirectionalData extends Element {
     super(DirectionalData.BASE_TYPE);
 
     this.direction = _initialDirection;
-    this.isStubborn = true;
+    this.makeStubborn();
 
     this.registerClass(QDirectional);
     this.registerClass(QData);
@@ -35,16 +33,22 @@ export class DirectionalData extends Element {
       this.color = Utils.rgbToHex(ew.origin.atom.data.value * 5, ew.origin.atom.data.value * 5, ew.origin.atom.data.value * 5);
     }
 
-    if (this.direction) {
-      if (this.moveDirectionally(ew)) {
-        this.counter = 0;
-      }
+    if (this.direction && (this.moveDirectionally(ew) || this.moveInDirection(ew, Wayfinder.turnRandom(this.direction)))) {
+      this.counter = 0;
     }
 
     //move if stale
-    this.counter++;
-    if (this.counter > 100) {
-      if (!this.direction) this.setRandomDirection();
+    if (!this.isDirected) {
+      this.counter++;
+    } else {
+      this.counter = 0;
+    }
+
+    if (this.counter > 10) {
+      if (!this.direction) {
+        console.log("SRD");
+        this.setRandomDirection();
+      }
       this.moveDirectionally(ew);
       this.counter = 0;
     }
