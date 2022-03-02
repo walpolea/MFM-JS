@@ -3,7 +3,7 @@ const esbuild = require("esbuild");
 esbuild
   .build({
     entryPoints: ["./src/index.ts"],
-    outfile: "lib/mfm.js",
+    outfile: "public/lib/mfm.js",
     bundle: true,
     minify: true,
     format: "esm",
@@ -11,5 +11,6 @@ esbuild
     sourcemap: true,
     target: "es2020",
     plugins: [],
+    loader: { ".png": "dataurl" },
   })
   .catch(() => process.exit(1));

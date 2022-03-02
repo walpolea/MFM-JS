@@ -3,6 +3,7 @@ import { Sprite, ParticleContainer, Application, Texture, Point, Container, Rect
 import { EventWindow } from "../../mfm/EventWindow.js";
 import { Site } from "../../mfm/Site.js";
 import { Tile } from "../../mfm/Tile.js";
+import url from "./element.png";
 
 export interface IRenderer {
   tile: Tile;
@@ -22,7 +23,7 @@ export class PixiRenderer implements IRenderer {
   totalSites: number;
 
   siteSize: number;
-  siteTexture: Texture = Texture.from("element.png");
+  siteTexture: Texture = Texture.from(url);
 
   particleContainer: ParticleContainer;
   pixiApplication: Application;
