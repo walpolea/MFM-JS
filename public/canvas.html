@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+    }
+
+    canvas {
+      width: 100%;
+      /* aspect-ratio: 1 / 1; */
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="grid"></canvas>
+  <script src="https://pixijs.download/release/pixi.min.js"></script>
+  <script type="module">
+    import { Tile, ForkBomb } from "./lib/mfm.js";
+
+    let size = window.innerWidth < window.innerHeight ? window.innerHeight : window.innerWidth;
+    let appX = size;
+    let appY = size;
+    let tileSizeW = 256;
+    let tileSizeH = 128;
+    let maxSites = tileSizeH * tileSizeW;
+    let siteSize = appX / tileSizeW;
+
+    const t = new Tile(tileSizeW, tileSizeH);
+
+    console.log(t);
+
+    let $ = (query = '') => document.querySelector(query)
+
+    let cel = $('canvas');
+    console.log('OffscreenCanvas' in window);
+    const c = ('OffscreenCanvas' in window) ? cel.transferControlToOffscreen() : cel;
+    // const c = cel;
+    let ctx = c.getContext('webgl');
+    c.width = tileSizeW;
+    c.height = tileSizeH;
+
+    let coords = [...Array(c.width * c.height)].map((e, i) => ({ x: i % c.width, y: 0 | (i / c.width) }));
+
+    let subdivisions = Math.sqrt(tileSizeW) >> 0;
+    let ww = tileSizeW / subdivisions;
+    let wh = tileSizeH / subdivisions;
+
+    let gridDivisions = [];
+    for (let row = 0; row < tileSizeH; row += wh) {
+      for (let col = 0; col < tileSizeW; col += ww) {
+        gridDivisions.push([row, row + wh, col, col + ww])
+      }
+    }
+
+    let siteArray = Array.from(t.sites.values());
+
+    let pace = (maxSites / gridDivisions.length) * 2;
+
+    const shuffle = arr => {
+      const newArr = [...arr];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const rand = ~~(Math.random() * (i + 1));
+        [newArr[i], newArr[rand]] = [newArr[rand], newArr[i]];
+      }
+      return newArr
+    };
+
+    t.sitesArray[0].atom = ForkBomb.CREATE();
+
+    (async () => {
+      while (true) {
+
+        console.time();
+        let pixels = ctx.getImageData(0, 0, c.width, c.height);
+
+        for (let x = 0; x < c.width; x++) {
+          for (let y = 0; y < c.height; y++) {
+            let i = 4 * (x + y * c.width)
+            let col = t.getSiteByCoordinate({ x, y }).atom.rd("color");
+            pixels.data[i] = (col >> 16) & 255;
+            pixels.data[i + 1] = (col >> 8) & 255;
+            pixels.data[i + 2] = (col) & 255;
+            pixels.data[i + 3] = 255;
+          }
+        }
+        ctx.putImageData(pixels, 0, 0)
+
+
+        for (let div = 0; div < gridDivisions.length; div++) {
+          for (let i = 0; i < pace; i++) {
+            const s = t.getRandomSiteInRange(gridDivisions[div]);
+            s.atom.behave(s.ew);
+          }
+        }
+
+        console.timeEnd();
+
+        await new Promise(requestAnimationFrame)
+      }
+    })()
+
+  </script>
+</body>
+
+</html>

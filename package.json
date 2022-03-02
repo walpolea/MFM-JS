@@ -1,57 +1,18 @@
 {
-  "name": "MFM-JS",
-  "version": "1.0.0",
-  "description": "A web-based simulator for Dr. Dave Ackley's Moveable Feast Machine",
+  "name": "mfm-js",
+  "version": "2.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "dev": "webpack --watch --info-verbosity verbose"
+    "build": "node esbuild.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://mfm.rocks",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/walpolea/MFM-JS.git"
-  },
-  "keywords": [
-    "robust-first",
-    "moveable feast machine",
-    "MFM"
-  ],
-  "author": "Andrew Walpole <walpolea@gmail.com> (https://andrewwalpole.com)",
-  "contributors": [
-    {
-      "name": "Dave Ackley",
-      "email": null,
-      "url": "https://github.com/DaveAckley",
-      "contributions": 3,
-      "additions": 9,
-      "deletions": 10,
-      "hireable": null
-    },
-    {
-      "name": "Andrew Walpole",
-      "email": "walpolea@gmail.com",
-      "url": "https://github.com/walpolea",
-      "contributions": 16,
-      "additions": 6540,
-      "deletions": 486,
-      "hireable": null
-    }
-  ],
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "babel-loader": "^8.2.2",
-    "pixi-particles": "^4.3.0",
-    "pixi.js": "^5.3.7",
-    "ts-loader": "^5.4.5",
-    "typescript": "^3.9.7",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
-  },
-  "dependencies": {
-    "vue": "^3.0.5"
+    "esbuild": "^0.14.22",
+    "pixi.js": "^6.2.2",
+    "typescript": "^4.5.5"
   }
 }

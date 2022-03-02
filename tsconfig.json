@@ -1,13 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
-    "sourceMap": false,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "module": "es2015",
-    "target": "es2015",
-    "lib": ["es2019", "dom", "esnext.array"],
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
+    "lib":["ES2019"],
+    "emitDeclarationOnly": true,
+    "declaration": true,    
+    "esModuleInterop": true,
   }
 }

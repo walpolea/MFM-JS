@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 10px;
+      background: #222;
+      display: grid;
+      justify-items: center;
+      color: white;
+      min-height: 100vh;
+      font-family: sans-serif;
+    }
+
+    h3 {
+      margin-block: 0px 5px;
+    }
+
+    ul {
+      padding: 0;
+    }
+
+    .grid {
+      display: grid;
+      place-items: center;
+    }
+
+    .controls {
+      width: 100%;
+      padding: 25px;
+    }
+
+    .controls input {
+      width: 100%;
+    }
+
+    canvas {
+      width: 100%;
+      image-rendering: smooth;
+      max-height: 90vh;
+    }
+
+    .element-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media screen and (max-width:500px) {
+      .element-btns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .element-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .element-btn-group {
+      display: block;
+    }
+
+    .element-btn {
+      color: white;
+      padding: 4px 6px;
+      background: #444;
+      border: 1px solid #111;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+
+    .element-btn.active {
+      background-color: rebeccapurple;
+    }
+  </style>
+</head>
+
+<body v-scope @vue:mounted="mounted">
+  <div class="grid">
+
+  </div>
+  <div class="controls" v-if="grid">
+    <label>
+      Render Speed ({{RenderSpeed}}x, {{~~grid.fixedRenderSpeed}} updates per frame)<br>
+      <input type="range" min="0" :max="20" value="1" :step="0.001" v-model="RenderSpeed">
+    </label>
+
+    <label>
+      Brush Size ({{BrushSize}})<br>
+      <input style="width:auto;" type="range" min="1" max="5" value="1" step="1" v-model="BrushSize">
+    </label>
+
+
+    <ul class="element-btns">
+      <li v-for="(group,key) in elements" class="element-btn-group">
+        <h3>{{key}}</h3>
+        <button class="element-btn" :class="{active:$el === activeEl}" v-for="e in group"
+          @click="setActiveElement($el, e)">
+          {{e.name}}
+        </button>
+      </li>
+    </ul>
+    <label>
+      <span>Grid size:</span>
+      <select @change="setGridSize($event.target.value);">
+        <option value="64,64">64 x 64</option>
+        <option value="128,64">128 x 64</option>
+        <option value="128,128">128 x 128</option>
+        <option value="196,128">196 x 128</option>
+        <option value="256,128" selected>256 x 128</option>
+        <option value="256,256">256 x 256</option>
+        <option value="512,256">512 x 256</option>
+      </select>
+    </label>
+    <button @click="tile.clear()">CLEAR GRID</button>
+    <button @click="tile.clearType( activeType );">CLEAR TYPE</button>
+
+
+  </div>
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/petite-vue?module';
+    import { Tile, PixiRenderer, ElementRegistry, EventWindow } from "./lib/mfm.js";
+
+    let t;
+
+    createApp({
+      activeEl: undefined,
+      activeType: undefined,
+      renderSpeed: 1,
+      brushSize: 1,
+      t,
+      tile: {
+        clear: () => {
+          t.clear();
+        },
+        clearType: (type) => {
+          t.clear(type);
+        }
+      },
+      grid: undefined,
+      elements: Object.fromEntries(ElementRegistry.GROUPS.entries()),
+      mounted() {
+        this.init(256, 128);
+        this.BrushSize = this.brushSize;
+      },
+      init(w, h) {
+        t = new Tile(w, h);
+        this.grid = new PixiRenderer(t, 1800, 1800 * (t.height / t.width));
+        const gridEl = document.querySelector('.grid');
+
+        while (gridEl.firstChild) {
+          gridEl.removeChild(gridEl.firstChild);
+        }
+
+        gridEl.appendChild(this.grid.view);
+      },
+      set RenderSpeed(rs) {
+        this.renderSpeed = rs;
+        this.grid.setRenderMultiplier(this.renderSpeed);
+      },
+      get RenderSpeed() {
+        return this.renderSpeed
+      },
+
+      set BrushSize(bs) {
+        this.brushSize = +bs;
+        this.grid.brushSize = +this.brushSize;
+      },
+      get BrushSize() {
+        return +this.brushSize;
+      },
+      setActiveElement($el, e) {
+        this.grid.curSelectedElementFunction = e.CREATE;
+        this.activeType = e;
+        this.activeEl = $el;
+      },
+      clearType() {
+        if (this.activeType) {
+          this.grid.siteArray
+        }
+      },
+      setGridSize(v) {
+        v = v.split(',').map(px => parseInt(px));
+
+        this.grid.deconstruct();
+        this.init(v[0], v[1]);
+        this.setActiveElement(this.activeEl, this.activeType);
+      }
+
+
+    }).mount()
+  </script>
+</body>
+
+</html>
