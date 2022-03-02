@@ -17,7 +17,6 @@ export class SiteRenderer {
   }
 
   init() {
-    //this.visual = PIXI.Sprite.fromImage("/resources/element.png");
     this.visual.interactive = false;
     this.visual.scale = new PIXI.Point(this.siteSize / 14, this.siteSize / 14);
     this.visual.x = this.site.tilePos.col * (this.siteSize + this.siteSpacing);

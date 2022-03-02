@@ -30,7 +30,7 @@ import { IElementType } from "../mfm/core/IElementType";
 import { Player } from "../mfm/elements/game/Player";
 
 export class MFMRenderer {
-  static SITE_TEXTURE: Texture = Texture.from("/resources/element.png");
+  static SITE_TEXTURE: Texture = Texture.from("../resources/element.png");
   appX: number = 800;
   appY: number = 800;
   selectedSite: Site;
