@@ -5,7 +5,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta name="title" content="MFM.ROCKS">
+  <meta name="description"
+    content="A javascript-based movable feast machine simulator built to explore robust-first programming with an emphasis on living systems computation.">
+  <title>MFM.ROCKS | Movable Feast Machine Simulator</title>
 
   <style>
     * {
@@ -21,6 +24,10 @@
       color: white;
       min-height: 100vh;
       font-family: sans-serif;
+    }
+
+    header {
+      padding: 50px;
     }
 
     h3 {
@@ -85,10 +92,42 @@
     .element-btn.active {
       background-color: rebeccapurple;
     }
+
+    nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin-inline: 20px;
+    }
+
+    nav ul li a {
+      color: #e1325e;
+    }
   </style>
 </head>
 
 <body v-scope @vue:mounted="mounted">
+  <header>
+
+    <img class="logo" src="mfmrocks-logo.png" alt="MFM.rocks Logo" width="512px">
+    <nav>
+      <ul>
+        <li><a target="_blank" href="https://github.com/walpolea/MFM-JS?ref=mfmrocks">MFM-JS Github</a></li>
+        <li>
+          <a target="_blank" href="http://robust.cs.unm.edu/doku.php">Robust-First Wiki (what is all this?)</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://www.t2tile.com/?ref=mfmrocks">T2Tile
+            Project</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
   <div class="grid">
 
   </div>

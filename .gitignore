@@ -1,4 +1,4 @@
 /node_modules
-/art
 .DS_Store
 package-lock.json
+.vercel
