@@ -13,6 +13,7 @@ export { DReg } from "./elements/core/DReg";
 export { Res } from "./elements/core/Res";
 export { ForkBomb } from "./elements/core/ForkBomb";
 export { Wall } from "./elements/core/Wall";
+export { LivingWall } from "./elements/agents/LivingWall";
 export { Sand } from "./elements/core/Sand";
 export { Water } from "./elements/core/Water";
 export { Builder } from "./elements/core/Builder";
