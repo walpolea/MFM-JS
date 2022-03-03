@@ -3,6 +3,7 @@ import { Sprite, ParticleContainer, Application, Texture, Point, Container, Rect
 import { EventWindow } from "../../mfm/EventWindow.js";
 import { Site } from "../../mfm/Site.js";
 import { Tile } from "../../mfm/Tile.js";
+//@ts-ignore
 import url from "./element.png";
 
 export interface IRenderer {
