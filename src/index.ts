@@ -21,3 +21,4 @@ export { Looper } from "./elements/agents/Looper";
 export { Bein } from "./elements/agents/Bein";
 export { Wanderer } from "./elements/agents/Wanderer";
 export { Director } from "./elements/agents/Director";
+export { Swamp } from "./elements/agents/Swamp";

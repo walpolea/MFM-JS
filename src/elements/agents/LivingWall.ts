@@ -3,6 +3,13 @@ import { EventWindow } from "../../mfm/EventWindow";
 
 export class LivingWall extends Element {
   static CREATE = LivingWall.CREATOR({ name: "LIVING WALL", class: LivingWall, color: 0x2255aa, groups: ["Environment", "MFM"] });
+  static MOVABLE_LIVING_WALL = LivingWall.CREATOR({
+    name: "MOVABLE LIVING WALL",
+    class: LivingWall,
+    color: 0x2255aa,
+    classifications: ["MOVABLE", "LIVING WALL"],
+    groups: ["Environment", "MFM"],
+  });
 
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
@@ -26,7 +33,7 @@ export class LivingWall extends Element {
         return [i, ew.getSite(i).atom.TYPE.CREATE];
       });
 
-      this.state.color = this.TYPE.color - this.state.regenMap.length * 25;
+      this.state.color = this.TYPE.color - this.state.regenMap.length * 6;
     }
   }
 
