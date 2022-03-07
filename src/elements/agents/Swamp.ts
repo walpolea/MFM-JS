@@ -6,7 +6,7 @@ export class Swamp extends Element {
   static CREATE = Swamp.CREATOR({
     name: "SWAMP",
     class: Swamp,
-    color: 0x2255aa,
+    color: 0x3d5b31,
     classifications: ["ENV", "OFSWAMP", "DECAYABLE"],
     groups: ["Swamp"],
   });
@@ -22,14 +22,17 @@ export class Swamp extends Element {
   behave(ew: EventWindow) {
     super.behave(ew);
 
-    const swamplings = ew.filterByType(EventWindow.ALLADJACENT, "SWAMPLING");
+    const swamplings = ew.filterByType(EventWindow.ADJACENT8WAY, "SWAMPLING");
+    const swamp = ew.filterByType(EventWindow.ADJACENT8WAY, "OFSWAMP");
 
-    if (swamplings.length) {
+    if (swamplings.length > 0) {
       this.state.age = 0;
-      if (EventWindow.oneIn(50)) this.grow(ew);
+      if (EventWindow.oneIn(10)) this.grow(ew);
     } else {
-      if (ew.selfIs("DECAYABLE")) {
-        Decay.DECAY(ew, this, this.state.lifeSpan ?? 1000, 10);
+      if (ew.selfIs("DECAYABLE") && swamp.length < 7) {
+        Decay.DECAY(ew, this, this.state.lifeSpan ?? 500);
+      } else {
+        this.state.age = 0;
       }
     }
   }

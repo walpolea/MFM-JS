@@ -16,8 +16,8 @@ export class Wanderer extends Element {
   static SWAMPLING = Wanderer.CREATOR({
     name: "SWAMPLING",
     class: Wanderer,
-    color: 0x4aeeef,
-    classifications: ["DIRECTIONAL", "DIRECTABLE"],
+    color: 0x22cc88,
+    classifications: ["OFSWAMP", "DIRECTIONAL", "DIRECTABLE"],
     groups: ["Swamp"],
   });
 
@@ -131,7 +131,9 @@ export class Wanderer extends Element {
       }
     } else {
       Wayfinding.MOVE_DIRECTIONALLY(ew, this, "SWAMP", Swamp.CREATE());
-      if (EventWindow.oneIn(3)) Wayfinding.SLIGHT_RIGHT(this);
+      if (EventWindow.oneIn(2)) {
+        Wayfinding.SLIGHT_RIGHT(this);
+      }
     }
   }
 }
