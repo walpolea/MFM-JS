@@ -4,7 +4,6 @@ import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow } from "../../mfm/EventWindow";
 import { Wayfinder } from "../../mfm/Wayfinder";
 import { Wall } from "../core/Wall";
-import { Swamp } from "./Swamp";
 
 export class Wanderer extends Element {
   //VARIANTS
@@ -12,14 +11,6 @@ export class Wanderer extends Element {
   static FLY = Wanderer.CREATOR({ name: "FLY", class: Wanderer, color: 0xccaaff, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
   static MOSQUITO = Wanderer.CREATOR({ name: "MOSQUITO", class: Wanderer, color: 0xccff55, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
   static BIRD = Wanderer.CREATOR({ name: "BIRD", class: Wanderer, color: 0x4a9bef, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
-
-  static SWAMPLING = Wanderer.CREATOR({
-    name: "SWAMPLING",
-    class: Wanderer,
-    color: 0x22cc88,
-    classifications: ["OFSWAMP", "DIRECTIONAL", "DIRECTABLE"],
-    groups: ["Swamp"],
-  });
 
   //SYSTEM ELEMENTS
   static BIRD_WING = Wall.CREATOR({ name: "BIRD WING", class: Wall, color: 0x3a8bdf, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE"] }, { lifeSpan: 2 });
@@ -62,8 +53,6 @@ export class Wanderer extends Element {
       this.behaveAsMosquito(ew);
     } else if (ew.selfIs("BIRD")) {
       this.behaveAsBird(ew);
-    } else if (ew.selfIs("SWAMPLING")) {
-      this.behaveAsSwampling(ew);
     } else {
       if (!this.state.heading) {
         Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
@@ -118,21 +107,6 @@ export class Wanderer extends Element {
         Wayfinding.REVERSE(this);
       } else if (EventWindow.oneIn(4)) {
         Wayfinding.SLIGHT_RANDOMLY(this);
-      }
-    }
-  }
-
-  behaveAsSwampling(ew: EventWindow) {
-    if (!this.state.heading) {
-      Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
-      const empties = ew.filterByType(EventWindow.ADJACENT8WAY, "EMPTY");
-      if (empties.length) {
-        ew.mutateMany(empties, Swamp.CREATE);
-      }
-    } else {
-      Wayfinding.MOVE_DIRECTIONALLY(ew, this, "SWAMP", Swamp.CREATE());
-      if (EventWindow.oneIn(2)) {
-        Wayfinding.SLIGHT_RIGHT(this);
       }
     }
   }

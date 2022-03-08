@@ -90,6 +90,19 @@ export class Wayfinding {
 
     return false;
   }
+
+  static SWAP_DIRECTIONALLY(ew: EventWindow, self: Element, types: string | string[] = "EMPTY"): boolean {
+    const { heading } = self.state;
+    if (heading) {
+      const travelTo: EWIndex = Wayfinder.getDirectionalMove(heading, true);
+
+      if (ew.is(travelTo, types)) {
+        return ew.swap(travelTo);
+      }
+    }
+
+    return false;
+  }
   static DIRECT(ew: EventWindow, s: EWIndex, heading: Direction): boolean {
     const { atom } = ew.getSite(s);
     if (atom && atom.state.heading) {
