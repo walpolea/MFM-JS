@@ -1,6 +1,8 @@
 import { Decay } from "../../../capabilities/Decay";
 import { Element, IElementType } from "../../../mfm/Element";
 import { EventWindow } from "../../../mfm/EventWindow";
+import { Wall } from "../../core/Wall";
+import { Swampling } from "./Swampling";
 import { SwampWorker } from "./SwampWorker";
 
 export class Swamp extends Element {
@@ -12,6 +14,8 @@ export class Swamp extends Element {
     groups: ["Swamp"],
   });
 
+  static BOG = Wall.CREATOR({ name: "BOG", class: Wall, classifications: ["DECAYABLE"], color: 0x142606 }, { lifeSpan: 45 });
+
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
 
@@ -19,7 +23,7 @@ export class Swamp extends Element {
   }
 
   init() {
-    this.state.lifeSpan = this.state.lifeSpan ?? 10;
+    this.state.lifeSpan = this.state.lifeSpan ?? 90;
   }
 
   behave(ew: EventWindow) {
@@ -29,17 +33,20 @@ export class Swamp extends Element {
     const ofswamps = ew.filterByType(EventWindow.ADJACENT8WAY, "OFSWAMP");
     const swamps = ew.filterByType(EventWindow.ALLADJACENT, "SWAMP");
 
-    if (swamps.length === EventWindow.ALLADJACENT.length) {
+    if (!this.state.made && swamps.length === EventWindow.ALLADJACENT.length) {
+      this.state.made = true;
       ew.mutate(0, SwampWorker.CREATE);
       return;
     }
 
     if (swamplings.length > 0) {
       this.state.age = 0;
-      if (EventWindow.oneIn(4)) this.grow(ew);
+      if (EventWindow.oneIn(6)) this.grow(ew);
     } else {
       if (ew.selfIs("DECAYABLE") && ofswamps.length < 7) {
-        Decay.DECAY(ew, this, this.state.lifeSpan);
+        if (Decay.DECAY(ew, this, this.state.lifeSpan)) {
+          ew.mutate(0, Swamp.BOG);
+        }
       } else {
         this.state.age = 0;
       }
@@ -47,11 +54,11 @@ export class Swamp extends Element {
   }
 
   grow(ew: EventWindow) {
-    const empties = ew.filterByType(EventWindow.ADJACENT8WAY, "EMPTY");
+    const empties = ew.filterByType(EventWindow.ADJACENT4WAY, "EMPTY");
 
     if (empties.length) {
       // ew.mutateMany(empties, this.TYPE.CREATE);
-      ew.mutate(ew.random(empties), this.TYPE.CREATE, [{}, {}]);
+      ew.mutate(ew.random(empties), this.TYPE.CREATE);
     }
   }
 }

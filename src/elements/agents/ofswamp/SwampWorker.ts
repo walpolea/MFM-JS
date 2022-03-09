@@ -10,6 +10,8 @@ export class SwampWorker extends Element {
     symbol: "SWK",
     class: SwampWorker,
     color: 0x03460f,
+    // color: 0x3d5b31,
+    // color: 0x3d6242,
     classifications: ["OFSWAMP", "DIRECTIONAL", "SWAMPLING"],
     groups: ["Swamp"],
   });
@@ -24,7 +26,7 @@ export class SwampWorker extends Element {
     const swampworkers = ew.filterByType(EventWindow.ADJACENT8WAY, "SWAMP WORKER");
     const ofswamps = ew.filterByType(EventWindow.ALLADJACENT, "OFSWAMP");
 
-    if (ofswamps.length < EventWindow.ALLADJACENT.length) {
+    if (ofswamps.length < EventWindow.ALLADJACENT.length * 0.4) {
       ew.mutate(0, Swamp.CREATE);
       return;
     }

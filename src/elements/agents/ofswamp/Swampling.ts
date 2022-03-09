@@ -40,10 +40,6 @@ export class Swampling extends Element {
       if (EventWindow.oneIn(1.5)) {
         Wayfinding.SLIGHT_RIGHT(this);
       }
-
-      // if (!Wayfinding.MOVE_DIRECTIONALLY(ew, this, "SWAMP", Swamp.CREATE())) {
-      //   Wayfinding.VEER_RIGHT(this);
-      // }
     }
   }
 }

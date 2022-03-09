@@ -12,6 +12,14 @@ export class Wanderer extends Element {
   static MOSQUITO = Wanderer.CREATOR({ name: "MOSQUITO", class: Wanderer, color: 0xccff55, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
   static BIRD = Wanderer.CREATOR({ name: "BIRD", class: Wanderer, color: 0x4a9bef, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
 
+  static SWAMPDATA = Wanderer.CREATOR({
+    name: "SWAMP DATA",
+    class: Wanderer,
+    color: 0x542300,
+    classifications: ["OFSWAMP", "DIRECTIONAL", "DIRECTABLE"],
+    groups: ["Swamp"],
+  });
+
   //SYSTEM ELEMENTS
   static BIRD_WING = Wall.CREATOR({ name: "BIRD WING", class: Wall, color: 0x3a8bdf, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE"] }, { lifeSpan: 2 });
   static FLY_TAIL = Wall.CREATOR({ name: "FLY TAIL", class: Wall, color: 0x991144, classifications: ["DECAYABLE"] }, { lifeSpan: 10 });
@@ -53,6 +61,8 @@ export class Wanderer extends Element {
       this.behaveAsMosquito(ew);
     } else if (ew.selfIs("BIRD")) {
       this.behaveAsBird(ew);
+    } else if (ew.selfIs("SWAMP DATA")) {
+      this.behaveAsSwampData(ew);
     } else {
       if (!this.state.heading) {
         Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
@@ -106,6 +116,23 @@ export class Wanderer extends Element {
       if (!Wayfinding.MOVE_DIRECTIONALLY(ew, this, "EMPTY")) {
         Wayfinding.REVERSE(this);
       } else if (EventWindow.oneIn(4)) {
+        Wayfinding.SLIGHT_RANDOMLY(this);
+      }
+    }
+  }
+
+  behaveAsSwampData(ew: EventWindow) {
+    if (!this.state.heading) {
+      Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
+    } else {
+      const empty = ew.filter(Wayfinder.getInFront(this.state.heading), "EMPTY");
+
+      if (empty.length) {
+        Wayfinding.REVERSE(this);
+      }
+
+      if (EventWindow.oneIn(10)) {
+        Wayfinding.SWAP_DIRECTIONALLY(ew, this, "SWAMP");
         Wayfinding.SLIGHT_RANDOMLY(this);
       }
     }

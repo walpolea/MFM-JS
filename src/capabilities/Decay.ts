@@ -14,20 +14,15 @@ export class Decay {
     };
   }
 
-  static DECAY(ew: EventWindow, self: Element, lifeSpan: number, deathChance: number = 1) {
+  static DECAY(ew: EventWindow, self: Element, lifeSpan: number, deathChance: number = 1): boolean {
     const { age } = self.state;
 
     if (age > lifeSpan) {
       if (EventWindow.oneIn(deathChance)) {
         ew.destroy();
+        return true;
       }
     }
-  }
-
-  static FAR_NORTH(ew: EventWindow, repelType: string | string[], escapeType: string | string[] = "EMPTY"): boolean {
-    if (EventWindow.oneIn(5) && ew.is(3, repelType) && ew.is(10, escapeType)) {
-      ew.swap(10);
-    }
-    return true;
+    return false;
   }
 }
