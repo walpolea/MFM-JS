@@ -65,6 +65,15 @@ export class PixiRenderer implements IRenderer {
     this.initializePIXI();
     this.initializeVisuals();
 
+    const subs = this.calculateSubdivisions();
+    this.setSubdivisions(subs);
+
+    this.initializeClickArea();
+
+    this.startRendering();
+  }
+
+  calculateSubdivisions(): number {
     let subs = Math.sqrt(this.tileWidth) * 0.25;
 
     if ((this.tileWidth / subs) % 1 !== 0) {
@@ -75,11 +84,11 @@ export class PixiRenderer implements IRenderer {
       } while ((this.tileWidth / subs) % 1 !== 0);
     }
 
-    this.setSubdivisions(subs);
+    if (subs < 1) {
+      subs = 1;
+    }
 
-    this.initializeClickArea();
-
-    this.startRendering();
+    return subs;
   }
 
   setSubdivisions(subs: number) {
@@ -169,25 +178,10 @@ export class PixiRenderer implements IRenderer {
   render() {
     // console.time();
 
-    //   let d,
-    //     div = 0,
-    //     i = 0,
-    //     j = 0,
-    //     t = this.gridDivisionTotal,
-    //     rs = this.renderSpeed;
-    //   for (div; div < t; div++) {
-    //     d = this.gridDivisions[div];
-    //     i = 0;
-    //     for (i; i < rs; i++) {
-    //       const { atom, ew } = this.tile.getRandomSiteInRangeSeeded(d);
-    //       atom.behave(ew);
-    //     }
-    //   }
-
     let i = 0,
       j = 0,
       rs = this.fixedRenderSpeed;
-    for (let i = 0; i < rs; i++) {
+    for (i; i < rs; i++) {
       const { atom, ew } = this.tile.getRandomSiteSeeded();
       atom.behave(ew);
     }
