@@ -67,7 +67,7 @@ export abstract class Element implements IElement {
 
   initializeState(state?: any) {
     this.state = {};
-    this.wr("age", 0);
+    this.wr("age", state.age ?? 0);
     this.wr("color", this.TYPE.color ?? 0xffffff);
     this.state = state ? { ...this.state, ...state } : { ...this.state };
   }
