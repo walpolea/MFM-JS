@@ -15,9 +15,9 @@ export class AntiForkBomb extends Element {
     const forkbombs = ew.filterByType(EventWindow.ADJACENT8WAY, "FORKBOMB");
 
     if (forkbombs.length) {
-      ew.mutateMany(forkbombs, AntiForkBomb.CREATE, [{ color: (this.rd("color") + 2048) % 0xffffff }, {}]); // EventWindow.RANDOM(EventWindow.ADJACENT4WAY), AntiForkBomb.CREATE({ color: (this.rd("color") + 512) % 0xffffff }));
+      ew.mutateMany(forkbombs, AntiForkBomb.CREATE, [{ color: (this.rd("color") + 2048) % 0xffffff }, {}]);
     }
 
-    Decay.DECAY(ew, this, 10);
+    Decay.DECAY(ew, this, 50);
   }
 }

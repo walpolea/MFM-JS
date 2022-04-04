@@ -1,10 +1,8 @@
-import { Repel } from "../../capabilities/Repel";
 import { Wayfinding } from "../../capabilities/Wayfinding";
 import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow } from "../../mfm/EventWindow";
 import { Wayfinder } from "../../mfm/Wayfinder";
 import { AntiForkBomb } from "../core/AntiForkBomb";
-import { Wall } from "../core/Wall";
 
 export class Sentry extends Element {
   //VARIANTS
@@ -30,7 +28,7 @@ export class Sentry extends Element {
     const forkbombs = ew.filter(EventWindow.ALLADJACENT, "FORKBOMB", true);
 
     if (forkbombs.length) {
-      ew.mutate(forkbombs[0], AntiForkBomb.CREATE); // EventWindow.RANDOM(EventWindow.ADJACENT4WAY), AntiForkBomb.CREATE({ color: (this.rd("color") + 512) % 0xffffff }));
+      ew.mutate(forkbombs[0], AntiForkBomb.CREATE);
     }
   }
 }
