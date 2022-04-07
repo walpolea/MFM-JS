@@ -147,7 +147,7 @@
       <li v-for="(group,key) in elements" class="element-btn-group">
         <h3>{{key}}</h3>
         <button class="element-btn" :class="{active:$el === activeEl}" v-for="e in group"
-          @click="setActiveElement($el, e)">
+          @click="setActiveElement($el, e)" :ref="e.name">
           {{e.name}}
         </button>
       </li>
@@ -187,6 +187,9 @@
         },
         clearType: (type) => {
           t.clear(type);
+        },
+        add: (atomizer, x, y) => {
+          t.add(atomizer, x, y);
         }
       },
       grid: undefined,
@@ -194,6 +197,69 @@
       mounted() {
         this.init(256, 128);
         this.BrushSize = this.brushSize;
+
+        this.setActiveElementByName("EMPTY");
+
+        this.processParams();
+      },
+      findElement(name) {
+        return ElementRegistry.getType(name);
+      },
+      processParams() {
+        let params = new URLSearchParams(document.location.search);
+
+        const possibleKeys = ["size", "atoms", "speed", "selected"]
+
+        if (params.get('size')) {
+          const [w, h] = params.get('size').split(',').map(v => parseInt(v));
+
+          if (w && h && w > 0 && h > 0 && w < 513 && h < 513) {
+            this.setGridSize(params.get('size'));
+          }
+        }
+
+        if (params.get('atoms')) {
+          const atoms = params.get('atoms').split(',').map(a => {
+            const atomData = a.split('-'); // "TYPE-x-y"
+
+
+            return {
+              type: atomData[0].toUpperCase(),
+              x: Math.min(t.width - 1, parseInt(atomData[1] ?? 0)),
+              y: Math.min(t.height - 1, parseInt(atomData[2] ?? 0))
+            }
+          });
+
+          console.log(atoms);
+
+          atoms.forEach(a => {
+            if (this.findElement(a.type)) {
+              this.tile.add(this.findElement(a.type).CREATE, a.x, a.y);
+            }
+          })
+
+        }
+
+        if (params.get('speed')) {
+          const rs = parseFloat(params.get('speed'))
+          if (rs !== undefined && rs >= 0 && rs <= 20) {
+            this.RenderSpeed = rs;
+          }
+        }
+
+        if (params.get('selected')) {
+          const sel = params.get('selected').toUpperCase()
+          if (sel) {
+            this.setActiveElementByName(sel);
+          }
+        }
+
+        if (params.get('brush')) {
+          const b = parseInt(params.get('brush'))
+          if (b !== undefined && b >= 1 && b <= 5) {
+            this.BrushSize = b;
+          }
+        }
       },
       init(w, h) {
         t = new Tile(w, h);
@@ -220,6 +286,11 @@
       },
       get BrushSize() {
         return +this.brushSize;
+      },
+      setActiveElementByName(name) {
+        if (this.findElement(name)) {
+          this.setActiveElement(this.$refs[name], this.findElement(name));
+        }
       },
       setActiveElement($el, e) {
         this.grid.curSelectedElementFunction = e.CREATE;

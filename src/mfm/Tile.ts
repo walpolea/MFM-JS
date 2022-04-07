@@ -89,6 +89,16 @@ export class Tile {
     this.sitesArray = Array.from(this.sites.values());
   }
 
+  add(atomizer, x = 0, y = 0) {
+    if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
+      const atom = atomizer();
+      let site: Site = this.getSiteByCoordinate({ x, y });
+      if (site) {
+        site.atom = atom;
+      }
+    }
+  }
+
   clear(t: string = undefined) {
     if (t) {
       this.sites.forEach((s) => {

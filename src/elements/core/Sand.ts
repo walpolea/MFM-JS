@@ -22,6 +22,10 @@ export class Sand extends Element {
     groups: ["Environment"],
   });
 
+  static GREEN_SAND = Sand.CREATOR({ name: "GREEN SAND", class: Sand, color: 0x8ac926, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] });
+  static BLUE_SAND = Sand.CREATOR({ name: "BLUE SAND", class: Sand, color: 0x1982c4, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] });
+  static PURPLE_SAND = Sand.CREATOR({ name: "PURPLE SAND", class: Sand, color: 0x6a4c93, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] });
+
   static SAND_GRID = Builder.CREATOR(
     { name: "SAND GRID", class: Builder, color: 0x121112, groups: ["Environment"] },
     { buildPath: EventWindow.DIAGONAL4WAY, atomizer: Sand.CREATE, totalSteps: 40 }
@@ -35,9 +39,7 @@ export class Sand extends Element {
     this.init();
   }
 
-  init() {
-    this.classifyAs("SAND");
-  }
+  init() {}
 
   behave(ew: EventWindow) {
     super.behave(ew);
