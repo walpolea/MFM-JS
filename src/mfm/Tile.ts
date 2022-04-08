@@ -108,9 +108,11 @@ export class Tile {
           atomMap[s.atom.TYPE.name] += `-${s.location.coordinate.x}x${s.location.coordinate.y}`;
         } else {
           atomMap[s.atom.TYPE.name] = `${s.atom.TYPE.name}`;
+          atomMap[s.atom.TYPE.name] += `-${s.location.coordinate.x}x${s.location.coordinate.y}`;
         }
       });
 
+    console.log(atomMap);
     return Object.values(atomMap);
   }
 
