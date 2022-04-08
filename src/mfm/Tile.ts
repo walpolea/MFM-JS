@@ -99,6 +99,21 @@ export class Tile {
     }
   }
 
+  exportAtoms() {
+    const atomMap = {};
+    Array.from(this.sites.values())
+      .filter((s) => !s.atom.is("EMPTY"))
+      .forEach((s) => {
+        if (atomMap[s.atom.TYPE.name]) {
+          atomMap[s.atom.TYPE.name] += `-${s.location.coordinate.x}x${s.location.coordinate.y}`;
+        } else {
+          atomMap[s.atom.TYPE.name] = `${s.atom.TYPE.name}`;
+        }
+      });
+
+    return Object.values(atomMap);
+  }
+
   clear(t: string = undefined) {
     if (t) {
       this.sites.forEach((s) => {

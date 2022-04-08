@@ -142,16 +142,6 @@
       <input style="width:auto;" type="range" min="1" max="5" value="1" step="1" v-model="BrushSize">
     </label>
 
-
-    <ul class="element-btns">
-      <li v-for="(group,key) in elements" class="element-btn-group">
-        <h3>{{key}}</h3>
-        <button class="element-btn" :class="{active:$el === activeEl}" v-for="e in group"
-          @click="setActiveElement($el, e)" :ref="e.name">
-          {{e.name}}
-        </button>
-      </li>
-    </ul>
     <label>
       <span>Grid size:</span>
       <select @change="setGridSize($event.target.value);">
@@ -166,6 +156,18 @@
     </label>
     <button @click="tile.clear()">CLEAR GRID</button>
     <button @click="tile.clearType( activeType );">CLEAR TYPE</button>
+    <button @click="createLink">COPY LINK TO CURRENT GRID STATE</button>
+
+    <ul class="element-btns">
+      <li v-for="(group,key) in elements" class="element-btn-group">
+        <h3>{{key}}</h3>
+        <button class="element-btn" :class="{active:$el === activeEl}" v-for="e in group"
+          @click="setActiveElement($el, e)" :ref="e.name">
+          {{e.name}}
+        </button>
+      </li>
+    </ul>
+
 
 
   </div>
@@ -190,6 +192,9 @@
         },
         add: (atomizer, x, y) => {
           t.add(atomizer, x, y);
+        },
+        exportAtoms: () => {
+          return t.exportAtoms();
         }
       },
       grid: undefined,
@@ -207,8 +212,7 @@
       },
       processParams() {
         let params = new URLSearchParams(document.location.search);
-
-        const possibleKeys = ["size", "atoms", "speed", "selected"]
+        const possibleKeys = ["size", "atoms", "speed", "selected"];
 
         if (params.get('size')) {
           const [w, h] = params.get('size').split(',').map(v => parseInt(v));
@@ -220,13 +224,19 @@
 
         if (params.get('atoms')) {
           const atoms = params.get('atoms').split(',').map(a => {
-            const atomData = a.split('-'); // "TYPE-x-y"
+            const atomData = a.split('-'); // "TYPE-{X}x{Y}-{X}x{Y}-{X}x{Y}"
 
+            const type = atomData[0].toUpperCase();
+            const coords = atomData.slice(1).map(c => {
+              const [x, y] = c.split('x').map(v => parseInt(v));
+              return {
+                x, y
+              }
+            })
 
             return {
-              type: atomData[0].toUpperCase(),
-              x: Math.min(t.width - 1, parseInt(atomData[1] ?? 0)),
-              y: Math.min(t.height - 1, parseInt(atomData[2] ?? 0))
+              type,
+              coords
             }
           });
 
@@ -234,9 +244,11 @@
 
           atoms.forEach(a => {
             if (this.findElement(a.type)) {
-              this.tile.add(this.findElement(a.type).CREATE, a.x, a.y);
+              a.coords.forEach(c => {
+                this.tile.add(this.findElement(a.type).CREATE, c.x, c.y);
+              });
             }
-          })
+          });
 
         }
 
@@ -261,6 +273,21 @@
           }
         }
       },
+      createLink() {
+
+        const atoms = `atoms=${this.tile.exportAtoms().join()}`;
+        const size = `size=${t.width},${t.height}`;
+        const speed = `speed=${this.RenderSpeed}`;
+        const selected = `selected=${this.activeType.name}`;
+
+        const link = `${window.location.origin}${window.location.pathname ?? ''}?${size}&${speed}&${selected}&${atoms}`;
+
+        console.log(link);
+
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link);
+        }
+      },
       init(w, h) {
         t = new Tile(w, h);
         this.grid = new PixiRenderer(t, 1800, 1800 * (t.height / t.width));
@@ -277,7 +304,7 @@
         this.grid.setRenderMultiplier(this.renderSpeed);
       },
       get RenderSpeed() {
-        return this.renderSpeed
+        return this.renderSpeed;
       },
 
       set BrushSize(bs) {
@@ -308,6 +335,8 @@
         this.grid.deconstruct();
         this.init(v[0], v[1]);
         this.setActiveElement(this.activeEl, this.activeType);
+        this.RenderSpeed = this.renderSpeed;
+        this.BrushSize = this.brushSize;
       }
 
 
