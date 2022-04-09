@@ -7,9 +7,6 @@ import { Wayfinder } from "../../mfm/Wayfinder";
 export class Bein extends Element {
   static CREATE = Bein.CREATOR({ name: "BEIN", symbol: "BNG", class: Bein, color: 0xbe146f, groups: ["MFM"] });
 
-  static ATTRACT_SELF = Repel.MAKE_ATTRACTOR("BEIN", [...EventWindow.LAYER3, ...EventWindow.LAYER4]);
-  static ATTRACT_DIRECTIONAL = Repel.MAKE_ATTRACTOR("WALL");
-
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
 
@@ -20,9 +17,5 @@ export class Bein extends Element {
 
   behave(ew: EventWindow) {
     super.behave(ew);
-
-    if (!Bein.ATTRACT_DIRECTIONAL(ew, this)) {
-      Bein.ATTRACT_SELF(ew, this);
-    }
   }
 }
