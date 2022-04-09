@@ -1,5 +1,6 @@
 import { Element } from "../mfm/Element";
 import { EventWindow, EWIndex } from "../mfm/EventWindow";
+import { Wayfinder } from "../mfm/Wayfinder";
 
 export class Repel {
   static NAME: string = "REPEL";
@@ -106,6 +107,26 @@ export class Repel {
         });
 
         return moved;
+      }
+
+      return false;
+    };
+  }
+
+  static MAKE_ATTRACTOR(_attractTypes: string | string[], view: EWIndex[] = EventWindow.ALLADJACENT) {
+    return (ew: EventWindow, self: Element): boolean => {
+      const attractTypes = self.state.attractTypes ?? _attractTypes;
+      const swapTypes = self.state.swapTypes ?? ["EMPTY"];
+
+      const attractors: EWIndex[] = ew.filter(view, attractTypes);
+
+      if (attractors.length) {
+        const towardIndexes: EWIndex[] = Wayfinder.getInFront(Wayfinder.indexToDirection(EventWindow.RANDOM(attractors)), true);
+        const swapDests: EWIndex[] = ew.filter(towardIndexes, swapTypes);
+
+        if (swapDests.length) {
+          return ew.swap(swapDests[0]);
+        }
       }
 
       return false;

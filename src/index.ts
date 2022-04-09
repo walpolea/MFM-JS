@@ -18,6 +18,7 @@ export { LivingWall } from "./elements/agents/LivingWall";
 export { Sand } from "./elements/core/Sand";
 export { Water } from "./elements/core/Water";
 export { Builder } from "./elements/core/Builder";
+export { Goop } from "./elements/core/Goop";
 export { Looper } from "./elements/agents/Looper";
 export { Bein } from "./elements/agents/Bein";
 export { Wanderer } from "./elements/agents/Wanderer";

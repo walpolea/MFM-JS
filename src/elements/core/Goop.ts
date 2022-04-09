@@ -4,11 +4,10 @@ import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow } from "../../mfm/EventWindow";
 import { Wayfinder } from "../../mfm/Wayfinder";
 
-export class Bein extends Element {
-  static CREATE = Bein.CREATOR({ name: "BEIN", symbol: "BNG", class: Bein, color: 0xbe146f, groups: ["MFM"] });
+export class Goop extends Element {
+  static CREATE = Goop.CREATOR({ name: "GOOP", symbol: "GOP", class: Goop, color: 0x5492a2, groups: ["MFM"] });
 
-  static ATTRACT_SELF = Repel.MAKE_ATTRACTOR("BEIN", [...EventWindow.LAYER3, ...EventWindow.LAYER4]);
-  static ATTRACT_DIRECTIONAL = Repel.MAKE_ATTRACTOR("WALL");
+  static ATTRACT = Repel.MAKE_ATTRACTOR(["GOOP", "WALL"], [...EventWindow.LAYER3, ...EventWindow.LAYER4]);
 
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
@@ -21,8 +20,6 @@ export class Bein extends Element {
   behave(ew: EventWindow) {
     super.behave(ew);
 
-    if (!Bein.ATTRACT_DIRECTIONAL(ew, this)) {
-      Bein.ATTRACT_SELF(ew, this);
-    }
+    Goop.ATTRACT(ew, this);
   }
 }

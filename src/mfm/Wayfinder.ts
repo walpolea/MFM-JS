@@ -61,6 +61,15 @@ export class Wayfinder {
   static NE_QUADRANT: EWIndex[] = [7, 17, 19, 27, 33, 35];
   static SE_QUADRANT: EWIndex[] = [8, 18, 20, 28, 34, 36];
 
+  static NNW_QUADRANT: EWIndex[] = [5, 15, 25, 31];
+  static WNW_QUADRANT: EWIndex[] = [5, 13, 25, 29];
+  static SSW_QUADRANT: EWIndex[] = [6, 16, 26, 32];
+  static WSW_QUADRANT: EWIndex[] = [6, 14, 26, 30];
+  static NNE_QUADRANT: EWIndex[] = [7, 17, 27, 33];
+  static ENE_QUADRANT: EWIndex[] = [7, 19, 27, 35];
+  static SSE_QUADRANT: EWIndex[] = [8, 18, 28, 34];
+  static ESE_QUADRANT: EWIndex[] = [8, 20, 28, 36];
+
   static DIRMAP_CLOCKWISE_PRIMARY: DirectionMap = new Map<Direction, Direction>([
     ["E", "S"],
     ["S", "W"],
@@ -201,6 +210,15 @@ export class Wayfinder {
     ["SW", Wayfinder.SW_QUADRANT],
     ["NE", Wayfinder.NE_QUADRANT],
     ["SE", Wayfinder.SE_QUADRANT],
+
+    ["WNW", Wayfinder.WNW_QUADRANT],
+    ["NNW", Wayfinder.NNW_QUADRANT],
+    ["NNE", Wayfinder.NNE_QUADRANT],
+    ["ENE", Wayfinder.ENE_QUADRANT],
+    ["WSW", Wayfinder.WSW_QUADRANT],
+    ["SSW", Wayfinder.SSW_QUADRANT],
+    ["SSE", Wayfinder.SSE_QUADRANT],
+    ["ESE", Wayfinder.ESE_QUADRANT],
   ]);
 
   static DIRECTIONS_BEHIND_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
@@ -231,6 +249,15 @@ export class Wayfinder {
     ["SW", Wayfinder.NE_QUADRANT],
     ["NE", Wayfinder.SW_QUADRANT],
     ["SE", Wayfinder.NW_QUADRANT],
+
+    ["WNW", Wayfinder.ESE_QUADRANT],
+    ["NNW", Wayfinder.SSE_QUADRANT],
+    ["NNE", Wayfinder.SSW_QUADRANT],
+    ["ENE", Wayfinder.WSW_QUADRANT],
+    ["WSW", Wayfinder.ENE_QUADRANT],
+    ["SSW", Wayfinder.NNE_QUADRANT],
+    ["SSE", Wayfinder.NNW_QUADRANT],
+    ["ESE", Wayfinder.WNW_QUADRANT],
   ]);
 
   static DIRECTIONS_LEFT_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
@@ -261,6 +288,14 @@ export class Wayfinder {
     ["SW", Wayfinder.SE_QUADRANT],
     ["NE", Wayfinder.NW_QUADRANT],
     ["SE", Wayfinder.NE_QUADRANT],
+    ["WNW", Wayfinder.SSW_QUADRANT],
+    ["NNW", Wayfinder.WSW_QUADRANT],
+    ["NNE", Wayfinder.WNW_QUADRANT],
+    ["ENE", Wayfinder.NNW_QUADRANT],
+    ["WSW", Wayfinder.SSE_QUADRANT],
+    ["SSW", Wayfinder.ESE_QUADRANT],
+    ["SSE", Wayfinder.ENE_QUADRANT],
+    ["ESE", Wayfinder.NNE_QUADRANT],
   ]);
 
   static DIRECTIONS_RIGHT_MAP: Map<Direction, EWIndex[]> = new Map<Direction, EWIndex[]>([
@@ -291,6 +326,14 @@ export class Wayfinder {
     ["SW", Wayfinder.NW_QUADRANT],
     ["NE", Wayfinder.SE_QUADRANT],
     ["SE", Wayfinder.SW_QUADRANT],
+    ["WNW", Wayfinder.ESE_QUADRANT],
+    ["NNW", Wayfinder.SSE_QUADRANT],
+    ["NNE", Wayfinder.SSW_QUADRANT],
+    ["ENE", Wayfinder.WSW_QUADRANT],
+    ["WSW", Wayfinder.ENE_QUADRANT],
+    ["SSW", Wayfinder.NNE_QUADRANT],
+    ["SSE", Wayfinder.NNW_QUADRANT],
+    ["ESE", Wayfinder.WNW_QUADRANT],
   ]);
 
   static INDEX_DIRECTION_MAP: Map<number, Direction> = new Map<EWIndex, Direction>([

@@ -2,13 +2,13 @@ import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow } from "../../mfm/EventWindow";
 
 export class LivingWall extends Element {
-  static CREATE = LivingWall.CREATOR({ name: "LIVING WALL", class: LivingWall, color: 0x2255aa, groups: ["Environment", "MFM"] });
+  static CREATE = LivingWall.CREATOR({ name: "LIVING WALL", class: LivingWall, color: 0x2255aa, groups: ["Structural", "MFM"] });
   static MOVABLE_LIVING_WALL = LivingWall.CREATOR({
     name: "MOVABLE LIVING WALL",
     class: LivingWall,
     color: 0x2255aa,
     classifications: ["MOVABLE", "LIVING WALL"],
-    groups: ["Environment", "MFM"],
+    groups: ["Structural", "MFM"],
   });
 
   constructor(type: IElementType, state: any = {}) {
