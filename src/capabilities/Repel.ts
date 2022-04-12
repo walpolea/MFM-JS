@@ -95,14 +95,14 @@ export class Repel {
         let moved = false;
         repellers.forEach((target) => {
           if (!moved) {
-            const toSite: EWIndex = repelMap[target];
+            // const toSite: EWIndex = repelMap[target];
             //try to avoid in the opposing direction
-            if (emptyDests.includes(toSite)) {
-              moved = ew.move(toSite);
-            } else {
-              //otherwise just avoid it anywhere available in the toSet!
-              moved = ew.move(EventWindow.RANDOM(emptyDests));
-            }
+            // if (emptyDests.includes(toSite)) {
+            // moved = ew.move(toSite);
+            // } else {
+            //otherwise just avoid it anywhere available in the toSet!
+            moved = ew.move(EventWindow.RANDOM(emptyDests));
+            // }
           }
         });
 
@@ -121,11 +121,15 @@ export class Repel {
       const attractors: EWIndex[] = ew.filter(view, attractTypes);
 
       if (attractors.length) {
-        const towardIndexes: EWIndex[] = Wayfinder.getInFront(Wayfinder.indexToDirection(EventWindow.RANDOM(attractors)), true);
+        const attractor = EventWindow.RANDOM(attractors);
+        const towardIndexes: EWIndex[] = Wayfinder.getInFront(Wayfinder.indexToDirection(attractor), true);
         const swapDests: EWIndex[] = ew.filter(towardIndexes, swapTypes);
 
         if (swapDests.length) {
+          //sort by nearest index to the target attractor
+          swapDests.sort((a, b) => Math.abs(attractor - a) - Math.abs(attractor - b));
           return ew.swap(swapDests[0]);
+          // return ew.swap(EventWindow.RANDOM(swapDests));
         }
       }
 

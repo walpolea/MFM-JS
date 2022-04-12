@@ -21,9 +21,12 @@ export class Wanderer extends Element {
   });
 
   //SYSTEM ELEMENTS
-  static BIRD_WING = Wall.CREATOR({ name: "BIRD WING", class: Wall, color: 0x3a8bdf, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE"] }, { lifeSpan: 2 });
-  static FLY_TAIL = Wall.CREATOR({ name: "FLY TAIL", class: Wall, color: 0x991144, classifications: ["DECAYABLE"] }, { lifeSpan: 10 });
-  static MOSQUITO_TAIL = Wall.CREATOR({ name: "MOSQUITO TAIL", class: Wall, color: 0x557700, classifications: ["DECAYABLE"] }, { lifeSpan: 10 });
+  static BIRD_WING = Wall.CREATOR(
+    { name: "BIRD WING", class: Wall, color: 0x3a8bdf, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE", "TAIL"] },
+    { lifeSpan: 2 }
+  );
+  static FLY_TAIL = Wall.CREATOR({ name: "FLY TAIL", class: Wall, color: 0x991144, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 });
+  static MOSQUITO_TAIL = Wall.CREATOR({ name: "MOSQUITO TAIL", class: Wall, color: 0x557700, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 });
 
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
