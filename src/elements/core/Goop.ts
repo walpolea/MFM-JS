@@ -51,11 +51,11 @@ export class Goop extends Element {
 
     //stranded, alone, time to die.
     if (!ew.filterByType(EventWindow.ALLADJACENT, [...this.state.stickyType, "GOOP"]).length) {
-      this.state.aloneCount++;
-      if (this.state.aloneCount > 20) {
-        ew.destroy();
-        return;
-      }
+      // this.state.aloneCount++;
+      // if (this.state.aloneCount > 20) {
+      // ew.destroy();
+      // return;
+      // }
     }
 
     //attract, else avoid, else attract to self

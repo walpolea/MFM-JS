@@ -127,9 +127,9 @@ export class Repel {
 
         if (swapDests.length) {
           //sort by nearest index to the target attractor
-          swapDests.sort((a, b) => Math.abs(attractor - a) - Math.abs(attractor - b));
-          return ew.swap(swapDests[0]);
-          // return ew.swap(EventWindow.RANDOM(swapDests));
+          swapDests.sort((a, b) => Math.abs(attractor - a) - Math.abs(attractor - b)).slice(~~(swapDests.length / 2));
+          // return ew.swap(swapDests[0]);
+          return ew.swap(EventWindow.RANDOM(swapDests));
         }
       }
 
