@@ -379,7 +379,7 @@ export class Wayfinder {
     [40, "E"],
   ]);
 
-  static directionToIndex(dir: Direction, useSecondaryDirections: boolean = false): number {
+  static directionToIndex(dir: Direction, useSecondaryDirections: boolean = false): EWIndex {
     return Wayfinder.DIRECTIONS_INDEX_MAP.get(dir);
   }
 

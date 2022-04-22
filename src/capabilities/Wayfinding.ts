@@ -83,7 +83,7 @@ export class Wayfinding {
     if (heading) {
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(heading, true);
 
-      if (ew.is(travelTo, types)) {
+      if (types === "ANY" || ew.is(travelTo, types)) {
         return ew.move(travelTo, leavingAtom);
       }
     }
@@ -96,7 +96,7 @@ export class Wayfinding {
     if (heading) {
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(heading, true);
 
-      if (ew.is(travelTo, types)) {
+      if (types === "ANY" || ew.is(travelTo, types)) {
         return ew.swap(travelTo);
       }
     }
