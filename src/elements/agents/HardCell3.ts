@@ -27,13 +27,16 @@ export class HardCell3 extends Element {
   behave(ew: EventWindow) {
     super.behave(ew);
 
+    //intiial figure out hopCount
     if( this.state.hops === undefined ) {
       this.figureHops(ew);
       return;
     }
 
-    const empties = ew.filter( HardCell3.CELL_SITES, "EMPTY" );
+    this.figureHops(ew);
 
+    //grow if empties (this will change when we need to account for movement)
+    const empties = ew.filter( HardCell3.CELL_SITES, "EMPTY" );
     if( empties.length && this.state.hops < this.state.maxHops ) {
       ew.mutateMany( empties, HardCell3.CREATOR( this.TYPE, { maxHops: this.state.maxHops } ));
     }
@@ -52,13 +55,14 @@ export class HardCell3 extends Element {
 
     const neighbors = ew.filter( HardCell3.CELL_SITES, "HARDCELL3" );
 
-    if(neighbors.length === 0 ) {
+    if(neighbors.length === 0 || this.state.hops === 0) {
       this.state.hops = 0;
     } else {
 
       const neighborHops:EWIndex[] = neighbors.map( n => ew.getSite(n)?.atom.state.hops).filter( v => !isNaN(v) && v !== undefined );
+
       if( neighborHops.length ) {
-        this.state.hops = neighborHops.sort()[0] + 1;
+        this.state.hops = Math.min(...neighborHops) + 1;
       } else {
         return;
       }
@@ -68,6 +72,7 @@ export class HardCell3 extends Element {
     this.state.color = HardCell3.COLORS[this.state.hops % HardCell3.COLORS.length]
 
     console.log( this.state.hops );
+
     if( isNaN(this.state.hops) ) {
       ew.destroy();
     }
