@@ -231,6 +231,10 @@ export class EventWindow {
     return this.window[index] ?? undefined;
   }
 
+  getSites(indexes: EWIndex[]): Site[] {
+    return indexes.map( i => this.window[index] ?? undefined);
+  }
+
   //get indexes of subset (of type) and possible only 1 random of the result
   //extremely useful in searching the event window for circumstances of element types
   filter(subset: EWIndex[], type: string | string[] | IElementType | IElementType[] = undefined, oneRandom: boolean = false): EWIndex[] {

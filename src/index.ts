@@ -1,3 +1,5 @@
+import { HardCell3 } from "./elements/agents/HardCell3";
+
 //CORE MFM
 export { Tile } from "./mfm/Tile";
 export { Element } from "./mfm/Element";
@@ -28,3 +30,4 @@ export { Swamp } from "./elements/agents/ofswamp/Swamp";
 export { Swampling } from "./elements/agents/ofswamp/Swampling";
 export { SwampWorker } from "./elements/agents/ofswamp/SwampWorker";
 export { Sentry } from "./elements/agents/Sentry";
+export { HardCell3 } from "./elements/agents/HardCell3";

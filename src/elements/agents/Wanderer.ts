@@ -3,6 +3,7 @@ import { Wayfinding } from "../../capabilities/Wayfinding";
 import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow } from "../../mfm/EventWindow";
 import { Wayfinder } from "../../mfm/Wayfinder";
+import { Empty } from "../core/Empty";
 import { Wall } from "../core/Wall";
 
 export class Wanderer extends Element {
@@ -98,6 +99,8 @@ export class Wanderer extends Element {
       Wayfinding.MOVE_DIRECTIONALLY(ew, this, "EMPTY", Wanderer.MOSQUITO_TAIL());
       Wayfinding.SLIGHT_RANDOMLY(this);
     }
+
+    // this.blazeTrail(ew);
   }
 
   behaveAsBird(ew: EventWindow) {
@@ -138,6 +141,39 @@ export class Wanderer extends Element {
         Wayfinding.SWAP_DIRECTIONALLY(ew, this, "SWAMP");
         Wayfinding.SLIGHT_RANDOMLY(this);
       }
+    }
+  }
+
+
+  blazeTrail(ew:EventWindow) {
+    if( this.state.heading) {
+      const left = Wayfinder.getInFront( Wayfinder.turnLeft(this.state.heading) )[1];
+      const right = Wayfinder.getInFront( Wayfinder.turnRight(this.state.heading) )[1];
+
+      if( ew.is(left, "EMPTY") ) {
+        ew.mutate(left, Wall.MOVABLE_WALL );
+      } else if(   ew.is( left, "MOVABLE WALL") ) {
+        ew.mutate(left, Empty.CREATE );
+
+      }
+
+      if( ew.is(right, "EMPTY") ) {
+        ew.mutate(right, Wall.MOVABLE_WALL );
+      }else if(   ew.is( right, "MOVABLE WALL") ) {
+        ew.mutate(right, Empty.CREATE );
+
+      }
+
+      // const left = ew.filter( Wayfinder.getInFront( Wayfinder.turnLeft(this.state.heading)), "EMPTY" );
+      // const right = ew.filter( Wayfinder.getInFront( Wayfinder.turnRight(this.state.heading)), "EMPTY" );
+
+      // if( left.length ) {
+      //   ew.mutateMany(left, Wall.MOVABLE_WALL );
+      // }
+
+      // if( right.length ) {
+      //   ew.mutateMany(right, Wall.MOVABLE_WALL );
+      // }
     }
   }
 }
