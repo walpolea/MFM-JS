@@ -21,31 +21,21 @@ export class HardCell3 extends Element {
   }
 
   init() {
-    this.state.maxHops = 5;
-    this.state.hops = this.state.hops ?? 0;
-    this.state.color = HardCell3.COLORS[this.state.hops]
+    this.state.maxHops = this.state.maxHops ?? 16;
   }
 
   behave(ew: EventWindow) {
     super.behave(ew);
 
-    //initial Make
-    if( this.state.age === 1 && this.state.hops < this.state.maxHops ) {
-
-      const empties = ew.filter( HardCell3.CELL_SITES, "EMPTY" );
-      ew.mutateMany( empties, HardCell3.CREATOR( this.TYPE, { hops: this.state.hops+1 }));
+    if( this.state.hops === undefined ) {
+      this.figureHops(ew);
+      return;
     }
 
-    //check if need to grow
-    else if( this.state.hops < this.state.maxHops ) {
-      const downstreams = this.downstreams(ew);
-      // const hopsLeft = this.state.maxHops - this.state.hops;
+    const empties = ew.filter( HardCell3.CELL_SITES, "EMPTY" );
 
-      if( downstreams.length < HardCell3.CELL_SITES.length ) {
-        const empties = HardCell3.CELL_SITES.filter( i => !downstreams.includes(i) );
-        ew.mutateMany( empties, HardCell3.CREATOR( this.TYPE, { hops: this.state.hops+1 }));
-      }
-
+    if( empties.length && this.state.hops < this.state.maxHops ) {
+      ew.mutateMany( empties, HardCell3.CREATOR( this.TYPE, { maxHops: this.state.maxHops } ));
     }
 
     if( this.isRoot() ) {
@@ -56,6 +46,31 @@ export class HardCell3 extends Element {
 
     }
 
+  }
+
+  figureHops(ew:EventWindow) {
+
+    const neighbors = ew.filter( HardCell3.CELL_SITES, "HARDCELL3" );
+
+    if(neighbors.length === 0 ) {
+      this.state.hops = 0;
+    } else {
+
+      const neighborHops:EWIndex[] = neighbors.map( n => ew.getSite(n)?.atom.state.hops).filter( v => !isNaN(v) && v !== undefined );
+      if( neighborHops.length ) {
+        this.state.hops = neighborHops.sort()[0] + 1;
+      } else {
+        return;
+      }
+
+    }
+
+    this.state.color = HardCell3.COLORS[this.state.hops % HardCell3.COLORS.length]
+
+    console.log( this.state.hops );
+    if( isNaN(this.state.hops) ) {
+      ew.destroy();
+    }
 
   }
 
