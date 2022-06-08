@@ -1,3 +1,4 @@
+import { Wayfinding } from "../../capabilities/Wayfinding";
 import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow, EWIndex } from "../../mfm/EventWindow";
 import { Direction } from "../../mfm/Wayfinder";
@@ -40,7 +41,7 @@ export class HardCell3 extends Element {
     [ 39, "S" ],
   ]);
 
-  static COLORS = [ 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0x4b0082, 0x940d3 ]
+  static COLORS = [ 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0x4b0082, 0x940d3 ];
 
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
@@ -50,38 +51,81 @@ export class HardCell3 extends Element {
 
   init() {
     this.state.maxHops = this.state.maxHops ?? 8;
+    this.state.stasus = false;
   }
 
   behave(ew: EventWindow) {
     super.behave(ew);
 
+    this.state.stasus = this.hasStasus(ew);
+
     //figure out hopCount
-    if( this.state.hops === undefined || EventWindow.oneIn(2)) {
+    if( this.state.hops === undefined || this.hasBadStructure(ew) ) {
       this.figureHops(ew);
       return;
     }
 
-    //grow if empties (this will change when we need to account for movement)
-    if( !this.isEnd() ) {
+    //check for movement
+    if( !this.isRoot() ) {
+
+      const dir = this.shouldMove(ew);
+      if( dir ) {
+        const moved = Wayfinding.MOVE_IN_DIRECTION( ew, this, dir );
+        return;
+      }
+    }
+
+    //grow if empties
+    //would like this to happen more than once (for regrowth)
+    if( !this.state.grew && !this.isEnd() && !this.shouldMove(ew) ) {
       const empties = ew.filter( HardCell3.CELL_SITES, "EMPTY" );
       if( empties.length ) {
         ew.mutateMany( empties, HardCell3.CREATOR( this.TYPE, { maxHops: this.state.maxHops } ));
       }
+      this.state.grew = true;
     }
 
-    if( this.isRoot() ) {
+    if( this.isRoot() && this.state.stasus ) {
 
-      // EventWindow.oneIn(100) {
-      //   ew.swap( EventWindow.RANDOM( HardCell3.CELL_WANDER_MAP.get(0) ), 0 );
-      // }
+      if( EventWindow.oneIn(2) && this.canMove(ew) ) {
+        ew.swap( EventWindow.RANDOM( HardCell3.CELL_WANDER_MAP.get(0) ), 0 );
+      }
 
     }
 
   }
 
+  //stasus means you have all 4 HardCell3's surrounding you if you're not the end
+  //AND all upstream HardCell3's are also in stasus
+  hasStasus( ew:EventWindow ):Boolean {
+
+    if( this.isEnd() ) {
+      return true;
+    }
+
+    const neighbors = this.neighbors(ew);
+    
+    if( neighbors.length !== HardCell3.CELL_SITES.length) {
+      return false;
+    }
+    
+    const neighborStasus = this.upstreams(ew).map( n => ew.getSite(n).atom.state.stasus ?? false ).some( v => !v );
+    return !neighborStasus;
+
+  }
+
+  //bad structure is if the neighbors have too high or low or no hop count
+  hasBadStructure( ew :EventWindow ):Boolean {
+    const neighborHops = this.neighbors(ew).map( n => ew.getSite(n).atom.state.hops );
+    const badStructure = neighborHops.some( h => h === undefined ) || neighborHops.some( h => h > this.state.hops+1 ) || neighborHops.some( h => h < this.state.hops-1 );
+
+    return badStructure;
+  }
+
+
   figureHops(ew:EventWindow) {
 
-    const neighbors = ew.filter( HardCell3.CELL_SITES, "HARDCELL3" );
+    const neighbors = this.neighbors(ew);
     
     if(neighbors.length === 0 || this.state.hops === 0 ) {
       this.state.hops = 0;
@@ -113,17 +157,31 @@ export class HardCell3 extends Element {
   }
 
   canMove( ew:EventWindow ):Boolean {
-
-    return false;
+    return this.neighbors(ew).length === HardCell3.CELL_SITES.length;
   }
 
 
-  wantsToMove( ew:EventWindow ):Boolean {
+  shouldMove( ew:EventWindow ):Direction | false {
 
-    const downstreams = this.downstreams(ew);
+    // const downstreams = this.downstreams(ew);
 
-    if( this.state.hops < this.state.maxHops && downstreams.length < HardCell3.CELL_SITES.length ) {
-      // const wandered = ew.filter( HardCell3.CELL_SITES, 
+    // if( this.state.hops < this.state.maxHops && downstreams.length < HardCell3.CELL_SITES.length ) {
+    //   // const wandered = ew.filter( HardCell3.CELL_SITES, 
+    // }
+
+    const empties = ew.filter( HardCell3.CELL_SITES, "EMPTY" );
+
+    if( empties.length ) {
+
+      const e = EventWindow.RANDOM(empties);
+      const lookArounds = HardCell3.CELL_WANDER_MAP.get(e);
+
+      const hc3s = ew.filter( lookArounds, "HARDCELL3").filter( h => ew.getSite(h).atom.state.hops < this.state.hops );
+
+      if( hc3s.length ) {
+        const hc3 = EventWindow.RANDOM(hc3s);
+        return HardCell3.CELL_DIRECTION_MAP.get( hc3 );
+      }
     }
 
     return false;
@@ -149,6 +207,11 @@ export class HardCell3 extends Element {
     const cellSites = neighbors.filter( n => ew.getSite(n)?.atom.state?.hops < this.state.hops );
 
     return cellSites;
+  }
+
+  //returns actual HardCell3's at CELL_SITES
+  neighbors(ew:EventWindow):EWIndex[] {
+    return ew.filter( HardCell3.CELL_SITES, "HARDCELL3" );
   }
 
   getDirectionFromWanderMap( ew:EventWindow, site:EWIndex ) {
