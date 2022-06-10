@@ -4,7 +4,7 @@ import { EventWindow, EWIndex } from "../../mfm/EventWindow";
 import { Wayfinder } from "../../mfm/Wayfinder";
 
 export class SwapWorm extends Element {
-  static CREATE = SwapWorm.CREATOR({ name: "SWAPWORM", symbol: "SWP", class: SwapWorm, color: 0xbe146f, classifications:["DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["LIFE"] });
+  static CREATE = SwapWorm.CREATOR({ name: "SWAPWORM", symbol: "SWP", class: SwapWorm, color: 0xbe146f, classifications:["DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] });
 
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
