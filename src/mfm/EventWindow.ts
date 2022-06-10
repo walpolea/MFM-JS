@@ -232,7 +232,7 @@ export class EventWindow {
   }
 
   getSites(indexes: EWIndex[]): Site[] {
-    return indexes.map( i => this.window[index] ?? undefined);
+    return indexes.map( i => this.window[i] ?? undefined);
   }
 
   //get indexes of subset (of type) and possible only 1 random of the result

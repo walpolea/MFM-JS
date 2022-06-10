@@ -31,3 +31,4 @@ export { Swampling } from "./elements/agents/ofswamp/Swampling";
 export { SwampWorker } from "./elements/agents/ofswamp/SwampWorker";
 export { Sentry } from "./elements/agents/Sentry";
 export { HardCell3 } from "./elements/agents/HardCell3";
+export { SwapWorm } from "./elements/agents/SwapWorm";

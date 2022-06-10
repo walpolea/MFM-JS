@@ -4,12 +4,15 @@ import { EventWindow, EWIndex } from "../../mfm/EventWindow";
 import { Direction } from "../../mfm/Wayfinder";
 
 export class HardCell3 extends Element {
-  static CREATE = HardCell3.CREATOR({ name: "HARDCELL3", symbol: "HC3", class: HardCell3, color: 0xbe146f, classifications: ["HARDCELL3"], groups: ["MFM"] });
+  static CREATE = HardCell3.CREATOR({ name: "HARDCELL3x16", symbol: "HC3", class: HardCell3, color: 0xbe146f, classifications: ["HARDCELL3"], groups: ["MFM"] });
+  static HC3x8 = HardCell3.CREATOR({ name: "HARDCELL3x8", symbol: "HC3", class: HardCell3, color: 0xbe146f, classifications: ["HARDCELL3"], groups: ["MFM"] }, { maxHops: 8});
+  static HC3x4 = HardCell3.CREATOR({ name: "HARDCELL3x4", symbol: "HC3", class: HardCell3, color: 0xbe146f, classifications: ["HARDCELL3"], groups: ["MFM"] }, { maxHops: 4});
 
   // static CELL_SITES:EWIndex[] = [37, 38, 39, 40]; //HardCell4
   static CELL_SITES:EWIndex[] = [21,22,23,24];
   // static CELL_SITES:EWIndex[] = [9,10,11,12]; //HardCell2
   // static CELL_SITES:EWIndex[] = [1,2,3,4]; //HardCell1
+
   static CELL_WANDER_MAP = new Map<EWIndex, EWIndex[]>([
     [  0, [1, 2, 3, 4] ],
     [ 21, [9,29,30,37] ],
@@ -50,14 +53,14 @@ export class HardCell3 extends Element {
   }
 
   init() {
-    this.state.maxHops = this.state.maxHops ?? 8;
+    this.state.maxHops = this.state.maxHops ?? 16;
     this.state.stasus = false;
   }
 
   behave(ew: EventWindow) {
     super.behave(ew);
 
-    this.state.stasus = this.hasStasus(ew);
+    this.state.stasus = this.hasStasis(ew);
 
     //figure out hopCount
     if( this.state.hops === undefined || this.hasBadStructure(ew) ) {
@@ -97,7 +100,7 @@ export class HardCell3 extends Element {
 
   //stasus means you have all 4 HardCell3's surrounding you if you're not the end
   //AND all upstream HardCell3's are also in stasus
-  hasStasus( ew:EventWindow ):Boolean {
+  hasStasis( ew:EventWindow ):Boolean {
 
     if( this.isEnd() ) {
       return true;
@@ -105,7 +108,7 @@ export class HardCell3 extends Element {
 
     const neighbors = this.neighbors(ew);
     
-    if( neighbors.length !== HardCell3.CELL_SITES.length) {
+    if( neighbors.length !== ew.getSites(HardCell3.CELL_SITES).filter(s => s).length) {
       return false;
     }
     
