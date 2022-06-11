@@ -7,6 +7,11 @@ export class SwapWorm extends Element {
   static CREATE = SwapWorm.CREATOR({ name: "SWAPWORM", symbol: "SWP", class: SwapWorm, color: 0xbe146f, classifications:["DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] });
 
 
+  static SMOLSW = SwapWorm.CREATOR({ name: "SMOLSW", symbol: "SWP", class: SwapWorm, color: 0xbe146f, classifications:["SWAPWORM", "DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] }, {growCount: 2});
+  static BIGSW = SwapWorm.CREATOR({ name: "BIGSW", symbol: "SWP", class: SwapWorm, color: 0xbe146f, classifications:["SWAPWORM", "DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] }, {growCount: 24});
+
+
+
   static COLORS = [ 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0x4b0082, 0x940d3 ];
 
   constructor(type: IElementType, state: any = {}) {
@@ -17,6 +22,7 @@ export class SwapWorm extends Element {
 
   init() {
     this.state.growCount = this.state.growCount ?? 8;
+    this.state.color = SwapWorm.COLORS[~~(Math.random()*SwapWorm.COLORS.length)];
   }
 
   behave(ew: EventWindow) {
@@ -98,10 +104,10 @@ export class SwapWorm extends Element {
       this.state.color = 0xddeeff;
       type = "HEAD";
     } else if( this.isTail() ) {
-      this.state.color = 0xff33ff;
+      // this.state.color = 0xff33ff;
       type = "TAIL";
     } else if( this.isMiddle() ) {
-      this.state.color = 0xcc0066;
+      // this.state.color = 0xcc0066;
       type = "MIDDLE";
     }
 
