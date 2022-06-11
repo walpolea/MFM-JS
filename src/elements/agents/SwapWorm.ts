@@ -6,6 +6,9 @@ import { Wayfinder } from "../../mfm/Wayfinder";
 export class SwapWorm extends Element {
   static CREATE = SwapWorm.CREATOR({ name: "SWAPWORM", symbol: "SWP", class: SwapWorm, color: 0xbe146f, classifications:["DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] });
 
+
+  static COLORS = [ 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0x4b0082, 0x940d3 ];
+
   constructor(type: IElementType, state: any = {}) {
     super(type, state);
 
@@ -38,14 +41,15 @@ export class SwapWorm extends Element {
 
 
       case "HEAD":
+        return this.move(ew);
 
-        if( !this.isBehindTemp(ew) ) {
-          moved = this.move(ew);
-        }
+        // if( !this.isBehindTemp(ew) ) {
+        //   moved = this.move(ew);
+        // }
   
-        if( moved ) {
-          return;
-        }
+        // if( moved ) {
+        //   return;
+        // }
 
       break;
       case "MIDDLE":
@@ -102,7 +106,7 @@ export class SwapWorm extends Element {
     }
 
     if( this.isTemp() ) {
-      this.state.color = 0x00ff00;
+      this.state.color = SwapWorm.COLORS[~~(Math.random()*SwapWorm.COLORS.length)];
     }
 
     return type;
@@ -218,16 +222,21 @@ export class SwapWorm extends Element {
   move( ew:EventWindow ):boolean {
 
     if (!this.state.heading) {
-      Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM([...Wayfinder.DIRECTIONS_PRIMARY, ...Wayfinder.DIRECTIONS_SECONDARY]));
-    } else if (EventWindow.oneIn(5)) {
+      Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
+    } else if (EventWindow.oneIn(2)) {
 
+      
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(this.state.heading, true);
-      const moved = Wayfinding.MOVE_DIRECTIONALLY(ew, this, "EMPTY", this.makeGrowTemp(travelTo));
+      let moved = false;
 
-      EventWindow.oneIn(10) && Wayfinding.VEER_RANDOMLY(this);
+      if( ew.is(travelTo, "EMPTY") ) {
+        moved = ew.move(travelTo, this.makeGrowTemp(travelTo) );
+      }
 
+      EventWindow.oneIn(10) && Wayfinding.SLIGHT_RANDOMLY(this);
+      
       if( !moved ) {
-        Wayfinding.VEER_RANDOMLY(this);
+        Wayfinding.SLIGHT_RANDOMLY(this);
       } else {
         this.state.behind = EventWindow.OPPOSITES[travelTo];
       }
