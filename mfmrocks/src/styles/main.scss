@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 10px;
+  background: #222;
+  display: grid;
+  justify-items: center;
+  color: white;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+header {
+  padding: 50px;
+}
+
+h3 {
+  margin-block: 0px 5px;
+}
+
+ul {
+  padding: 0;
+}
+
+
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+}
+
+nav ul li {
+  margin-inline: 20px;
+  text-align: center;
+}
+
+nav ul li a, footer a {
+  color: #e1325e;
+
+  &:visited {
+    color: lightsalmon;
+  }
+}
