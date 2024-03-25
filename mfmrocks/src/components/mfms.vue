@@ -1,5 +1,5 @@
 <template>
-  <div class="mfms">
+  <div class="mfms" :class="{ pinned }">
     <div ref="mfms" class="mfms-grid" v-once></div>
 
     <div class="controls">
@@ -26,6 +26,7 @@
             <br>
             <button @click="tile.clear()">CLEAR GRID</button>
             <button @click="tile.clear( activeType );">CLEAR TYPE</button>
+            <label><input type="checkbox" v-model="pinned">pin</label>
           </fieldgroup>
 
           </div>
@@ -96,6 +97,7 @@
   const renderSpeed = ref(1);
   const brushSize = ref(1);
   const gridSize = ref('256,128');
+  const pinned = ref(false);
 
   watch( brushSize, (bs) => {
     grid.brushSize = +bs;
@@ -171,6 +173,16 @@ button {
   cursor:pointer;
 }
 
+.mfms.pinned {
+  .mfms-grid {
+    margin-bottom:20px;
+  }
+
+  .controls {
+    position:static;
+  }
+}
+
 .mfms-grid {
   display: grid;
   place-items: center;
@@ -226,6 +238,8 @@ button {
   padding: 25px;
   width:100%;
   background: rgb( 0 0 0 / 0.6 );
+
+
   position:fixed;
   bottom:0;
   left:0;

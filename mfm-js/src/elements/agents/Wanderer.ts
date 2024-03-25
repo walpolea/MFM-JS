@@ -81,6 +81,11 @@ export class Wanderer extends Element {
       // if (Repel.MAKE_REPELLER(["MOVABLE"], front, others)(ew, this)) {
       //   return;
       // }
+
+      const front = [Wayfinder.getInFront(this.state.heading)[0]];
+      if (ew.is(front[0], "MOVABLE")) {
+        Repel.MAKE_REPELLER(["MOVABLE"], front, [9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36])(ew, this)
+      }
     }
 
     if (ew.selfIs("FLY")) {

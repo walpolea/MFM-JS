@@ -73,7 +73,7 @@ const Me = class Me extends V {
 };
 Me.CREATE = Me.CREATOR({ name: "EMPTY", symbol: "EMT", class: Me, color: 2763306, groups: ["MFM"] });
 let xt = Me;
-const R = class R {
+const b = class b {
   static oneIn(t) {
     return t === 0 ? !1 : Math.random() * t < 1;
   }
@@ -83,9 +83,9 @@ const R = class R {
   makeWindow(t, e) {
     this.origin = t.getSiteByCoordinate(e), this.window = new Array(41);
     let s, r;
-    const n = R.WINDOW_OFFSETS.length;
+    const n = b.WINDOW_OFFSETS.length;
     for (let a = 0; a < n; a++)
-      s = R.WINDOW_OFFSETS[a], r = t.getSiteByCoordinate(this.offsetFromOrigin(e, s)), this.window[a] = r;
+      s = b.WINDOW_OFFSETS[a], r = t.getSiteByCoordinate(this.offsetFromOrigin(e, s)), this.window[a] = r;
   }
   //get relative offset ICoordinate from absolute ICoordinate
   //this should only be used by the makeWindow function to translate a picked site into
@@ -172,7 +172,7 @@ const R = class R {
     return this.mutate(t, xt.CREATE);
   }
 };
-R.WINDOW_OFFSETS = [
+b.WINDOW_OFFSETS = [
   { x: 0, y: 0 },
   { x: -1, y: 0 },
   { x: 0, y: -1 },
@@ -214,15 +214,15 @@ R.WINDOW_OFFSETS = [
   { x: 0, y: -4 },
   { x: 0, y: 4 },
   { x: 4, y: 0 }
-], R.RANDOM = (t = R.ALLADJACENT) => t[~~(t.length * Math.random())], R.ORIGIN = [0], R.W = [1], R.N = [2], R.S = [3], R.E = [4], R.NW = [5], R.SW = [6], R.NE = [7], R.SE = [8], R.ADJACENT4WAY = [1, 2, 3, 4], R.DIAGONAL4WAY = [5, 6, 7, 8], R.ADJACENT8WAY = [...R.ADJACENT4WAY, ...R.DIAGONAL4WAY], R.LAYER1 = [1, 2, 3, 4], R.LAYER2 = [5, 6, 7, 8, 9, 10, 11, 12], R.LAYER3 = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], R.LAYER4 = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40], R.W_LINE = [1, 9, 21, 37], R.N_LINE = [2, 10, 22, 38], R.S_LINE = [3, 11, 23, 39], R.E_LINE = [4, 12, 24, 40], R.NW_LINE = [5, 25], R.SW_LINE = [6, 26], R.NE_LINE = [7, 27], R.SE_LINE = [8, 28], R.EQUATOR = [...R.ORIGIN, ...R.W_LINE, ...R.E_LINE], R.PRIME_MERIDIAN = [...R.ORIGIN, ...R.N_LINE, ...R.S_LINE], R.W_QUADRANT = [1, 9, 13, 14, 21, 29, 30, 37], R.N_QUADRANT = [2, 10, 15, 17, 22, 31, 33, 38], R.S_QUADRANT = [3, 11, 16, 18, 23, 32, 34, 39], R.E_QUADRANT = [4, 12, 19, 20, 24, 35, 36, 40], R.NW_QUADRANT = [5, 13, 15, 25, 29, 31], R.SW_QUADRANT = [6, 14, 16, 26, 30, 32], R.NE_QUADRANT = [7, 17, 19, 27, 33, 35], R.SE_QUADRANT = [8, 18, 20, 28, 34, 36], R.W_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...R.NW_QUADRANT, ...R.W_LINE, ...R.SW_QUADRANT])).sort(
+], b.RANDOM = (t = b.ALLADJACENT) => t[~~(t.length * Math.random())], b.ORIGIN = [0], b.W = [1], b.N = [2], b.S = [3], b.E = [4], b.NW = [5], b.SW = [6], b.NE = [7], b.SE = [8], b.ADJACENT4WAY = [1, 2, 3, 4], b.DIAGONAL4WAY = [5, 6, 7, 8], b.ADJACENT8WAY = [...b.ADJACENT4WAY, ...b.DIAGONAL4WAY], b.LAYER1 = [1, 2, 3, 4], b.LAYER2 = [5, 6, 7, 8, 9, 10, 11, 12], b.LAYER3 = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], b.LAYER4 = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40], b.W_LINE = [1, 9, 21, 37], b.N_LINE = [2, 10, 22, 38], b.S_LINE = [3, 11, 23, 39], b.E_LINE = [4, 12, 24, 40], b.NW_LINE = [5, 25], b.SW_LINE = [6, 26], b.NE_LINE = [7, 27], b.SE_LINE = [8, 28], b.EQUATOR = [...b.ORIGIN, ...b.W_LINE, ...b.E_LINE], b.PRIME_MERIDIAN = [...b.ORIGIN, ...b.N_LINE, ...b.S_LINE], b.W_QUADRANT = [1, 9, 13, 14, 21, 29, 30, 37], b.N_QUADRANT = [2, 10, 15, 17, 22, 31, 33, 38], b.S_QUADRANT = [3, 11, 16, 18, 23, 32, 34, 39], b.E_QUADRANT = [4, 12, 19, 20, 24, 35, 36, 40], b.NW_QUADRANT = [5, 13, 15, 25, 29, 31], b.SW_QUADRANT = [6, 14, 16, 26, 30, 32], b.NE_QUADRANT = [7, 17, 19, 27, 33, 35], b.SE_QUADRANT = [8, 18, 20, 28, 34, 36], b.W_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...b.NW_QUADRANT, ...b.W_LINE, ...b.SW_QUADRANT])).sort(
   (t, e) => t - e
-), R.N_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...R.NW_QUADRANT, ...R.N_LINE, ...R.NE_QUADRANT])).sort(
+), b.N_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...b.NW_QUADRANT, ...b.N_LINE, ...b.NE_QUADRANT])).sort(
   (t, e) => t - e
-), R.S_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...R.SW_QUADRANT, ...R.S_LINE, ...R.SE_QUADRANT])).sort(
+), b.S_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...b.SW_QUADRANT, ...b.S_LINE, ...b.SE_QUADRANT])).sort(
   (t, e) => t - e
-), R.E_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...R.NE_QUADRANT, ...R.E_LINE, ...R.SE_QUADRANT])).sort(
+), b.E_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...b.NE_QUADRANT, ...b.E_LINE, ...b.SE_QUADRANT])).sort(
   (t, e) => t - e
-), R.ALL = [
+), b.ALL = [
   0,
   1,
   2,
@@ -264,7 +264,7 @@ R.WINDOW_OFFSETS = [
   38,
   39,
   40
-], R.ALLADJACENT = [
+], b.ALLADJACENT = [
   1,
   2,
   3,
@@ -305,7 +305,7 @@ R.WINDOW_OFFSETS = [
   38,
   39,
   40
-], R.OPPOSITES = [
+], b.OPPOSITES = [
   0,
   4,
   3,
@@ -347,7 +347,7 @@ R.WINDOW_OFFSETS = [
   39,
   38,
   37
-], R.X_REFLECTION = [
+], b.X_REFLECTION = [
   0,
   1,
   3,
@@ -389,7 +389,7 @@ R.WINDOW_OFFSETS = [
   39,
   38,
   40
-], R.Y_REFLECTION = [
+], b.Y_REFLECTION = [
   0,
   4,
   2,
@@ -431,8 +431,8 @@ R.WINDOW_OFFSETS = [
   38,
   39,
   37
-], R.XY_REFLECTION = R.OPPOSITES, R.SUBSETS = (/* @__PURE__ */ new Map()).set("4way", R.ADJACENT4WAY).set("8way", R.ADJACENT8WAY).set("all", R.ALL);
-let T = R;
+], b.XY_REFLECTION = b.OPPOSITES, b.SUBSETS = (/* @__PURE__ */ new Map()).set("4way", b.ADJACENT4WAY).set("8way", b.ADJACENT8WAY).set("all", b.ALL);
+let T = b;
 class Sn {
   constructor(t) {
     this.location = t, this.id = this.location.id, this.create();
@@ -654,7 +654,7 @@ const Ls = (i) => {
   },
   test: () => !0,
   load: async () => {
-    await import("./browserAll-w_ftacHm.mjs");
+    await import("./browserAll-BzPXtMpj.mjs");
   }
 }, Rn = {
   extension: {
@@ -664,7 +664,7 @@ const Ls = (i) => {
   },
   test: () => typeof self < "u" && self.WorkerGlobalScope !== void 0,
   load: async () => {
-    await import("./webworkerAll-Bq2LQ_uo.mjs");
+    await import("./webworkerAll-DXpoY56r.mjs");
   }
 };
 class mt {
@@ -1616,8 +1616,8 @@ const ps = {
 function nt(i = "default") {
   return ps[i] === void 0 && (ps[i] = -1), ++ps[i];
 }
-const Ei = {}, Nt = "8.0.0";
-function It(i, t, e = 3) {
+const Ei = {}, It = "8.0.0";
+function Ct(i, t, e = 3) {
   if (Ei[t])
     return;
   let s = new Error().stack;
@@ -1667,7 +1667,7 @@ const Ar = class Er extends te {
     return this.addressModeU;
   }
   set wrapMode(t) {
-    It(Nt, "TextureStyle.wrapMode is now TextureStyle.addressMode"), this.addressMode = t;
+    Ct(It, "TextureStyle.wrapMode is now TextureStyle.addressMode"), this.addressMode = t;
   }
   get wrapMode() {
     return this.addressMode;
@@ -2045,7 +2045,7 @@ class H extends te {
   }
   /** @deprecated since 8.0.0 */
   get baseTexture() {
-    return It(Nt, "Texture.baseTexture is now Texture.source"), this._source;
+    return Ct(It, "Texture.baseTexture is now Texture.source"), this._source;
   }
 }
 H.EMPTY = new H({
@@ -2074,7 +2074,7 @@ function kn(i, t, e, s) {
   } else
     i.minX = -t._x * r - s, i.maxX = i.minX + r, i.minY = -t._y * n - s, i.maxY = i.minY + n;
 }
-var Yn = { grad: 0.9, turn: 360, rad: 360 / (2 * Math.PI) }, Lt = function(i) {
+var Yn = { grad: 0.9, turn: 360, rad: 360 / (2 * Math.PI) }, vt = function(i) {
   return typeof i == "string" ? i.length > 0 : typeof i == "number";
 }, tt = function(i, t, e) {
   return t === void 0 && (t = 0), e === void 0 && (e = Math.pow(10, t)), Math.round(e * i) / e + 0;
@@ -2121,16 +2121,16 @@ var Yn = { grad: 0.9, turn: 360, rad: 360 / (2 * Math.PI) }, Lt = function(i) {
   return _i(r);
 }, "hsl"]], object: [[function(i) {
   var t = i.r, e = i.g, s = i.b, r = i.a, n = r === void 0 ? 1 : r;
-  return Lt(t) && Lt(e) && Lt(s) ? Ti({ r: Number(t), g: Number(e), b: Number(s), a: Number(n) }) : null;
+  return vt(t) && vt(e) && vt(s) ? Ti({ r: Number(t), g: Number(e), b: Number(s), a: Number(n) }) : null;
 }, "rgb"], [function(i) {
   var t = i.h, e = i.s, s = i.l, r = i.a, n = r === void 0 ? 1 : r;
-  if (!Lt(t) || !Lt(e) || !Lt(s))
+  if (!vt(t) || !vt(e) || !vt(s))
     return null;
   var a = Ri({ h: Number(t), s: Number(e), l: Number(s), a: Number(n) });
   return _i(a);
 }, "hsl"], [function(i) {
   var t = i.h, e = i.s, s = i.v, r = i.a, n = r === void 0 ? 1 : r;
-  if (!Lt(t) || !Lt(e) || !Lt(s))
+  if (!vt(t) || !vt(e) || !vt(s))
     return null;
   var a = function(o) {
     return { h: Sr(o.h), s: At(o.s, 0, 100), v: At(o.v, 0, 100), a: At(o.a) };
@@ -2610,7 +2610,7 @@ const qn = {
    * @memberof scene.Container#
    */
   addChildAt(i, t) {
-    this.allowChildren || It(Nt, "addChildAt: Only Containers will be allowed to add children in v8.0.0");
+    this.allowChildren || Ct(It, "addChildAt: Only Containers will be allowed to add children in v8.0.0");
     const { children: e } = this;
     if (t < 0 || t > e.length)
       throw new Error(`${i}addChildAt: The index ${t} supplied is out of bounds ${e.length}`);
@@ -2774,7 +2774,7 @@ class ta {
     }), t;
   }
 }
-const vt = new ta();
+const Pt = new ta();
 class ea {
   constructor() {
     this._effectClasses = [], this._tests = [], this._initialized = !1;
@@ -2795,12 +2795,12 @@ class ea {
     for (let e = 0; e < this._tests.length; e++) {
       const s = this._tests[e];
       if (s.test(t))
-        return vt.get(s.maskClass, t);
+        return Pt.get(s.maskClass, t);
     }
     return t;
   }
   returnMaskEffect(t) {
-    vt.return(t);
+    Pt.return(t);
   }
 }
 const Os = new ea();
@@ -2913,10 +2913,10 @@ const sa = {
    * @memberof scene.Container#
    */
   get name() {
-    return It(Nt, "Container.name property has been removed, use Container.label instead"), this.label;
+    return Ct(It, "Container.name property has been removed, use Container.label instead"), this.label;
   },
   set name(i) {
-    It(Nt, "Container.name property has been removed, use Container.label instead"), this.label = i;
+    Ct(It, "Container.name property has been removed, use Container.label instead"), this.label = i;
   },
   /**
    * @method getChildByName
@@ -3531,7 +3531,7 @@ class ot extends te {
    * @returns {Container} - The first child that was added.
    */
   addChild(...t) {
-    if (this.allowChildren || It(Nt, "addChild: Only Containers will be allowed to add children in v8.0.0"), t.length > 1) {
+    if (this.allowChildren || Ct(It, "addChild: Only Containers will be allowed to add children in v8.0.0"), t.length > 1) {
       for (let s = 0; s < t.length; s++)
         this.addChild(t[s]);
       return t[0];
@@ -4743,7 +4743,7 @@ function Aa(i, t) {
   }
   return e;
 }
-const Ct = {
+const Mt = {
   /**
    * Converts a path to posix format.
    * @param path - The path to convert to posix
@@ -4805,7 +4805,7 @@ const Ct = {
     if (Tt(i), this.isDataUrl(i) || this.isBlobUrl(i))
       return i;
     const s = xe(this.toPosix(t ?? dt.get().getBaseUrl())), r = xe(this.toPosix(e ?? this.rootname(s)));
-    return i = this.toPosix(i), i.startsWith("/") ? Ct.join(r, i.slice(1)) : this.isAbsolute(i) ? i : this.join(s, i);
+    return i = this.toPosix(i), i.startsWith("/") ? Mt.join(r, i.slice(1)) : this.isAbsolute(i) ? i : this.join(s, i);
   },
   /**
    * Normalizes the given path, resolving '..' and '.' segments
@@ -5387,7 +5387,7 @@ class fe {
   }
   _buildResolvedAsset(t, e) {
     const { aliases: s, data: r, loadParser: n, format: a } = e;
-    return (this._basePath || this._rootPath) && (t.src = Ct.toAbsolute(t.src, this._basePath, this._rootPath)), t.alias = s ?? t.alias ?? [t.src], t.src = this._appendDefaultSearchParams(t.src), t.data = { ...r || {}, ...t.data }, t.loadParser = n ?? t.loadParser, t.format = a ?? t.format ?? ya(t.src), t;
+    return (this._basePath || this._rootPath) && (t.src = Mt.toAbsolute(t.src, this._basePath, this._rootPath)), t.alias = s ?? t.alias ?? [t.src], t.src = this._appendDefaultSearchParams(t.src), t.data = { ...r || {}, ...t.data }, t.loadParser = n ?? t.loadParser, t.format = a ?? t.format ?? ya(t.src), t;
   }
 }
 fe.RETINA_PREFIX = /@([0-9\.]+)x/;
@@ -5522,7 +5522,7 @@ function Hr(i, t, e) {
   }), Object.keys(t.textures).forEach((r) => {
     s[r] = t.textures[r];
   }), !e) {
-    const r = Ct.dirname(i[0]);
+    const r = Mt.dirname(i[0]);
     t.linkedSheets.forEach((n, a) => {
       const o = Hr([`${r}/${t.data.meta.related_multi_packs[a]}`], n, !0);
       Object.assign(s, o);
@@ -5566,7 +5566,7 @@ const Sa = {
       priority: ee.Normal
     },
     async testParse(i, t) {
-      return Ct.extname(t.src).toLowerCase() === ".json" && !!i.frames;
+      return Mt.extname(t.src).toLowerCase() === ".json" && !!i.frames;
     },
     async parse(i, t, e) {
       var l, c;
@@ -5576,7 +5576,7 @@ const Sa = {
         imageFilename: r
         // if user need to use custom filename (not from jsonFile.meta.image)
       } = (t == null ? void 0 : t.data) ?? {};
-      let n = Ct.dirname(t.src);
+      let n = Mt.dirname(t.src);
       n && n.lastIndexOf("/") !== n.length - 1 && (n += "/");
       let a;
       if (s instanceof H)
@@ -5832,7 +5832,7 @@ const Na = [
   }
   render(t, e) {
     let s = t;
-    if (s instanceof ot && (s = { container: s }, e && (It(Nt, "passing a second argument is deprecated, please use render options instead"), s.target = e.renderTexture)), s.target || (s.target = this.view.renderTarget), s.target === this.view.renderTarget && (this._lastObjectRendered = s.container, s.clearColor = this.background.colorRgba), s.clearColor) {
+    if (s instanceof ot && (s = { container: s }, e && (Ct(It, "passing a second argument is deprecated, please use render options instead"), s.target = e.renderTexture)), s.target || (s.target = this.view.renderTarget), s.target === this.view.renderTarget && (this._lastObjectRendered = s.container, s.clearColor = this.background.colorRgba), s.clearColor) {
       const r = Array.isArray(s.clearColor) && s.clearColor.length === 4;
       s.clearColor = r ? s.clearColor : gt.shared.setValue(s.clearColor).toArray();
     }
@@ -6066,13 +6066,13 @@ async function Ma(i) {
   for (let n = 0; n < t.length; n++) {
     const a = t[n];
     if (a === "webgpu" && await Ca()) {
-      const { WebGPURenderer: o } = await import("./WebGPURenderer-CRAmWbI7.mjs");
+      const { WebGPURenderer: o } = await import("./WebGPURenderer-BPHmtO68.mjs");
       e = o, s = { ...i, ...i.webgpu };
       break;
     } else if (a === "webgl" && Ia(
       i.failIfMajorPerformanceCaveat ?? $r.defaultOptions.failIfMajorPerformanceCaveat
     )) {
-      const { WebGLRenderer: o } = await import("./WebGLRenderer-DntmBkVA.mjs");
+      const { WebGLRenderer: o } = await import("./WebGLRenderer-9pYBi8Qb.mjs");
       e = o, s = { ...i, ...i.webgl };
       break;
     } else if (a === "canvas") {
@@ -6087,7 +6087,7 @@ async function Ma(i) {
 const Qr = class ks {
   /** @ignore */
   constructor(...t) {
-    this.stage = new ot(), t[0] !== void 0 && It(Nt, "Application constructor options are deprecated, please use Application.init() instead.");
+    this.stage = new ot(), t[0] !== void 0 && Ct(It, "Application constructor options are deprecated, please use Application.init() instead.");
   }
   /**
    * @param options - The optional application and renderer parameters.
@@ -6115,7 +6115,7 @@ const Qr = class ks {
    * @deprecated since 8.0.0
    */
   get view() {
-    return It(Nt, "Application.view is deprecated, please use Application.canvas instead."), this.renderer.canvas;
+    return Ct(It, "Application.view is deprecated, please use Application.canvas instead."), this.renderer.canvas;
   }
   /**
    * Reference to the renderer's screen rectangle. Its safe to use as `filterArea` or `hitArea` for the whole screen.
@@ -6334,7 +6334,7 @@ class Ya {
       alias: [l],
       src: l
     })), o = a.length, h = a.map(async (l) => {
-      const c = Ct.toAbsolute(l.src);
+      const c = Mt.toAbsolute(l.src);
       if (!r[l.src])
         try {
           this.promiseCache[c] || (this.promiseCache[c] = this._getLoadPromiseAndParser(c, l)), r[l.src] = await this.promiseCache[c].promise, e && e(++s / o);
@@ -6363,7 +6363,7 @@ ${u}`);
       src: r
     })).map(async (r) => {
       var o, h;
-      const n = Ct.toAbsolute(r.src), a = this.promiseCache[n];
+      const n = Mt.toAbsolute(r.src), a = this.promiseCache[n];
       if (a) {
         const l = await a.promise;
         delete this.promiseCache[n], (h = (o = a.parser) == null ? void 0 : o.unload) == null || h.call(o, l, r, this);
@@ -6386,7 +6386,7 @@ function pe(i, t) {
   return i.startsWith(`data:${t}`);
 }
 function me(i, t) {
-  const e = i.split("?")[0], s = Ct.extname(e).toLowerCase();
+  const e = i.split("?")[0], s = Mt.extname(e).toLowerCase();
   return Array.isArray(t) ? t.includes(s) : s === t;
 }
 const Ua = ".json", Fa = "application/json", Ga = {
@@ -6432,7 +6432,7 @@ const Ua = ".json", Fa = "application/json", Ga = {
   "font/woff2"
 ], ja = /^(--|-?[A-Z_])[0-9A-Z_-]*$/i;
 function qa(i) {
-  const t = Ct.extname(i), r = Ct.basename(i, t).replace(/(-|_)/g, " ").toLowerCase().split(" ").map((o) => o.charAt(0).toUpperCase() + o.slice(1));
+  const t = Mt.extname(i), r = Mt.basename(i, t).replace(/(-|_)/g, " ").toLowerCase().split(" ").map((o) => o.charAt(0).toUpperCase() + o.slice(1));
   let n = r.length > 0;
   for (const o of r)
     if (!o.match(ja)) {
@@ -7604,7 +7604,7 @@ function Io(i, t, e, s, r, n, a, o, h) {
   const g = r, y = i.length / 2;
   let E = i.length;
   const x = g.length / 2, S = c.width / 2, L = S * S, B = c.miterLimit * c.miterLimit;
-  let C = i[0], M = i[1], _ = i[2], N = i[3], q = 0, Mt = 0, w = -(M - N), D = C - _, X = 0, K = 0, St = Math.sqrt(w * w + D * D);
+  let C = i[0], M = i[1], _ = i[2], N = i[3], q = 0, Lt = 0, w = -(M - N), D = C - _, X = 0, K = 0, St = Math.sqrt(w * w + D * D);
   w /= St, D /= St, w *= S, D *= S;
   const di = u, P = (1 - di) * 2, W = di * 2;
   f || (c.cap === "round" ? E += zt(
@@ -7624,8 +7624,8 @@ function Io(i, t, e, s, r, n, a, o, h) {
     M + D * W
   );
   for (let G = 1; G < y - 1; ++G) {
-    C = i[(G - 1) * 2], M = i[(G - 1) * 2 + 1], _ = i[G * 2], N = i[G * 2 + 1], q = i[(G + 1) * 2], Mt = i[(G + 1) * 2 + 1], w = -(M - N), D = C - _, St = Math.sqrt(w * w + D * D), w /= St, D /= St, w *= S, D *= S, X = -(N - Mt), K = _ - q, St = Math.sqrt(X * X + K * K), X /= St, K /= St, X *= S, K *= S;
-    const Wt = _ - C, ge = M - N, Ae = _ - q, Ee = Mt - N, fi = Wt * Ae + ge * Ee, Ve = ge * Ae - Ee * Wt, ye = Ve < 0;
+    C = i[(G - 1) * 2], M = i[(G - 1) * 2 + 1], _ = i[G * 2], N = i[G * 2 + 1], q = i[(G + 1) * 2], Lt = i[(G + 1) * 2 + 1], w = -(M - N), D = C - _, St = Math.sqrt(w * w + D * D), w /= St, D /= St, w *= S, D *= S, X = -(N - Lt), K = _ - q, St = Math.sqrt(X * X + K * K), X /= St, K /= St, X *= S, K *= S;
+    const Wt = _ - C, ge = M - N, Ae = _ - q, Ee = Lt - N, fi = Wt * Ae + ge * Ee, Ve = ge * Ae - Ee * Wt, ye = Ve < 0;
     if (Math.abs(Ve) < 1e-3 * Math.abs(fi)) {
       g.push(
         _ - w * P,
@@ -7651,7 +7651,7 @@ function Io(i, t, e, s, r, n, a, o, h) {
       ));
       continue;
     }
-    const pi = (-w + C) * (-D + N) - (-w + _) * (-D + M), mi = (-X + q) * (-K + N) - (-X + _) * (-K + Mt), ze = (Wt * mi - Ae * pi) / Ve, Xe = (Ee * pi - ge * mi) / Ve, us = (ze - _) * (ze - _) + (Xe - N) * (Xe - N), Ft = _ + (ze - _) * P, Gt = N + (Xe - N) * P, Ht = _ - (ze - _) * W, Vt = N - (Xe - N) * W, yn = Math.min(Wt * Wt + ge * ge, Ae * Ae + Ee * Ee), gi = ye ? P : W, xn = yn + gi * gi * L;
+    const pi = (-w + C) * (-D + N) - (-w + _) * (-D + M), mi = (-X + q) * (-K + N) - (-X + _) * (-K + Lt), ze = (Wt * mi - Ae * pi) / Ve, Xe = (Ee * pi - ge * mi) / Ve, us = (ze - _) * (ze - _) + (Xe - N) * (Xe - N), Ft = _ + (ze - _) * P, Gt = N + (Xe - N) * P, Ht = _ - (ze - _) * W, Vt = N - (Xe - N) * W, yn = Math.min(Wt * Wt + ge * ge, Ae * Ae + Ee * Ee), gi = ye ? P : W, xn = yn + gi * gi * L;
     us <= xn ? c.join === "bevel" || us / L > B ? (ye ? (g.push(Ft, Gt), g.push(_ + w * W, N + D * W), g.push(Ft, Gt), g.push(_ + X * W, N + K * W)) : (g.push(_ - w * P, N - D * P), g.push(Ht, Vt), g.push(_ - X * P, N - K * P), g.push(Ht, Vt)), E += 2) : c.join === "round" ? ye ? (g.push(Ft, Gt), g.push(_ + w * W, N + D * W), E += zt(
       _,
       N,
@@ -7702,7 +7702,7 @@ function Io(i, t, e, s, r, n, a, o, h) {
   ) + 2 : c.cap === "square" && (E += Gi(_, N, w, D, P, W, !1, g)));
   const En = Fi * Fi;
   for (let G = x; G < E + x - 2; ++G)
-    C = g[G * 2], M = g[G * 2 + 1], _ = g[(G + 1) * 2], N = g[(G + 1) * 2 + 1], q = g[(G + 2) * 2], Mt = g[(G + 2) * 2 + 1], !(Math.abs(C * (N - Mt) + _ * (Mt - M) + q * (M - N)) < En) && o.push(G, G + 1, G + 2);
+    C = g[G * 2], M = g[G * 2 + 1], _ = g[(G + 1) * 2], N = g[(G + 1) * 2 + 1], q = g[(G + 2) * 2], Lt = g[(G + 2) * 2 + 1], !(Math.abs(C * (N - Lt) + _ * (Lt - M) + q * (M - N)) < En) && o.push(G, G + 1, G + 2);
 }
 var ri = { exports: {} };
 ri.exports = cs;
@@ -8057,7 +8057,7 @@ function Ko(i, t, e) {
     m.x2,
     m.y2
   );
-  const f = vt.get(rn);
+  const f = Pt.get(rn);
   f.indexOffset = a, f.indexSize = n.length - a, f.vertexOffset = o, f.vertexSize = s.length / 2 - o, f.color = i.style, f.alpha = i.alpha, f.texture = u, f.geometryData = e, t.push(f);
 }
 function Vi(i, t, e, s, r, n) {
@@ -8081,7 +8081,7 @@ function Vi(i, t, e, s, r, n) {
       u && S.append(u.clone().invert()), xo(a, 2, f, o, y, 2, a.length / 2 - f, S);
     } else
       So(o, y, 2, a.length / 2 - f);
-    const x = vt.get(rn);
+    const x = Pt.get(rn);
     x.indexOffset = m, x.indexSize = h.length - m, x.vertexOffset = f, x.vertexSize = a.length / 2 - f, x.color = t.color, x.alpha = t.alpha, x.texture = E, x.geometryData = n, r.push(x);
   });
 }
@@ -8152,16 +8152,16 @@ const ai = class Gs {
   }
   _returnActiveBatchers() {
     for (let t = 0; t < this._activeBatchers.length; t++)
-      vt.return(this._activeBatchers[t]);
+      Pt.return(this._activeBatchers[t]);
     this._activeBatchers.length = 0;
   }
   _initContextRenderData(t) {
-    const e = vt.get(th), s = this._gpuContextHash[t.uid].batches;
+    const e = Pt.get(th), s = this._gpuContextHash[t.uid].batches;
     let r = 0, n = 0;
     s.forEach((l) => {
       l.applyTransform = !1, r += l.geometryData.vertices.length, n += l.geometryData.indices.length;
     });
-    const a = vt.get(yo);
+    const a = Pt.get(yo);
     this._activeBatchers.push(a), a.ensureAttributeBuffer(r), a.ensureIndexBuffer(n), a.begin();
     for (let l = 0; l < s.length; l++) {
       const c = s[l];
@@ -8189,8 +8189,8 @@ const ai = class Gs {
   }
   _cleanGraphicsContextData(t) {
     const e = this._gpuContextHash[t.uid];
-    e.isBatchable || this._graphicsDataContextHash[t.uid] && (vt.return(this.getContextRenderData(t)), this._graphicsDataContextHash[t.uid] = null), e.batches && e.batches.forEach((s) => {
-      vt.return(s);
+    e.isBatchable || this._graphicsDataContextHash[t.uid] && (Pt.return(this.getContextRenderData(t)), this._graphicsDataContextHash[t.uid] = null), e.batches && e.batches.forEach((s) => {
+      Pt.return(s);
     });
   }
   destroy() {
@@ -8385,14 +8385,14 @@ function dh(i, t, e, s, r, n, a, o = 0, h = 0, l = 0) {
   let L = i[i.length - 2], B = i[i.length - 1];
   const C = { x: 0, y: 0 };
   for (let M = 0; M < S; M++) {
-    const _ = lh(A, g), { x: N, y: q } = Is(_[0], n, a, u, c, y, E, C), { x: Mt, y: w } = Is(_[1], n, a, u, c, y, E, C), { x: D, y: X } = Is(_[2], n, a, u, c, y, E, C);
+    const _ = lh(A, g), { x: N, y: q } = Is(_[0], n, a, u, c, y, E, C), { x: Lt, y: w } = Is(_[1], n, a, u, c, y, E, C), { x: D, y: X } = Is(_[2], n, a, u, c, y, E, C);
     ln(
       i,
       L,
       B,
       N,
       q,
-      Mt,
+      Lt,
       w,
       D,
       X
@@ -9461,7 +9461,7 @@ const Sh = new rt(), $i = new U(), oi = class _t extends te {
   fill(t, e) {
     let s;
     const r = this.instructions[this.instructions.length - 1];
-    return this._tick === 0 && r && r.action === "stroke" ? s = r.data.path : s = this._activePath.clone(), s ? (t && (e !== void 0 && typeof t == "number" && (It(Nt, "GraphicsContext.fill(color, alpha) is deprecated, use GraphicsContext.fill({ color, alpha }) instead"), t = { color: t, alpha: e }), this._fillStyle = se(t, _t.defaultFillStyle)), this.instructions.push({
+    return this._tick === 0 && r && r.action === "stroke" ? s = r.data.path : s = this._activePath.clone(), s ? (t && (e !== void 0 && typeof t == "number" && (Ct(It, "GraphicsContext.fill(color, alpha) is deprecated, use GraphicsContext.fill({ color, alpha }) instead"), t = { color: t, alpha: e }), this._fillStyle = se(t, _t.defaultFillStyle)), this.instructions.push({
       action: "fill",
       // TODO copy fill style!
       data: { style: this.fillStyle, path: s }
@@ -10853,13 +10853,13 @@ const at = class at {
   }
 };
 at.DOWN = at.CREATE(T.S), at.SIDE = at.CREATE([6, 8]), at.SLIP = at.CREATE(T.EQUATOR), at.SINK = at.CREATE([...T.S, 6, 8], "WATER"), at.FLOAT = at.CREATE([...T.N, 5, 7], "WATER"), at.PATROL = at.CREATE(T.ADJACENT4WAY), at.PATROL_8 = at.CREATE(T.ADJACENT8WAY);
-let Pt = at;
+let Dt = at;
 const Le = class Le extends V {
   constructor(t, e = {}) {
     super(t, e);
   }
   behave(t) {
-    super.behave(t), Pt.PATROL(t);
+    super.behave(t), Dt.PATROL(t);
   }
 };
 Le.CREATE = Le.CREATOR({ name: "RES", class: Le, color: 938240, groups: ["MFM"] });
@@ -11257,35 +11257,35 @@ p.RANDOM = (t = p.DIRECTIONS) => t[~~(t.length * Math.random())], p.NORTH = "N",
   [39, "S"],
   [40, "E"]
 ]);
-let b = p;
+let R = p;
 const li = class li {
   static REVERSE(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.reverse(e));
+    e && t.wr("heading", R.reverse(e));
   }
   static SLIGHT_LEFT(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.slightLeft(e));
+    e && t.wr("heading", R.slightLeft(e));
   }
   static VEER_LEFT(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.veerLeft(e));
+    e && t.wr("heading", R.veerLeft(e));
   }
   static TURN_LEFT(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.turnLeft(e));
+    e && t.wr("heading", R.turnLeft(e));
   }
   static SLIGHT_RIGHT(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.slightRight(e));
+    e && t.wr("heading", R.slightRight(e));
   }
   static VEER_RIGHT(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.veerRight(e));
+    e && t.wr("heading", R.veerRight(e));
   }
   static TURN_RIGHT(t) {
     const { heading: e } = t.state;
-    e && t.wr("heading", b.turnRight(e));
+    e && t.wr("heading", R.turnRight(e));
   }
   static SLIGHT_RANDOMLY(t) {
     T.oneIn(2) ? this.SLIGHT_LEFT(t) : this.SLIGHT_RIGHT(t);
@@ -11308,7 +11308,7 @@ const li = class li {
   static MOVE_DIRECTIONALLY(t, e, s = "EMPTY", r = xt.CREATE()) {
     const { heading: n } = e.state;
     if (n) {
-      const a = b.getDirectionalMove(n, !0);
+      const a = R.getDirectionalMove(n, !0);
       if (s === "ANY" || t.is(a, s))
         return t.move(a, r);
     }
@@ -11317,7 +11317,7 @@ const li = class li {
   static SWAP_DIRECTIONALLY(t, e, s = "EMPTY") {
     const { heading: r } = e.state;
     if (r) {
-      const n = b.getDirectionalMove(r, !0);
+      const n = R.getDirectionalMove(r, !0);
       if (s === "ANY" || t.is(n, s))
         return t.swap(n);
     }
@@ -11340,10 +11340,10 @@ const Y = class Y extends V {
   behave(t) {
     var n, a;
     super.behave(t);
-    const e = b.directionToIndex(b.turnLeft(this.state.heading)), s = b.directionToIndex(b.turnRight(this.state.heading)), r = b.getInFront(this.state.heading);
+    const e = R.directionToIndex(R.turnLeft(this.state.heading)), s = R.directionToIndex(R.turnRight(this.state.heading)), r = R.getInFront(this.state.heading);
     switch (t.is(r[0], "SWAPLINE") && t.destroy(), this.state.phase) {
       case "BUILD":
-        const o = b.getInFront(b.veerLeft(this.state.heading)), h = b.getInFront(b.veerRight(this.state.heading));
+        const o = R.getInFront(R.veerLeft(this.state.heading)), h = R.getInFront(R.veerRight(this.state.heading));
         if (t.any([...o, ...h], "SWAPLINE"))
           return;
         if (t.is(e, "EMPTY") ? t.mutate(e, this.TYPE.CREATE) : this.state.color = 13421568, t.is(s, "EMPTY") && (t.mutate(s, this.TYPE.CREATE), this.state.color = 16776960), !t.any([e, s], "EMPTY")) {
@@ -11357,7 +11357,7 @@ const Y = class Y extends V {
         break;
       case "SWAP":
         this.state.color = 16737792;
-        const l = b.getInFront(b.turnLeft(b.veerLeft(this.state.heading))).slice(0, 2), c = b.getInFront(b.turnRight(b.veerRight(this.state.heading))).slice(0, 2);
+        const l = R.getInFront(R.turnLeft(R.veerLeft(this.state.heading))).slice(0, 2), c = R.getInFront(R.turnRight(R.veerRight(this.state.heading))).slice(0, 2);
         !t.any([...r, ...l, ...c], "SWAPLINE") && v.SWAP_DIRECTIONALLY(t, this, "ANY"), t.getSite(r[0]) || (this.state.phase = "DIE");
         break;
       case "DIE":
@@ -11496,7 +11496,7 @@ const ui = class ui {
     return (s, r) => {
       const n = r.state.attractTypes ?? t, a = r.state.swapTypes ?? ["EMPTY"], o = s.filter(e, n);
       if (o.length) {
-        const h = T.RANDOM(o), l = b.getInFront(b.indexToDirection(h), !0), c = s.filter(l, a);
+        const h = T.RANDOM(o), l = R.getInFront(R.indexToDirection(h), !0), c = s.filter(l, a);
         if (c.length)
           return c.sort((u, d) => Math.abs(h - u) - Math.abs(h - d)).slice(~~(c.length / 2)), s.swap(T.RANDOM(c));
       }
@@ -11505,7 +11505,7 @@ const ui = class ui {
   }
 };
 ui.NAME = "REPEL";
-let Dt = ui;
+let Nt = ui;
 const F = class F extends V {
   constructor(t, e = {}) {
     super(t, e), this.init();
@@ -11513,7 +11513,7 @@ const F = class F extends V {
   init() {
   }
   behave(t) {
-    super.behave(t), Pt.DOWN(t) || Pt.SIDE(t), t.selfIs("BUBBLY") && F.BUBBLE(t), t.selfIs("FLOATS") ? Pt.FLOAT(t, 1.25) : Pt.SINK(t);
+    super.behave(t), Dt.DOWN(t) || Dt.SIDE(t), t.selfIs("BUBBLY") && F.BUBBLE(t), t.selfIs("FLOATS") ? Dt.FLOAT(t, 1.25) : Dt.SINK(t);
   }
 };
 F.CREATE = F.CREATOR({ name: "SAND", symbol: "SND", class: F, color: 16768256, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), F.RED_SAND = F.CREATOR({ name: "RED SAND", class: F, color: 16711680, classifications: ["SAND", "BUBBLY", "MOVABLE"], groups: ["Environment"] }), F.PINK_SAND = F.CREATOR({
@@ -11531,7 +11531,7 @@ F.CREATE = F.CREATOR({ name: "SAND", symbol: "SND", class: F, color: 16768256, c
 }), F.GREEN_SAND = F.CREATOR({ name: "GREEN SAND", class: F, color: 9095462, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), F.BLUE_SAND = F.CREATOR({ name: "BLUE SAND", class: F, color: 1671876, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), F.PURPLE_SAND = F.CREATOR({ name: "PURPLE SAND", class: F, color: 6966419, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), F.SAND_GRID = Et.CREATOR(
   { name: "SAND GRID", class: Et, color: 1184018, groups: ["Environment"] },
   { buildPath: T.DIAGONAL4WAY, atomizer: F.CREATE, totalSteps: 40 }
-), F.BUBBLE = Dt.CREATE("SAND", T.S_QUADRANT, "EMPTY", T.N_QUADRANT);
+), F.BUBBLE = Nt.CREATE("SAND", T.S_QUADRANT, "EMPTY", T.N_QUADRANT);
 let er = F;
 const ct = class ct extends V {
   constructor(t, e = {}) {
@@ -11541,7 +11541,7 @@ const ct = class ct extends V {
     this.classifyAs("WATER");
   }
   behave(t) {
-    super.behave(t), Pt.DOWN(t) || Pt.SLIP(t), t.selfIs("BUBBLY") && ct.DO_BUBBLE(t);
+    super.behave(t), Dt.DOWN(t) || Dt.SLIP(t), t.selfIs("BUBBLY") && ct.DO_BUBBLE(t);
   }
 };
 ct.CREATE = ct.CREATOR({ name: "WATER", symbol: "SND", class: ct, color: 4590, groups: ["Environment"] }), ct.BUBBLY_WATER = ct.CREATOR({ name: "BUBBLY WATER", class: ct, color: 4590, classifications: ["WATER", "BUBBLY"], groups: ["Environment"] }), ct.WATER_GRID = Et.CREATOR(
@@ -11550,17 +11550,17 @@ ct.CREATE = ct.CREATOR({ name: "WATER", symbol: "SND", class: ct, color: 4590, g
 ), ct.WATER_LINE = Et.CREATOR(
   { name: "WATER LINE", class: Et, color: 1184018, groups: ["Environment"] },
   { buildPath: [1, 4], atomizer: ct.CREATE }
-), ct.DO_BUBBLE = Dt.CREATE("WATER", T.S_QUADRANT, "EMPTY", T.N_QUADRANT);
+), ct.DO_BUBBLE = Nt.CREATE("WATER", T.S_QUADRANT, "EMPTY", T.N_QUADRANT);
 let sr = ct;
 const J = class J extends V {
   constructor(t, e = {}) {
     super(t, e), this.init();
   }
   init() {
-    this.state.stickyType || (this.state.stickyType = ["GOOP"]), this.state.attractor = Dt.MAKE_ATTRACTOR(
+    this.state.stickyType || (this.state.stickyType = ["GOOP"]), this.state.attractor = Nt.MAKE_ATTRACTOR(
       this.state.stickyType,
       [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
-    ), this.state.avoider = Dt.MAKE_AVOIDER(this.state.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]), this.state.aloneCount = 0;
+    ), this.state.avoider = Nt.MAKE_AVOIDER(this.state.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]), this.state.aloneCount = 0;
   }
   behave(t) {
     super.behave(t), t.filterByType(T.ALLADJACENT, [...this.state.stickyType, "GOOP"]).length, !this.state.attractor(t, this) && !this.state.avoider(t, this) && J.ATTRACT(t, this);
@@ -11578,7 +11578,7 @@ J.CREATE = J.CREATOR({ name: "GOOP", symbol: "GOP", class: J, color: 5542562, gr
 ), J.GOOP_GRID = Et.CREATOR(
   { name: "GOOP GRID", class: Et, color: 1184018, groups: ["Goopy Stuff"] },
   { buildPath: T.DIAGONAL4WAY, atomizer: J.LIFE_GOOP, totalSteps: 40 }
-), J.ATTRACT = Dt.MAKE_ATTRACTOR(["GOOP"], [...T.LAYER2, ...T.LAYER3, ...T.LAYER4]), J.AVOID = Dt.MAKE_AVOIDER(["GOOP"], [...T.LAYER1], [...T.LAYER2, ...T.LAYER3, ...T.LAYER4]);
+), J.ATTRACT = Nt.MAKE_ATTRACTOR(["GOOP"], [...T.LAYER2, ...T.LAYER3, ...T.LAYER4]), J.AVOID = Nt.MAKE_AVOIDER(["GOOP"], [...T.LAYER1], [...T.LAYER2, ...T.LAYER3, ...T.LAYER4]);
 let ir = J;
 const I = class I extends V {
   constructor(t, e = {}) {
@@ -11670,11 +11670,11 @@ const lt = class lt extends V {
   }
   makeBigTail(t) {
     [
-      ...b.getLeft(this.state.heading, !0),
-      b.getDirectionalMove(b.veerLeft(this.state.heading), !0),
-      b.getDirectionalMove(b.veerRight(this.state.heading), !0),
-      b.getDirectionalMove(b.turnRight(this.state.heading), !0),
-      b.getDirectionalMove(b.turnLeft(this.state.heading), !0)
+      ...R.getLeft(this.state.heading, !0),
+      R.getDirectionalMove(R.veerLeft(this.state.heading), !0),
+      R.getDirectionalMove(R.veerRight(this.state.heading), !0),
+      R.getDirectionalMove(R.turnRight(this.state.heading), !0),
+      R.getDirectionalMove(R.turnLeft(this.state.heading), !0)
     ].forEach((e) => {
       t.is(e, "EMPTY") && t.replace(e, lt.LOOP_WALL());
     });
@@ -11684,7 +11684,7 @@ const lt = class lt extends V {
   }
   behaveAsLooper(t) {
     if (!this.state.heading)
-      v.SET_DIRECTION(this, b.RANDOM(b.DIRECTIONS_PRIMARY)), this.state.moves = 0;
+      v.SET_DIRECTION(this, R.RANDOM(R.DIRECTIONS_PRIMARY)), this.state.moves = 0;
     else {
       const e = this.state.moves % 2 !== 0;
       let s;
@@ -11696,8 +11696,8 @@ const lt = class lt extends V {
       t,
       this,
       ["DECAY WALL", "EMPTY"],
-      Ue.DIRECTORS_MAP.get(b.turnRight(this.state.heading))({ classifications: ["DECAY WALL", "DECAYABLE"] }, { lifeSpan: 50 })
-    ), this.state.age % 5 === 0 && v.SLIGHT_RIGHT(this)) : (v.SET_DIRECTION(this, b.RANDOM(b.DIRECTIONS)), this.state.moves = 0);
+      Ue.DIRECTORS_MAP.get(R.turnRight(this.state.heading))({ classifications: ["DECAY WALL", "DECAYABLE"] }, { lifeSpan: 50 })
+    ), this.state.age % 5 === 0 && v.SLIGHT_RIGHT(this)) : (v.SET_DIRECTION(this, R.RANDOM(R.DIRECTIONS)), this.state.moves = 0);
   }
 };
 lt.CREATE = lt.CREATOR({ name: "LOOPER", symbol: "LPR", class: lt, color: 16716911, groups: ["Life"] }), lt.WONKY = lt.CREATOR({
@@ -11707,7 +11707,7 @@ lt.CREATE = lt.CREATOR({ name: "LOOPER", symbol: "LPR", class: lt, color: 167169
   color: 16716911,
   classifications: ["WONKY", "LOOPER"],
   groups: ["Life"]
-}), lt.LOOP_WALL = st.CREATOR({ name: "LOOP WALL", class: st, color: 6689177, classifications: ["DECAYABLE", "MOVABLE"] }, { lifeSpan: 150 }), lt.LOOP_DIRECTOR = (t) => Ue.DIRECTORS_MAP.get(b.turnRight(t))({ classifications: ["LOOP DIRECTOR", "DECAYABLE"] }, { lifeSpan: 100 }), lt.REPEL_DIRECTIONAL = Dt.MAKE_REPELLER(["DIRECTIONAL"], [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 25, 26, 27, 28]);
+}), lt.LOOP_WALL = st.CREATOR({ name: "LOOP WALL", class: st, color: 6689177, classifications: ["DECAYABLE", "MOVABLE"] }, { lifeSpan: 150 }), lt.LOOP_DIRECTOR = (t) => Ue.DIRECTORS_MAP.get(R.turnRight(t))({ classifications: ["LOOP DIRECTOR", "DECAYABLE"] }, { lifeSpan: 100 }), lt.REPEL_DIRECTIONAL = Nt.MAKE_REPELLER(["DIRECTIONAL"], [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 25, 26, 27, 28]);
 let rr = lt;
 const ve = class ve extends V {
   constructor(t, e = {}) {
@@ -11749,7 +11749,11 @@ const z = class z extends V {
   }
   behave(t) {
     var e;
-    if (super.behave(t), this.state.heading, t.selfIs("FLY"))
+    if (super.behave(t), this.state.heading) {
+      const s = [R.getInFront(this.state.heading)[0]];
+      t.is(s[0], "MOVABLE") && Nt.MAKE_REPELLER(["MOVABLE"], s, [9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36])(t, this);
+    }
+    if (t.selfIs("FLY"))
       this.behaveAsFly(t);
     else if (t.selfIs("MOSQUITO"))
       this.behaveAsMosquito(t);
@@ -11759,16 +11763,16 @@ const z = class z extends V {
       this.behaveAsSwampData(t);
     else {
       if (!this.state.heading) {
-        v.SET_DIRECTION(this, b.RANDOM());
+        v.SET_DIRECTION(this, R.RANDOM());
         return;
       }
-      if (!t.exists(b.getInFront(this.state.heading)[0])) {
+      if (!t.exists(R.getInFront(this.state.heading)[0])) {
         v.REVERSE(this), v.SLIGHT_RANDOMLY(this);
         return;
       }
-      const s = (e = t.filter(b.getInFront(this.state.heading, !0), "WANDERER", !0)) == null ? void 0 : e[0];
+      const s = (e = t.filter(R.getInFront(this.state.heading, !0), "WANDERER", !0)) == null ? void 0 : e[0];
       s ? this.state.heading = t.getSite(s).atom.state.heading : T.oneIn(100) && v.SLIGHT_RANDOMLY(this);
-      const r = t.filter(b.getBehind(this.state.heading, !0), "WANDERER", !1);
+      const r = t.filter(R.getBehind(this.state.heading, !0), "WANDERER", !1);
       r.length > 0 && r.forEach((n) => {
         t.getSite(n).atom.state.heading = this.state.heading;
       }), v.MOVE_DIRECTIONALLY(t, this) || v.SLIGHT_RANDOMLY(this), this.state.setColor();
@@ -11776,34 +11780,34 @@ const z = class z extends V {
   }
   behaveAsFly(t) {
     this.state.heading ? ([
-      b.getDirectionalMove(b.turnRight(this.state.heading), !0),
-      b.getDirectionalMove(b.turnLeft(this.state.heading), !0)
+      R.getDirectionalMove(R.turnRight(this.state.heading), !0),
+      R.getDirectionalMove(R.turnLeft(this.state.heading), !0)
     ].forEach((e) => {
       t.is(e, "EMPTY") && t.replace(e, z.FLY_TAIL());
-    }), v.MOVE_DIRECTIONALLY(t, this, "EMPTY", z.FLY_TAIL()), T.oneIn(2) && v.SLIGHT_RANDOMLY(this)) : v.SET_DIRECTION(this, b.RANDOM());
+    }), v.MOVE_DIRECTIONALLY(t, this, "EMPTY", z.FLY_TAIL()), T.oneIn(2) && v.SLIGHT_RANDOMLY(this)) : v.SET_DIRECTION(this, R.RANDOM());
   }
   behaveAsMosquito(t) {
-    this.state.heading ? (v.MOVE_DIRECTIONALLY(t, this, "EMPTY", z.MOSQUITO_TAIL()), v.SLIGHT_RANDOMLY(this)) : v.SET_DIRECTION(this, b.RANDOM());
+    this.state.heading ? (v.MOVE_DIRECTIONALLY(t, this, "EMPTY", z.MOSQUITO_TAIL()), v.SLIGHT_RANDOMLY(this)) : v.SET_DIRECTION(this, R.RANDOM());
   }
   behaveAsBird(t) {
     if (!this.state.heading)
-      v.SET_DIRECTION(this, b.RANDOM());
+      v.SET_DIRECTION(this, R.RANDOM());
     else {
       const e = t.filter(T.ALLADJACENT, "BIRD", !0)[0];
       e && (this.state.heading = t.getSite(e).atom.state.heading ?? this.state.heading), [
-        b.getDirectionalMove(b.turnRight(this.state.heading), !0),
-        b.getDirectionalMove(b.turnLeft(this.state.heading), !0)
+        R.getDirectionalMove(R.turnRight(this.state.heading), !0),
+        R.getDirectionalMove(R.turnLeft(this.state.heading), !0)
       ].forEach((s) => {
         t.is(s, "EMPTY") && t.replace(s, z.BIRD_WING({}, { heading: this.state.heading }));
       }), v.MOVE_DIRECTIONALLY(t, this, "EMPTY") ? T.oneIn(4) && v.SLIGHT_RANDOMLY(this) : v.REVERSE(this);
     }
   }
   behaveAsSwampData(t) {
-    this.state.heading ? (t.filter(b.getInFront(this.state.heading), "EMPTY").length && v.REVERSE(this), T.oneIn(10) && (v.SWAP_DIRECTIONALLY(t, this, "SWAMP"), v.SLIGHT_RANDOMLY(this))) : v.SET_DIRECTION(this, b.RANDOM());
+    this.state.heading ? (t.filter(R.getInFront(this.state.heading), "EMPTY").length && v.REVERSE(this), T.oneIn(10) && (v.SWAP_DIRECTIONALLY(t, this, "SWAMP"), v.SLIGHT_RANDOMLY(this))) : v.SET_DIRECTION(this, R.RANDOM());
   }
   blazeTrail(t) {
     if (this.state.heading) {
-      const e = b.getInFront(b.turnLeft(this.state.heading))[1], s = b.getInFront(b.turnRight(this.state.heading))[1];
+      const e = R.getInFront(R.turnLeft(this.state.heading))[1], s = R.getInFront(R.turnRight(this.state.heading))[1];
       t.is(e, "EMPTY") ? t.mutate(e, st.MOVABLE_WALL) : t.is(e, "MOVABLE WALL") && t.mutate(e, xt.CREATE), t.is(s, "EMPTY") ? t.mutate(s, st.MOVABLE_WALL) : t.is(s, "MOVABLE WALL") && t.mutate(s, xt.CREATE);
     }
   }
@@ -11831,8 +11835,8 @@ const Pe = class Pe extends V {
     e.length > 0 && t.mutateMany(e, js.CREATE);
     const s = t.filterByType(T.LAYER4, "EMPTY");
     if (s.length > 0 && s.forEach((r) => {
-      let n = b.indexToDirection(r);
-      const a = b.turnLeft(n);
+      let n = R.indexToDirection(r);
+      const a = R.turnLeft(n);
       t.mutate(r, Ue.DIRECTORS_MAP.get(a));
     }), T.oneIn(1e3)) {
       const r = t.filterByType(T.LAYER4, "DIRECTOR");
@@ -11851,18 +11855,18 @@ const kt = class kt extends V {
   behave(t) {
     var s, r;
     if (super.behave(t), !this.state.heading) {
-      this.state.heading = b.RANDOM(b.DIRECTIONS);
+      this.state.heading = R.RANDOM(R.DIRECTIONS);
       return;
     }
     const e = t.filterByType(T.ALLADJACENT, ((s = this.state) == null ? void 0 : s.directableTypes) ?? ["DIRECTABLE"]);
     if (e.length > 0) {
-      const n = e[0], a = v.DIRECT(t, n, ((r = this.state) == null ? void 0 : r.pointing) ?? b.reverse(this.state.heading));
+      const n = e[0], a = v.DIRECT(t, n, ((r = this.state) == null ? void 0 : r.pointing) ?? R.reverse(this.state.heading));
       if (this.state.once && a) {
         t.destroy(0);
         return;
       }
     }
-    this.state.heading && (v.MOVE_DIRECTIONALLY(t, this, this.state.direction) || (this.state.heading = b.slightRandom(this.state.heading)));
+    this.state.heading && (v.MOVE_DIRECTIONALLY(t, this, this.state.direction) || (this.state.heading = R.slightRandom(this.state.heading)));
   }
 };
 kt.CREATE = kt.CREATOR({ name: "DIRDIR", symbol: "DDIR", class: kt, color: 11184810, groups: ["Agents"], classifications: ["DIRECTOR"] }), kt.DDIR_ONCE = kt.CREATOR(
@@ -11885,7 +11889,7 @@ const De = class De extends V {
       t.mutate(0, Fe.CREATE);
       return;
     }
-    this.state.heading ? v.SWAP_DIRECTIONALLY(t, this, "SWAMP") ? v.VEER_RIGHT(this) : v.SLIGHT_RIGHT(this) : v.SET_DIRECTION(this, b.RANDOM(b.DIRECTIONS_PRIMARY));
+    this.state.heading ? v.SWAP_DIRECTIONALLY(t, this, "SWAMP") ? v.VEER_RIGHT(this) : v.SLIGHT_RIGHT(this) : v.SET_DIRECTION(this, R.RANDOM(R.DIRECTIONS_PRIMARY));
   }
 };
 De.CREATE = De.CREATOR({
@@ -11937,7 +11941,7 @@ const we = class we extends V {
     if (super.behave(t), this.state.heading)
       t.filterByType(T.ADJACENT8WAY, "EMPTY").length > 1 && v.SLIGHT_RIGHT(this), v.SWAP_DIRECTIONALLY(t, this, "SWAMP"), T.oneIn(1.5) && v.SLIGHT_RIGHT(this);
     else {
-      v.SET_DIRECTION(this, b.RANDOM());
+      v.SET_DIRECTION(this, R.RANDOM());
       const e = t.filterByType(T.ADJACENT8WAY, "EMPTY");
       e.length && t.mutateMany(e, Fe.CREATE);
     }
@@ -11959,7 +11963,7 @@ const Oe = class Oe extends V {
   init() {
   }
   behave(t) {
-    super.behave(t), this.state.heading ? (v.MOVE_DIRECTIONALLY(t, this), v.SLIGHT_RANDOMLY(this)) : v.SET_DIRECTION(this, b.RANDOM());
+    super.behave(t), this.state.heading ? (v.MOVE_DIRECTIONALLY(t, this), v.SLIGHT_RANDOMLY(this)) : v.SET_DIRECTION(this, R.RANDOM());
     const e = t.filter(T.ALLADJACENT, "FORKBOMB", !0);
     e.length && t.mutate(e[0], Qs.CREATE);
   }
@@ -12202,9 +12206,9 @@ const pt = class pt extends V {
     if (((e = this.state) == null ? void 0 : e.status) === "HELD")
       return !1;
     if (!this.state.heading)
-      v.SET_DIRECTION(this, b.RANDOM());
+      v.SET_DIRECTION(this, R.RANDOM());
     else if (T.oneIn(2)) {
-      const r = b.getDirectionalMove(this.state.heading, !0);
+      const r = R.getDirectionalMove(this.state.heading, !0);
       let n = !1;
       return t.is(r, "EMPTY") && (n = t.move(r, this.makeGrowTemp(r))), ((s = this.state) == null ? void 0 : s.status) !== "DIRECTED" && T.oneIn(10) && v.SLIGHT_RANDOMLY(this), n ? this.state.behind = T.OPPOSITES[r] : v.SLIGHT_RANDOMLY(this), n;
     }
@@ -12271,8 +12275,8 @@ export {
   Ss as H,
   gt as I,
   Ir as J,
-  It as K,
-  Nt as L,
+  Ct as K,
+  It as L,
   Jr as M,
   lo as N,
   le as O,
@@ -12289,7 +12293,7 @@ export {
   ht as Z,
   rn as _,
   te as a,
-  Ct as a0,
+  Mt as a0,
   Pi as a1,
   kn as a2,
   cn as a3,
@@ -12337,7 +12341,7 @@ export {
   yo as m,
   Hh as n,
   po as o,
-  vt as p,
+  Pt as p,
   _r as q,
   jn as r,
   Ot as s,
