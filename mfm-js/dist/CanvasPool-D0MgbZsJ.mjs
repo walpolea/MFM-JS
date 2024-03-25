@@ -1,4 +1,4 @@
-import { D as c, n } from "./main-DGnPO_fL.mjs";
+import { D as c, n } from "./main-Dh78mr3i.mjs";
 class l {
   constructor(a) {
     this._canvasPool = /* @__PURE__ */ Object.create(null), this.canvasOptions = a || {}, this.enableFullScreen = !1;
