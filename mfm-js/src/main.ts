@@ -6,9 +6,6 @@ export { Element } from "./mfm/Element";
 export { ElementRegistry } from "./mfm/ElementRegistry";
 export { EventWindow } from "./mfm/EventWindow";
 
-//RENDERERS
-export { PixiRenderer } from "./renderers/pixi/renderer";
-
 ///ELEMENTS
 export { Empty } from "./elements/core/Empty";
 export { DReg } from "./elements/core/DReg";

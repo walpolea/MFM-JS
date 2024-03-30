@@ -173,22 +173,10 @@
   </div>
   <script type="module">
     import { createApp } from 'https://unpkg.com/petite-vue?module';
-    import { Tile, PixiRenderer, ElementRegistry, EventWindow } from "./src/main.ts";
+    import { Tile, ElementRegistry, EventWindow } from "./src/main.ts";
+    import { PixiRenderer } from "./renderers/pixi/renderer.ts";
 
     let t;
-
-    // t = new Tile(256, 128);
-    // const grid = new PixiRenderer(t, 1800, 1800 * (t.height / t.width));
-    // await grid.init();
-
-    // console.log( 'hey', grid );
-    // const gridEl = document.querySelector('.grid');
-
-    // while (gridEl.firstChild) {
-    //   gridEl.removeChild(gridEl.firstChild);
-    // }
-
-    // gridEl.appendChild(grid.view);
 
     createApp({
       activeEl: undefined,
