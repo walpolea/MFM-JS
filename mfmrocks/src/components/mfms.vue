@@ -58,7 +58,7 @@
   import { ref, onMounted, watch } from 'vue';
   import { Tile, ElementRegistry } from 'mfm-js';
 
-  import { PixiRenderer } from '/../mfm-js/renderers/pixi/renderer.ts';
+  import { PixiRenderer } from '/src/scripts/renderers/pixi/renderer.ts';
 
   const showControls = ref(true);
   const toggleControls = () => showControls.value = !showControls.value;

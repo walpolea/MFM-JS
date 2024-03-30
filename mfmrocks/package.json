@@ -12,8 +12,9 @@
   "dependencies": {
     "@astrojs/vue": "^4.0.8",
     "astro": "^4.4.15",
+    "mfm-js": "file:../mfm-js",
+    "pixi.js": "^8.0.4",
     "sass": "^1.71.1",
-    "vue": "^3.4.21",
-    "mfm-js": "file:../mfm-js"
+    "vue": "^3.4.21"
   }
 }
