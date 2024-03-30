@@ -7,27 +7,32 @@
       <div class="control-panel" :class="{open: showControls}">
         <div class="panel-items">
           <div class="grid-tools">
+            <div style="grid-column:1 / -1;width:max-content;max-height:40px;">
+                <label style="display:flex;">
+                  <input style="max-width:20px;" type="checkbox" v-model="pinned">
+                  <span style="flex:1;">pin controls</span>
+                </label>
+              </div>
             <label>
               Render Speed ({{renderSpeed}}x, {{~~grid?.fixedRenderSpeed}} updates per frame)<br>
               <input type="range" min="0" :max="20" value="1" :step="0.001" v-model="renderSpeed">
             </label>
             <fieldgroup>
-
-            <label>
-              Brush Size ({{brushSize}})<br>
-              <input style="width:auto;" type="range" min="1" max="5" value="1" step="1" v-model="brushSize">
-            </label>
-            <label style="margin-left:16px;">
-              <span>Grid size:</span>
-              <select v-model="gridSize">
-                <option v-for="gs in GRID_SIZES" :value="`${gs.w},${gs.h}`">{{gs.w}} x {{gs.h}}</option>
-              </select>
-            </label>
-            <br>
-            <button @click="tile.clear()">CLEAR GRID</button>
-            <button @click="tile.clear( activeType );">CLEAR TYPE</button>
-            <label><input type="checkbox" v-model="pinned">pin</label>
-          </fieldgroup>
+              <label>
+                Brush Size ({{brushSize}})<br>
+                <input style="width:auto;" type="range" min="1" max="5" value="1" step="1" v-model="brushSize">
+              </label>
+              <label style="margin-left:16px;">
+                <span>Grid size:</span>
+                <select v-model="gridSize">
+                  <option v-for="gs in GRID_SIZES" :value="`${gs.w},${gs.h}`">{{gs.w}} x {{gs.h}}</option>
+                </select>
+              </label>
+              <br>
+              
+              <button @click="tile.clear()">CLEAR GRID</button>
+              <button @click="tile.clear( activeType );">CLEAR TYPE</button>
+            </fieldgroup>
 
           </div>
         
@@ -51,9 +56,11 @@
 <script setup>
 
   import { ref, onMounted, watch } from 'vue';
-  import { Tile, PixiRenderer, ElementRegistry } from 'mfm-js';
+  import { Tile, ElementRegistry } from 'mfm-js';
 
-  const showControls = ref(false);
+  import { PixiRenderer } from '/../mfm-js/renderers/pixi/renderer.ts';
+
+  const showControls = ref(true);
   const toggleControls = () => showControls.value = !showControls.value;
 
   const GRID_SIZES = [
@@ -97,7 +104,7 @@
   const renderSpeed = ref(1);
   const brushSize = ref(1);
   const gridSize = ref('256,128');
-  const pinned = ref(false);
+  const pinned = ref(true);
 
   watch( brushSize, (bs) => {
     grid.brushSize = +bs;
@@ -175,7 +182,7 @@ button {
 
 .mfms.pinned {
   .mfms-grid {
-    margin-bottom:20px;
+    margin-bottom:5px;
   }
 
   .controls {

@@ -8,7 +8,7 @@ module.exports = defineConfig({
       entry: path.resolve(__dirname, 'src/main.ts'),
       name: 'MFM-JS',
       fileName: (format) => `mfm.${format}.js`
-    }
+    },
   },
   plugins: [dts()],
 });
