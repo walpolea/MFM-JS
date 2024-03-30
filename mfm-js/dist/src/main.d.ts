@@ -1,4 +1,5 @@
 export { Tile } from './mfm/Tile';
+export { Site } from './mfm/Site';
 export { Element } from './mfm/Element';
 export { ElementRegistry } from './mfm/ElementRegistry';
 export { EventWindow } from './mfm/EventWindow';
