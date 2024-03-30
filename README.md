@@ -10,16 +10,15 @@
 
 Prerequisites
 
-- nodejs 14+ (_I use nvm to easily manage and upgrade node versions_) (https://nodejs.org)
+- nodejs 18+ (_I use nvm to easily manage and upgrade node versions_) (https://nodejs.org)
 - an IDE like VS Code (https://code.visualstudio.com/)
 
 Install
 
 - git clone https://github.com/walpolea/MFM-JS.git
-- `cd MFM-JS`
+- `cd MFM-JS/mfm-js`
 - `npm install`
 - `npm run build`
-- serve up `public/index.html` to view in browser
-  - you can `npm install -g serve`
-  - and then `serve ./public`
-  - or even `npx serve ./public`
+- the library builds to `/mfm-js/dist`
+- also serve up `index.html` with `npm run dev` to watch chaanges as you build things.
+- note that the renderers are no longer bundled with the main library
