@@ -140,8 +140,7 @@ export class PixiRenderer implements IRenderer {
 
         viz.x = j * this.siteSize;
         viz.y = i * this.siteSize;
-        viz.cacheAsBitmap = true;
-
+        // viz.cacheAsBitmap = true;
         
         viz.tint = this.tile.sites.get(`${i}:${j}`).atom.rd("color");
         this.particleContainer.addChild(viz);

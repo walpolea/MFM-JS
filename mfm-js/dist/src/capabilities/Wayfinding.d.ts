@@ -1,6 +1,6 @@
-import { Direction } from '../mfm/Wayfinder';
-import { EventWindow, EWIndex } from '../mfm/EventWindow';
 import { Element } from '../mfm/Element';
+import { EventWindow, EWIndex } from '../mfm/EventWindow';
+import { Direction } from '../mfm/Wayfinder';
 
 export declare class Wayfinding {
     static NAME: string;

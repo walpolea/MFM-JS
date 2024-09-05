@@ -1,6 +1,6 @@
-import { Direction } from '../../mfm/Wayfinder';
-import { EventWindow } from '../../mfm/EventWindow';
 import { Element, IElementType } from '../../mfm/Element';
+import { EventWindow } from '../../mfm/EventWindow';
+import { Direction } from '../../mfm/Wayfinder';
 
 export declare class Director extends Element {
     static N: (_typeDefinition?: import('../../mfm/Element').IElementTypePartial, _state?: any) => Element;

@@ -6,6 +6,15 @@ export { Site } from "./mfm/Site";
 export { Element } from "./mfm/Element";
 export { ElementRegistry } from "./mfm/ElementRegistry";
 export { EventWindow } from "./mfm/EventWindow";
+export { CapabilityRegistry } from "./mfm/Capability";
+export { Wayfinder } from "./mfm/Wayfinder";
+
+// CAPABILITIES
+export { Wayfinding } from "./capabilities/Wayfinding";
+export { Build } from "./capabilities/Build";
+export { Decay } from "./capabilities/Decay";
+export { Repel } from "./capabilities/Repel";
+export { Swap } from "./capabilities/Swap";
 
 ///ELEMENTS
 export { Empty } from "./elements/core/Empty";

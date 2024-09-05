@@ -1,6 +1,6 @@
-import { Tile } from '../../src/mfm/Tile.js';
-import { Site } from '../../src/mfm/Site.js';
 import { Sprite, Container, Application, Texture, FederatedPointerEvent } from 'pixi.js';
+import { Site } from '../../src/mfm/Site.js';
+import { Tile } from '../../src/mfm/Tile.js';
 
 export interface IRenderer {
     tile: Tile;

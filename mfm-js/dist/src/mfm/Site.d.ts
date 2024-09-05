@@ -1,6 +1,6 @@
-import { TileCoordinate } from './TileCoordinate';
-import { EventWindow } from './EventWindow';
 import { Element } from './Element';
+import { EventWindow } from './EventWindow';
+import { TileCoordinate } from './TileCoordinate';
 
 export declare class Site {
     location: TileCoordinate;

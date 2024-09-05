@@ -4,5 +4,6 @@
     "emitDeclarationOnly": true,
     "declaration": true,    
     "esModuleInterop": true,
+    "moduleResolution": "nodenext"
   }
 }

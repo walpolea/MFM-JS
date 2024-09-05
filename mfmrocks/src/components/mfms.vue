@@ -200,8 +200,7 @@ button {
     display:block;
     image-rendering: smooth;
     width:100%;
-    max-height: 10
-    0vh;
+    max-height: 100vh;
   }
 }
 
