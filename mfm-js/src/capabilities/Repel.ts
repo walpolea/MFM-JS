@@ -53,12 +53,10 @@ export class Repel {
             //try to repel in the opposing direction
             if (emptyDests.includes(toSite)) {
               moved = ew.move(toSite, undefined, target);
-              // if (moved) ew.getSite(toSite).atom.state.color += 2048;
             } else {
               //otherwise just repel it anywhere available in the toSet!
               const empty = EventWindow.RANDOM(emptyDests);
               moved = ew.move(empty, undefined, target);
-              // if (moved) ew.getSite(empty).atom.state.color += 2048;
             }
           }
         });

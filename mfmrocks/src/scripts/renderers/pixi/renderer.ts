@@ -181,7 +181,7 @@ export class PixiRenderer implements IRenderer {
   }
 
   render() {
-    console.time();
+    // console.time();
 
     let i = 0,
       j = 0,
@@ -200,7 +200,7 @@ export class PixiRenderer implements IRenderer {
       }
     }
 
-    console.timeEnd();
+    // console.timeEnd();
   }
 
   initializeClickArea() {

@@ -2,7 +2,7 @@ import { Element, IElementType } from "../../mfm/Element";
 import { EventWindow } from "../../mfm/EventWindow";
 import { Wayfinder } from "../../mfm/Wayfinder";
 import { Director } from "./Director";
-import { LivingWall } from "./LivingWall";
+import { Wall } from "../core/Wall";
 
 
 export class DirectorWall extends Element {
@@ -22,7 +22,7 @@ export class DirectorWall extends Element {
     const emptyWallNeighbors = ew.filterByType([...EventWindow.LAYER1, ...EventWindow.LAYER2, ...EventWindow.LAYER3], ["EMPTY", "DIRECTOR"]);
 
     if (emptyWallNeighbors.length > 0) {
-      ew.mutateMany( emptyWallNeighbors, LivingWall.CREATE );
+      ew.mutateMany( emptyWallNeighbors, Wall.CREATE );
     }
 
     const emptyDirectorNeighbors = ew.filterByType(EventWindow.LAYER4, "EMPTY");

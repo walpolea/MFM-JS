@@ -78,4 +78,5 @@ export declare class EventWindow {
     mutate(targetIndex: EWIndex, atomCreator: Function, creatorParams?: any[]): boolean;
     mutateMany(siteSet: EWIndex[], atomCreator: Function, creatorParams?: any[]): void;
     destroy(targetIndex?: EWIndex): boolean;
+    shuffleSites(siteSet: EWIndex[]): EWIndex[];
 }
