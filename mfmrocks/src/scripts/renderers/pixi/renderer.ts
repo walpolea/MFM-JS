@@ -1,5 +1,5 @@
 import { Sprite, Container, Application, Assets, Texture, Point, Rectangle, ObservablePoint, FederatedPointerEvent } from "pixi.js";
-import { EventWindow, Site, Tile } from "mfm-js";
+import { EventWindow, Site, Tile, ElementRegistry } from "mfm-js";
 //@ts-ignore
 import url from "./element.png";
 
@@ -269,6 +269,48 @@ export class PixiRenderer implements IRenderer {
     if (site && this.curSelectedElementFunction) {
       site.atom = this.curSelectedElementFunction();
     }
+  }
+
+  setAllAtoms( type = "EMPTY" ) {
+    this.tile.sites.forEach( (s) => {
+      s.atom = ElementRegistry.getType(type).CREATE();
+    });
+  }
+
+  setAtomAt( x, y, type = "EMPTY", {params = undefined, state = undefined} = {} ) {
+    this.tile.sites.get(`${y}:${x}`).atom = ElementRegistry.getType(type).CREATE(params, state);
+  }
+
+  setAtomicMap( map ) {
+
+    this.setAllAtoms();
+
+    map.atoms.forEach( atom => {
+
+      if( atom.from && atom.to ) {
+        const {from, to} = atom;
+
+        const xdist = Math.abs(to.x - from.x);
+        const ydist = Math.abs(to.y - from.y);
+
+        const steps = Math.max(xdist, ydist);
+
+        for( let i = 0; i < steps; i++ ) {
+          const x = ~~(from.x + (xdist / steps) * i);
+          const y = ~~(from.y + (ydist / steps) * i);
+
+          console.log( atom.from.x, x ) ;
+          this.setAtomAt( x, y, atom.type, atom?.settings );
+        }
+
+        this.setAtomAt(to.x, to.y, atom.type, atom?.settings );
+
+      } else {
+        const {x, y} = atom;
+        this.setAtomAt(x, y, atom.type, atom?.settings );
+      }
+    });
+
   }
 
   minValue(v1, v2) {

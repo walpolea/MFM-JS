@@ -18,6 +18,9 @@ export class Lemming extends Element {
   behave(ew: EventWindow) {
     super.behave(ew);
 
+    if( !ew.exists( 3 ) ) {
+      ew.destroy();
+    }
 
     //Gravity?
     if( ew.is(3, "EMPTY") ) {

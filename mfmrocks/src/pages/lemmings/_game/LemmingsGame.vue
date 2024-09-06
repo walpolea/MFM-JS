@@ -2,28 +2,25 @@
 <div class="lemmings-game" v-once></div>
 <div class="controls">
   <button @click="togglePause">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
+  <input type="range" min="0" :max="2" value="1" :step="0.001" v-model="renderSpeed">
 </div>
 </template>
 <script setup>
 
-import { ref, onMounted, watch } from 'vue';
-import { Tile, ElementRegistry } from 'mfm-js';
-
-import {Lemming} from './elements/lemming.ts';
-
+  import { ref, onMounted, watch } from 'vue';
+  import { Tile, ElementRegistry } from 'mfm-js';
   import { PixiRenderer } from '/src/scripts/renderers/pixi/renderer.ts';
 
-  const GRID_SIZES = [
-    {
-      w: 96,
-      h: 64
-    },
-  ]
+  import {Lemming} from './elements/Lemming.ts';
+  import {LemmingEmitter} from './elements/LemmingEmitter.ts';
+
+  import {LEVEL1} from './levels/level1';
 
   let tile; 
   let grid;
   let mfms;
-  // const mfms = ref(null);
+  let currentLevel = LEVEL1;
+
   const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()));
   const activeType = ref(null);
 
@@ -37,14 +34,11 @@ import {Lemming} from './elements/lemming.ts';
   }
   const play = () => {
     isPaused.value = false;
-    renderSpeed.value = 0.5;
+    renderSpeed.value = 1;
   }
 
-  console.log( elements.value );
-
-  const renderSpeed = ref(0.5);
+  const renderSpeed = ref(1);
   const brushSize = ref(1);
-  const gridSize = ref('96,64');
 
   watch( brushSize, (bs) => {
     grid.brushSize = +bs;
@@ -53,20 +47,39 @@ import {Lemming} from './elements/lemming.ts';
   watch( renderSpeed, (rs) => {
     grid.setRenderMultiplier(rs);
   });
-
-  watch( gridSize, (gs) => {
-    setGridSize(gs);
-  });
   
   onMounted( async () => {
     mfms = document.querySelector('.lemmings-game');
-    await init();
+
+
+    // await init();
+
+    // grid.setAllAtoms( "LEMM" );
+    // grid.setAtomAt( 10, 50, "LEMM" );
+    loadLevel();
   });
 
-  async function init(w = 96, h = 64) {
+  async function loadLevel( level ) {
 
+    if(level) {
+      currentLevel = level;
+    }
+
+    await init( currentLevel.map.width, currentLevel.map.height );
+    // await init();
+
+    grid.setAtomicMap( currentLevel.map );
+  }
+
+  function onReInit({ w, h }) {
+    // init(w, h);
+  }
+
+  async function init(w = 128, h = 64) {
+
+    const sizeFactor = 3600;
     tile = new Tile(w, h);
-    grid = new PixiRenderer(tile, 3600, 3600 * (tile.height / tile.width));
+    grid = new PixiRenderer(tile, sizeFactor, sizeFactor * (tile.height / tile.width));
 
     await grid.init();
     
