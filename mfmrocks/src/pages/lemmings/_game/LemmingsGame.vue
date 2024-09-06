@@ -1,11 +1,13 @@
 <template>
   <div class="top-hud">
-    <span>Lemmings Saved: {{ saved }}</span>
+    <span>{{ currentLevel.name }}</span>
+    <span>Lemmings Saved: {{ currentSavedLemmings }} / {{ currentLevel.saveGoal ?? "?" }}</span>
   </div>
 <div class="lemmings-game" v-once></div>
 <div class="controls">
   <button @click="togglePause">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
-  <input type="range" min="0" :max="1" value="1" :step="0.001" v-model="renderSpeed">
+  <button @click="loadLevel()">RESTART LEVEL</button>
+  <input type="range" min="0" :max="4" value="1" :step="0.001" v-model="renderSpeed">
   <div class="editor-controls" v-if="mode === 'EDIT'">
     <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
     <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
@@ -26,14 +28,13 @@
   import {Dirt} from './elements/Dirt.ts';
   import {Exit} from './elements/Exit.ts';
 
-  import {LEVEL1} from './levels/level1';
+  import {useGameState} from './useGameState';
 
   let tile; 
   let grid;
   let mfms;
-  let currentLevel = LEVEL1;
 
-  const saved = ref(0);
+  const { currentLevel, currentSavedLemmings, currentSaveGoal, nextLevel, prevLevel, levelPassed } = useGameState();
 
   const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()).LEMMINGS);
   const activeType = ref(null);
@@ -63,24 +64,32 @@
   watch( renderSpeed, (rs) => {
     grid.setRenderMultiplier(rs);
   });
+
+  watch( () => levelPassed.value, () => {
+    if( levelPassed.value ) {
+      console.log('next level');
+      pause();
+      nextLevel();
+      loadLevel();
+    }
+  })
   
   onMounted( async () => {
     mfms = document.querySelector('.lemmings-game');
-
     loadLevel();
   });
 
   async function loadLevel( level ) {
 
     if(level) {
-      currentLevel = level;
+      currentLevel.value = level;
     }
 
     if( grid ) {
       grid.deconstruct();
     }
-    await init( currentLevel.map.width, currentLevel.map.height );
-    grid.setAtomicMap( currentLevel.map );
+    await init( currentLevel.value.map.width, currentLevel.value.map.height );
+    grid.setAtomicMap( currentLevel.value.map );
   }
 
   function onReInit({ w, h }) {
@@ -148,5 +157,11 @@
     width:100%;
     max-height: 60vh;
   }
+
+}
+
+.top-hud {
+  display:flex;
+  gap:1rem;
 }
 </style>

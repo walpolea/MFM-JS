@@ -310,6 +310,10 @@ export class PixiRenderer implements IRenderer {
       }
     });
 
+    if( map.emitter ) {
+      this.setAtomAt(map.emitter.x, map.emitter.y, map.emitter.t, map.emitter.settings);
+    }
+
   }
 
   getAtomicMap( asString = false ) {

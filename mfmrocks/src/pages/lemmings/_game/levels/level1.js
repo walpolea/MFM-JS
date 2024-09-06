@@ -1,7 +1,8 @@
 export const LEVEL1 = {
   id: 'level1',
-  name: 'Just Dig!',
+  name: 'Level 1: Just Dig!',
   description: 'Dig your way to the exit!',
+  saveGoal: 100,
   difficulty: 1,
   map: {
     width: 64,
