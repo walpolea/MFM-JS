@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "lib":["ES2019"],
-    "emitDeclarationOnly": true,
-    "declaration": true,    
-    "esModuleInterop": true,
-  }
-}

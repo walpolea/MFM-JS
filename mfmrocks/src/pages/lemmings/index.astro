@@ -1,0 +1,52 @@
+---
+import '../../styles/main.scss';
+
+import LemmingsGame from './_game/LemmingsGame.vue';
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>MFM.ROCKS</title>
+	</head>
+	<body>
+    <div class="game-container">
+
+      <header>
+        <h1>MFM Lemmings</h1>
+      </header>
+      
+      <LemmingsGame client:only="vue"></LemmingsGame>
+      
+      <footer>
+        <p>created by <a href="https://www.andrewwalpole.com/">Andrew Walpole</a> &copy; { new Date().getFullYear() }</p>
+      </footer>
+      
+    </div>
+	</body>
+</html>
+
+<style>
+
+  .game-container {
+
+    height: 100dvh;
+    width::100vw;
+
+  }
+	header {
+		display:grid;
+		place-items:center;
+	}
+
+	footer {
+		width:100%;
+		display:grid;
+		place-items:center;
+		margin-bottom:50px;
+		line-height:1.5;
+	}
+</style>

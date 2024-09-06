@@ -1,0 +1,67 @@
+---
+import '../styles/main.scss'
+import MFMS from '../components/mfms.vue'
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>MFM.ROCKS</title>
+	</head>
+	<body>
+		<header>
+			<img class="logo" src="/images/mfmrocks-logo.png" alt="MFM.rocks Logo" width="800px">
+			<h1>A Movable Feast Machine Simulator written in JavaScript</h1>
+			<nav>
+				<ul>
+					<li>
+						<a target="_blank" href="https://github.com/walpolea/MFM-JS?ref=mfmrocks">MFM-JS Github</a>
+					</li>
+					<li>
+						<a target="_blank" href="https://www.andrewwalpole.com/blog/an-introduction-to-robust-first-computation/">Intro to Robust-First Computation</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://robust.cs.unm.edu/doku.php">Robust-First Wiki (What's the MFM?)</a>
+					</li>
+					<li>
+						<a target="_blank" href="https://www.t2tile.com/?ref=mfmrocks">The T2Tile Project</a>
+					</li>
+					<li>
+						<a href="/v1/">MFM.rocks V1</a>
+					</li>
+					<li>
+						<a href="/v1/game/">Dungeon Grid (A game in MFM)</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<footer>
+			<p>created by <a href="https://www.andrewwalpole.com/">Andrew Walpole</a> &copy; { new Date().getFullYear() }</p>
+		</footer>
+
+		<section class="grid">
+			<MFMS client:only />
+		</section>
+
+		
+	</body>
+</html>
+
+<style>
+	header {
+		display:grid;
+		place-items:center;
+	}
+
+	footer {
+		width:100%;
+		display:grid;
+		place-items:center;
+		margin-bottom:50px;
+		line-height:1.5;
+	}
+</style>
