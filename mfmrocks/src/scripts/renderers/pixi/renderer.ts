@@ -98,7 +98,7 @@ export class PixiRenderer implements IRenderer {
 
   setRenderMultiplier(mult: number) {
     this.renderMultiplier = mult;
-    this.renderSpeed = (this.totalSites / this.gridDivisions.length) * this.renderMultiplier;
+    this.renderSpeed = (this.totalSites / (this.gridDivisions?.length ?? 1)) * this.renderMultiplier;
     this.fixedRenderSpeed = this.totalSites * this.renderMultiplier;
   }
 

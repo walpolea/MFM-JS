@@ -61,7 +61,7 @@
     grid.brushSize = +bs;
   });
 
-  watch( renderSpeed, (rs) => {
+  watch( () => renderSpeed.value, (rs) => {
     grid.setRenderMultiplier(rs);
   });
 
