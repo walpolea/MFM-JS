@@ -1,7 +1,9 @@
 import { Element, EventWindow, Empty } from "mfm-js";
+import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
-  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0xbe146f, groups: ["LEMMINGS"] });
+  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0x505CFE, groups: ["LEMMINGS"] });
+  static HEAD = Empty.CREATOR({ name: "LEMM_HEAD", class: Empty, color: 0x05b604});
 
   constructor(type, state = {}) {
     super(type, state);
@@ -33,11 +35,16 @@ export class Lemming extends Element {
       ew.destroy();
     }
 
+    this.behead(ew);
+
     //Gravity?
     if( ew.is(3, "EMPTY") ) {
       ew.swap(3);
       return;
     }
+
+    this.head(ew);
+
 
     switch( this.state.role ) {
       case "WALKER":
@@ -48,20 +55,29 @@ export class Lemming extends Element {
           this.walk(ew);
         }
         break;
+      case "BLOCKER":
+        this.block(ew);
+        break;
     }
   }
 
   walk(ew) {
-    const walkChecks = Lemming.WALK_CHECKS[this.state.direction];
-    const empties = ew.filterByType( walkChecks, "EMPTY" );
 
-    if( empties.length > 0 ) {
-      ew.swap( empties[0] );
-      return;
-    } else {
-      this.state.direction = this.state.direction === 'RIGHT' ? 'LEFT' : 'RIGHT';
+    const WALK_CHANCE = 10;
+    if( EventWindow.oneIn( WALK_CHANCE ) ) {
+
+      const walkChecks = Lemming.WALK_CHECKS[this.state.direction];
+      const empties = ew.filterByType( walkChecks, "EMPTY" );
+      
+      if( empties.length > 0 ) {
+        this.behead(ew);
+        ew.move( empties[0] );
+        return;
+      } else {
+        this.state.direction = this.state.direction === 'RIGHT' ? 'LEFT' : 'RIGHT';
+      }
+      
     }
-
   }
 
   dig(ew) {
@@ -71,6 +87,27 @@ export class Lemming extends Element {
       dug = true;
     }
     return dug;
+  }
+
+  block(ew) {
+    const blocks = [2,3,10,22,38];
+    blocks.forEach( b => {
+      if( ew.is(b, "EMPTY" ) ) {
+        ew.mutate(b, Dirt.ROCK);
+      }
+    });
+  }
+
+  behead(ew) {
+    if( ew.is( Lemming.DIRS.UP, "LEMM_HEAD" ) ) {
+      ew.mutate( Lemming.DIRS.UP, Empty.CREATE );
+    }
+  }
+
+  head(ew) {
+    if( ew.is( Lemming.DIRS.UP, "EMPTY" ) ) {
+      ew.mutate( Lemming.DIRS.UP, Lemming.HEAD );
+    }
   }
 
   setRole(role) {

@@ -21,6 +21,7 @@
   import {LemmingEmitter} from './elements/LemmingEmitter.ts';
   import {Power} from './elements/Power.ts';
   import { Dirt } from './elements/Dirt.ts';
+  import {Exit} from './elements/Exit.ts';
 
   import {LEVEL1} from './levels/level1';
 
