@@ -1,4 +1,7 @@
 <template>
+  <div class="top-hud">
+    <span>Lemmings Saved: {{ saved }}</span>
+  </div>
 <div class="lemmings-game" v-once></div>
 <div class="controls">
   <button @click="togglePause">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
@@ -6,7 +9,7 @@
   <div class="editor-controls" v-if="mode === 'EDIT'">
     <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
     <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
-    <input type="range" v-model="brushSize" min="1" max="10"> {{ brushSize }}
+    <input type="range" v-model="brushSize" min="1" max="5"> {{ brushSize }}
     <button @click="console.log(grid.getAtomicMap(true))">LOG MAP</button>
   </div>
 </div>
@@ -20,7 +23,7 @@
   import {Lemming} from './elements/Lemming.ts';
   import {LemmingEmitter} from './elements/LemmingEmitter.ts';
   import {Power} from './elements/Power.ts';
-  import { Dirt } from './elements/Dirt.ts';
+  import {Dirt} from './elements/Dirt.ts';
   import {Exit} from './elements/Exit.ts';
 
   import {LEVEL1} from './levels/level1';
@@ -30,12 +33,13 @@
   let mfms;
   let currentLevel = LEVEL1;
 
+  const saved = ref(0);
 
   const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()).LEMMINGS);
   const activeType = ref(null);
   const mode = ref('EDIT');
 
-  const isPaused = ref(false);
+  const isPaused = ref(true);
   const togglePause = () => {
     isPaused.value ? play() : pause();
   }
@@ -50,7 +54,7 @@
 
   const INITIAL_RENDER_SPEED = 0.0;
   const renderSpeed = ref(INITIAL_RENDER_SPEED);
-  const brushSize = ref(2);
+  const brushSize = ref(1);
 
   watch( brushSize, (bs) => {
     grid.brushSize = +bs;

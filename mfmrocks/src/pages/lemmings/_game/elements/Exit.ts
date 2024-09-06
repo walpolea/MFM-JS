@@ -3,6 +3,7 @@ import { Element, Empty, EventWindow, Decay } from "mfm-js";
 export class Exit extends Element {
   static CREATE = Exit.CREATOR({ name: "EXIT", class: Exit, color: 0x444444, classifications: ["GOAL"], groups: ["LEMMINGS"] });
   static EMPTY_GOAL = Exit.CREATOR({name: "EMPTY_EXIT", class: Exit, color: 0x444444, classifications: ["GOAL", "EMPTY", "DECAYABLE"]});
+  static EXIT_FRAME = Exit.CREATOR({name: "EXIT_FRAME", class: Exit, color: 0xffc72e, classifications: ["GOAL", "EMPTY", "DECAYABLE"]});
 
   static BUILD_MAP = {
     '2': Exit.EMPTY_GOAL,
@@ -11,6 +12,13 @@ export class Exit extends Element {
     '6': Exit.EMPTY_GOAL,
     '3': Exit.EMPTY_GOAL,
     '8': Exit.EMPTY_GOAL,
+    '5': Exit.EXIT_FRAME,
+    '7': Exit.EXIT_FRAME,
+    '9': Exit.EXIT_FRAME,
+    '10': Exit.EXIT_FRAME,
+    '12': Exit.EXIT_FRAME,
+    '14': Exit.EXIT_FRAME,
+    '20': Exit.EXIT_FRAME,
   }
   constructor(type: IElementType, state: any = {}) {
     super(type, state);

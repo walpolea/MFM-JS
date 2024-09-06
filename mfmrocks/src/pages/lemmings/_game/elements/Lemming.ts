@@ -3,7 +3,6 @@ import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
   static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0x505CFE, groups: ["LEMMINGS"] });
-  // static HEAD = Empty.CREATOR({ name: "LEMM_HEAD", class: Empty, color: 0x05b604});
   static HEAD = Wall.CREATOR(
     { name: "LEMM_HEAD", class: Wall, color: 0x05b604, classifications: ["DECAYABLE", "EMPTY"] },
     { lifeSpan: 10 }
@@ -97,7 +96,7 @@ export class Lemming extends Element {
     const blocks = [2,3,10,22,38];
     blocks.forEach( b => {
       if( ew.is(b, "EMPTY" ) ) {
-        ew.mutate(b, Dirt.ROCK);
+        ew.mutate(b, Dirt.MOSS);
       }
     });
   }

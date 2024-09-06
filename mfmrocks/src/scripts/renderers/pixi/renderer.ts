@@ -299,14 +299,14 @@ export class PixiRenderer implements IRenderer {
           const x = ~~(from.x + (xdist / steps) * i);
           const y = ~~(from.y + (ydist / steps) * i);
 
-          this.setAtomAt( x, y, atom.type, atom?.settings );
+          this.setAtomAt( x, y, atom.t, atom?.settings );
         }
 
-        this.setAtomAt(to.x, to.y, atom.type, atom?.settings );
+        this.setAtomAt(to.x, to.y, atom.t, atom?.settings );
 
       } else {
         const {x, y} = atom;
-        this.setAtomAt(x, y, atom.type, atom?.settings );
+        this.setAtomAt(x, y, atom.t, atom?.settings );
       }
     });
 
@@ -320,8 +320,8 @@ export class PixiRenderer implements IRenderer {
         atoms.push({
           x: s.location.coordinate.x,
           y: s.location.coordinate.y,
-          type: s.atom.TYPE.name,
-          settings: { params: s.atom.type, state: s.atom.state }
+          t: s.atom.TYPE.name,
+          // settings: { params: {}, state: s.atom.state }
         });
       }
     });
