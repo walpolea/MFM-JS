@@ -1,9 +1,13 @@
-import { Element, EventWindow, Empty } from "mfm-js";
+import { Element, EventWindow, Empty, Wall } from "mfm-js";
 import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
   static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0x505CFE, groups: ["LEMMINGS"] });
-  static HEAD = Empty.CREATOR({ name: "LEMM_HEAD", class: Empty, color: 0x05b604});
+  // static HEAD = Empty.CREATOR({ name: "LEMM_HEAD", class: Empty, color: 0x05b604});
+  static HEAD = Wall.CREATOR(
+    { name: "LEMM_HEAD", class: Wall, color: 0x05b604, classifications: ["DECAYABLE", "EMPTY"] },
+    { lifeSpan: 10 }
+  );
 
   constructor(type, state = {}) {
     super(type, state);
@@ -63,7 +67,7 @@ export class Lemming extends Element {
 
   walk(ew) {
 
-    const WALK_CHANCE = 10;
+    const WALK_CHANCE = 5;
     if( EventWindow.oneIn( WALK_CHANCE ) ) {
 
       const walkChecks = Lemming.WALK_CHECKS[this.state.direction];
