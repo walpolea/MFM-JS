@@ -14,7 +14,7 @@ export class LemmingEmitter extends Element {
   init() {
 
     if(!this.state.emitCount) {
-      this.state.emitCount = 10;
+      this.state.emitCount = 100;
     }
   }
 

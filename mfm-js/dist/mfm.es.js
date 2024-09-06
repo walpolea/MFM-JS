@@ -44,7 +44,8 @@ class S {
     this.classes.add(s.toUpperCase());
   }
   declassify(t) {
-    const s = typeof t == "string" ? t : t.name;
+    if (!t) return;
+    const s = typeof t == "string" ? t : t == null ? void 0 : t.name;
     this.classes.delete(s.toUpperCase());
   }
   is(t) {
