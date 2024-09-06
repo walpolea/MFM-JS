@@ -1,5 +1,5 @@
-import { EventWindow, EWIndex } from '../mfm/EventWindow';
 import { IElementType } from '../mfm/Element';
+import { EventWindow, EWIndex } from '../mfm/EventWindow';
 
 export declare class Swap {
     static DOWN: (ew: EventWindow, chance?: number) => boolean;

@@ -1,4 +1,4 @@
-const _ = class _ {
+const st = class st {
   static registerType(t) {
     this.TYPES.set(t.name.toUpperCase(), t), (t.groups ?? ["Misc"]).forEach((e) => {
       this.GROUPS.has(e) || this.GROUPS.set(e, []);
@@ -10,17 +10,17 @@ const _ = class _ {
     return typeof t == "string" ? this.TYPES.get(t.toUpperCase()) : this.TYPES.get(t.name.toUpperCase());
   }
 };
-_.TYPES = /* @__PURE__ */ new Map(), _.GROUPS = /* @__PURE__ */ new Map();
-let tt = _;
-class l {
+st.TYPES = /* @__PURE__ */ new Map(), st.GROUPS = /* @__PURE__ */ new Map();
+let it = st;
+class S {
   //creator creates an atom of element creation function with the ability to override BASE_TYPE element properties
   static CREATOR(t, s = {}) {
     let e = { ...t };
-    const a = (r = {}, n = {}) => {
-      const I = { ...e, ...r }, D = { ...s, ...n };
-      return D ? new I.class(I, D) : new I.class(I);
+    const a = (o = {}, c = {}) => {
+      const T = { ...e, ...o }, O = { ...s, ...c };
+      return O ? new T.class(T, O) : new T.class(T);
     };
-    return e.CREATE = a, tt.registerType({ ...e, CREATE: a }), a;
+    return e.CREATE = a, it.registerType({ ...e, CREATE: a }), a;
   }
   constructor(t, s) {
     this.TYPE = t, this.classes = /* @__PURE__ */ new Set(), this.initializeState(s ?? void 0), this.classifyAs(this.TYPE), this.TYPE.classifications && this.TYPE.classifications.forEach((e) => {
@@ -60,7 +60,7 @@ class l {
     return (typeof t == "string" ? t : t.name).toUpperCase() === this.TYPE.name.toUpperCase();
   }
 }
-const V = class V extends l {
+const J = class J extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -71,9 +71,9 @@ const V = class V extends l {
     super.behave(t);
   }
 };
-V.CREATE = V.CREATOR({ name: "EMPTY", symbol: "EMT", class: V, color: 2763306, groups: ["MFM"] });
-let P = V;
-const o = class o {
+J.CREATE = J.CREATOR({ name: "EMPTY", symbol: "EMT", class: J, color: 2763306, groups: ["MFM"] });
+let d = J;
+const A = class A {
   static oneIn(t) {
     return t === 0 ? !1 : Math.random() * t < 1;
   }
@@ -83,9 +83,9 @@ const o = class o {
   makeWindow(t, s) {
     this.origin = t.getSiteByCoordinate(s), this.window = new Array(41);
     let e, a;
-    const r = o.WINDOW_OFFSETS.length;
-    for (let n = 0; n < r; n++)
-      e = o.WINDOW_OFFSETS[n], a = t.getSiteByCoordinate(this.offsetFromOrigin(s, e)), this.window[n] = a;
+    const o = A.WINDOW_OFFSETS.length;
+    for (let c = 0; c < o; c++)
+      e = A.WINDOW_OFFSETS[c], a = t.getSiteByCoordinate(this.offsetFromOrigin(s, e)), this.window[c] = a;
   }
   //get relative offset ICoordinate from absolute ICoordinate
   //this should only be used by the makeWindow function to translate a picked site into
@@ -130,7 +130,7 @@ const o = class o {
   }
   is(t = 0, s) {
     let e = !1, a;
-    return typeof t == "number" ? a = this.getSite(t) : a = t, a ? (Array.isArray(s) ? e = !!s.filter((n) => a.atom.is(n)).length : e = a.atom.is(s), e) : !1;
+    return typeof t == "number" ? a = this.getSite(t) : a = t, a ? (Array.isArray(s) ? e = !!s.filter((c) => a.atom.is(c)).length : e = a.atom.is(s), e) : !1;
   }
   any(t, s) {
     return Array.isArray(t) || (t = [t]), this.howMany(t, s) > 0;
@@ -148,8 +148,8 @@ const o = class o {
   // EVENT WINDOW ACTIONS
   /////////////////////////////////
   move(t, s = void 0, e = 0) {
-    const a = this.getSite(t), r = this.getSite(e);
-    return a && r ? (a.atom = r.atom, s ? r.atom = s : r.atom = P.CREATE(), !0) : !1;
+    const a = this.getSite(t), o = this.getSite(e);
+    return a && o ? (a.atom = o.atom, s ? o.atom = s : o.atom = d.CREATE(), !0) : !1;
   }
   swap(t, s = 0) {
     const e = this.getSite(t), a = this.getSite(s);
@@ -169,10 +169,15 @@ const o = class o {
     });
   }
   destroy(t = 0) {
-    return this.mutate(t, P.CREATE);
+    return this.mutate(t, d.CREATE);
+  }
+  shuffleSites(t) {
+    for (var s = t.length, e, a; s !== 0; )
+      a = Math.floor(Math.random() * s), s -= 1, e = t[s], t[s] = t[a], t[a] = e;
+    return t;
   }
 };
-o.WINDOW_OFFSETS = [
+A.WINDOW_OFFSETS = [
   { x: 0, y: 0 },
   { x: -1, y: 0 },
   { x: 0, y: -1 },
@@ -214,15 +219,15 @@ o.WINDOW_OFFSETS = [
   { x: 0, y: -4 },
   { x: 0, y: 4 },
   { x: 4, y: 0 }
-], o.RANDOM = (t = o.ALLADJACENT) => t[~~(t.length * Math.random())], o.ORIGIN = [0], o.W = [1], o.N = [2], o.S = [3], o.E = [4], o.NW = [5], o.SW = [6], o.NE = [7], o.SE = [8], o.ADJACENT4WAY = [1, 2, 3, 4], o.DIAGONAL4WAY = [5, 6, 7, 8], o.ADJACENT8WAY = [...o.ADJACENT4WAY, ...o.DIAGONAL4WAY], o.LAYER1 = [1, 2, 3, 4], o.LAYER2 = [5, 6, 7, 8, 9, 10, 11, 12], o.LAYER3 = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], o.LAYER4 = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40], o.W_LINE = [1, 9, 21, 37], o.N_LINE = [2, 10, 22, 38], o.S_LINE = [3, 11, 23, 39], o.E_LINE = [4, 12, 24, 40], o.NW_LINE = [5, 25], o.SW_LINE = [6, 26], o.NE_LINE = [7, 27], o.SE_LINE = [8, 28], o.EQUATOR = [...o.ORIGIN, ...o.W_LINE, ...o.E_LINE], o.PRIME_MERIDIAN = [...o.ORIGIN, ...o.N_LINE, ...o.S_LINE], o.W_QUADRANT = [1, 9, 13, 14, 21, 29, 30, 37], o.N_QUADRANT = [2, 10, 15, 17, 22, 31, 33, 38], o.S_QUADRANT = [3, 11, 16, 18, 23, 32, 34, 39], o.E_QUADRANT = [4, 12, 19, 20, 24, 35, 36, 40], o.NW_QUADRANT = [5, 13, 15, 25, 29, 31], o.SW_QUADRANT = [6, 14, 16, 26, 30, 32], o.NE_QUADRANT = [7, 17, 19, 27, 33, 35], o.SE_QUADRANT = [8, 18, 20, 28, 34, 36], o.W_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...o.NW_QUADRANT, ...o.W_LINE, ...o.SW_QUADRANT])).sort(
+], A.RANDOM = (t = A.ALLADJACENT) => t[~~(t.length * Math.random())], A.ORIGIN = [0], A.W = [1], A.N = [2], A.S = [3], A.E = [4], A.NW = [5], A.SW = [6], A.NE = [7], A.SE = [8], A.ADJACENT4WAY = [1, 2, 3, 4], A.DIAGONAL4WAY = [5, 6, 7, 8], A.ADJACENT8WAY = [...A.ADJACENT4WAY, ...A.DIAGONAL4WAY], A.LAYER1 = [1, 2, 3, 4], A.LAYER2 = [5, 6, 7, 8, 9, 10, 11, 12], A.LAYER3 = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], A.LAYER4 = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40], A.W_LINE = [1, 9, 21, 37], A.N_LINE = [2, 10, 22, 38], A.S_LINE = [3, 11, 23, 39], A.E_LINE = [4, 12, 24, 40], A.NW_LINE = [5, 25], A.SW_LINE = [6, 26], A.NE_LINE = [7, 27], A.SE_LINE = [8, 28], A.EQUATOR = [...A.ORIGIN, ...A.W_LINE, ...A.E_LINE], A.PRIME_MERIDIAN = [...A.ORIGIN, ...A.N_LINE, ...A.S_LINE], A.W_QUADRANT = [1, 9, 13, 14, 21, 29, 30, 37], A.N_QUADRANT = [2, 10, 15, 17, 22, 31, 33, 38], A.S_QUADRANT = [3, 11, 16, 18, 23, 32, 34, 39], A.E_QUADRANT = [4, 12, 19, 20, 24, 35, 36, 40], A.NW_QUADRANT = [5, 13, 15, 25, 29, 31], A.SW_QUADRANT = [6, 14, 16, 26, 30, 32], A.NE_QUADRANT = [7, 17, 19, 27, 33, 35], A.SE_QUADRANT = [8, 18, 20, 28, 34, 36], A.W_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...A.NW_QUADRANT, ...A.W_LINE, ...A.SW_QUADRANT])).sort(
   (t, s) => t - s
-), o.N_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...o.NW_QUADRANT, ...o.N_LINE, ...o.NE_QUADRANT])).sort(
+), A.N_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...A.NW_QUADRANT, ...A.N_LINE, ...A.NE_QUADRANT])).sort(
   (t, s) => t - s
-), o.S_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...o.SW_QUADRANT, ...o.S_LINE, ...o.SE_QUADRANT])).sort(
+), A.S_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...A.SW_QUADRANT, ...A.S_LINE, ...A.SE_QUADRANT])).sort(
   (t, s) => t - s
-), o.E_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...o.NE_QUADRANT, ...o.E_LINE, ...o.SE_QUADRANT])).sort(
+), A.E_HEMISPHERE = Array.from(/* @__PURE__ */ new Set([...A.NE_QUADRANT, ...A.E_LINE, ...A.SE_QUADRANT])).sort(
   (t, s) => t - s
-), o.ALL = [
+), A.ALL = [
   0,
   1,
   2,
@@ -264,7 +269,7 @@ o.WINDOW_OFFSETS = [
   38,
   39,
   40
-], o.ALLADJACENT = [
+], A.ALLADJACENT = [
   1,
   2,
   3,
@@ -305,7 +310,7 @@ o.WINDOW_OFFSETS = [
   38,
   39,
   40
-], o.OPPOSITES = [
+], A.OPPOSITES = [
   0,
   4,
   3,
@@ -347,7 +352,7 @@ o.WINDOW_OFFSETS = [
   39,
   38,
   37
-], o.X_REFLECTION = [
+], A.X_REFLECTION = [
   0,
   1,
   3,
@@ -389,7 +394,7 @@ o.WINDOW_OFFSETS = [
   39,
   38,
   40
-], o.Y_REFLECTION = [
+], A.Y_REFLECTION = [
   0,
   4,
   2,
@@ -431,14 +436,14 @@ o.WINDOW_OFFSETS = [
   38,
   39,
   37
-], o.XY_REFLECTION = o.OPPOSITES, o.SUBSETS = (/* @__PURE__ */ new Map()).set("4way", o.ADJACENT4WAY).set("8way", o.ADJACENT8WAY).set("all", o.ALL);
-let E = o;
-class ft {
+], A.XY_REFLECTION = A.OPPOSITES, A.SUBSETS = (/* @__PURE__ */ new Map()).set("4way", A.ADJACENT4WAY).set("8way", A.ADJACENT8WAY).set("all", A.ALL);
+let E = A;
+class dt {
   constructor(t) {
     this.location = t, this.id = this.location.id, this.create();
   }
   create() {
-    this.atom = P.CREATE(), this.baseAtom = P.CREATE();
+    this.atom = d.CREATE(), this.baseAtom = d.CREATE();
   }
   swapAtoms(t) {
     return [this.atom, t.atom] = [t.atom, this.atom], !0;
@@ -450,7 +455,7 @@ class ft {
     this.baseAtom = t;
   }
 }
-class G {
+class x {
   static CoordinateToId(t) {
     return `${t.y}:${t.x}`;
   }
@@ -459,16 +464,16 @@ class G {
     return { y: +s, x: +e };
   }
   static fromCoordinate(t) {
-    return new G(G.CoordinateToId(t));
+    return new x(x.CoordinateToId(t));
   }
   static fromId(t) {
-    return new G(t);
+    return new x(t);
   }
   constructor(t) {
-    this.id = t, this.coordinate = G.IdToCoordinate(this.id);
+    this.id = t, this.coordinate = x.IdToCoordinate(this.id);
   }
 }
-class Wt {
+class Yt {
   constructor(t = 1, s = 1) {
     this.cur = 0, this.isRunning = !1, this.width = t, this.height = s, this.create(), this.seedRandoms();
   }
@@ -480,7 +485,7 @@ class Wt {
       this.rands.push(t[s] % (this.width * this.height));
   }
   getSiteByCoordinate(t) {
-    return this.sites.get(G.CoordinateToId(t));
+    return this.sites.get(x.CoordinateToId(t));
   }
   getSiteById(t) {
     return this.sites.get(t);
@@ -501,8 +506,8 @@ class Wt {
     this.sites = /* @__PURE__ */ new Map();
     for (let t = 0; t < this.width; t++)
       for (let s = 0; s < this.height; s++) {
-        const e = G.fromId(`${s}:${t}`);
-        this.sites.set(e.id, new ft(e));
+        const e = x.fromId(`${s}:${t}`);
+        this.sites.set(e.id, new dt(e));
       }
     this.sites.forEach((t) => {
       t.ew = new E(this, t.location.coordinate);
@@ -511,8 +516,8 @@ class Wt {
   add(t, s = 0, e = 0) {
     if (s >= 0 && e >= 0 && s < this.width && e < this.height) {
       const a = t();
-      let r = this.getSiteByCoordinate({ x: s, y: e });
-      r && (r.atom = a);
+      let o = this.getSiteByCoordinate({ x: s, y: e });
+      o && (o.atom = a);
     }
   }
   exportAtoms() {
@@ -523,96 +528,22 @@ class Wt {
   }
   clear(t = void 0) {
     t ? this.sites.forEach((s) => {
-      s.atom.is(t) && s.mutate(P.CREATE());
+      s.atom.is(t) && s.mutate(d.CREATE());
     }) : this.sites.forEach((s) => {
-      s.mutate(P.CREATE());
+      s.mutate(d.CREATE());
     });
   }
 }
-const g = class g {
-  static CREATE(t, s = "EMPTY") {
-    return (e, a = 1) => {
-      var r;
-      if (E.oneIn(a) && e.any(t, s)) {
-        const n = (r = e.filter(t, s, !0)) == null ? void 0 : r[0];
-        return e.swap(n);
-      }
-      return !1;
-    };
+const ht = class ht {
+  static registerCapability(t) {
+    this.CAPABILITIES.set(t.name.toUpperCase(), t);
+  }
+  static getCapability(t) {
+    return typeof t == "string" ? this.CAPABILITIES.get(t.toUpperCase()) : this.CAPABILITIES.get(t.name.toUpperCase());
   }
 };
-g.DOWN = g.CREATE(E.S), g.SIDE = g.CREATE([6, 8]), g.SLIP = g.CREATE(E.EQUATOR), g.SINK = g.CREATE([...E.S, 6, 8], "WATER"), g.FLOAT = g.CREATE([...E.N, 5, 7], "WATER"), g.PATROL = g.CREATE(E.ADJACENT4WAY), g.PATROL_8 = g.CREATE(E.ADJACENT8WAY);
-let b = g;
-const K = class K extends l {
-  constructor(t, s = {}) {
-    super(t, s);
-  }
-  behave(t) {
-    super.behave(t), b.PATROL(t);
-  }
-};
-K.CREATE = K.CREATOR({ name: "RES", class: K, color: 938240, groups: ["MFM"] });
-let st = K;
-const x = class x extends l {
-  constructor(t, s = {}) {
-    super(t, s);
-  }
-  behave(t) {
-    super.behave(t);
-    const s = t.filter(E.ADJACENT4WAY, null, !0)[0];
-    if (t.is(s, "EMPTY")) {
-      const e = E.oneIn(this.state.pDREG_CREATE), a = E.oneIn(this.state.pRES_CREATE);
-      e ? t.move(s, x.CREATE()) : a ? t.move(s, st.CREATE()) : t.swap(s);
-    } else
-      (t.is(s, "DREG") && E.oneIn(this.state.pDREG_DESTROY) || E.oneIn(this.state.pANY_DESTROY)) && t.move(s);
-  }
-};
-x.CREATE = x.CREATOR(
-  { name: "DREG", class: x, color: 16719904, groups: ["MFM"] },
-  {
-    pDREG_CREATE: 1e3,
-    pRES_CREATE: 200,
-    pDREG_DESTROY: 10,
-    pANY_DESTROY: 100
-  }
-);
-let ot = x;
-const F = class F extends l {
-  constructor(t, s = {}) {
-    super(t, s);
-  }
-  behave(t) {
-    super.behave(t), t.replace(E.RANDOM(E.ADJACENT4WAY), F.CREATE({ color: (this.rd("color") + 512) % 16777215 }));
-  }
-};
-F.CREATE = F.CREATOR({ name: "FORKBOMB", symbol: "FKB", class: F, color: 14483456, groups: ["MFM"] });
-let rt = F;
-class Z {
-  static MAKE_DECAY(t, s = 1) {
-    return (e, a) => {
-      const { age: r } = a.state;
-      r > t && E.oneIn(s) && e.destroy();
-    };
-  }
-  static DECAY(t, s, e, a = 1) {
-    const { age: r } = s.state;
-    return r > e && E.oneIn(a) ? (t.destroy(), !0) : !1;
-  }
-}
-const Q = class Q extends l {
-  constructor(t, s = {}) {
-    super(t, s);
-  }
-  behave(t) {
-    super.behave(t);
-    const s = t.filterByType(E.ADJACENT8WAY, "FORKBOMB");
-    s.length && t.mutateMany(s, Q.CREATE, [{ color: (this.rd("color") + 2048) % 16777215 }, {}]), Z.DECAY(t, this, 40);
-    const e = t.filterByType(E.ADJACENT8WAY, "ANTIFORKBOMB");
-    e.length && E.oneIn(2) && t.mutateMany(e, Q.CREATE, [{ color: (this.rd("color") + 1024) % 11206655 }, { age: this.state.age - 1 }]);
-  }
-};
-Q.CREATE = Q.CREATOR({ name: "ANTIFORKBOMB", symbol: "AFK", class: Q, color: 43741, groups: ["MFM"] });
-let it = Q;
+ht.CAPABILITIES = /* @__PURE__ */ new Map();
+let rt = ht;
 const i = class i {
   static directionToIndex(t, s = !1) {
     return i.DIRECTIONS_INDEX_MAP.get(t);
@@ -947,7 +878,7 @@ i.RANDOM = (t = i.DIRECTIONS) => t[~~(t.length * Math.random())], i.NORTH = "N",
   [40, "E"]
 ]);
 let h = i;
-const Et = class Et {
+const At = class At {
   static REVERSE(t) {
     const { heading: s } = t.state;
     s && t.wr("heading", h.reverse(s));
@@ -988,27 +919,27 @@ const Et = class Et {
   static SET_DIRECTION(t, s) {
     t.wr("heading", s);
   }
-  static MOVE_IN_DIRECTION(t, s, e, a = "EMPTY", r = P.CREATE()) {
-    const { heading: n } = s.state;
+  static MOVE_IN_DIRECTION(t, s, e, a = "EMPTY", o = d.CREATE()) {
+    const { heading: c } = s.state;
     s.wr("heading", e);
-    const I = this.MOVE_DIRECTIONALLY(t, s, a, r);
-    return s.wr("heading", n ?? e), I;
+    const T = this.MOVE_DIRECTIONALLY(t, s, a, o);
+    return s.wr("heading", c ?? e), T;
   }
-  static MOVE_DIRECTIONALLY(t, s, e = "EMPTY", a = P.CREATE()) {
-    const { heading: r } = s.state;
-    if (r) {
-      const n = h.getDirectionalMove(r, !0);
-      if (e === "ANY" || t.is(n, e))
-        return t.move(n, a);
+  static MOVE_DIRECTIONALLY(t, s, e = "EMPTY", a = d.CREATE()) {
+    const { heading: o } = s.state;
+    if (o) {
+      const c = h.getDirectionalMove(o, !0);
+      if (e === "ANY" || t.is(c, e))
+        return t.move(c, a);
     }
     return !1;
   }
   static SWAP_DIRECTIONALLY(t, s, e = "EMPTY") {
     const { heading: a } = s.state;
     if (a) {
-      const r = h.getDirectionalMove(a, !0);
-      if (e === "ANY" || t.is(r, e))
-        return t.swap(r);
+      const o = h.getDirectionalMove(a, !0);
+      if (e === "ANY" || t.is(o, e))
+        return t.swap(o);
     }
     return !1;
   }
@@ -1017,9 +948,179 @@ const Et = class Et {
     return a && a.state.heading ? (a.state.heading = e, !0) : !1;
   }
 };
-Et.NAME = "WAYFINDING";
-let c = Et;
-const N = class N extends l {
+At.NAME = "WAYFINDING";
+let n = At;
+const b = class b {
+  static MAKE_REPEATER(t, s) {
+    return (e, a, o) => {
+      const c = e.filterByType(t, "EMPTY");
+      if (s) {
+        let T = e.origin.atom.rd("buildStep") ?? 1;
+        e.origin.atom.wr("buildStep", T), T < s && e.mutateMany(c, a, [{}, { buildStep: T + 1 }]);
+      } else
+        e.mutateMany(c, a);
+      return e.mutate(0, o), !0;
+    };
+  }
+};
+b.GRID = b.MAKE_REPEATER(E.DIAGONAL4WAY), b.SMALL_GRID = b.MAKE_REPEATER(E.DIAGONAL4WAY, 4), b.H_LINE = b.MAKE_REPEATER([1, 4]), b.V_LINE = b.MAKE_REPEATER([2, 3]);
+let nt = b;
+class _ {
+  static MAKE_DECAY(t, s = 1) {
+    return (e, a) => {
+      const { age: o } = a.state;
+      o > t && E.oneIn(s) && e.destroy();
+    };
+  }
+  static DECAY(t, s, e, a = 1) {
+    const { age: o } = s.state;
+    return o > e && E.oneIn(a) ? (t.destroy(), !0) : !1;
+  }
+}
+const ot = class ot {
+  static CREATE(t, s, e = "EMPTY", a) {
+    return (o) => {
+      let c = !1;
+      if (o.any(s, t)) {
+        const T = o.filterByType(a, e);
+        T.length && (c = o.swap(o.random(T)));
+      }
+      return c;
+    };
+  }
+  static FAR_NORTH(t, s, e = "EMPTY") {
+    return E.oneIn(5) && t.is(3, s) && t.is(10, e) && t.swap(10), !0;
+  }
+  static MAKE_REPELLER(t, s = [1, 2, 3, 4, 5, 6, 7, 8], e = [37, 38, 39, 40, 25, 26, 27, 28]) {
+    return (a, o) => {
+      const c = o.state.repelTypes ?? t;
+      if (s.length > e.length)
+        throw new Error("fromSet must be less than or equal to length of toSet");
+      const T = a.filter(s, c), O = a.filter(e, "EMPTY");
+      if (T.length && O.length) {
+        const g = Object.fromEntries(
+          s.map((Y, F) => [Y, e[F]])
+        );
+        let f = !1;
+        return T.forEach((Y) => {
+          if (!f) {
+            const F = g[Y];
+            if (O.includes(F))
+              f = a.move(F, void 0, Y);
+            else {
+              const Pt = E.RANDOM(O);
+              f = a.move(Pt, void 0, Y);
+            }
+          }
+        }), f;
+      }
+      return !1;
+    };
+  }
+  static MAKE_AVOIDER(t, s = [1, 2, 3, 4, 5, 6, 7, 8], e = [40, 39, 38, 37, 28, 27, 26, 25]) {
+    return (a, o) => {
+      const c = o.state.repelTypes ?? t;
+      if (s.length > e.length)
+        throw new Error("fromSet must be less than or equal to length of toSet");
+      const T = a.filter(s, c), O = a.filter(e, "EMPTY");
+      if (T.length && O.length) {
+        Object.fromEntries(
+          s.map((f, Y) => [f, e[Y]])
+        );
+        let g = !1;
+        return T.forEach((f) => {
+          g || (g = a.move(E.RANDOM(O)));
+        }), g;
+      }
+      return !1;
+    };
+  }
+  static MAKE_ATTRACTOR(t, s = E.ALLADJACENT) {
+    return (e, a) => {
+      const o = a.state.attractTypes ?? t, c = a.state.swapTypes ?? ["EMPTY"], T = e.filter(s, o);
+      if (T.length) {
+        const O = E.RANDOM(T), g = h.getInFront(h.indexToDirection(O), !0), f = e.filter(g, c);
+        if (f.length)
+          return f.sort((Y, F) => Math.abs(O - Y) - Math.abs(O - F)).slice(~~(f.length / 2)), e.swap(E.RANDOM(f));
+      }
+      return !1;
+    };
+  }
+};
+ot.NAME = "REPEL";
+let M = ot;
+const C = class C {
+  static CREATE(t, s = "EMPTY") {
+    return (e, a = 1) => {
+      var o;
+      if (E.oneIn(a) && e.any(t, s)) {
+        const c = (o = e.filter(t, s, !0)) == null ? void 0 : o[0];
+        return e.swap(c);
+      }
+      return !1;
+    };
+  }
+};
+C.DOWN = C.CREATE(E.S), C.SIDE = C.CREATE([6, 8]), C.SLIP = C.CREATE(E.EQUATOR), C.SINK = C.CREATE([...E.S, 6, 8], "WATER"), C.FLOAT = C.CREATE([...E.N, 5, 7], "WATER"), C.PATROL = C.CREATE(E.ADJACENT4WAY), C.PATROL_8 = C.CREATE(E.ADJACENT8WAY);
+let B = C;
+const k = class k extends S {
+  constructor(t, s = {}) {
+    super(t, s);
+  }
+  behave(t) {
+    super.behave(t), B.PATROL(t);
+  }
+};
+k.CREATE = k.CREATOR({ name: "RES", class: k, color: 938240, groups: ["MFM"] });
+let et = k;
+const V = class V extends S {
+  constructor(t, s = {}) {
+    super(t, s);
+  }
+  behave(t) {
+    super.behave(t);
+    const s = t.filter(E.ADJACENT4WAY, null, !0)[0];
+    if (t.is(s, "EMPTY")) {
+      const e = E.oneIn(this.state.pDREG_CREATE), a = E.oneIn(this.state.pRES_CREATE);
+      e ? t.move(s, V.CREATE()) : a ? t.move(s, et.CREATE()) : t.swap(s);
+    } else (t.is(s, "DREG") && E.oneIn(this.state.pDREG_DESTROY) || E.oneIn(this.state.pANY_DESTROY)) && t.move(s);
+  }
+};
+V.CREATE = V.CREATOR(
+  { name: "DREG", class: V, color: 16719904, groups: ["MFM"] },
+  {
+    pDREG_CREATE: 1e3,
+    pRES_CREATE: 200,
+    pDREG_DESTROY: 10,
+    pANY_DESTROY: 100
+  }
+);
+let ct = V;
+const K = class K extends S {
+  constructor(t, s = {}) {
+    super(t, s);
+  }
+  behave(t) {
+    super.behave(t), t.replace(E.RANDOM(E.ADJACENT4WAY), K.CREATE({ color: (this.rd("color") + 512) % 16777215 }));
+  }
+};
+K.CREATE = K.CREATOR({ name: "FORKBOMB", symbol: "FKB", class: K, color: 14483456, groups: ["MFM"] });
+let Rt = K;
+const G = class G extends S {
+  constructor(t, s = {}) {
+    super(t, s);
+  }
+  behave(t) {
+    super.behave(t);
+    const s = t.filterByType(E.ADJACENT8WAY, "FORKBOMB");
+    s.length && t.mutateMany(s, G.CREATE, [{ color: (this.rd("color") + 2048) % 16777215 }, {}]), _.DECAY(t, this, 40);
+    const e = t.filterByType(E.ADJACENT8WAY, "ANTIFORKBOMB");
+    e.length && E.oneIn(2) && t.mutateMany(e, G.CREATE, [{ color: (this.rd("color") + 1024) % 11206655 }, { age: this.state.age - 1 }]);
+  }
+};
+G.CREATE = G.CREATOR({ name: "ANTIFORKBOMB", symbol: "AFK", class: G, color: 43741, groups: ["MFM"] });
+let at = G;
+const N = class N extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1027,13 +1128,13 @@ const N = class N extends l {
     this.state.heading || (this.state.heading = "E"), this.state.phase = "BUILD";
   }
   behave(t) {
-    var r, n;
+    var o, c;
     super.behave(t);
     const s = h.directionToIndex(h.turnLeft(this.state.heading)), e = h.directionToIndex(h.turnRight(this.state.heading)), a = h.getInFront(this.state.heading);
     switch (t.is(a[0], "SWAPLINE") && t.destroy(), this.state.phase) {
       case "BUILD":
-        const I = h.getInFront(h.veerLeft(this.state.heading)), D = h.getInFront(h.veerRight(this.state.heading));
-        if (t.any([...I, ...D], "SWAPLINE"))
+        const T = h.getInFront(h.veerLeft(this.state.heading)), O = h.getInFront(h.veerRight(this.state.heading));
+        if (t.any([...T, ...O], "SWAPLINE"))
           return;
         if (t.is(s, "EMPTY") ? t.mutate(s, this.TYPE.CREATE) : this.state.color = 13421568, t.is(e, "EMPTY") && (t.mutate(e, this.TYPE.CREATE), this.state.color = 16776960), !t.any([s, e], "EMPTY")) {
           this.state.phase = "WAIT_TO_SWAP";
@@ -1042,12 +1143,12 @@ const N = class N extends l {
         t.destroy();
         break;
       case "WAIT_TO_SWAP":
-        this.state.color = 6710886, ((r = t.getSite(s)) == null ? void 0 : r.atom.state.phase) !== "BUILD" && ((n = t.getSite(e)) == null ? void 0 : n.atom.state.phase) !== "BUILD" && (this.state.phase = "SWAP");
+        this.state.color = 6710886, ((o = t.getSite(s)) == null ? void 0 : o.atom.state.phase) !== "BUILD" && ((c = t.getSite(e)) == null ? void 0 : c.atom.state.phase) !== "BUILD" && (this.state.phase = "SWAP");
         break;
       case "SWAP":
         this.state.color = 16737792;
-        const C = h.getInFront(h.turnLeft(h.veerLeft(this.state.heading))).slice(0, 2), f = h.getInFront(h.turnRight(h.veerRight(this.state.heading))).slice(0, 2);
-        !t.any([...a, ...C, ...f], "SWAPLINE") && c.SWAP_DIRECTIONALLY(t, this, "ANY"), t.getSite(a[0]) || (this.state.phase = "DIE");
+        const g = h.getInFront(h.turnLeft(h.veerLeft(this.state.heading))).slice(0, 2), f = h.getInFront(h.turnRight(h.veerRight(this.state.heading))).slice(0, 2);
+        !t.any([...a, ...g, ...f], "SWAPLINE") && n.SWAP_DIRECTIONALLY(t, this, "ANY"), t.getSite(a[0]) || (this.state.phase = "DIE");
         break;
       case "DIE":
         t.destroy();
@@ -1055,8 +1156,8 @@ const N = class N extends l {
   }
 };
 N.CREATE = N.CREATOR({ name: "SWAPLINE", symbol: "SWL", class: N, color: 10070562, groups: ["Swaplines"] }), N.NORTH = N.CREATOR({ name: "SWAPLINE NORTH", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "N" }), N.SOUTH = N.CREATOR({ name: "SWAPLINE SOUTH", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "S" }), N.EAST = N.CREATOR({ name: "SWAPLINE EAST", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "E" }), N.WEST = N.CREATOR({ name: "SWAPLINE WEST", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "W" }), N.NW = N.CREATOR({ name: "SWAPLINE NW", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "NW" }), N.NE = N.CREATOR({ name: "SWAPLINE NE", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "NE" }), N.SW = N.CREATOR({ name: "SWAPLINE SW", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "SW" }), N.SE = N.CREATOR({ name: "SWAPLINE SE", symbol: "SWL", class: N, color: 10070562, classifications: ["SWAPLINE"], groups: ["Swaplines"] }, { heading: "SE" });
-let At = N;
-class M extends l {
+let Nt = N;
+class P extends S {
   // static CREATE = Builder.CREATOR({ name: "BUILDER", symbol: "BLD", class: Builder, color: 0x121112 });
   constructor(t, s = {}) {
     super(t, s), this.init();
@@ -1066,18 +1167,18 @@ class M extends l {
   }
   behave(t) {
     super.behave(t);
-    const { buildPath: s, atomizer: e, totalSteps: a, transitionAge: r, age: n } = this.state, I = this.state.currentStep ?? 0, D = this.state.didSpread ?? !1, C = t.filterByType(s, "EMPTY");
-    !D && C.length && (a ? I < a && (t.mutateMany(C, this.TYPE.CREATE, [{}, { currentStep: I + 1 }]), this.state.totalSteps--) : t.mutateMany(C, this.TYPE.CREATE)), this.state.didSpread = !0, n > r && t.mutate(0, e);
+    const { buildPath: s, atomizer: e, totalSteps: a, transitionAge: o, age: c } = this.state, T = this.state.currentStep ?? 0, O = this.state.didSpread ?? !1, g = t.filterByType(s, "EMPTY");
+    !O && g.length && (a ? T < a && (t.mutateMany(g, this.TYPE.CREATE, [{}, { currentStep: T + 1 }]), this.state.totalSteps--) : t.mutateMany(g, this.TYPE.CREATE)), this.state.didSpread = !0, c > o && t.mutate(0, e);
   }
 }
-const L = class L extends l {
+const L = class L extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
   init() {
   }
   behave(t) {
-    super.behave(t), t.selfIs("DECAYABLE") && Z.DECAY(t, this, this.state.lifeSpan ?? 100, 2);
+    super.behave(t), t.selfIs("DECAYABLE") && _.DECAY(t, this, this.state.lifeSpan ?? 100, 2);
   }
 };
 L.CREATE = L.CREATOR({ name: "WALL", class: L, color: 3346892, groups: ["Structural", "MFM"] }), L.MOVABLE_WALL = L.CREATOR({ name: "MOVABLE WALL", class: L, color: 8917452, classifications: ["MOVABLE"], groups: ["Structural", "MFM"] }), L.DECAY_WALL = L.CREATOR({ name: "DECAY WALL", class: L, color: 238, classifications: ["DECAYABLE", "WALL"], groups: ["Structural"] }), L.DECAY_WALL_10 = L.CREATOR(
@@ -1089,12 +1190,12 @@ L.CREATE = L.CREATOR({ name: "WALL", class: L, color: 3346892, groups: ["Structu
 ), L.DECAY_WALL_50 = L.CREATOR(
   { name: "DECAY WALL 50", class: L, color: 238, classifications: ["DECAYABLE", "WALL", "DECAY WALL"], groups: ["Structural"] },
   { lifeSpan: 50 }
-), L.MOVABLE_WALL_GRID = M.CREATOR(
-  { name: "MOVABLE WALL GRID", class: M, color: 1184018, groups: ["Structural"] },
+), L.MOVABLE_WALL_GRID = P.CREATOR(
+  { name: "MOVABLE WALL GRID", class: P, color: 1184018, groups: ["Structural"] },
   { buildPath: E.DIAGONAL4WAY, atomizer: L.MOVABLE_WALL }
 );
-let O = L;
-const y = class y extends l {
+let D = L;
+const U = class U extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1115,114 +1216,42 @@ const y = class y extends l {
     });
   }
 };
-y.CREATE = y.CREATOR({ name: "LIVING WALL", class: y, color: 2250154, groups: ["Structural", "MFM"] }), y.MOVABLE_LIVING_WALL = y.CREATOR({
+U.CREATE = U.CREATOR({ name: "LIVING WALL", class: U, color: 2250154, groups: ["Structural", "MFM"] }), U.MOVABLE_LIVING_WALL = U.CREATOR({
   name: "MOVABLE LIVING WALL",
-  class: y,
+  class: U,
   color: 2250154,
   classifications: ["MOVABLE", "LIVING WALL"],
   groups: ["Structural", "MFM"]
 });
-let et = y;
-const ht = class ht {
-  static CREATE(t, s, e = "EMPTY", a) {
-    return (r) => {
-      let n = !1;
-      if (r.any(s, t)) {
-        const I = r.filterByType(a, e);
-        I.length && (n = r.swap(r.random(I)));
-      }
-      return n;
-    };
-  }
-  static FAR_NORTH(t, s, e = "EMPTY") {
-    return E.oneIn(5) && t.is(3, s) && t.is(10, e) && t.swap(10), !0;
-  }
-  static MAKE_REPELLER(t, s = [1, 2, 3, 4, 5, 6, 7, 8], e = [37, 38, 39, 40, 25, 26, 27, 28]) {
-    return (a, r) => {
-      const n = r.state.repelTypes ?? t;
-      if (s.length > e.length)
-        throw new Error("fromSet must be less than or equal to length of toSet");
-      const I = a.filter(s, n), D = a.filter(e, "EMPTY");
-      if (I.length && D.length) {
-        const C = Object.fromEntries(
-          s.map((d, H) => [d, e[H]])
-        );
-        let f = !1;
-        return I.forEach((d) => {
-          if (!f) {
-            const H = C[d];
-            if (D.includes(H))
-              f = a.move(H, void 0, d);
-            else {
-              const Ct = E.RANDOM(D);
-              f = a.move(Ct, void 0, d);
-            }
-          }
-        }), f;
-      }
-      return !1;
-    };
-  }
-  static MAKE_AVOIDER(t, s = [1, 2, 3, 4, 5, 6, 7, 8], e = [40, 39, 38, 37, 28, 27, 26, 25]) {
-    return (a, r) => {
-      const n = r.state.repelTypes ?? t;
-      if (s.length > e.length)
-        throw new Error("fromSet must be less than or equal to length of toSet");
-      const I = a.filter(s, n), D = a.filter(e, "EMPTY");
-      if (I.length && D.length) {
-        Object.fromEntries(
-          s.map((f, d) => [f, e[d]])
-        );
-        let C = !1;
-        return I.forEach((f) => {
-          C || (C = a.move(E.RANDOM(D)));
-        }), C;
-      }
-      return !1;
-    };
-  }
-  static MAKE_ATTRACTOR(t, s = E.ALLADJACENT) {
-    return (e, a) => {
-      const r = a.state.attractTypes ?? t, n = a.state.swapTypes ?? ["EMPTY"], I = e.filter(s, r);
-      if (I.length) {
-        const D = E.RANDOM(I), C = h.getInFront(h.indexToDirection(D), !0), f = e.filter(C, n);
-        if (f.length)
-          return f.sort((d, H) => Math.abs(D - d) - Math.abs(D - H)).slice(~~(f.length / 2)), e.swap(E.RANDOM(f));
-      }
-      return !1;
-    };
-  }
-};
-ht.NAME = "REPEL";
-let Y = ht;
-const T = class T extends l {
+let Tt = U;
+const l = class l extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
   init() {
   }
   behave(t) {
-    super.behave(t), b.DOWN(t) || b.SIDE(t), t.selfIs("BUBBLY") && T.BUBBLE(t), t.selfIs("FLOATS") ? b.FLOAT(t, 1.25) : b.SINK(t);
+    super.behave(t), B.DOWN(t) || B.SIDE(t), t.selfIs("BUBBLY") && l.BUBBLE(t), t.selfIs("FLOATS") ? B.FLOAT(t, 1.25) : B.SINK(t);
   }
 };
-T.CREATE = T.CREATOR({ name: "SAND", symbol: "SND", class: T, color: 16768256, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), T.RED_SAND = T.CREATOR({ name: "RED SAND", class: T, color: 16711680, classifications: ["SAND", "BUBBLY", "MOVABLE"], groups: ["Environment"] }), T.PINK_SAND = T.CREATOR({
+l.CREATE = l.CREATOR({ name: "SAND", symbol: "SND", class: l, color: 16768256, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), l.RED_SAND = l.CREATOR({ name: "RED SAND", class: l, color: 16711680, classifications: ["SAND", "BUBBLY", "MOVABLE"], groups: ["Environment"] }), l.PINK_SAND = l.CREATOR({
   name: "PINK SAND",
-  class: T,
+  class: l,
   color: 16418500,
   classifications: ["BUBBLY", "SAND", "FLOATS", "MOVABLE"],
   groups: ["Environment"]
-}), T.FLOATY_SAND = T.CREATOR({
+}), l.FLOATY_SAND = l.CREATOR({
   name: "FLOATY SAND",
-  class: T,
+  class: l,
   color: 0,
   classifications: ["FLOATS", "SAND", "MOVABLE"],
   groups: ["Environment"]
-}), T.GREEN_SAND = T.CREATOR({ name: "GREEN SAND", class: T, color: 9095462, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), T.BLUE_SAND = T.CREATOR({ name: "BLUE SAND", class: T, color: 1671876, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), T.PURPLE_SAND = T.CREATOR({ name: "PURPLE SAND", class: T, color: 6966419, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), T.SAND_GRID = M.CREATOR(
-  { name: "SAND GRID", class: M, color: 1184018, groups: ["Environment"] },
-  { buildPath: E.DIAGONAL4WAY, atomizer: T.CREATE, totalSteps: 40 }
-), T.BUBBLE = Y.CREATE("SAND", E.S_QUADRANT, "EMPTY", E.N_QUADRANT);
-let ct = T;
-const W = class W extends l {
+}), l.GREEN_SAND = l.CREATOR({ name: "GREEN SAND", class: l, color: 9095462, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), l.BLUE_SAND = l.CREATOR({ name: "BLUE SAND", class: l, color: 1671876, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), l.PURPLE_SAND = l.CREATOR({ name: "PURPLE SAND", class: l, color: 6966419, classifications: ["SAND", "MOVABLE"], groups: ["Environment"] }), l.SAND_GRID = P.CREATOR(
+  { name: "SAND GRID", class: P, color: 1184018, groups: ["Environment"] },
+  { buildPath: E.DIAGONAL4WAY, atomizer: l.CREATE, totalSteps: 40 }
+), l.BUBBLE = M.CREATE("SAND", E.S_QUADRANT, "EMPTY", E.N_QUADRANT);
+let lt = l;
+const W = class W extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1230,26 +1259,26 @@ const W = class W extends l {
     this.classifyAs("WATER");
   }
   behave(t) {
-    super.behave(t), b.DOWN(t) || b.SLIP(t), t.selfIs("BUBBLY") && W.DO_BUBBLE(t);
+    super.behave(t), B.DOWN(t) || B.SLIP(t), t.selfIs("BUBBLY") && W.DO_BUBBLE(t);
   }
 };
-W.CREATE = W.CREATOR({ name: "WATER", symbol: "SND", class: W, color: 4590, groups: ["Environment"] }), W.BUBBLY_WATER = W.CREATOR({ name: "BUBBLY WATER", class: W, color: 4590, classifications: ["WATER", "BUBBLY"], groups: ["Environment"] }), W.WATER_GRID = M.CREATOR(
-  { name: "WATER GRID", class: M, color: 1184018, groups: ["Environment"] },
+W.CREATE = W.CREATOR({ name: "WATER", symbol: "SND", class: W, color: 4590, groups: ["Environment"] }), W.BUBBLY_WATER = W.CREATOR({ name: "BUBBLY WATER", class: W, color: 4590, classifications: ["WATER", "BUBBLY"], groups: ["Environment"] }), W.WATER_GRID = P.CREATOR(
+  { name: "WATER GRID", class: P, color: 1184018, groups: ["Environment"] },
   { buildPath: E.DIAGONAL4WAY, atomizer: W.CREATE, totalSteps: 40 }
-), W.WATER_LINE = M.CREATOR(
-  { name: "WATER LINE", class: M, color: 1184018, groups: ["Environment"] },
+), W.WATER_LINE = P.CREATOR(
+  { name: "WATER LINE", class: P, color: 1184018, groups: ["Environment"] },
   { buildPath: [1, 4], atomizer: W.CREATE }
-), W.DO_BUBBLE = Y.CREATE("WATER", E.S_QUADRANT, "EMPTY", E.N_QUADRANT);
-let nt = W;
-const u = class u extends l {
+), W.DO_BUBBLE = M.CREATE("WATER", E.S_QUADRANT, "EMPTY", E.N_QUADRANT);
+let St = W;
+const u = class u extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
   init() {
-    this.state.stickyType || (this.state.stickyType = ["GOOP"]), this.state.attractor = Y.MAKE_ATTRACTOR(
+    this.state.stickyType || (this.state.stickyType = ["GOOP"]), this.state.attractor = M.MAKE_ATTRACTOR(
       this.state.stickyType,
       [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
-    ), this.state.avoider = Y.MAKE_AVOIDER(this.state.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]), this.state.aloneCount = 0;
+    ), this.state.avoider = M.MAKE_AVOIDER(this.state.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]), this.state.aloneCount = 0;
   }
   behave(t) {
     super.behave(t), t.filterByType(E.ALLADJACENT, [...this.state.stickyType, "GOOP"]).length, !this.state.attractor(t, this) && !this.state.avoider(t, this) && u.ATTRACT(t, this);
@@ -1264,12 +1293,12 @@ u.CREATE = u.CREATOR({ name: "GOOP", symbol: "GOP", class: u, color: 5542562, gr
 ), u.HC3_GOOP = u.CREATOR(
   { name: "HC3 GOOP", class: u, color: 5548439, classifications: ["GOOP", "MOVABLE"], groups: ["Goopy Stuff"] },
   { stickyType: ["HC3-END"] }
-), u.GOOP_GRID = M.CREATOR(
-  { name: "GOOP GRID", class: M, color: 1184018, groups: ["Goopy Stuff"] },
+), u.GOOP_GRID = P.CREATOR(
+  { name: "GOOP GRID", class: P, color: 1184018, groups: ["Goopy Stuff"] },
   { buildPath: E.DIAGONAL4WAY, atomizer: u.LIFE_GOOP, totalSteps: 40 }
-), u.ATTRACT = Y.MAKE_ATTRACTOR(["GOOP"], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]), u.AVOID = Y.MAKE_AVOIDER(["GOOP"], [...E.LAYER1], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]);
-let Rt = u;
-const A = class A extends l {
+), u.ATTRACT = M.MAKE_ATTRACTOR(["GOOP"], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]), u.AVOID = M.MAKE_AVOIDER(["GOOP"], [...E.LAYER1], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]);
+let It = u;
+const r = class r extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1278,79 +1307,79 @@ const A = class A extends l {
   behave(t) {
     super.behave(t), this.state.directableTypes && this.state.directableTypes.forEach((s) => {
       t.filter(E.ALLADJACENT, s).forEach((a) => {
-        c.DIRECT(t, a, this.state.pointing);
+        n.DIRECT(t, a, this.state.pointing);
       });
-    }), t.selfIs("DECAYABLE") && Z.DECAY(t, this, this.state.lifeSpan ?? 100, 2);
+    }), t.selfIs("DECAYABLE") && _.DECAY(t, this, this.state.lifeSpan ?? 100, 2);
   }
 };
-A.N = A.CREATOR(
-  { name: "DIRECTOR N", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+r.N = r.CREATOR(
+  { name: "DIRECTOR N", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "N", directableTypes: ["DIRECTABLE"] }
-), A.S = A.CREATOR(
-  { name: "DIRECTOR S", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.S = r.CREATOR(
+  { name: "DIRECTOR S", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "S", directableTypes: ["DIRECTABLE"] }
-), A.E = A.CREATOR(
-  { name: "DIRECTOR E", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.E = r.CREATOR(
+  { name: "DIRECTOR E", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "E", directableTypes: ["DIRECTABLE"] }
-), A.W = A.CREATOR(
-  { name: "DIRECTOR W", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.W = r.CREATOR(
+  { name: "DIRECTOR W", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "W", directableTypes: ["DIRECTABLE"] }
-), A.NE = A.CREATOR(
-  { name: "DIRECTOR NE", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.NE = r.CREATOR(
+  { name: "DIRECTOR NE", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "NE", directableTypes: ["DIRECTABLE"] }
-), A.NW = A.CREATOR(
-  { name: "DIRECTOR NW", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.NW = r.CREATOR(
+  { name: "DIRECTOR NW", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "NW", directableTypes: ["DIRECTABLE"] }
-), A.SW = A.CREATOR(
-  { name: "DIRECTOR SW", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.SW = r.CREATOR(
+  { name: "DIRECTOR SW", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "SW", directableTypes: ["DIRECTABLE"] }
-), A.SE = A.CREATOR(
-  { name: "DIRECTOR SE", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.SE = r.CREATOR(
+  { name: "DIRECTOR SE", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "SE", directableTypes: ["DIRECTABLE"] }
-), A.NNE = A.CREATOR(
-  { name: "DIRECTOR NNE", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.NNE = r.CREATOR(
+  { name: "DIRECTOR NNE", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "NNE", directableTypes: ["DIRECTABLE"] }
-), A.NNW = A.CREATOR(
-  { name: "DIRECTOR NNW", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.NNW = r.CREATOR(
+  { name: "DIRECTOR NNW", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "NNW", directableTypes: ["DIRECTABLE"] }
-), A.ENE = A.CREATOR(
-  { name: "DIRECTOR ENE", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.ENE = r.CREATOR(
+  { name: "DIRECTOR ENE", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "ENE", directableTypes: ["DIRECTABLE"] }
-), A.WNW = A.CREATOR(
-  { name: "DIRECTOR WNW", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.WNW = r.CREATOR(
+  { name: "DIRECTOR WNW", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "WNW", directableTypes: ["DIRECTABLE"] }
-), A.SSE = A.CREATOR(
-  { name: "DIRECTOR SSE", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.SSE = r.CREATOR(
+  { name: "DIRECTOR SSE", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "SSE", directableTypes: ["DIRECTABLE"] }
-), A.SSW = A.CREATOR(
-  { name: "DIRECTOR SSW", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.SSW = r.CREATOR(
+  { name: "DIRECTOR SSW", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "SSW", directableTypes: ["DIRECTABLE"] }
-), A.ESE = A.CREATOR(
-  { name: "DIRECTOR ESE", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.ESE = r.CREATOR(
+  { name: "DIRECTOR ESE", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "ESE", directableTypes: ["DIRECTABLE"] }
-), A.WSW = A.CREATOR(
-  { name: "DIRECTOR WSW", symbol: "DTR", class: A, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
+), r.WSW = r.CREATOR(
+  { name: "DIRECTOR WSW", symbol: "DTR", class: r, color: 6750777, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { pointing: "WSW", directableTypes: ["DIRECTABLE"] }
-), A.DIRECTORS_MAP = /* @__PURE__ */ new Map([
-  ["N", A.N],
-  ["E", A.E],
-  ["S", A.S],
-  ["W", A.W],
-  ["NE", A.NE],
-  ["NW", A.NW],
-  ["SE", A.SE],
-  ["SW", A.SW],
-  ["NNE", A.NNE],
-  ["NNW", A.NNW],
-  ["ENE", A.ENE],
-  ["WNW", A.WNW],
-  ["SSE", A.SSE],
-  ["SSW", A.SSW],
-  ["ESE", A.ESE],
-  ["WSW", A.WSW]
+), r.DIRECTORS_MAP = /* @__PURE__ */ new Map([
+  ["N", r.N],
+  ["E", r.E],
+  ["S", r.S],
+  ["W", r.W],
+  ["NE", r.NE],
+  ["NW", r.NW],
+  ["SE", r.SE],
+  ["SW", r.SW],
+  ["NNE", r.NNE],
+  ["NNW", r.NNW],
+  ["ENE", r.ENE],
+  ["WNW", r.WNW],
+  ["SSE", r.SSE],
+  ["SSW", r.SSW],
+  ["ESE", r.ESE],
+  ["WSW", r.WSW]
 ]);
-let j = A;
-const p = class p extends l {
+let Z = r;
+const p = class p extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1373,20 +1402,20 @@ const p = class p extends l {
   }
   behaveAsLooper(t) {
     if (!this.state.heading)
-      c.SET_DIRECTION(this, h.RANDOM(h.DIRECTIONS_PRIMARY)), this.state.moves = 0;
+      n.SET_DIRECTION(this, h.RANDOM(h.DIRECTIONS_PRIMARY)), this.state.moves = 0;
     else {
       const s = this.state.moves % 2 !== 0;
       let e;
-      this.makeBigTail(t), s && (e = p.LOOP_DIRECTOR(this.state.heading)), c.MOVE_DIRECTIONALLY(t, this, ["LOOP WALL", "LOOP DIRECTOR", "EMPTY"], e), this.state.moves++, this.state.moves % 8 === 0 && c.VEER_RIGHT(this);
+      this.makeBigTail(t), s && (e = p.LOOP_DIRECTOR(this.state.heading)), n.MOVE_DIRECTIONALLY(t, this, ["LOOP WALL", "LOOP DIRECTOR", "EMPTY"], e), this.state.moves++, this.state.moves % 8 === 0 && n.VEER_RIGHT(this);
     }
   }
   behaveAsWonky(t) {
-    this.state.heading ? (c.MOVE_DIRECTIONALLY(
+    this.state.heading ? (n.MOVE_DIRECTIONALLY(
       t,
       this,
       ["DECAY WALL", "EMPTY"],
-      j.DIRECTORS_MAP.get(h.turnRight(this.state.heading))({ classifications: ["DECAY WALL", "DECAYABLE"] }, { lifeSpan: 50 })
-    ), this.state.age % 5 === 0 && c.SLIGHT_RIGHT(this)) : (c.SET_DIRECTION(this, h.RANDOM(h.DIRECTIONS)), this.state.moves = 0);
+      Z.DIRECTORS_MAP.get(h.turnRight(this.state.heading))({ classifications: ["DECAY WALL", "DECAYABLE"] }, { lifeSpan: 50 })
+    ), this.state.age % 5 === 0 && n.SLIGHT_RIGHT(this)) : (n.SET_DIRECTION(this, h.RANDOM(h.DIRECTIONS)), this.state.moves = 0);
   }
 };
 p.CREATE = p.CREATOR({ name: "LOOPER", symbol: "LPR", class: p, color: 16716911, groups: ["Life"] }), p.WONKY = p.CREATOR({
@@ -1396,9 +1425,9 @@ p.CREATE = p.CREATOR({ name: "LOOPER", symbol: "LPR", class: p, color: 16716911,
   color: 16716911,
   classifications: ["WONKY", "LOOPER"],
   groups: ["Life"]
-}), p.LOOP_WALL = O.CREATOR({ name: "LOOP WALL", class: O, color: 6689177, classifications: ["DECAYABLE", "MOVABLE"] }, { lifeSpan: 150 }), p.LOOP_DIRECTOR = (t) => j.DIRECTORS_MAP.get(h.turnRight(t))({ classifications: ["LOOP DIRECTOR", "DECAYABLE"] }, { lifeSpan: 100 }), p.REPEL_DIRECTIONAL = Y.MAKE_REPELLER(["DIRECTIONAL"], [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 25, 26, 27, 28]);
-let Nt = p;
-const J = class J extends l {
+}), p.LOOP_WALL = D.CREATOR({ name: "LOOP WALL", class: D, color: 6689177, classifications: ["DECAYABLE", "MOVABLE"] }, { lifeSpan: 150 }), p.LOOP_DIRECTOR = (t) => Z.DIRECTORS_MAP.get(h.turnRight(t))({ classifications: ["LOOP DIRECTOR", "DECAYABLE"] }, { lifeSpan: 100 }), p.REPEL_DIRECTIONAL = M.MAKE_REPELLER(["DIRECTIONAL"], [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 25, 26, 27, 28]);
+let Lt = p;
+const $ = class $ extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1408,9 +1437,9 @@ const J = class J extends l {
     super.behave(t);
   }
 };
-J.CREATE = J.CREATOR({ name: "BEIN", symbol: "BNG", class: J, color: 12457071, groups: ["MFM"] });
-let Tt = J;
-const S = class S extends l {
+$.CREATE = $.CREATOR({ name: "BEIN", symbol: "BNG", class: $, color: 12457071, groups: ["MFM"] });
+let ut = $;
+const I = class I extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1439,8 +1468,8 @@ const S = class S extends l {
   behave(t) {
     var s;
     if (super.behave(t), this.state.heading) {
-      const e = [h.getInFront(this.state.heading)[0]];
-      t.is(e[0], "MOVABLE") && Y.MAKE_REPELLER(["MOVABLE"], e, [9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36])(t, this);
+      const e = h.getInFront(this.state.heading)[0];
+      t.is(e, "MOVABLE") && M.MAKE_REPELLER(["MOVABLE"], [e], t.shuffleSites([9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]))(t, this);
     }
     if (t.selfIs("FLY"))
       this.behaveAsFly(t);
@@ -1452,19 +1481,19 @@ const S = class S extends l {
       this.behaveAsSwampData(t);
     else {
       if (!this.state.heading) {
-        c.SET_DIRECTION(this, h.RANDOM());
+        n.SET_DIRECTION(this, h.RANDOM());
         return;
       }
       if (!t.exists(h.getInFront(this.state.heading)[0])) {
-        c.REVERSE(this), c.SLIGHT_RANDOMLY(this);
+        n.REVERSE(this), n.SLIGHT_RANDOMLY(this);
         return;
       }
       const e = (s = t.filter(h.getInFront(this.state.heading, !0), "WANDERER", !0)) == null ? void 0 : s[0];
-      e ? this.state.heading = t.getSite(e).atom.state.heading : E.oneIn(100) && c.SLIGHT_RANDOMLY(this);
+      e ? this.state.heading = t.getSite(e).atom.state.heading : E.oneIn(100) && n.SLIGHT_RANDOMLY(this);
       const a = t.filter(h.getBehind(this.state.heading, !0), "WANDERER", !1);
-      a.length > 0 && a.forEach((r) => {
-        t.getSite(r).atom.state.heading = this.state.heading;
-      }), c.MOVE_DIRECTIONALLY(t, this) || c.SLIGHT_RANDOMLY(this), this.state.setColor();
+      a.length > 0 && a.forEach((o) => {
+        t.getSite(o).atom.state.heading = this.state.heading;
+      }), n.MOVE_DIRECTIONALLY(t, this) || n.SLIGHT_RANDOMLY(this), this.state.setColor();
     }
   }
   behaveAsFly(t) {
@@ -1472,47 +1501,47 @@ const S = class S extends l {
       h.getDirectionalMove(h.turnRight(this.state.heading), !0),
       h.getDirectionalMove(h.turnLeft(this.state.heading), !0)
     ].forEach((s) => {
-      t.is(s, "EMPTY") && t.replace(s, S.FLY_TAIL());
-    }), c.MOVE_DIRECTIONALLY(t, this, "EMPTY", S.FLY_TAIL()), E.oneIn(2) && c.SLIGHT_RANDOMLY(this)) : c.SET_DIRECTION(this, h.RANDOM());
+      t.is(s, "EMPTY") && t.replace(s, I.FLY_TAIL());
+    }), n.MOVE_DIRECTIONALLY(t, this, "EMPTY", I.FLY_TAIL()), E.oneIn(2) && n.SLIGHT_RANDOMLY(this)) : n.SET_DIRECTION(this, h.RANDOM());
   }
   behaveAsMosquito(t) {
-    this.state.heading ? (c.MOVE_DIRECTIONALLY(t, this, "EMPTY", S.MOSQUITO_TAIL()), c.SLIGHT_RANDOMLY(this)) : c.SET_DIRECTION(this, h.RANDOM());
+    this.state.heading ? (n.MOVE_DIRECTIONALLY(t, this, "EMPTY", I.MOSQUITO_TAIL()), n.SLIGHT_RANDOMLY(this)) : n.SET_DIRECTION(this, h.RANDOM());
   }
   behaveAsBird(t) {
     if (!this.state.heading)
-      c.SET_DIRECTION(this, h.RANDOM());
+      n.SET_DIRECTION(this, h.RANDOM());
     else {
       const s = t.filter(E.ALLADJACENT, "BIRD", !0)[0];
       s && (this.state.heading = t.getSite(s).atom.state.heading ?? this.state.heading), [
         h.getDirectionalMove(h.turnRight(this.state.heading), !0),
         h.getDirectionalMove(h.turnLeft(this.state.heading), !0)
       ].forEach((e) => {
-        t.is(e, "EMPTY") && t.replace(e, S.BIRD_WING({}, { heading: this.state.heading }));
-      }), c.MOVE_DIRECTIONALLY(t, this, "EMPTY") ? E.oneIn(4) && c.SLIGHT_RANDOMLY(this) : c.REVERSE(this);
+        t.is(e, "EMPTY") && t.replace(e, I.BIRD_WING({}, { heading: this.state.heading }));
+      }), n.MOVE_DIRECTIONALLY(t, this, "EMPTY") ? E.oneIn(4) && n.SLIGHT_RANDOMLY(this) : n.REVERSE(this);
     }
   }
   behaveAsSwampData(t) {
-    this.state.heading ? (t.filter(h.getInFront(this.state.heading), "EMPTY").length && c.REVERSE(this), E.oneIn(10) && (c.SWAP_DIRECTIONALLY(t, this, "SWAMP"), c.SLIGHT_RANDOMLY(this))) : c.SET_DIRECTION(this, h.RANDOM());
+    this.state.heading ? (t.filter(h.getInFront(this.state.heading), "EMPTY").length && n.REVERSE(this), E.oneIn(10) && (n.SWAP_DIRECTIONALLY(t, this, "SWAMP"), n.SLIGHT_RANDOMLY(this))) : n.SET_DIRECTION(this, h.RANDOM());
   }
   blazeTrail(t) {
     if (this.state.heading) {
       const s = h.getInFront(h.turnLeft(this.state.heading))[1], e = h.getInFront(h.turnRight(this.state.heading))[1];
-      t.is(s, "EMPTY") ? t.mutate(s, O.MOVABLE_WALL) : t.is(s, "MOVABLE WALL") && t.mutate(s, P.CREATE), t.is(e, "EMPTY") ? t.mutate(e, O.MOVABLE_WALL) : t.is(e, "MOVABLE WALL") && t.mutate(e, P.CREATE);
+      t.is(s, "EMPTY") ? t.mutate(s, D.MOVABLE_WALL) : t.is(s, "MOVABLE WALL") && t.mutate(s, d.CREATE), t.is(e, "EMPTY") ? t.mutate(e, D.MOVABLE_WALL) : t.is(e, "MOVABLE WALL") && t.mutate(e, d.CREATE);
     }
   }
 };
-S.CREATE = S.CREATOR({ name: "WANDERER", class: S, color: 12457071, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), S.FLY = S.CREATOR({ name: "FLY", class: S, color: 13413119, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), S.MOSQUITO = S.CREATOR({ name: "MOSQUITO", class: S, color: 13434709, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), S.BIRD = S.CREATOR({ name: "BIRD", class: S, color: 4889583, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), S.SWAMPDATA = S.CREATOR({
+I.CREATE = I.CREATOR({ name: "WANDERER", class: I, color: 12457071, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), I.FLY = I.CREATOR({ name: "FLY", class: I, color: 13413119, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), I.MOSQUITO = I.CREATOR({ name: "MOSQUITO", class: I, color: 13434709, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), I.BIRD = I.CREATOR({ name: "BIRD", class: I, color: 4889583, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] }), I.SWAMPDATA = I.CREATOR({
   name: "SWAMP DATA",
-  class: S,
+  class: I,
   color: 5513984,
   classifications: ["OFSWAMP", "DIRECTIONAL", "DIRECTABLE"],
   groups: ["Swamp"]
-}), S.BIRD_WING = O.CREATOR(
-  { name: "BIRD WING", class: O, color: 3836895, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE", "TAIL"] },
+}), I.BIRD_WING = D.CREATOR(
+  { name: "BIRD WING", class: D, color: 3836895, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE", "TAIL"] },
   { lifeSpan: 2 }
-), S.FLY_TAIL = O.CREATOR({ name: "FLY TAIL", class: O, color: 10031428, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 }), S.MOSQUITO_TAIL = O.CREATOR({ name: "MOSQUITO TAIL", class: O, color: 5601024, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 });
-let lt = S;
-const k = class k extends l {
+), I.FLY_TAIL = D.CREATOR({ name: "FLY TAIL", class: D, color: 10031428, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 }), I.MOSQUITO_TAIL = D.CREATOR({ name: "MOSQUITO TAIL", class: D, color: 5601024, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 });
+let Dt = I;
+const z = class z extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1521,21 +1550,21 @@ const k = class k extends l {
   behave(t) {
     super.behave(t);
     const s = t.filterByType([...E.LAYER1, ...E.LAYER2, ...E.LAYER3], ["EMPTY", "DIRECTOR"]);
-    s.length > 0 && t.mutateMany(s, et.CREATE);
+    s.length > 0 && t.mutateMany(s, D.CREATE);
     const e = t.filterByType(E.LAYER4, "EMPTY");
     if (e.length > 0 && e.forEach((a) => {
-      let r = h.indexToDirection(a);
-      const n = h.turnLeft(r);
-      t.mutate(a, j.DIRECTORS_MAP.get(n));
+      let o = h.indexToDirection(a);
+      const c = h.turnLeft(o);
+      t.mutate(a, Z.DIRECTORS_MAP.get(c));
     }), E.oneIn(1e3)) {
       const a = t.filterByType(E.LAYER4, "DIRECTOR");
       t.destroy(t.random(a));
     }
   }
 };
-k.CREATE = k.CREATOR({ name: "DIRECTOR WALL", symbol: "DRWL", class: k, color: 12457071, groups: ["Structural"] });
-let St = k;
-const B = class B extends l {
+z.CREATE = z.CREATOR({ name: "DIRECTOR WALL", symbol: "DRWL", class: z, color: 12457071, groups: ["Structural"] });
+let Ot = z;
+const v = class v extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1549,21 +1578,21 @@ const B = class B extends l {
     }
     const s = t.filterByType(E.ALLADJACENT, ((e = this.state) == null ? void 0 : e.directableTypes) ?? ["DIRECTABLE"]);
     if (s.length > 0) {
-      const r = s[0], n = c.DIRECT(t, r, ((a = this.state) == null ? void 0 : a.pointing) ?? h.reverse(this.state.heading));
-      if (this.state.once && n) {
+      const o = s[0], c = n.DIRECT(t, o, ((a = this.state) == null ? void 0 : a.pointing) ?? h.reverse(this.state.heading));
+      if (this.state.once && c) {
         t.destroy(0);
         return;
       }
     }
-    this.state.heading && (c.MOVE_DIRECTIONALLY(t, this, this.state.direction) || (this.state.heading = h.slightRandom(this.state.heading)));
+    this.state.heading && (n.MOVE_DIRECTIONALLY(t, this, this.state.direction) || (this.state.heading = h.slightRandom(this.state.heading)));
   }
 };
-B.CREATE = B.CREATOR({ name: "DIRDIR", symbol: "DDIR", class: B, color: 11184810, groups: ["Agents"], classifications: ["DIRECTOR"] }), B.DDIR_ONCE = B.CREATOR(
-  { name: "DIRDIR ONCE", symbol: "DDIRO", class: B, color: 10066329, classifications: ["DIRECTOR"], groups: ["Agents"] },
+v.CREATE = v.CREATOR({ name: "DIRDIR", symbol: "DDIR", class: v, color: 11184810, groups: ["Agents"], classifications: ["DIRECTOR"] }), v.DDIR_ONCE = v.CREATOR(
+  { name: "DIRDIR ONCE", symbol: "DDIRO", class: v, color: 10066329, classifications: ["DIRECTOR"], groups: ["Agents"] },
   { directableTypes: ["DIRECTABLE"], once: !0 }
 );
-let It = B;
-const $ = class $ extends l {
+let Ct = v;
+const X = class X extends S {
   constructor(t, s = {}) {
     super(t, s);
   }
@@ -1571,28 +1600,28 @@ const $ = class $ extends l {
     super.behave(t);
     const s = t.filterByType(E.ADJACENT8WAY, "SWAMP WORKER");
     if (t.filterByType(E.ALLADJACENT, "OFSWAMP").length < E.ALLADJACENT.length * 0.4) {
-      t.mutate(0, q.CREATE);
+      t.mutate(0, w.CREATE);
       return;
     }
     if (s.length) {
-      t.mutate(0, q.CREATE);
+      t.mutate(0, w.CREATE);
       return;
     }
-    this.state.heading ? c.SWAP_DIRECTIONALLY(t, this, "SWAMP") ? c.VEER_RIGHT(this) : c.SLIGHT_RIGHT(this) : c.SET_DIRECTION(this, h.RANDOM(h.DIRECTIONS_PRIMARY));
+    this.state.heading ? n.SWAP_DIRECTIONALLY(t, this, "SWAMP") ? n.VEER_RIGHT(this) : n.SLIGHT_RIGHT(this) : n.SET_DIRECTION(this, h.RANDOM(h.DIRECTIONS_PRIMARY));
   }
 };
-$.CREATE = $.CREATOR({
+X.CREATE = X.CREATOR({
   name: "SWAMP WORKER",
   symbol: "SWK",
-  class: $,
+  class: X,
   color: 214543,
   // color: 0x3d5b31,
   // color: 0x3d6242,
   classifications: ["OFSWAMP", "DIRECTIONAL", "SWAMPLING"],
   groups: ["Swamp"]
 });
-let at = $;
-const v = class v extends l {
+let Et = X;
+const H = class H extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1603,63 +1632,63 @@ const v = class v extends l {
     super.behave(t);
     const s = t.filterByType(E.ADJACENT8WAY, "SWAMPLING"), e = t.filterByType(E.ADJACENT8WAY, "OFSWAMP"), a = t.filterByType(E.ALLADJACENT, "SWAMP");
     if (!this.state.made && a.length === E.ALLADJACENT.length) {
-      this.state.made = !0, t.mutate(0, at.CREATE);
+      this.state.made = !0, t.mutate(0, Et.CREATE);
       return;
     }
-    s.length > 0 ? (this.state.age = 0, E.oneIn(6) && this.grow(t)) : t.selfIs("DECAYABLE") && e.length < 7 ? Z.DECAY(t, this, this.state.lifeSpan) && t.mutate(0, v.BOG) : this.state.age = 0;
+    s.length > 0 ? (this.state.age = 0, E.oneIn(6) && this.grow(t)) : t.selfIs("DECAYABLE") && e.length < 7 ? _.DECAY(t, this, this.state.lifeSpan) && t.mutate(0, H.BOG) : this.state.age = 0;
   }
   grow(t) {
     const s = t.filterByType(E.ADJACENT4WAY, "EMPTY");
     s.length && t.mutate(t.random(s), this.TYPE.CREATE);
   }
 };
-v.CREATE = v.CREATOR({
+H.CREATE = H.CREATOR({
   name: "SWAMP",
-  class: v,
+  class: H,
   color: 4021041,
   classifications: ["ENV", "OFSWAMP", "DECAYABLE"],
   groups: ["Swamp"]
-}), v.BOG = O.CREATOR({ name: "BOG", class: O, classifications: ["DECAYABLE"], color: 1320454 }, { lifeSpan: 45 });
-let q = v;
-const z = class z extends l {
+}), H.BOG = D.CREATOR({ name: "BOG", class: D, classifications: ["DECAYABLE"], color: 1320454 }, { lifeSpan: 45 });
+let w = H;
+const j = class j extends S {
   //SYSTEM ELEMENTS
   constructor(t, s = {}) {
     super(t, s);
   }
   behave(t) {
     if (super.behave(t), this.state.heading)
-      t.filterByType(E.ADJACENT8WAY, "EMPTY").length > 1 && c.SLIGHT_RIGHT(this), c.SWAP_DIRECTIONALLY(t, this, "SWAMP"), E.oneIn(1.5) && c.SLIGHT_RIGHT(this);
+      t.filterByType(E.ADJACENT8WAY, "EMPTY").length > 1 && n.SLIGHT_RIGHT(this), n.SWAP_DIRECTIONALLY(t, this, "SWAMP"), E.oneIn(1.5) && n.SLIGHT_RIGHT(this);
     else {
-      c.SET_DIRECTION(this, h.RANDOM());
+      n.SET_DIRECTION(this, h.RANDOM());
       const s = t.filterByType(E.ADJACENT8WAY, "EMPTY");
-      s.length && t.mutateMany(s, q.CREATE);
+      s.length && t.mutateMany(s, w.CREATE);
     }
   }
 };
-z.CREATE = z.CREATOR({
+j.CREATE = j.CREATOR({
   name: "SWAMPLING",
-  class: z,
+  class: j,
   color: 2280584,
   // color: 0x3d5b31,
   classifications: ["OFSWAMP", "DIRECTIONAL", "DIRECTABLE"],
   groups: ["Swamp"]
 });
-let Lt = z;
-const X = class X extends l {
+let gt = j;
+const q = class q extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
   init() {
   }
   behave(t) {
-    super.behave(t), this.state.heading ? (c.MOVE_DIRECTIONALLY(t, this), c.SLIGHT_RANDOMLY(this)) : c.SET_DIRECTION(this, h.RANDOM());
+    super.behave(t), this.state.heading ? (n.MOVE_DIRECTIONALLY(t, this), n.SLIGHT_RANDOMLY(this)) : n.SET_DIRECTION(this, h.RANDOM());
     const s = t.filter(E.ALLADJACENT, "FORKBOMB", !0);
-    s.length && t.mutate(s[0], it.CREATE);
+    s.length && t.mutate(s[0], at.CREATE);
   }
 };
-X.CREATE = X.CREATOR({ name: "SENTRY", class: X, color: 10753279, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["MFM"] });
-let ut = X;
-const R = class R extends l {
+q.CREATE = q.CREATOR({ name: "SENTRY", class: q, color: 10753279, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["MFM"] });
+let ft = q;
+const R = class R extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1674,7 +1703,7 @@ const R = class R extends l {
     if (!this.isRoot()) {
       const s = this.shouldMove(t);
       if (s) {
-        c.MOVE_IN_DIRECTION(t, this, s);
+        n.MOVE_IN_DIRECTION(t, this, s);
         return;
       }
     }
@@ -1701,8 +1730,8 @@ const R = class R extends l {
       return;
     } else {
       const e = s.map((a) => {
-        var r;
-        return (r = t.getSite(a)) == null ? void 0 : r.atom.state.hops;
+        var o;
+        return (o = t.getSite(a)) == null ? void 0 : o.atom.state.hops;
       }).filter((a) => !isNaN(a) && a !== void 0);
       if (e.length)
         this.state.hops = Math.min(...e) + 1;
@@ -1723,10 +1752,10 @@ const R = class R extends l {
   shouldMove(t) {
     const s = t.filter(R.CELL_SITES, "EMPTY");
     if (s.length) {
-      const e = E.RANDOM(s), a = R.CELL_WANDER_MAP.get(e), r = t.filter(a, this.localType()).filter((n) => t.getSite(n).atom.state.hops < this.state.hops);
-      if (r.length) {
-        const n = E.RANDOM(r);
-        return R.CELL_DIRECTION_MAP.get(n);
+      const e = E.RANDOM(s), a = R.CELL_WANDER_MAP.get(e), o = t.filter(a, this.localType()).filter((c) => t.getSite(c).atom.state.hops < this.state.hops);
+      if (o.length) {
+        const c = E.RANDOM(o);
+        return R.CELL_DIRECTION_MAP.get(c);
       }
     }
     return !1;
@@ -1742,14 +1771,14 @@ const R = class R extends l {
   }
   upstreams(t) {
     return t.filter(R.CELL_SITES, this.localType()).filter((a) => {
-      var r, n;
-      return ((n = (r = t.getSite(a)) == null ? void 0 : r.atom.state) == null ? void 0 : n.hops) > this.state.hops;
+      var o, c;
+      return ((c = (o = t.getSite(a)) == null ? void 0 : o.atom.state) == null ? void 0 : c.hops) > this.state.hops;
     });
   }
   downstreams(t) {
     return t.filter(R.CELL_SITES, this.localType()).filter((a) => {
-      var r, n;
-      return ((n = (r = t.getSite(a)) == null ? void 0 : r.atom.state) == null ? void 0 : n.hops) < this.state.hops;
+      var o, c;
+      return ((c = (o = t.getSite(a)) == null ? void 0 : o.atom.state) == null ? void 0 : c.hops) < this.state.hops;
     });
   }
   //returns actual HardCell3's at CELL_SITES
@@ -1757,11 +1786,11 @@ const R = class R extends l {
     return t.filter(R.CELL_SITES, this.localType());
   }
   getDirectionFromWanderMap(t, s) {
-    var r;
+    var o;
     const e = R.CELL_WANDER_MAP.get(s);
     if (!e)
       return;
-    const a = (r = t.filter(e, this.localType(), !0)) == null ? void 0 : r[0];
+    const a = (o = t.filter(e, this.localType(), !0)) == null ? void 0 : o[0];
     if (a)
       return R.CELL_DIRECTION_MAP.get(a);
   }
@@ -1794,8 +1823,8 @@ R.CREATE = R.CREATOR({ name: "HARDCELL3x16", symbol: "HC3", class: R, color: 124
   [36, "S"],
   [39, "S"]
 ]), R.COLORS = [16711680, 16744192, 16776960, 65280, 255, 4915330, 606419];
-let Dt = R;
-const m = class m extends l {
+let Wt = R;
+const m = class m extends S {
   // static COLORS = [ 0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0x4b0082, 0x940d3 ];
   constructor(t, s = {}) {
     super(t, s), this.init();
@@ -1895,18 +1924,18 @@ const m = class m extends l {
     if (((s = this.state) == null ? void 0 : s.status) === "HELD")
       return !1;
     if (!this.state.heading)
-      c.SET_DIRECTION(this, h.RANDOM());
+      n.SET_DIRECTION(this, h.RANDOM());
     else if (E.oneIn(2)) {
       const a = h.getDirectionalMove(this.state.heading, !0);
-      let r = !1;
-      return t.is(a, "EMPTY") && (r = t.move(a, this.makeGrowTemp(a))), ((e = this.state) == null ? void 0 : e.status) !== "DIRECTED" && E.oneIn(10) && c.SLIGHT_RANDOMLY(this), r ? this.state.behind = E.OPPOSITES[a] : c.SLIGHT_RANDOMLY(this), r;
+      let o = !1;
+      return t.is(a, "EMPTY") && (o = t.move(a, this.makeGrowTemp(a))), ((e = this.state) == null ? void 0 : e.status) !== "DIRECTED" && E.oneIn(10) && n.SLIGHT_RANDOMLY(this), o ? this.state.behind = E.OPPOSITES[a] : n.SLIGHT_RANDOMLY(this), o;
     }
     return !1;
   }
 };
 m.CREATE = m.CREATOR({ name: "SWAPWORM", symbol: "SWP", class: m, color: 12457071, classifications: ["DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] }), m.SMOLSW = m.CREATOR({ name: "SMOLSW", symbol: "SWP", class: m, color: 12457071, classifications: ["SWAPWORM", "DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] }, { growCount: 2 }), m.BIGSW = m.CREATOR({ name: "BIGSW", symbol: "SWP", class: m, color: 12457071, classifications: ["SWAPWORM", "DIRECTIONAL", "DIRECTABLE", "WORM"], groups: ["Life"] }, { growCount: 24 });
-let Ot = m;
-const U = class U extends l {
+let pt = m;
+const Q = class Q extends S {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1919,7 +1948,7 @@ const U = class U extends l {
         this.captureWorm(t);
         break;
       case "HOLDING":
-        t.mutate(2, U.BUILDER), t.mutate(3, U.BUILDER), this.state.status = "BUILT";
+        t.mutate(2, Q.BUILDER), t.mutate(3, Q.BUILDER), this.state.status = "BUILT";
         break;
       case "BUILT":
         if (t.is(1, "SWAPWORM")) {
@@ -1931,56 +1960,105 @@ const U = class U extends l {
         if (t.is(2, "WALL"))
           t.swap(4);
         else {
-          t.mutateMany([2, 3], O.CREATE), this.state.status = "DONE";
+          t.mutateMany([2, 3], D.CREATE), this.state.status = "DONE";
           return;
         }
         break;
     }
-    t.selfIs("DECAYABLE") && Z.DECAY(t, this, this.state.lifeSpan ?? 100, 2);
+    t.selfIs("DECAYABLE") && _.DECAY(t, this, this.state.lifeSpan ?? 100, 2);
   }
   captureWorm(t) {
     const s = t.filter([1, 5, 6, 9], "SWAPWORM");
     if (s.length > 0) {
       const e = t.getSite(E.RANDOM(s)).atom, a = t.filter([, 2, 3, 10, 11, 15, 16, 13, 14, 21, 25, 26, 29, 30, 37], "EMPTY");
-      return t.mutateMany(a, O.CREATE), e.state.status = "DIRECTED", this.state.status = "HOLDING", !0;
+      return t.mutateMany(a, D.CREATE), e.state.status = "DIRECTED", this.state.status = "HOLDING", !0;
     }
     return !1;
   }
 };
-U.CREATE = U.CREATOR({ name: "WORMTRAP", class: U, color: 8930542, groups: ["Structural"] }), U.BUILDER = M.CREATOR(
-  { name: "WORM TRAP WALL", class: M, color: 1184018, groups: ["Misc"] },
-  { buildPath: [4], totalSteps: 5, atomizer: O.CREATE, transitionAge: 1 }
+Q.CREATE = Q.CREATOR({ name: "WORMTRAP", class: Q, color: 8930542, groups: ["Structural"] }), Q.BUILDER = P.CREATOR(
+  { name: "WORM TRAP WALL", class: P, color: 1184018, groups: ["Misc"] },
+  { buildPath: [4], totalSteps: 5, atomizer: D.CREATE, transitionAge: 1 }
 );
-let gt = U;
+let mt = Q;
+const y = class y extends S {
+  constructor(t, s = {}) {
+    super(t, s), this.init();
+  }
+  init() {
+    this.state.homeostasis = 5, this.state.inactivityCounter = 0;
+  }
+  behave(t) {
+    super.behave(t), this.state.hasData || this.state.hadData ? this.state.inactivityCounter = 0 : this.state.inactivityCounter++;
+    const s = t.filterByType([...E.LAYER1, ...E.ADJACENT8WAY], "MESHNET"), e = t.filterByType(E.ALLADJACENT, "MESHNET");
+    if (e.length > 1)
+      this.state.color = 65280;
+    else {
+      this.state.color = 15606289, y.ATTRACT(t, this) || t.swap(t.random(E.ALLADJACENT));
+      return;
+    }
+    if (e.length === 0) {
+      y.ATTRACT(t, this) || t.swap(t.random(E.ALLADJACENT));
+      return;
+    }
+    if (s.length > 0) {
+      y.AVOID(t, this);
+      return;
+    }
+    const a = t.filterByType(E.ADJACENT8WAY, "RES");
+    if (a.length > 0) {
+      t.destroy(a[0]), this.state.hasData = !0, this.state.hadData = !0;
+      return;
+    }
+    if (this.state.hasData) {
+      if (this.state.color = 16759603, e.length > 0) {
+        const o = t.getSite(E.RANDOM(e)).atom;
+        o.state.hasData || (this.state.hasData = !1, this.state.hadData = !0, o.state.hasData = !0);
+      }
+      return;
+    }
+    this.state.hadData && !this.state.hasData && (this.state.color = 0), this.state.inactivityCounter > 1e3 && (this.state.inactivityCounter = 0, t.swap(t.random(E.ALLADJACENT)));
+  }
+};
+y.CREATE = y.CREATOR({ name: "MESHNET", symbol: "MNT", class: y, color: 15606289, groups: ["MFM"] }), y.ATTRACT = M.MAKE_ATTRACTOR(["MESHNET"], E.ALLADJACENT), y.AVOID = M.MAKE_AVOIDER(["MESHNET"], [...E.LAYER1, ...E.LAYER2, ...E.LAYER3], [...E.LAYER4, ...E.LAYER4, ...E.LAYER4]);
+let Mt = y;
 export {
-  it as AntiForkBomb,
-  Tt as Bein,
-  M as Builder,
-  ot as DReg,
-  It as DirectionalDirector,
-  j as Director,
-  St as DirectorWall,
-  l as Element,
-  tt as ElementRegistry,
-  P as Empty,
+  at as AntiForkBomb,
+  ut as Bein,
+  nt as Build,
+  P as Builder,
+  rt as CapabilityRegistry,
+  ct as DReg,
+  _ as Decay,
+  Ct as DirectionalDirector,
+  Z as Director,
+  Ot as DirectorWall,
+  S as Element,
+  it as ElementRegistry,
+  d as Empty,
   E as EventWindow,
-  rt as ForkBomb,
-  Rt as Goop,
-  Dt as HardCell3,
-  et as LivingWall,
-  Nt as Looper,
-  st as Res,
-  ct as Sand,
-  ut as Sentry,
-  ft as Site,
-  q as Swamp,
-  at as SwampWorker,
-  Lt as Swampling,
-  At as SwapLine,
-  Ot as SwapWorm,
-  Wt as Tile,
-  O as Wall,
-  lt as Wanderer,
-  nt as Water,
-  gt as WormTrap
+  Rt as ForkBomb,
+  It as Goop,
+  Wt as HardCell3,
+  Tt as LivingWall,
+  Lt as Looper,
+  Mt as MeshNet,
+  M as Repel,
+  et as Res,
+  lt as Sand,
+  ft as Sentry,
+  dt as Site,
+  w as Swamp,
+  Et as SwampWorker,
+  gt as Swampling,
+  B as Swap,
+  Nt as SwapLine,
+  pt as SwapWorm,
+  Yt as Tile,
+  D as Wall,
+  Dt as Wanderer,
+  St as Water,
+  h as Wayfinder,
+  n as Wayfinding,
+  mt as WormTrap
 };

@@ -1,5 +1,5 @@
-import { EventWindow, EWIndex } from '../mfm/EventWindow';
 import { Element } from '../mfm/Element';
+import { EventWindow, EWIndex } from '../mfm/EventWindow';
 
 export declare class Repel {
     static NAME: string;

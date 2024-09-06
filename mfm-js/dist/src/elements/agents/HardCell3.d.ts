@@ -1,6 +1,6 @@
-import { Direction } from '../../mfm/Wayfinder';
-import { EventWindow, EWIndex } from '../../mfm/EventWindow';
 import { Element, IElementType } from '../../mfm/Element';
+import { EventWindow, EWIndex } from '../../mfm/EventWindow';
+import { Direction } from '../../mfm/Wayfinder';
 
 export declare class HardCell3 extends Element {
     static CREATE: (_typeDefinition?: import('../../mfm/Element').IElementTypePartial, _state?: any) => Element;

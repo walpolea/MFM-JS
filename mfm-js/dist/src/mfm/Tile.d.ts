@@ -1,5 +1,5 @@
-import { ICoordinate } from './TileCoordinate';
 import { Site } from './Site';
+import { ICoordinate } from './TileCoordinate';
 
 export declare class Tile {
     width: number;

@@ -414,4 +414,19 @@ export class EventWindow {
   destroy(targetIndex: EWIndex = 0): boolean {
     return this.mutate(targetIndex, Empty.CREATE);
   }
+
+  shuffleSites( siteSet: EWIndex[] ):EWIndex[] {
+    var currentIndex = siteSet.length, temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = siteSet[currentIndex];
+      siteSet[currentIndex] = siteSet[randomIndex];
+      siteSet[randomIndex] = temporaryValue;
+    }
+    return siteSet;
+  }
+
+  
 }
