@@ -90,7 +90,8 @@ export abstract class Element implements IElement {
   }
 
   declassify(c: string | IElementType): void {
-    const t: string = typeof c === "string" ? c : c.name;
+    if(!c) return;
+    const t: string = typeof c === "string" ? c : c?.name;
     this.classes.delete(t.toUpperCase());
   }
 

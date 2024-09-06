@@ -299,7 +299,6 @@ export class PixiRenderer implements IRenderer {
           const x = ~~(from.x + (xdist / steps) * i);
           const y = ~~(from.y + (ydist / steps) * i);
 
-          console.log( atom.from.x, x ) ;
           this.setAtomAt( x, y, atom.type, atom?.settings );
         }
 
@@ -311,6 +310,27 @@ export class PixiRenderer implements IRenderer {
       }
     });
 
+  }
+
+  getAtomicMap( asString = false ) {
+    const atoms = [];
+
+    this.tile.sites.forEach( (s) => {
+      if( !s.atom.is("EMPTY") ) {
+        atoms.push({
+          x: s.location.coordinate.x,
+          y: s.location.coordinate.y,
+          type: s.atom.TYPE.name,
+          settings: { params: s.atom.type, state: s.atom.state }
+        });
+      }
+    });
+
+    if( asString ) {
+      return JSON.stringify(atoms);
+    }
+
+    return atoms;
   }
 
   minValue(v1, v2) {

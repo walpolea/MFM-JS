@@ -2,7 +2,13 @@
 <div class="lemmings-game" v-once></div>
 <div class="controls">
   <button @click="togglePause">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
-  <input type="range" min="0" :max="2" value="1" :step="0.001" v-model="renderSpeed">
+  <input type="range" min="0" :max="1" value="1" :step="0.001" v-model="renderSpeed">
+  <div class="editor-controls" v-if="mode === 'EDIT'">
+    <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
+    <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
+    <input type="range" v-model="brushSize" min="1" max="10"> {{ brushSize }}
+    <button @click="console.log(grid.getAtomicMap(true))">LOG MAP</button>
+  </div>
 </div>
 </template>
 <script setup>
@@ -13,6 +19,8 @@
 
   import {Lemming} from './elements/Lemming.ts';
   import {LemmingEmitter} from './elements/LemmingEmitter.ts';
+  import {Power} from './elements/Power.ts';
+  import { Dirt } from './elements/Dirt.ts';
 
   import {LEVEL1} from './levels/level1';
 
@@ -21,8 +29,10 @@
   let mfms;
   let currentLevel = LEVEL1;
 
-  const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()));
+
+  const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()).LEMMINGS);
   const activeType = ref(null);
+  const mode = ref('EDIT');
 
   const isPaused = ref(false);
   const togglePause = () => {
@@ -37,8 +47,9 @@
     renderSpeed.value = 1;
   }
 
-  const renderSpeed = ref(1);
-  const brushSize = ref(1);
+  const INITIAL_RENDER_SPEED = 0.0;
+  const renderSpeed = ref(INITIAL_RENDER_SPEED);
+  const brushSize = ref(2);
 
   watch( brushSize, (bs) => {
     grid.brushSize = +bs;
@@ -51,11 +62,6 @@
   onMounted( async () => {
     mfms = document.querySelector('.lemmings-game');
 
-
-    // await init();
-
-    // grid.setAllAtoms( "LEMM" );
-    // grid.setAtomAt( 10, 50, "LEMM" );
     loadLevel();
   });
 
@@ -65,9 +71,10 @@
       currentLevel = level;
     }
 
+    if( grid ) {
+      grid.deconstruct();
+    }
     await init( currentLevel.map.width, currentLevel.map.height );
-    // await init();
-
     grid.setAtomicMap( currentLevel.map );
   }
 
@@ -97,7 +104,7 @@
     if( activeType.value ) {
       setActiveElement(activeType.value);
     } else {
-      setActiveElementByName('LEMM');
+      setActiveElementByName('POWER');
     }
   }
 
