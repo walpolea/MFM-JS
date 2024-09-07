@@ -82,7 +82,10 @@ export class Lemming extends Element {
         ew.move( empties[0] );
         return;
       } else {
-        this.state.direction = this.state.direction === 'RIGHT' ? 'LEFT' : 'RIGHT';
+        const CHANCE_TO_TURN = 2;
+        if( EventWindow.oneIn(CHANCE_TO_TURN) ) {
+          this.state.direction = this.state.direction === 'RIGHT' ? 'LEFT' : 'RIGHT';
+        }
       }
       
     }
@@ -113,8 +116,11 @@ export class Lemming extends Element {
   }
 
   head(ew) {
+    this.behead(ew);
     if( ew.is( Lemming.DIRS.UP, "EMPTY" ) ) {
       ew.mutate( Lemming.DIRS.UP, Lemming.HEAD );
+    } else if( ew.is( Lemming.DIRS[this.state.direction], "EMPTY" ) ) {
+      ew.mutate( Lemming.DIRS[this.state.direction], Lemming.HEAD );
     }
   }
 

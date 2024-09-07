@@ -1,33 +1,36 @@
 <template>
+<div>
   <div class="top-hud">
     <span>{{ currentLevel.name }}</span>
     <span>Lemmings Saved: {{ currentSavedLemmings }} / {{ currentLevel.saveGoal ?? "?" }}</span>
   </div>
-<div class="lemmings-game" v-once></div>
-<div class="controls">
-  <div class="user-contro">
-    <button @click="togglePause()">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
-    <button @click="pause();loadLevel(currentLevel);initLevel();">RESTART LEVEL</button>
-    <input type="range" min="0" :max="4" value="1" :step="0.001" v-model="renderSpeed">
-    <div class="resources">
-      <button v-for="resource in currentLevel.resources" @click="setActiveElementByName(resource.type)">{{ resource.type }} - {{ resource.count }}</button>
+  <div class="lemmings-game" v-once></div>
+  <div class="controls">
+    <div class="user-contro">
+      <button @click="togglePause()">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
+      <button @click="pause();loadLevel(currentLevel);initLevel();">RESTART LEVEL</button>
+      <input type="range" min="0" :max="4" value="1" :step="0.001" v-model="renderSpeed">
+      <div class="resources">
+        <button v-for="resource in currentLevel.resources" @click="setActiveElementByName(resource.type)">{{ resource.type }} - {{ resource.count }}</button>
+      </div>
     </div>
-  </div>
 
-  <div class="editor-controls" v-if="mode === 'EDIT'">
-    <p>Editor Controls</p>
-    <div class="menu">
-      <button @click="prevLevel()">Prev Level</button>
-      <button @click="nextLevel()">Next Level</button>
+    <div class="editor-controls" v-if="mode === 'EDIT'">
+      <p>Editor Controls</p>
+      <div class="menu">
+        <button @click="prevLevel()">Prev Level</button>
+        <button @click="nextLevel()">Next Level</button>
+      </div>
+      <div class="elements">
+        <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
+        <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
+        <input type="range" v-model="brushSize" min="1" max="5"> {{ brushSize }}
+      </div>
+      <button @click="console.log(grid.getAtomicMap(true))">LOG MAP</button>
     </div>
-    <div class="elements">
-      <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
-      <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
-      <input type="range" v-model="brushSize" min="1" max="5"> {{ brushSize }}
-    </div>
-    <button @click="console.log(grid.getAtomicMap(true))">LOG MAP</button>
   </div>
 </div>
+
 </template>
 <script setup>
 
@@ -90,10 +93,8 @@
     if( window ) {
       window.addEventListener('PLACED_ATOM', (e) => {
         const site = e.detail;
-        console.log( 'placed', site, currentLevel.value );
         if( currentLevel.value && site?.atom) {
           currentLevel.value.resources.forEach( r => {
-            console.log( r.type, site.atom.type );
             if( r.type === site.atom.TYPE.name ) {
               r.count--;
 
