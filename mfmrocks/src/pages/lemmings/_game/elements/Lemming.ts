@@ -61,6 +61,11 @@ export class Lemming extends Element {
       case "BLOCKER":
         this.block(ew);
         break;
+      case "MINER":
+        if( !this.mine(ew) ) {
+          this.walk(ew);
+        }
+        break;
     }
   }
 
@@ -85,8 +90,8 @@ export class Lemming extends Element {
 
   dig(ew) {
     let dug = false;
-    if( ew.is( 3, "DIGGABLE") ) {
-      ew.mutate(3, Empty.CREATE);
+    if( ew.is( Lemming.DIRS.DOWN, "DIGGABLE") ) {
+      ew.mutate(Lemming.DIRS.DOWN, Empty.CREATE);
       dug = true;
     }
     return dug;
@@ -117,6 +122,15 @@ export class Lemming extends Element {
     this.declassify(this.state.role);
     this.state.role = role;
     this.classifyAs(this.state.role);
+  }
+
+  mine(ew) {
+    let dug = false;
+    if( ew.is( Lemming.DIRS[this.state.direction], "DIGGABLE") ) {
+      ew.mutate(Lemming.DIRS[this.state.direction], Empty.CREATE);
+      dug = true;
+    }
+    return dug;
   }
 }
 

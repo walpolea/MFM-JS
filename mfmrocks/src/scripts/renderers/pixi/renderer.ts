@@ -173,8 +173,9 @@ export class PixiRenderer implements IRenderer {
     });
   }
 
-  deconstruct() {
-    Assets.load(url);
+  async deconstruct() {
+    await Assets.unload(url);
+    this.siteTexture.destroy(true);
     this.particleContainer.destroy(true);
     this.pixiApplication.stop();
     this.pixiApplication.destroy(true);
@@ -259,6 +260,9 @@ export class PixiRenderer implements IRenderer {
       let sites: Site[] = this.getSitesFromCanvasXY(p.x, p.y, this.brushSize);
       sites.forEach((site) => {
         this.addAtom(site);
+        if( window ) {
+          window.dispatchEvent(new CustomEvent("PLACED_ATOM", { detail: site }));
+        }
       });
     }
   }

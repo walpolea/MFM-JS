@@ -4,6 +4,7 @@ export class Power extends Element {
   static CREATE = Power.CREATOR({ name: "POWER", symbol: "POW", class: Power, color: 0x2390aa, groups: ["LEMMINGS"] });
   static DIGGER = Power.CREATOR({ name: "DIGGER", symbol: "DIG", class: Power, color: 0x2390aa, groups: ["LEMMINGS"] }, { power: "DIGGER", charges: 1});
   static BLOCKER = Power.CREATOR({ name: "BLOCKER", symbol: "BLK", class: Power, color: 0x2390aa, groups: ["LEMMINGS"] }, { power: "BLOCKER", charges: 1});
+  static MINER = Power.CREATOR({ name: "MINER", symbol: "MNR", class: Power, color: 0x2390aa, groups: ["LEMMINGS"] }, { power: "MINER", charges: 1});
 
 
   constructor(type, state = {}) {
