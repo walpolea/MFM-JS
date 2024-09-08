@@ -15,8 +15,9 @@ export declare class Wayfinding {
     static VEER_RANDOMLY(self: Element): void;
     static TURN_RANDOMLY(self: Element): void;
     static SET_DIRECTION(self: Element, d: Direction): void;
-    static MOVE_IN_DIRECTION(ew: EventWindow, self: Element, direction: Direction, types?: string | string[], leavingAtom?: Element): boolean;
+    static MOVE_IN_DIRECTION(ew: EventWindow, self: Element, direction: Direction | Direction[], types?: string | string[], leavingAtom?: Element): boolean;
     static MOVE_DIRECTIONALLY(ew: EventWindow, self: Element, types?: string | string[], leavingAtom?: Element): boolean;
+    static SWAP_IN_DIRECTION(ew: EventWindow, self: Element, direction: Direction | Direction[], types?: string | string[]): boolean;
     static SWAP_DIRECTIONALLY(ew: EventWindow, self: Element, types?: string | string[]): boolean;
     static DIRECT(ew: EventWindow, s: EWIndex, heading: Direction): boolean;
 }

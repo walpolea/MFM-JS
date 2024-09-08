@@ -2,7 +2,7 @@
 <div>
   <div class="top-hud">
     <span>{{ currentLevel.name }}</span>
-    <span>Lemmings Saved: {{ currentSavedLemmings }} / {{ currentLevel.saveGoal ?? "?" }}</span>
+    <span>Lemmings Saved: {{ currentSavedLemmings }} / {{ currentSaveGoal ?? "?" }}</span>
   </div>
   <div class="lemmings-game" v-once></div>
   <div class="controls">
@@ -11,7 +11,11 @@
       <button @click="pause();loadLevel(currentLevel);initLevel();">RESTART LEVEL</button>
       <input type="range" min="0" :max="4" value="1" :step="0.001" v-model="renderSpeed">
       <div class="resources">
-        <button v-for="resource in currentLevel.resources" @click="setActiveElementByName(resource.type)">{{ resource.type }} - {{ resource.count }}</button>
+        <button v-for="resource in currentResources" 
+        :class="{hide: resource.count <= 0}" 
+        @click="setActiveElementByName(resource.type)">
+          {{ resource.type }} ({{ resource.count }})
+        </button>
       </div>
     </div>
 
@@ -36,7 +40,7 @@
 
   import { ref, onMounted, watch } from 'vue';
   import { Tile, ElementRegistry } from 'mfm-js';
-  import { PixiRenderer } from '/src/scripts/renderers/pixi/renderer.ts';
+  import { PixiRenderer } from './renderer/renderer.ts';
 
   import {Lemming} from './elements/Lemming.ts';
   import {LemmingEmitter} from './elements/LemmingEmitter.ts';
@@ -50,7 +54,7 @@
   let grid;
   let mfms;
 
-  const { currentLevel, currentSavedLemmings, currentSaveGoal, nextLevel, prevLevel, loadLevel, levelPassed } = useGameState();
+  const { currentLevel, currentSavedLemmings, currentSaveGoal, currentResources, selectResource, nextLevel, prevLevel, loadLevel, levelPassed } = useGameState();
 
   const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()).LEMMINGS);
   const activeType = ref(null);
@@ -89,24 +93,6 @@
   onMounted( async () => {
     mfms = document.querySelector('.lemmings-game');
     initLevel();
-
-    if( window ) {
-      window.addEventListener('PLACED_ATOM', (e) => {
-        const site = e.detail;
-        if( currentLevel.value && site?.atom) {
-          currentLevel.value.resources.forEach( r => {
-            if( r.type === site.atom.TYPE.name ) {
-              r.count--;
-
-              if( r.count < 0 ) {
-                r.count = 0;
-                site.create();
-              }
-            }
-          });
-        }
-      });
-    }
   });
 
   async function initLevel() {
@@ -158,6 +144,7 @@
   function setActiveElementByName(name) {
     if(findElement(name)) {
       setActiveElement(findElement(name));
+      selectResource(name);
     }
   }
 
@@ -175,8 +162,8 @@
   canvas {
     display:block;
     image-rendering: smooth;
-    width:100%;
-    max-height: 60vh;
+    max-width:100%;
+    max-height: 65vh;
   }
 
 }
@@ -184,5 +171,9 @@
 .top-hud {
   display:flex;
   gap:1rem;
+}
+
+button.hide {
+  display:none;
 }
 </style>

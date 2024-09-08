@@ -1,5 +1,6 @@
 import { Sprite, Container, Application, Assets, Texture, Point, Rectangle, ObservablePoint, FederatedPointerEvent } from "pixi.js";
 import { EventWindow, Site, Tile, ElementRegistry } from "mfm-js";
+import { useGameState } from "../useGameState";
 //@ts-ignore
 import url from "./element.png";
 
@@ -219,7 +220,11 @@ export class PixiRenderer implements IRenderer {
       this.pointerDown = false;
     });
 
-    this.clickArea.on("pointermove", this.handleClick, this);
+    this.clickArea.on("pointermove", (e) => {
+      if( useGameState().csi.value === null ) {
+        this.handleClick(e);
+      }
+    }, this);
   }
 
   getSitesFromCanvasXY(x: number, y: number, size: number = 1): Site[] {
@@ -255,11 +260,28 @@ export class PixiRenderer implements IRenderer {
   }
 
   handleClick(e:FederatedPointerEvent) {
+
+    const { currentResources, csi, deselectResource } = useGameState();
+    const selectedType = this.curSelectedElementFunction().TYPE.name;
+
+    if( csi.value && currentResources.value[csi.value].count <= 0 ) {
+      return;
+    }
+
     if (this.mouseEnabled && this.pointerDown && e.target) {
       let p: Point = (this.pixiApplication.stage).toLocal(e.global);//e.data.getLocalPosition(this.pixiApplication.stage);
       let sites: Site[] = this.getSitesFromCanvasXY(p.x, p.y, this.brushSize);
       sites.forEach((site) => {
         this.addAtom(site);
+
+        if( csi.value !== null ) {
+          currentResources.value[csi.value].count--;
+
+          if( currentResources.value[csi.value].count <= 0 ) {
+            deselectResource();
+          }
+        }
+        
       });
     }
   }

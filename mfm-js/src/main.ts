@@ -1,5 +1,3 @@
-import { HardCell3 } from "./elements/agents/HardCell3";
-
 //CORE MFM
 export { Tile } from "./mfm/Tile";
 export { Site } from "./mfm/Site";

@@ -1,4 +1,4 @@
-import { Element, EventWindow } from "mfm-js";
+import { Element, EventWindow, Sand } from "mfm-js";
 
 export class Dirt extends Element {
   static CREATE = Dirt.CREATOR({ name: "DIRT", class: Dirt, color: 0xcf932b, classifications: ["DIGGABLE"], groups: ["LEMMINGS"] });
@@ -8,6 +8,8 @@ export class Dirt extends Element {
   static TODE_RED = Dirt.CREATOR({ name: "TODE_RED", class: Dirt, color: 0xfe4646, classifications: ["SOLID"], groups: ["LEMMINGS"] });
   static TODE_GREEN = Dirt.CREATOR({ name: "TODE_GREEN", class: Dirt, color: 0x00fe81, classifications: ["SOLID"], groups: ["LEMMINGS"] });
   static TODE_BLACK = Dirt.CREATOR({ name: "TODE_BLACK", class: Dirt, color: 0x161c28, classifications: ["SOLID"], groups: ["LEMMINGS"] });
+
+  static SAND = Sand.CREATOR({ name: "SAND", symbol: "SND", class: Sand, color: 0xffdd00, classifications: ["SAND", "MOVABLE"], groups: ["LEMMINGS"] });
   
 
 

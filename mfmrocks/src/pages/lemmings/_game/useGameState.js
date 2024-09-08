@@ -9,10 +9,17 @@ let currentLevelIndex = 0;
 const currentLevel = ref(levels[currentLevelIndex]);
 const currentSavedLemmings = ref(0);
 const currentSaveGoal = ref(50);
-const currentResources = ref(null);
+const currentResources = ref(currentLevel.value.resources);
+const csi = ref(null); //CurrentSelectedResourceIndex
 
 const levelPassed = computed(() => {
   return currentSavedLemmings.value >= currentSaveGoal.value;
+});
+
+watch( () => levelPassed.value, () => {
+  if( levelPassed.value ) {
+    nextLevel();
+  }
 });
 
 watch( () => levelPassed.value, () => {
@@ -29,17 +36,21 @@ export function useGameState() {
     currentLevel,
     currentSavedLemmings,
     currentSaveGoal,
+    currentResources,
+    csi,
     levelPassed,
     loadLevel,
     nextLevel,
     prevLevel,
+    selectResource,
+    deselectResource,
   }
 }
 
 export function resetLevel() {
   currentSavedLemmings.value = 0;
-  currentSaveGoal.value = currentLevel.saveGoal;
-  currentResources.value = currentLevel.resources;
+  currentSaveGoal.value = currentLevel.value.saveGoal;
+  currentResources.value = [...currentLevel.value.resources];
 }
 
 export function loadLevel(level) {
@@ -57,3 +68,17 @@ export function prevLevel() {
   loadLevel(levels[currentLevelIndex]);
 }
 
+export function selectResource(type) {
+  const resIndex = currentResources.value.findIndex(r => r.type === type);
+
+  if( resIndex !== -1 ) {
+    csi.value = resIndex;
+  } else {
+    csi.value = null;
+  }
+
+}
+
+export function deselectResource() {
+  csi.value = null;
+}

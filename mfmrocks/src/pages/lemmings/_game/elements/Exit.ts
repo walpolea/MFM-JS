@@ -35,6 +35,7 @@ export class Exit extends Element {
     super.behave(ew);
 
     if (ew.selfIs("DECORATION")) {
+      Decay.DECAY(ew, this, 50, 1);
       return;
     }
 

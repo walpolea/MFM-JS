@@ -65,17 +65,26 @@ export class Wayfinding {
   static MOVE_IN_DIRECTION(
     ew: EventWindow,
     self: Element,
-    direction: Direction,
+    direction: Direction | Direction[],
     types: string | string[] = "EMPTY",
-    leavingAtom: Element = Empty.CREATE()
+    leavingAtom: Element = Empty.CREATE(),
   ): boolean {
-    const { heading } = self.state;
 
-    self.wr("heading", direction);
-    const didIt: boolean = this.MOVE_DIRECTIONALLY(ew, self, types, leavingAtom);
-    self.wr("heading", heading ?? direction);
+    if (typeof direction === "string") {
+      direction = [direction];
+    }
 
-    return didIt;
+    const possibleMoves = direction.map((d) => Wayfinder.getDirectionalMove(d, true));
+
+    if(!possibleMoves.length) {
+      return false;
+    }
+
+    for (const travelTo of possibleMoves) {
+      if (types === "ANY" || ew.is(travelTo, types)) {
+        return ew.move(travelTo, leavingAtom);
+      }
+    }
   }
 
   static MOVE_DIRECTIONALLY(ew: EventWindow, self: Element, types: string | string[] = "EMPTY", leavingAtom: Element = Empty.CREATE()): boolean {
@@ -89,6 +98,27 @@ export class Wayfinding {
     }
 
     return false;
+  }
+
+  static SWAP_IN_DIRECTION(
+    ew: EventWindow,
+    self: Element,
+    direction: Direction | Direction[],
+    types: string | string[] = "EMPTY",
+  ): boolean {
+    const { heading } = self.state;
+
+    if (typeof direction === "string") {
+      direction = [direction];
+    }
+
+    const possibleMoves = direction.map((d) => Wayfinder.getDirectionalMove(d, true));
+
+    for (const travelTo of possibleMoves) {
+      if (types === "ANY" || ew.is(travelTo, types)) {
+        return ew.swap(travelTo);
+      }
+    }
   }
 
   static SWAP_DIRECTIONALLY(ew: EventWindow, self: Element, types: string | string[] = "EMPTY"): boolean {
