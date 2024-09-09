@@ -10,10 +10,10 @@ export declare class VirtualEventWindow {
     static REVERSE_ORIENTATIONS: Array<Map<EWIndex, VirtualEWIndex>>;
     static CREATE_EW_TO_VIRTUAL_MAP(centerIndex: EWIndex): Map<EWIndex, VirtualEWIndex>;
     static CREATE_VIRTUAL_TO_EW_MAP(centerIndex: EWIndex): Map<VirtualEWIndex, EWIndex>;
-    static getOrientedSite(fromOrientation: EWIndex, siteIndex: VirtualEWIndex, ew: EventWindow): Site;
-    static getOrientedSites(fromOrientation: EWIndex, siteIndexes: VirtualEWIndex[], ew: EventWindow): Site[];
-    static getOrientedSiteIndex(fromOrientation: EWIndex, siteIndex: VirtualEWIndex): EWIndex;
-    static getOrientedSiteIndexes(fromOrientation: EWIndex, siteIndexes: VirtualEWIndex[]): EWIndex[];
+    static getOrientedSite(fromOrientation: EWIndex, virtualIndex: VirtualEWIndex, ew: EventWindow): Site;
+    static getOrientedSites(fromOrientation: EWIndex, virtualIndexes: VirtualEWIndex[], ew: EventWindow): Site[];
+    static getOrientedSiteIndex(fromOrientation: EWIndex, virtualIndex: VirtualEWIndex): EWIndex;
+    static getOrientedSiteIndexes(fromOrientation: EWIndex, virtualIndexes: VirtualEWIndex[]): EWIndex[];
     static getVirtualIndex(fromOrientation: EWIndex, siteIndex: EWIndex): VirtualEWIndex;
     static getVirtualIndexes(fromOrientation: EWIndex, siteIndexes: EWIndex[]): VirtualEWIndex[];
 }

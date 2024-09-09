@@ -82,7 +82,9 @@ export class Wayfinding {
 
     for (const travelTo of possibleMoves) {
       if (types === "ANY" || ew.is(travelTo, types)) {
-        return ew.move(travelTo, leavingAtom);
+        const moved = ew.move(travelTo, leavingAtom);
+        if( moved ) self.wr('location', travelTo);
+        return moved;
       }
     }
   }
@@ -93,7 +95,9 @@ export class Wayfinding {
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(heading, true);
 
       if (types === "ANY" || ew.is(travelTo, types)) {
-        return ew.move(travelTo, leavingAtom);
+        const moved = ew.move(travelTo, leavingAtom);
+        if( moved ) self.wr('location', travelTo);
+        return moved;
       }
     }
 
@@ -116,7 +120,9 @@ export class Wayfinding {
 
     for (const travelTo of possibleMoves) {
       if (types === "ANY" || ew.is(travelTo, types)) {
-        return ew.swap(travelTo);
+        const swapped = ew.swap(travelTo);
+        if( swapped ) self.wr('location', travelTo);
+        return swapped;
       }
     }
   }
@@ -127,7 +133,9 @@ export class Wayfinding {
       const travelTo: EWIndex = Wayfinder.getDirectionalMove(heading, true);
 
       if (types === "ANY" || ew.is(travelTo, types)) {
-        return ew.swap(travelTo);
+        const swapped = ew.swap(travelTo);
+        if( swapped ) self.wr('location', travelTo);
+        return swapped;
       }
     }
 

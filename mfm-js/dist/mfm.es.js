@@ -17,8 +17,8 @@ class l {
   static CREATOR(t, s = {}) {
     let e = { ...t };
     const a = (h = {}, n = {}) => {
-      const R = { ...e, ...h }, O = { ...s, ...n };
-      return O ? new R.class(R, O) : new R.class(R);
+      const R = { ...e, ...h }, u = { ...s, ...n };
+      return u ? new R.class(R, u) : new R.class(R);
     };
     return e.CREATE = a, et.registerType({ ...e, CREATE: a }), a;
   }
@@ -1137,15 +1137,19 @@ const rt = class rt {
     if (!n.length)
       return !1;
     for (const R of n)
-      if (a === "ANY" || t.is(R, a))
-        return t.move(R, h);
+      if (a === "ANY" || t.is(R, a)) {
+        const u = t.move(R, h);
+        return u && s.wr("location", R), u;
+      }
   }
   static MOVE_DIRECTIONALLY(t, s, e = "EMPTY", a = x.CREATE()) {
     const { heading: h } = s.state;
     if (h) {
       const n = o.getDirectionalMove(h, !0);
-      if (e === "ANY" || t.is(n, e))
-        return t.move(n, a);
+      if (e === "ANY" || t.is(n, e)) {
+        const R = t.move(n, a);
+        return R && s.wr("location", n), R;
+      }
     }
     return !1;
   }
@@ -1153,15 +1157,19 @@ const rt = class rt {
     s.state, typeof e == "string" && (e = [e]);
     const h = e.map((n) => o.getDirectionalMove(n, !0));
     for (const n of h)
-      if (a === "ANY" || t.is(n, a))
-        return t.swap(n);
+      if (a === "ANY" || t.is(n, a)) {
+        const R = t.swap(n);
+        return R && s.wr("location", n), R;
+      }
   }
   static SWAP_DIRECTIONALLY(t, s, e = "EMPTY") {
     const { heading: a } = s.state;
     if (a) {
       const h = o.getDirectionalMove(a, !0);
-      if (e === "ANY" || t.is(h, e))
-        return t.swap(h);
+      if (e === "ANY" || t.is(h, e)) {
+        const n = t.swap(h);
+        return n && s.wr("location", h), n;
+      }
     }
     return !1;
   }
@@ -1218,8 +1226,8 @@ const At = class At {
       const n = h.state.repelTypes ?? t;
       if (s.length > e.length)
         throw new Error("fromSet must be less than or equal to length of toSet");
-      const R = a.filter(s, n), O = a.filter(e, "EMPTY");
-      if (R.length && O.length) {
+      const R = a.filter(s, n), u = a.filter(e, "EMPTY");
+      if (R.length && u.length) {
         const f = Object.fromEntries(
           s.map((d, V) => [d, e[V]])
         );
@@ -1227,10 +1235,10 @@ const At = class At {
         return R.forEach((d) => {
           if (!W) {
             const V = f[d];
-            if (O.includes(V))
+            if (u.includes(V))
               W = a.move(V, void 0, d);
             else {
-              const xt = E.RANDOM(O);
+              const xt = E.RANDOM(u);
               W = a.move(xt, void 0, d);
             }
           }
@@ -1244,14 +1252,14 @@ const At = class At {
       const n = h.state.repelTypes ?? t;
       if (s.length > e.length)
         throw new Error("fromSet must be less than or equal to length of toSet");
-      const R = a.filter(s, n), O = a.filter(e, "EMPTY");
-      if (R.length && O.length) {
+      const R = a.filter(s, n), u = a.filter(e, "EMPTY");
+      if (R.length && u.length) {
         Object.fromEntries(
           s.map((W, d) => [W, e[d]])
         );
         let f = !1;
         return R.forEach((W) => {
-          f || (f = a.move(E.RANDOM(O)));
+          f || (f = a.move(E.RANDOM(u)));
         }), f;
       }
       return !1;
@@ -1261,9 +1269,9 @@ const At = class At {
     return (e, a) => {
       const h = a.state.attractTypes ?? t, n = a.state.swapTypes ?? ["EMPTY"], R = e.filter(s, h);
       if (R.length) {
-        const O = E.RANDOM(R), f = o.getInFront(o.indexToDirection(O), !0), W = e.filter(f, n);
+        const u = E.RANDOM(R), f = o.getInFront(o.indexToDirection(u), !0), W = e.filter(f, n);
         if (W.length)
-          return W.sort((d, V) => Math.abs(O - d) - Math.abs(O - V)).slice(~~(W.length / 2)), e.swap(E.RANDOM(W));
+          return W.sort((d, V) => Math.abs(u - d) - Math.abs(u - V)).slice(~~(W.length / 2)), e.swap(E.RANDOM(W));
       }
       return !1;
     };
@@ -1355,8 +1363,8 @@ const N = class N extends l {
     const s = o.directionToIndex(o.turnLeft(this.state.heading)), e = o.directionToIndex(o.turnRight(this.state.heading)), a = o.getInFront(this.state.heading);
     switch (t.is(a[0], "SWAPLINE") && t.destroy(), this.state.phase) {
       case "BUILD":
-        const R = o.getInFront(o.veerLeft(this.state.heading)), O = o.getInFront(o.veerRight(this.state.heading));
-        if (t.any([...R, ...O], "SWAPLINE"))
+        const R = o.getInFront(o.veerLeft(this.state.heading)), u = o.getInFront(o.veerRight(this.state.heading));
+        if (t.any([...R, ...u], "SWAPLINE"))
           return;
         if (t.is(s, "EMPTY") ? t.mutate(s, this.TYPE.CREATE) : this.state.color = 13421568, t.is(e, "EMPTY") && (t.mutate(e, this.TYPE.CREATE), this.state.color = 16776960), !t.any([s, e], "EMPTY")) {
           this.state.phase = "WAIT_TO_SWAP";
@@ -1389,8 +1397,8 @@ class P extends l {
   }
   behave(t) {
     super.behave(t);
-    const { buildPath: s, atomizer: e, totalSteps: a, transitionAge: h, age: n } = this.state, R = this.state.currentStep ?? 0, O = this.state.didSpread ?? !1, f = t.filterByType(s, "EMPTY");
-    !O && f.length && (a ? R < a && (t.mutateMany(f, this.TYPE.CREATE, [{}, { currentStep: R + 1 }]), this.state.totalSteps--) : t.mutateMany(f, this.TYPE.CREATE)), this.state.didSpread = !0, n > h && t.mutate(0, e);
+    const { buildPath: s, atomizer: e, totalSteps: a, transitionAge: h, age: n } = this.state, R = this.state.currentStep ?? 0, u = this.state.didSpread ?? !1, f = t.filterByType(s, "EMPTY");
+    !u && f.length && (a ? R < a && (t.mutateMany(f, this.TYPE.CREATE, [{}, { currentStep: R + 1 }]), this.state.totalSteps--) : t.mutateMany(f, this.TYPE.CREATE)), this.state.didSpread = !0, n > h && t.mutate(0, e);
   }
 }
 const L = class L extends l {
@@ -1416,7 +1424,7 @@ L.CREATE = L.CREATOR({ name: "WALL", class: L, color: 3346892, groups: ["Structu
   { name: "MOVABLE WALL GRID", class: P, color: 1184018, groups: ["Structural"] },
   { buildPath: E.DIAGONAL4WAY, atomizer: L.MOVABLE_WALL }
 );
-let D = L;
+let O = L;
 const v = class v extends l {
   constructor(t, s = {}) {
     super(t, s), this.init();
@@ -1492,7 +1500,7 @@ p.CREATE = p.CREATOR({ name: "WATER", symbol: "SND", class: p, color: 4590, grou
   { buildPath: [1, 4], atomizer: p.CREATE }
 ), p.DO_BUBBLE = y.CREATE("WATER", E.S_QUADRANT, "EMPTY", E.N_QUADRANT);
 let Lt = p;
-const u = class u extends l {
+const D = class D extends l {
   constructor(t, s = {}) {
     super(t, s), this.init();
   }
@@ -1503,23 +1511,23 @@ const u = class u extends l {
     ), this.state.avoider = y.MAKE_AVOIDER(this.state.stickyType, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]), this.state.aloneCount = 0;
   }
   behave(t) {
-    super.behave(t), t.filterByType(E.ALLADJACENT, [...this.state.stickyType, "GOOP"]).length, !this.state.attractor(t, this) && !this.state.avoider(t, this) && u.ATTRACT(t, this);
+    super.behave(t), t.filterByType(E.ALLADJACENT, [...this.state.stickyType, "GOOP"]).length, !this.state.attractor(t, this) && !this.state.avoider(t, this) && D.ATTRACT(t, this);
   }
 };
-u.CREATE = u.CREATOR({ name: "GOOP", symbol: "GOP", class: u, color: 5542562, groups: ["Goopy Stuff"] }), u.WALL_GOOP = u.CREATOR(
-  { name: "WALL GOOP", class: u, color: 15110911, classifications: ["GOOP"], groups: ["Goopy Stuff"] },
+D.CREATE = D.CREATOR({ name: "GOOP", symbol: "GOP", class: D, color: 5542562, groups: ["Goopy Stuff"] }), D.WALL_GOOP = D.CREATOR(
+  { name: "WALL GOOP", class: D, color: 15110911, classifications: ["GOOP"], groups: ["Goopy Stuff"] },
   { stickyType: ["WALL"] }
-), u.LIFE_GOOP = u.CREATOR(
-  { name: "LIFE GOOP", class: u, color: 5548439, classifications: ["GOOP", "MOVABLE"], groups: ["Goopy Stuff"] },
+), D.LIFE_GOOP = D.CREATOR(
+  { name: "LIFE GOOP", class: D, color: 5548439, classifications: ["GOOP", "MOVABLE"], groups: ["Goopy Stuff"] },
   { stickyType: ["DIRECTIONAL", "TAIL"] }
-), u.HC3_GOOP = u.CREATOR(
-  { name: "HC3 GOOP", class: u, color: 5548439, classifications: ["GOOP", "MOVABLE"], groups: ["Goopy Stuff"] },
+), D.HC3_GOOP = D.CREATOR(
+  { name: "HC3 GOOP", class: D, color: 5548439, classifications: ["GOOP", "MOVABLE"], groups: ["Goopy Stuff"] },
   { stickyType: ["HC3-END"] }
-), u.GOOP_GRID = P.CREATOR(
+), D.GOOP_GRID = P.CREATOR(
   { name: "GOOP GRID", class: P, color: 1184018, groups: ["Goopy Stuff"] },
-  { buildPath: E.DIAGONAL4WAY, atomizer: u.LIFE_GOOP, totalSteps: 40 }
-), u.ATTRACT = y.MAKE_ATTRACTOR(["GOOP"], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]), u.AVOID = y.MAKE_AVOIDER(["GOOP"], [...E.LAYER1], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]);
-let ut = u;
+  { buildPath: E.DIAGONAL4WAY, atomizer: D.LIFE_GOOP, totalSteps: 40 }
+), D.ATTRACT = y.MAKE_ATTRACTOR(["GOOP"], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]), D.AVOID = y.MAKE_AVOIDER(["GOOP"], [...E.LAYER1], [...E.LAYER2, ...E.LAYER3, ...E.LAYER4]);
+let ut = D;
 const A = class A extends l {
   constructor(t, s = {}) {
     super(t, s), this.init();
@@ -1647,7 +1655,7 @@ m.CREATE = m.CREATOR({ name: "LOOPER", symbol: "LPR", class: m, color: 16716911,
   color: 16716911,
   classifications: ["WONKY", "LOOPER"],
   groups: ["Life"]
-}), m.LOOP_WALL = D.CREATOR({ name: "LOOP WALL", class: D, color: 6689177, classifications: ["DECAYABLE", "MOVABLE"] }, { lifeSpan: 150 }), m.LOOP_DIRECTOR = (t) => w.DIRECTORS_MAP.get(o.turnRight(t))({ classifications: ["LOOP DIRECTOR", "DECAYABLE"] }, { lifeSpan: 100 }), m.REPEL_DIRECTIONAL = y.MAKE_REPELLER(["DIRECTIONAL"], [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 25, 26, 27, 28]);
+}), m.LOOP_WALL = O.CREATOR({ name: "LOOP WALL", class: O, color: 6689177, classifications: ["DECAYABLE", "MOVABLE"] }, { lifeSpan: 150 }), m.LOOP_DIRECTOR = (t) => w.DIRECTORS_MAP.get(o.turnRight(t))({ classifications: ["LOOP DIRECTOR", "DECAYABLE"] }, { lifeSpan: 100 }), m.REPEL_DIRECTIONAL = y.MAKE_REPELLER(["DIRECTIONAL"], [1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 25, 26, 27, 28]);
 let Dt = m;
 const z = class z extends l {
   constructor(t, s = {}) {
@@ -1748,7 +1756,7 @@ const I = class I extends l {
   blazeTrail(t) {
     if (this.state.heading) {
       const s = o.getInFront(o.turnLeft(this.state.heading))[1], e = o.getInFront(o.turnRight(this.state.heading))[1];
-      t.is(s, "EMPTY") ? t.mutate(s, D.MOVABLE_WALL) : t.is(s, "MOVABLE WALL") && t.mutate(s, x.CREATE), t.is(e, "EMPTY") ? t.mutate(e, D.MOVABLE_WALL) : t.is(e, "MOVABLE WALL") && t.mutate(e, x.CREATE);
+      t.is(s, "EMPTY") ? t.mutate(s, O.MOVABLE_WALL) : t.is(s, "MOVABLE WALL") && t.mutate(s, x.CREATE), t.is(e, "EMPTY") ? t.mutate(e, O.MOVABLE_WALL) : t.is(e, "MOVABLE WALL") && t.mutate(e, x.CREATE);
     }
   }
 };
@@ -1758,10 +1766,10 @@ I.CREATE = I.CREATOR({ name: "WANDERER", class: I, color: 12457071, classificati
   color: 5513984,
   classifications: ["OFSWAMP", "DIRECTIONAL", "DIRECTABLE"],
   groups: ["Swamp"]
-}), I.BIRD_WING = D.CREATOR(
-  { name: "BIRD WING", class: D, color: 3836895, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE", "TAIL"] },
+}), I.BIRD_WING = O.CREATOR(
+  { name: "BIRD WING", class: O, color: 3836895, classifications: ["DECAYABLE", "BIRD", "DIRECTABLE", "TAIL"] },
   { lifeSpan: 2 }
-), I.FLY_TAIL = D.CREATOR({ name: "FLY TAIL", class: D, color: 10031428, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 }), I.MOSQUITO_TAIL = D.CREATOR({ name: "MOSQUITO TAIL", class: D, color: 5601024, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 });
+), I.FLY_TAIL = O.CREATOR({ name: "FLY TAIL", class: O, color: 10031428, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 }), I.MOSQUITO_TAIL = O.CREATOR({ name: "MOSQUITO TAIL", class: O, color: 5601024, classifications: ["DECAYABLE", "TAIL"] }, { lifeSpan: 10 });
 let gt = I;
 const X = class X extends l {
   constructor(t, s = {}) {
@@ -1772,7 +1780,7 @@ const X = class X extends l {
   behave(t) {
     super.behave(t);
     const s = t.filterByType([...E.LAYER1, ...E.LAYER2, ...E.LAYER3], ["EMPTY", "DIRECTOR"]);
-    s.length > 0 && t.mutateMany(s, D.CREATE);
+    s.length > 0 && t.mutateMany(s, O.CREATE);
     const e = t.filterByType(E.LAYER4, "EMPTY");
     if (e.length > 0 && e.forEach((a) => {
       let h = o.indexToDirection(a);
@@ -1870,7 +1878,7 @@ H.CREATE = H.CREATOR({
   color: 4021041,
   classifications: ["ENV", "OFSWAMP", "DECAYABLE"],
   groups: ["Swamp"]
-}), H.BOG = D.CREATOR({ name: "BOG", class: D, classifications: ["DECAYABLE"], color: 1320454 }, { lifeSpan: 45 });
+}), H.BOG = O.CREATOR({ name: "BOG", class: O, classifications: ["DECAYABLE"], color: 1320454 }, { lifeSpan: 45 });
 let _ = H;
 const q = class q extends l {
   //SYSTEM ELEMENTS
@@ -2182,7 +2190,7 @@ const G = class G extends l {
         if (t.is(2, "WALL"))
           t.swap(4);
         else {
-          t.mutateMany([2, 3], D.CREATE), this.state.status = "DONE";
+          t.mutateMany([2, 3], O.CREATE), this.state.status = "DONE";
           return;
         }
         break;
@@ -2193,14 +2201,14 @@ const G = class G extends l {
     const s = t.filter([1, 5, 6, 9], "SWAPWORM");
     if (s.length > 0) {
       const e = t.getSite(E.RANDOM(s)).atom, a = t.filter([, 2, 3, 10, 11, 15, 16, 13, 14, 21, 25, 26, 29, 30, 37], "EMPTY");
-      return t.mutateMany(a, D.CREATE), e.state.status = "DIRECTED", this.state.status = "HOLDING", !0;
+      return t.mutateMany(a, O.CREATE), e.state.status = "DIRECTED", this.state.status = "HOLDING", !0;
     }
     return !1;
   }
 };
 G.CREATE = G.CREATOR({ name: "WORMTRAP", class: G, color: 8930542, groups: ["Structural"] }), G.BUILDER = P.CREATOR(
   { name: "WORM TRAP WALL", class: P, color: 1184018, groups: ["Misc"] },
-  { buildPath: [4], totalSteps: 5, atomizer: D.CREATE, transitionAge: 1 }
+  { buildPath: [4], totalSteps: 5, atomizer: O.CREATE, transitionAge: 1 }
 );
 let yt = G;
 const b = class b extends l {
@@ -2278,7 +2286,7 @@ export {
   Mt as SwapWorm,
   Yt as Tile,
   nt as VirtualEventWindow,
-  D as Wall,
+  O as Wall,
   gt as Wanderer,
   Lt as Water,
   o as Wayfinder,

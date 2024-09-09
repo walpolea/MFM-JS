@@ -20,6 +20,13 @@ export class Lemming extends Element {
     'W': 1
   }
 
+  static ORIENTED_DIRS = {
+    'N': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 2 ),
+    'E': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 4 ),
+    'S': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 3 ),
+    'W': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 1 ),
+  }
+
   static FIELD_OF_VIEW = {
     'N': ["N", "NE", "NW"],
     'S': ["S", "SE", "SW"],
@@ -30,17 +37,14 @@ export class Lemming extends Element {
   init() {
 
     this.state.heading = 'E';
+    this.state.location = 0;
+
     this.setRole('WALKER');
   }
 
   behave(ew: EventWindow) {
     super.behave(ew);
-
-    // console.log( VirtualEventWindow.ORIENTATIONS.map( m => Object.fromEntries(m)) );
-    // console.log( VirtualEventWindow.getOrientedSite(39, 2, ew) );
-
-    console.log( VirtualEventWindow.REVERSE_ORIENTATIONS );
-    console.log( VirtualEventWindow.getVirtualIndexes(39, [2, 10, 22, 38]) );
+    this.state.location = 0;
 
     if( !ew.exists( 3 ) ) {
       ew.destroy();
@@ -54,7 +58,7 @@ export class Lemming extends Element {
       return;
     }
 
-    this.head(ew);
+    // this.head(ew);
 
     let moved = false;
 
@@ -77,6 +81,7 @@ export class Lemming extends Element {
         break;
     }
 
+    this.head(ew);
   }
 
   walk(ew) {
@@ -131,19 +136,19 @@ export class Lemming extends Element {
   }
 
   behead(ew) {
-    if( ew.is( Lemming.DIRS.N, "LEMM_HEAD" ) ) {
-      ew.mutate( Lemming.DIRS.N, Empty.CREATE );
+    if( ew.is( Lemming.ORIENTED_DIRS.N(this.state.location), "LEMM_HEAD" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS.N(this.state.location), Empty.CREATE );
     }
-    if( ew.is( Lemming.DIRS[this.state.heading], "LEMM_HEAD" ) ) {
-      ew.mutate( Lemming.DIRS[this.state.heading], Empty.CREATE );
+    if( ew.is( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), "LEMM_HEAD" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), Empty.CREATE );
     }
   }
 
   head(ew) {
-    if( ew.is( Lemming.DIRS.N, "EMPTY" ) ) {
-      ew.mutate( Lemming.DIRS.N, Lemming.HEAD );
-    } else if( ew.is( Lemming.DIRS[this.state.heading], "EMPTY" ) ) {
-      ew.mutate( Lemming.DIRS[this.state.heading], Lemming.HEAD );
+    if( ew.is( Lemming.ORIENTED_DIRS.N(this.state.location), "EMPTY" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS.N(this.state.location), Lemming.HEAD );
+    } else if( ew.is( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), "EMPTY" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), Lemming.HEAD );
     }
   }
 
