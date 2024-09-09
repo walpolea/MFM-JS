@@ -164,6 +164,7 @@
     image-rendering: smooth;
     max-width:100%;
     max-height: 65vh;
+    margin-inline:auto;
   }
 
 }
