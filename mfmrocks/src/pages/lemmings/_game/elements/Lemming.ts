@@ -58,8 +58,6 @@ export class Lemming extends Element {
       return;
     }
 
-    // this.head(ew);
-
     let moved = false;
 
     switch( this.state.role ) {
@@ -92,7 +90,6 @@ export class Lemming extends Element {
     if( EventWindow.oneIn( WALK_CHANCE ) ) {
       const walkChecks = Lemming.FIELD_OF_VIEW[this.state.heading];
       
-      this.behead(ew);
       walked = Wayfinding.MOVE_IN_DIRECTION(ew, this, walkChecks, "EMPTY");
       
       if(!walked && EventWindow.oneIn(2)) {
