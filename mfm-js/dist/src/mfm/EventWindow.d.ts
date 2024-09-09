@@ -56,6 +56,7 @@ export declare class EventWindow {
     static SUBSETS: Map<string, EWIndex[]>;
     origin: Site;
     window: Site[];
+    offsetOrigin: EWIndex;
     constructor(_tile: Tile, _origin: ICoordinate);
     private makeWindow;
     private offsetFromOrigin;

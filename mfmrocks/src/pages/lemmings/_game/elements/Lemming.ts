@@ -1,4 +1,4 @@
-import { Element, EventWindow, Empty, Wall, Wayfinding } from "mfm-js";
+import { Element, EventWindow, Empty, Wall, Wayfinding, VirtualEventWindow } from "mfm-js";
 import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
@@ -35,6 +35,9 @@ export class Lemming extends Element {
 
   behave(ew: EventWindow) {
     super.behave(ew);
+
+    // console.log( VirtualEventWindow.ORIENTATIONS.map( m => Object.fromEntries(m)) );
+    // console.log( VirtualEventWindow.getOrientedSite(39, 2, ew) );
 
     if( !ew.exists( 3 ) ) {
       ew.destroy();
@@ -78,8 +81,6 @@ export class Lemming extends Element {
     const WALK_CHANCE = 5;
     let walked = false;
 
-    if(!this.state.heading) return false;
-
     if( EventWindow.oneIn( WALK_CHANCE ) ) {
       const walkChecks = Lemming.FIELD_OF_VIEW[this.state.heading];
       
@@ -108,8 +109,8 @@ export class Lemming extends Element {
   mine(ew) {
     let mined = false;
     const mineChecks = Lemming.FIELD_OF_VIEW[this.state.heading];
-    
-    mined = Wayfinding.MOVE_IN_DIRECTION(ew, this, mineChecks, "DIGGABLE");
+
+    mined = Wayfinding.MOVE_IN_DIRECTION(ew, this, mineChecks, ["DIGGABLE", "MOVABLE"]);
 
     if( !mined ) {
       mined = Wayfinding.SWAP_IN_DIRECTION(ew, this, mineChecks, "MOVABLE");

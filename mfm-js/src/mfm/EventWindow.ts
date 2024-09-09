@@ -196,9 +196,12 @@ export class EventWindow {
 
   origin: Site;
   window: Site[];
+  offsetOrigin: EWIndex = 0;
 
   constructor(_tile: Tile, _origin: ICoordinate) {
-    this.makeWindow(_tile, _origin);
+    if( _tile ) {
+      this.makeWindow(_tile, _origin);
+    }
   }
 
   private makeWindow(tile: Tile, origin: ICoordinate) {
