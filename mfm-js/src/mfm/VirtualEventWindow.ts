@@ -165,6 +165,7 @@ export class VirtualEventWindow {
   /*
   //I don't think I need this for now, but not ready to delete
   //The static functions provided are enough to translate between virtual and real EW indexes.
+  //But in the future, maybe it's a lot less thinking to be done if you just get a new EventWindow object that JustWorks(TM)
 
   static REORIENT( ew: EventWindow, centerIndex: EWIndex ):EventWindow {
 
@@ -233,7 +234,7 @@ export class VirtualEventWindow {
   }
 
   static getOrientedSiteIndexes( fromOrientation: EWIndex, siteIndexes: VirtualEWIndex[] ):EWIndex[] {
-    return siteIndexes.map( (i) => VirtualEventWindow.getOrientedSiteIndex( fromOrientation, i ) );
+    return siteIndexes.map( (i) => VirtualEventWindow.getOrientedSiteIndex( fromOrientation, i ) ).filter( (s) => s );
   }
 }
 
