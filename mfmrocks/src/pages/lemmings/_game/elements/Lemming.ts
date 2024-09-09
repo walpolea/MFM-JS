@@ -54,7 +54,9 @@ export class Lemming extends Element {
 
     //Gravity?
     if( ew.is(3, "EMPTY") ) {
-      ew.swap(3);
+      const swapped = ew.swap(3);
+      if( swapped ) this.state.location = 3;
+      this.head(ew);
       return;
     }
 
