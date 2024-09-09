@@ -161,6 +161,7 @@ export class VirtualEventWindow {
   );
 
   static ORIENTATIONS: Array<Map<VirtualEWIndex, EWIndex>> = EventWindow.ALL.map( i => VirtualEventWindow.CREATE_VIRTUAL_TO_EW_MAP(i) );
+  static REVERSE_ORIENTATIONS: Array<Map<EWIndex, VirtualEWIndex>> = EventWindow.ALL.map( i => VirtualEventWindow.CREATE_EW_TO_VIRTUAL_MAP(i) );
 
   /*
   //I don't think I need this for now, but not ready to delete
@@ -221,20 +222,28 @@ export class VirtualEventWindow {
   //Given an orientation (self/0 moved in the EventWindow) and a virtual site index,
   //return the site in the event window (may return undefined when site is not in original EW view)
   // e.g. VirtualEventWindow.getOrientedSite(39, 2, ew) returns the site one step North of 39 (in the original EW view)
-  static getOrientedSite( fromOrientation: EWIndex, siteIndex: VirtualEWIndex, ew: EventWindow ):Site {
-    return ew.getSite( VirtualEventWindow.ORIENTATIONS[fromOrientation].get( siteIndex ) as EWIndex );
+  static getOrientedSite( fromOrientation: EWIndex, virtualIndex: VirtualEWIndex, ew: EventWindow ):Site {
+    return ew.getSite( VirtualEventWindow.ORIENTATIONS[fromOrientation].get( virtualIndex ) as EWIndex );
   }
 
-  static getOrientedSites( fromOrientation: EWIndex, siteIndexes: VirtualEWIndex[], ew: EventWindow ):Site[] {
-    return siteIndexes.map( (i) => VirtualEventWindow.getOrientedSite( fromOrientation, i, ew ) ).filter( (s) => s );
+  static getOrientedSites( fromOrientation: EWIndex, virtualIndexes: VirtualEWIndex[], ew: EventWindow ):Site[] {
+    return virtualIndexes.map( (i) => VirtualEventWindow.getOrientedSite( fromOrientation, i, ew ) ).filter( (s) => s );
   }
 
-  static getOrientedSiteIndex( fromOrientation: EWIndex, siteIndex: VirtualEWIndex ):EWIndex {
-    return VirtualEventWindow.ORIENTATIONS[fromOrientation].get( siteIndex ) as EWIndex;
+  static getOrientedSiteIndex( fromOrientation: EWIndex, virtualIndex: VirtualEWIndex ):EWIndex {
+    return VirtualEventWindow.ORIENTATIONS[fromOrientation].get( virtualIndex ) as EWIndex;
   }
 
-  static getOrientedSiteIndexes( fromOrientation: EWIndex, siteIndexes: VirtualEWIndex[] ):EWIndex[] {
-    return siteIndexes.map( (i) => VirtualEventWindow.getOrientedSiteIndex( fromOrientation, i ) ).filter( (s) => s );
+  static getOrientedSiteIndexes( fromOrientation: EWIndex, virtualIndexes: VirtualEWIndex[] ):EWIndex[] {
+    return virtualIndexes.map( (i) => VirtualEventWindow.getOrientedSiteIndex( fromOrientation, i ) ).filter( (s) => s );
+  }
+
+  static getVirtualIndex( fromOrientation: EWIndex, siteIndex: EWIndex ):VirtualEWIndex {
+    return VirtualEventWindow.REVERSE_ORIENTATIONS[fromOrientation].get( siteIndex ) as VirtualEWIndex;
+  }
+
+  static getVirtualIndexes( fromOrientation: EWIndex, siteIndexes: EWIndex[] ):VirtualEWIndex[] {
+    return siteIndexes.map( (i) => VirtualEventWindow.getVirtualIndex( fromOrientation, i ) ).filter( (s) => s );
   }
 }
 

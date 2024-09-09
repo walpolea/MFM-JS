@@ -39,6 +39,9 @@ export class Lemming extends Element {
     // console.log( VirtualEventWindow.ORIENTATIONS.map( m => Object.fromEntries(m)) );
     // console.log( VirtualEventWindow.getOrientedSite(39, 2, ew) );
 
+    console.log( VirtualEventWindow.REVERSE_ORIENTATIONS );
+    console.log( VirtualEventWindow.getVirtualIndexes(39, [2, 10, 22, 38]) );
+
     if( !ew.exists( 3 ) ) {
       ew.destroy();
     }
