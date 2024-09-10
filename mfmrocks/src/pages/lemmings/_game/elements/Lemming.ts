@@ -21,10 +21,10 @@ export class Lemming extends Element {
   }
 
   static ORIENTED_DIRS = {
-    'N': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 2 ),
-    'E': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 4 ),
-    'S': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 3 ),
-    'W': (location) => VirtualEventWindow.getOrientedSiteIndex( location, 1 ),
+    'N': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 2 ),
+    'E': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 4 ),
+    'S': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 3 ),
+    'W': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 1 ),
   }
 
   static FIELD_OF_VIEW = {

@@ -1,8 +1,10 @@
 import { Sprite, Container, Application, Assets, Texture, Point, Rectangle, ObservablePoint, FederatedPointerEvent } from "pixi.js";
+import {DEFAULT_TEXTURE, LEMMING_TEXTURES} from "./sprites";
 import { EventWindow, Site, Tile, ElementRegistry } from "mfm-js";
 import { useGameState } from "../useGameState";
 //@ts-ignore
 import url from "./element.png";
+
 
 export interface IRenderer {
   tile: Tile;
@@ -134,13 +136,10 @@ export class PixiRenderer implements IRenderer {
         let viz = Sprite.from(this.siteTexture);
         viz.interactive = false;
 
-        // viz.scale = new ObservablePoint(undefined, undefined, this.siteSize / textureSize, this.siteSize / textureSize);
         viz.scale = new Point(this.siteSize / textureSize, this.siteSize / textureSize) as ObservablePoint;
 
         viz.x = j * this.siteSize;
         viz.y = i * this.siteSize;
-        // viz.cacheAsBitmap = true;
-
         
         viz.tint = this.tile.sites.get(`${i}:${j}`).atom.rd("color");
         this.particleContainer.addChild(viz);
@@ -195,7 +194,13 @@ export class PixiRenderer implements IRenderer {
 
     for (j; j < this.totalSites; j++) {
       const s = this.siteArray[j];
-      const v = this.siteVisuals.get(s);
+      let v = this.siteVisuals.get(s);
+      v.texture = DEFAULT_TEXTURE;
+
+      if( v && LEMMING_TEXTURES[s.atom.TYPE.name] ) {
+        v.texture = LEMMING_TEXTURES[s.atom.TYPE.name];
+      }
+
       const color = s.atom.state.color;
       if (v.tint !== color) {
         v.tint = color;
