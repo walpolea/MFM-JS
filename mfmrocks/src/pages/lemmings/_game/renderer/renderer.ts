@@ -3,7 +3,7 @@ import {DEFAULT_TEXTURE, LEMMING_TEXTURES} from "./sprites";
 import { EventWindow, Site, Tile, ElementRegistry } from "mfm-js";
 import { useGameState } from "../useGameState";
 //@ts-ignore
-import url from "./element.png";
+// import url from "./element.png";
 
 
 export interface IRenderer {
@@ -126,14 +126,14 @@ export class PixiRenderer implements IRenderer {
   }
 
   async initializeVisuals() {
-    this.siteTexture = await Assets.load(url);
+    // this.siteTexture = await Assets.load(url);
     const textureSize = 14; //this.siteTexture._frame.width;
     this.siteVisuals = new Map<Site, Sprite>();
 
     // Create the sprite and add it to the stage
     for (let i = 0; i < this.tileHeight; i++) {
       for (let j = 0; j < this.tileWidth; j++) {
-        let viz = Sprite.from(this.siteTexture);
+        let viz = Sprite.from(DEFAULT_TEXTURE);
         viz.interactive = false;
 
         viz.scale = new Point(this.siteSize / textureSize, this.siteSize / textureSize) as ObservablePoint;
@@ -173,11 +173,16 @@ export class PixiRenderer implements IRenderer {
     });
   }
 
+  stopRendering() {
+    this.pixiApplication.ticker.stop();
+  }
+
+
   async deconstruct() {
-    await Assets.unload(url);
-    this.siteTexture.destroy(true);
-    this.particleContainer.destroy(true);
+    // await Assets.unload(url);
+    // this.siteTexture.destroy(true);
     this.pixiApplication.stop();
+    // this.particleContainer.destroy(true);
     this.pixiApplication.destroy(true);
   }
 
