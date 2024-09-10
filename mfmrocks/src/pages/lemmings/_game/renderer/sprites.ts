@@ -1,17 +1,18 @@
 import { Sprite, Assets, Texture } from "pixi.js";
 
-//@ts-ignore
 import DEFAULT from "./element.png";
-//@ts-ignore
+import SOLID from "./sprites/SOLID.png";
 import LEMM from "./sprites/LEMM.png";
-//@ts-ignore
 import LEMM_HEAD from "./sprites/LEMM_HEAD.png";
+import DIRT from "./sprites/DIRT.png";
 
 export const DEFAULT_TEXTURE = await Assets.load( DEFAULT );
 
 const SPRITE_LIST = [
   ["LEMM", LEMM],
   ["LEMM_HEAD", LEMM_HEAD],
+  ["DIRT", DIRT],
+  ["ROCK", DIRT]
 ]
 
 export const LEMMING_TEXTURES = {}
