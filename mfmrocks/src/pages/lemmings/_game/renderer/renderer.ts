@@ -1,5 +1,5 @@
 import { Sprite, Container, Application, Assets, Texture, Point, Rectangle, ObservablePoint, FederatedPointerEvent } from "pixi.js";
-import {DEFAULT_TEXTURE, LEMMING_TEXTURES} from "./sprites";
+import {DEFAULT_TEXTURE, LEMMING_TEXTURES, getTexture} from "./sprites";
 import { EventWindow, Site, Tile, ElementRegistry } from "mfm-js";
 import { useGameState } from "../useGameState";
 //@ts-ignore
@@ -127,7 +127,7 @@ export class PixiRenderer implements IRenderer {
 
   async initializeVisuals() {
     // this.siteTexture = await Assets.load(url);
-    const textureSize = 14; //this.siteTexture._frame.width;
+    const textureSize = 32; //this.siteTexture._frame.width;
     this.siteVisuals = new Map<Site, Sprite>();
 
     // Create the sprite and add it to the stage
@@ -186,31 +186,40 @@ export class PixiRenderer implements IRenderer {
     this.pixiApplication.destroy(true);
   }
 
+  lastRenderTypes = [];
+
   render() {
     // console.time();
 
     let i = 0,
       j = 0,
       rs = this.fixedRenderSpeed;
+    
     for (i; i < rs; i++) {
       const { atom, ew } = this.tile.getRandomSiteSeeded();
       atom.behave(ew);
     }
 
+    const renderTypes = [];
     for (j; j < this.totalSites; j++) {
-      const s = this.siteArray[j];
-      let v = this.siteVisuals.get(s);
-      v.texture = DEFAULT_TEXTURE;
 
-      if( v && LEMMING_TEXTURES[s.atom.TYPE.name] ) {
-        v.texture = LEMMING_TEXTURES[s.atom.TYPE.name];
+      const s = this.siteArray[j];
+      renderTypes.push(s.atom.TYPE.name);
+
+      if( this.lastRenderTypes[j] === s.atom.TYPE.name ) {
+        continue;
       }
+
+      let v = this.siteVisuals.get(s);
+      v.texture = getTexture(s.atom.TYPE.name);//DEFAULT_TEXTURE;
 
       const color = s.atom.state.color;
       if (v.tint !== color) {
         v.tint = color;
       }
     }
+
+    this.lastRenderTypes = renderTypes;
 
     // console.timeEnd();
   }

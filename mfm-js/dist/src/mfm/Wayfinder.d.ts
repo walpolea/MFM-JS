@@ -91,4 +91,6 @@ export declare class Wayfinder {
     static slightRandom(dir: Direction): Direction;
     static veerRandom(dir: Direction): Direction;
     static turnRandom(dir: Direction): Direction;
+    static mapPath(path: Direction[], startingLocation?: EWIndex): EWIndex[];
+    static getDestinationFromPath(path: Direction[], startingLocation?: EWIndex): EWIndex;
 }

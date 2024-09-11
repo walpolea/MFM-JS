@@ -1,4 +1,5 @@
 import { EventWindow, EWIndex } from "./EventWindow";
+import { VirtualEventWindow } from "./VirtualEventWindow";
 
 export type DirectionMap = Map<Direction, Direction>;
 export type Direction = "N" | "E" | "S" | "W" | "NW" | "NE" | "SW" | "SE" | "NNW" | "WNW" | "SSW" | "WSW" | "NNE" | "ENE" | "SSE" | "ESE";
@@ -470,5 +471,31 @@ export class Wayfinder {
 
   static turnRandom(dir: Direction): Direction {
     return EventWindow.oneIn(2) ? this.turnRight(dir) : this.turnLeft(dir);
+  }
+
+  //Given a path like, ["N", "E", "E", "N", "W", "W", "S"], and a starting location,
+  //convert the movements into EWIndex[]: [2, 7, 19, 27, 17, 10, 2]
+  static mapPath( path: Direction[], startingLocation:EWIndex = 0 ):EWIndex[] {
+    let lastMove:EWIndex = startingLocation;
+    const mappedPath: EWIndex[] = [];
+    for( let i = 0; i < path.length; i++) {
+      const move = VirtualEventWindow.getOrientedSiteIndex( lastMove, Wayfinder.getDirectionalMove(path[i]) );
+
+      if(!move) {
+        //we extended beyond the event window
+        break;
+      }
+
+      if( move !== lastMove ) {
+        mappedPath.push(move);
+        lastMove = move;
+      }
+    }
+    return mappedPath;
+  }
+
+  static getDestinationFromPath( path: Direction[], startingLocation:EWIndex = 0 ):EWIndex {
+    const mappedPath:EWIndex[] = Wayfinder.mapPath(path, startingLocation);
+    return mappedPath[mappedPath.length - 1];
   }
 }

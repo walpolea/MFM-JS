@@ -1,10 +1,10 @@
-import { Element, EventWindow, Empty, Wall, Wayfinding, VirtualEventWindow } from "mfm-js";
+import { Element, EventWindow, Empty, Wall, Wayfinding, VirtualEventWindow, Wayfinder } from "mfm-js";
 import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
-  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0x505CFE, groups: ["LEMMINGS"] });
+  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0xffffff, groups: ["LEMMINGS"] });
   static HEAD = Wall.CREATOR(
-    { name: "LEMM_HEAD", class: Wall, color: 0x05b604, classifications: ["DECAYABLE", "EMPTY"] },
+    { name: "LEMM_HEAD", class: Wall, color: 0xffffff, classifications: ["DECAYABLE", "EMPTY"] },
     { lifeSpan: 10 }
   );
 
@@ -30,8 +30,13 @@ export class Lemming extends Element {
   static FIELD_OF_VIEW = {
     'N': ["N", "NE", "NW"],
     'S': ["S", "SE", "SW"],
-    'E': ["E", "SE", "NE"],
-    'W': ["W", "SW", "NW"],
+    'E': ["E", "NE", "SE"],
+    'W': ["W", "NW", "SW"],
+  }
+
+  static BUILD_WALK_TARGETS = {
+    "E" : "NE",
+    "W" : "NW",
   }
 
   init() {
@@ -79,8 +84,12 @@ export class Lemming extends Element {
           moved = this.walk(ew);
         }
         break;
+      case "BUILDER":
+        if( !this.build(ew) ) {
+          moved = this.walk(ew);
+        }
+        break;
     }
-
     this.head(ew);
   }
 
@@ -132,6 +141,40 @@ export class Lemming extends Element {
         ew.mutate(b, Dirt.MOSS);
       }
     });
+  }
+
+  build(ew) {
+    
+    let built = false;
+    this.state.buildCount = this.state.buildCount ?? 0;
+
+    const buildChecks = Wayfinder.mapPath(this.buildPath() );
+
+    if( ew.all( buildChecks, "EMPTY") ) {
+
+      ew.mutateMany( buildChecks, Wall.CREATE );
+      built = true;
+      this.state.buildCount++;
+
+      const buildWalkTarget = Wayfinder.getDestinationFromPath( [...this.buildPath(), "N"] );
+      if( ew.is( buildWalkTarget, "EMPTY" ) ) {
+        if( ew.move( buildWalkTarget ) ) {
+          this.state.location = buildWalkTarget;
+        }
+      }
+    }
+
+    if( this.state.buildCount > 5 ) {
+      this.setRole('WALKER');
+      this.state.buildCount = 0;
+    }
+
+    return built;
+  }
+
+  buildPath() {
+    const h = this.state.heading;
+    return [ h, h, h];
   }
 
   behead(ew) {

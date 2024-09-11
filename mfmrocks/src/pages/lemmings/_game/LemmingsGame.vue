@@ -11,7 +11,8 @@
       <button @click="pause();loadLevel(currentLevel);initLevel();">RESTART LEVEL</button>
       <input type="range" min="0" :max="4" value="1" :step="0.001" v-model="renderSpeed">
       <div class="resources">
-        <button v-for="resource in currentResources" 
+        <button v-for="resource in currentResources"
+        :key="resource.type" 
         :class="{hide: resource.count <= 0}" 
         @click="setActiveElementByName(resource.type)">
           {{ resource.type }} ({{ resource.count }})
@@ -163,7 +164,7 @@
     display:block;
     image-rendering: smooth;
     max-width:100%;
-    max-height: 65vh;
+    max-height: 75vh;
     margin-inline:auto;
   }
 
