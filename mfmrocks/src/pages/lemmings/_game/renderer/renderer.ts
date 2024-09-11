@@ -179,9 +179,9 @@ export class PixiRenderer implements IRenderer {
 
 
   async deconstruct() {
+    this.pixiApplication.stop();
     // await Assets.unload(url);
     // this.siteTexture.destroy(true);
-    this.pixiApplication.stop();
     // this.particleContainer.destroy(true);
     this.pixiApplication.destroy(true);
   }
