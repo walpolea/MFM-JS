@@ -14,7 +14,7 @@ import SPRITESHEET from './sprites/lemmings.png';
 export const DEFAULT_TEXTURE = await Assets.load( DEFAULT );
 
 const SPRITE_MAP = {
-  // "EMPTY": "CIRCLE",
+  // "EMPTY": "DEFAULT",
   "LEMM": "LEMM",
   "LEMM_HEAD": "LEMM_HEAD",
   // "DIRT": "DIRT",
