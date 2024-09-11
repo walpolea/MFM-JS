@@ -2,8 +2,9 @@ import { computed, ref, watch } from 'vue';
 import {LEVEL1} from './levels/level1';
 import {LEVEL2} from './levels/level2';
 import {LEVEL3} from './levels/level3';
+import {LEVEL4} from './levels/level4';
 
-const levels = [LEVEL1, LEVEL2, LEVEL3];
+const levels = [LEVEL1, LEVEL2, LEVEL3, LEVEL4];
 let currentLevelIndex = 0;
 
 const currentLevel = ref(levels[currentLevelIndex]);
