@@ -2,7 +2,7 @@ import { Element, EventWindow, Empty, Wall, Wayfinding, VirtualEventWindow, Wayf
 import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
-  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0xffffff, groups: ["LEMMINGS"] });
+  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0xffffff, groups: ["LEMMINGS"], classifications: ["WALKABLE"] });
   static HEAD = Wall.CREATOR(
     { name: "LEMM_HEAD", class: Wall, color: 0xffffff, classifications: ["DECAYABLE", "EMPTY"] },
     { lifeSpan: 10 }
@@ -102,6 +102,10 @@ export class Lemming extends Element {
       const walkChecks = Lemming.FIELD_OF_VIEW[this.state.heading];
       
       walked = Wayfinding.MOVE_IN_DIRECTION(ew, this, walkChecks, "EMPTY");
+
+      if( !walked && EventWindow.oneIn(2) ) {
+        walked = Wayfinding.SWAP_IN_DIRECTION(ew, this, walkChecks, "WALKABLE");
+      }
       
       if(!walked && EventWindow.oneIn(2)) {
         Wayfinding.REVERSE(this);
@@ -137,6 +141,7 @@ export class Lemming extends Element {
   block(ew) {
     const blocks = [2,3,10,22,38];
     blocks.forEach( b => {
+      ew.mutate(0, Dirt.MOSS);
       if( ew.is(b, "EMPTY" ) ) {
         ew.mutate(b, Dirt.MOSS);
       }

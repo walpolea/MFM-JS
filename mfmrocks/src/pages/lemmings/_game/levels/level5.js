@@ -2,7 +2,7 @@ export const LEVEL5 = {
   id: 'level5',
   name: 'Level 5',
   description: 'hmmm',
-  saveGoal: 50,
+  saveGoal: 75,
   difficulty: 2,
   resources: [
     {
