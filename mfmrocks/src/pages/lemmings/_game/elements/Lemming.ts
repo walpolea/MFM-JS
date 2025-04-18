@@ -1,11 +1,10 @@
-import { Element, EventWindow, Empty, Wall } from "mfm-js";
+import { Element, EventWindow, Empty, Wall, Wayfinding, VirtualEventWindow, Wayfinder } from "mfm-js";
 import { Dirt } from "./Dirt";
 
 export class Lemming extends Element {
-  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0x505CFE, groups: ["LEMMINGS"] });
-  // static HEAD = Empty.CREATOR({ name: "LEMM_HEAD", class: Empty, color: 0x05b604});
+  static CREATE = Lemming.CREATOR({ name: "LEMM", symbol: "LMG", class: Lemming, color: 0xffffff, groups: ["LEMMINGS"], classifications: ["WALKABLE"] });
   static HEAD = Wall.CREATOR(
-    { name: "LEMM_HEAD", class: Wall, color: 0x05b604, classifications: ["DECAYABLE", "EMPTY"] },
+    { name: "LEMM_HEAD", class: Wall, color: 0xffffff, classifications: ["DECAYABLE", "EMPTY"] },
     { lifeSpan: 10 }
   );
 
@@ -15,25 +14,42 @@ export class Lemming extends Element {
   }
 
   static DIRS = {
-    'UP': 2,
-    'RIGHT': 4,
-    'DOWN': 3,
-    'LEFT': 1
+    'N': 2,
+    'E': 4,
+    'S': 3,
+    'W': 1
   }
 
-  static WALK_CHECKS = {
-    'LEFT': [1, 5],
-    'RIGHT': [4, 7]
+  static ORIENTED_DIRS = {
+    'N': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 2 ),
+    'E': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 4 ),
+    'S': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 3 ),
+    'W': (location = 0) => VirtualEventWindow.getOrientedSiteIndex( location, 1 ),
+  }
+
+  static FIELD_OF_VIEW = {
+    'N': ["N", "NE", "NW"],
+    'S': ["S", "SE", "SW"],
+    'E': ["E", "NE", "SE"],
+    'W': ["W", "NW", "SW"],
+  }
+
+  static BUILD_WALK_TARGETS = {
+    "E" : "NE",
+    "W" : "NW",
   }
 
   init() {
 
-    this.state.direction = 'RIGHT';
+    this.state.heading = 'E';
+    this.state.location = 0;
+
     this.setRole('WALKER');
   }
 
   behave(ew: EventWindow) {
     super.behave(ew);
+    this.state.location = 0;
 
     if( !ew.exists( 3 ) ) {
       ew.destroy();
@@ -43,74 +59,143 @@ export class Lemming extends Element {
 
     //Gravity?
     if( ew.is(3, "EMPTY") ) {
-      ew.swap(3);
+      const swapped = ew.swap(3);
+      if( swapped ) this.state.location = 3;
+      this.head(ew);
       return;
     }
 
-    this.head(ew);
-
+    let moved = false;
 
     switch( this.state.role ) {
       case "WALKER":
-        this.walk(ew);
+        moved = this.walk(ew);
         break;
       case "DIGGER":
         if( !this.dig(ew) ) {
-          this.walk(ew);
+          moved = this.walk(ew);
         }
         break;
       case "BLOCKER":
         this.block(ew);
         break;
+      case "MINER":
+        if( !this.mine(ew) ) {
+          moved = this.walk(ew);
+        }
+        break;
+      case "BUILDER":
+        if( !this.build(ew) ) {
+          moved = this.walk(ew);
+        }
+        break;
     }
+    this.head(ew);
   }
 
   walk(ew) {
 
     const WALK_CHANCE = 5;
-    if( EventWindow.oneIn( WALK_CHANCE ) ) {
+    let walked = false;
 
-      const walkChecks = Lemming.WALK_CHECKS[this.state.direction];
-      const empties = ew.filterByType( walkChecks, "EMPTY" );
+    if( EventWindow.oneIn( WALK_CHANCE ) ) {
+      const walkChecks = Lemming.FIELD_OF_VIEW[this.state.heading];
       
-      if( empties.length > 0 ) {
-        this.behead(ew);
-        ew.move( empties[0] );
-        return;
-      } else {
-        this.state.direction = this.state.direction === 'RIGHT' ? 'LEFT' : 'RIGHT';
+      walked = Wayfinding.MOVE_IN_DIRECTION(ew, this, walkChecks, "EMPTY");
+
+      if( !walked && EventWindow.oneIn(2) ) {
+        walked = Wayfinding.SWAP_IN_DIRECTION(ew, this, walkChecks, "WALKABLE");
       }
       
+      if(!walked && EventWindow.oneIn(2)) {
+        Wayfinding.REVERSE(this);
+      }
+
     }
+    return false;
   }
 
   dig(ew) {
     let dug = false;
-    if( ew.is( 3, "DIGGABLE") ) {
-      ew.mutate(3, Empty.CREATE);
-      dug = true;
+    const digChecks = Lemming.FIELD_OF_VIEW["S"];
+
+    dug = Wayfinding.MOVE_IN_DIRECTION(ew, this, digChecks, "DIGGABLE");
+    if( !dug ) {
+      dug = Wayfinding.SWAP_IN_DIRECTION(ew, this, digChecks, "MOVABLE");
     }
     return dug;
+  }
+
+  mine(ew) {
+    let mined = false;
+    const mineChecks = Lemming.FIELD_OF_VIEW[this.state.heading];
+
+    mined = Wayfinding.MOVE_IN_DIRECTION(ew, this, mineChecks, ["DIGGABLE", "MOVABLE"]);
+
+    if( !mined ) {
+      mined = Wayfinding.SWAP_IN_DIRECTION(ew, this, mineChecks, "MOVABLE");
+    }
+    return mined;
   }
 
   block(ew) {
     const blocks = [2,3,10,22,38];
     blocks.forEach( b => {
+      ew.mutate(0, Dirt.MOSS);
       if( ew.is(b, "EMPTY" ) ) {
-        ew.mutate(b, Dirt.ROCK);
+        ew.mutate(b, Dirt.MOSS);
       }
     });
   }
 
+  build(ew) {
+    
+    let built = false;
+    this.state.buildCount = this.state.buildCount ?? 0;
+
+    const buildChecks = Wayfinder.mapPath(this.buildPath() );
+
+    if( ew.all( buildChecks, "EMPTY") ) {
+
+      ew.mutateMany( buildChecks, Wall.CREATE );
+      built = true;
+      this.state.buildCount++;
+
+      const buildWalkTarget = Wayfinder.getDestinationFromPath( [...this.buildPath(), "N"] );
+      if( ew.is( buildWalkTarget, "EMPTY" ) ) {
+        if( ew.move( buildWalkTarget ) ) {
+          this.state.location = buildWalkTarget;
+        }
+      }
+    }
+
+    if( this.state.buildCount > 5 ) {
+      this.setRole('WALKER');
+      this.state.buildCount = 0;
+    }
+
+    return built;
+  }
+
+  buildPath() {
+    const h = this.state.heading;
+    return [ h, h, h];
+  }
+
   behead(ew) {
-    if( ew.is( Lemming.DIRS.UP, "LEMM_HEAD" ) ) {
-      ew.mutate( Lemming.DIRS.UP, Empty.CREATE );
+    if( ew.is( Lemming.ORIENTED_DIRS.N(this.state.location), "LEMM_HEAD" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS.N(this.state.location), Empty.CREATE );
+    }
+    if( ew.is( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), "LEMM_HEAD" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), Empty.CREATE );
     }
   }
 
   head(ew) {
-    if( ew.is( Lemming.DIRS.UP, "EMPTY" ) ) {
-      ew.mutate( Lemming.DIRS.UP, Lemming.HEAD );
+    if( ew.is( Lemming.ORIENTED_DIRS.N(this.state.location), "EMPTY" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS.N(this.state.location), Lemming.HEAD );
+    } else if( ew.is( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), "EMPTY" ) ) {
+      ew.mutate( Lemming.ORIENTED_DIRS[this.state.heading](this.state.location), Lemming.HEAD );
     }
   }
 
@@ -119,5 +204,7 @@ export class Lemming extends Element {
     this.state.role = role;
     this.classifyAs(this.state.role);
   }
+
+  
 }
 

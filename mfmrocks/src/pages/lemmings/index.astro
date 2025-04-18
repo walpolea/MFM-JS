@@ -10,13 +10,13 @@ import LemmingsGame from './_game/LemmingsGame.vue';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>MFM.ROCKS</title>
+		<title>MFM Lemmings</title>
 	</head>
 	<body>
     <div class="game-container">
 
       <header>
-        <h1>MFM Lemmings</h1>
+        <img role="heading" src="/images/mfm-lemmings.png" alt="MFM Lemmings" style="width:min(600px, 100%);margin-inline:auto;" />
       </header>
       
       <LemmingsGame client:only="vue"></LemmingsGame>
@@ -40,6 +40,7 @@ import LemmingsGame from './_game/LemmingsGame.vue';
 	header {
 		display:grid;
 		place-items:center;
+		padding:15px;
 	}
 
 	footer {

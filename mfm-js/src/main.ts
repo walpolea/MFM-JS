@@ -1,11 +1,10 @@
-import { HardCell3 } from "./elements/agents/HardCell3";
-
 //CORE MFM
 export { Tile } from "./mfm/Tile";
 export { Site } from "./mfm/Site";
 export { Element } from "./mfm/Element";
 export { ElementRegistry } from "./mfm/ElementRegistry";
 export { EventWindow } from "./mfm/EventWindow";
+export { VirtualEventWindow } from "./mfm/VirtualEventWindow";
 export { CapabilityRegistry } from "./mfm/Capability";
 export { Wayfinder } from "./mfm/Wayfinder";
 

@@ -1,41 +1,67 @@
 <template>
-<div class="lemmings-game" v-once></div>
-<div class="controls">
-  <button @click="togglePause">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
-  <input type="range" min="0" :max="1" value="1" :step="0.001" v-model="renderSpeed">
-  <div class="editor-controls" v-if="mode === 'EDIT'">
-    <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
-    <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
-    <input type="range" v-model="brushSize" min="1" max="10"> {{ brushSize }}
-    <button @click="console.log(grid.getAtomicMap(true))">LOG MAP</button>
+<div>
+  <div class="top-hud">
+    <span>{{ currentLevel.name }}</span>
+    <span>Lemmings Saved: {{ currentSavedLemmings }} / {{ currentSaveGoal ?? "?" }}</span>
+  </div>
+  <div class="lemmings-game" v-once></div>
+  <div class="controls">
+    <div class="user-contro">
+      <button @click="togglePause()">{{ isPaused ? "PLAY" : "PAUSE" }}</button>
+      <button @click="pause();loadLevel(currentLevel);initLevel();">RESTART LEVEL</button>
+      <input type="range" min="0" :max="4" value="1" :step="0.001" v-model="renderSpeed">
+      <div class="resources">
+        <button v-for="resource in currentResources"
+        :key="resource.type" 
+        :class="{hide: resource.count <= 0}" 
+        @click="setActiveElementByName(resource.type)">
+          {{ resource.type }} ({{ resource.count }})
+        </button>
+      </div>
+    </div>
+
+    <div class="editor-controls" v-if="mode === 'EDIT'">
+      <p>Editor Controls</p>
+      <div class="menu">
+        <button @click="prevLevel()">Prev Level</button>
+        <button @click="nextLevel()">Next Level</button>
+      </div>
+      <div class="elements">
+        <button @click="setActiveElementByName('EMPTY')">EMPTY</button>
+        <button v-for="element in elements" @click="setActiveElement(element)">{{ element.name }}</button>
+        <input type="range" v-model="brushSize" min="1" max="5"> {{ brushSize }}
+      </div>
+      <button @click="console.log(grid.getAtomicMap(true))">LOG MAP</button>
+    </div>
   </div>
 </div>
+
 </template>
 <script setup>
 
   import { ref, onMounted, watch } from 'vue';
   import { Tile, ElementRegistry } from 'mfm-js';
-  import { PixiRenderer } from '/src/scripts/renderers/pixi/renderer.ts';
+  import { PixiRenderer } from './renderer/renderer.ts';
 
   import {Lemming} from './elements/Lemming.ts';
   import {LemmingEmitter} from './elements/LemmingEmitter.ts';
   import {Power} from './elements/Power.ts';
-  import { Dirt } from './elements/Dirt.ts';
+  import {Dirt} from './elements/Dirt.ts';
   import {Exit} from './elements/Exit.ts';
 
-  import {LEVEL1} from './levels/level1';
+  import {useGameState} from './useGameState';
 
   let tile; 
   let grid;
   let mfms;
-  let currentLevel = LEVEL1;
 
+  const { currentLevel, currentSavedLemmings, currentSaveGoal, currentResources, selectResource, nextLevel, prevLevel, loadLevel, levelPassed } = useGameState();
 
   const elements = ref(Object.fromEntries(ElementRegistry.GROUPS.entries()).LEMMINGS);
   const activeType = ref(null);
   const mode = ref('EDIT');
 
-  const isPaused = ref(false);
+  const isPaused = ref(true);
   const togglePause = () => {
     isPaused.value ? play() : pause();
   }
@@ -50,37 +76,32 @@
 
   const INITIAL_RENDER_SPEED = 0.0;
   const renderSpeed = ref(INITIAL_RENDER_SPEED);
-  const brushSize = ref(2);
+  const brushSize = ref(1);
 
   watch( brushSize, (bs) => {
     grid.brushSize = +bs;
   });
 
-  watch( renderSpeed, (rs) => {
+  watch( () => renderSpeed.value, (rs) => {
     grid.setRenderMultiplier(rs);
+  });
+
+  watch( currentLevel , () => {
+    pause();
+    initLevel();
   });
   
   onMounted( async () => {
     mfms = document.querySelector('.lemmings-game');
-
-    loadLevel();
+    initLevel();
   });
 
-  async function loadLevel( level ) {
-
-    if(level) {
-      currentLevel = level;
-    }
-
+  async function initLevel() {
     if( grid ) {
       grid.deconstruct();
     }
-    await init( currentLevel.map.width, currentLevel.map.height );
-    grid.setAtomicMap( currentLevel.map );
-  }
-
-  function onReInit({ w, h }) {
-    // init(w, h);
+    await init( currentLevel.value.map.width, currentLevel.value.map.height );
+    grid.setAtomicMap( currentLevel.value.map );
   }
 
   async function init(w = 128, h = 64) {
@@ -124,6 +145,7 @@
   function setActiveElementByName(name) {
     if(findElement(name)) {
       setActiveElement(findElement(name));
+      selectResource(name);
     }
   }
 
@@ -141,8 +163,19 @@
   canvas {
     display:block;
     image-rendering: smooth;
-    width:100%;
-    max-height: 60vh;
+    max-width:100%;
+    max-height: 75vh;
+    margin-inline:auto;
   }
+
+}
+
+.top-hud {
+  display:flex;
+  gap:1rem;
+}
+
+button.hide {
+  display:none;
 }
 </style>

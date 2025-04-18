@@ -1,7 +1,10 @@
 import { Sprite, Container, Application, Assets, Texture, Point, Rectangle, ObservablePoint, FederatedPointerEvent } from "pixi.js";
+import {DEFAULT_TEXTURE, LEMMING_TEXTURES, getTexture} from "./sprites";
 import { EventWindow, Site, Tile, ElementRegistry } from "mfm-js";
+import { useGameState } from "../useGameState";
 //@ts-ignore
-import url from "./element.png";
+// import url from "./element.png";
+
 
 export interface IRenderer {
   tile: Tile;
@@ -123,23 +126,20 @@ export class PixiRenderer implements IRenderer {
   }
 
   async initializeVisuals() {
-    this.siteTexture = await Assets.load(url);
-    const textureSize = 14; //this.siteTexture._frame.width;
+    // this.siteTexture = await Assets.load(url);
+    const textureSize = 32; //this.siteTexture._frame.width;
     this.siteVisuals = new Map<Site, Sprite>();
 
     // Create the sprite and add it to the stage
     for (let i = 0; i < this.tileHeight; i++) {
       for (let j = 0; j < this.tileWidth; j++) {
-        let viz = Sprite.from(this.siteTexture);
+        let viz = Sprite.from(DEFAULT_TEXTURE);
         viz.interactive = false;
 
-        // viz.scale = new ObservablePoint(undefined, undefined, this.siteSize / textureSize, this.siteSize / textureSize);
         viz.scale = new Point(this.siteSize / textureSize, this.siteSize / textureSize) as ObservablePoint;
 
         viz.x = j * this.siteSize;
         viz.y = i * this.siteSize;
-        // viz.cacheAsBitmap = true;
-
         
         viz.tint = this.tile.sites.get(`${i}:${j}`).atom.rd("color");
         this.particleContainer.addChild(viz);
@@ -173,13 +173,20 @@ export class PixiRenderer implements IRenderer {
     });
   }
 
+  stopRendering() {
+    this.pixiApplication.ticker.stop();
+  }
+
+
   async deconstruct() {
-    await Assets.unload(url);
-    this.siteTexture.destroy(true);
-    this.particleContainer.destroy(true);
     this.pixiApplication.stop();
+    // await Assets.unload(url);
+    // this.siteTexture.destroy(true);
+    // this.particleContainer.destroy(true);
     this.pixiApplication.destroy(true);
   }
+
+  lastRenderTypes = [];
 
   render() {
     // console.time();
@@ -187,19 +194,32 @@ export class PixiRenderer implements IRenderer {
     let i = 0,
       j = 0,
       rs = this.fixedRenderSpeed;
+    
     for (i; i < rs; i++) {
       const { atom, ew } = this.tile.getRandomSiteSeeded();
       atom.behave(ew);
     }
 
+    const renderTypes = [];
     for (j; j < this.totalSites; j++) {
+
       const s = this.siteArray[j];
-      const v = this.siteVisuals.get(s);
+      renderTypes.push(s.atom.TYPE.name);
+
+      if( this.lastRenderTypes[j] === s.atom.TYPE.name ) {
+        continue;
+      }
+
+      let v = this.siteVisuals.get(s);
+      v.texture = getTexture(s.atom.TYPE.name);//DEFAULT_TEXTURE;
+
       const color = s.atom.state.color;
       if (v.tint !== color) {
         v.tint = color;
       }
     }
+
+    this.lastRenderTypes = renderTypes;
 
     // console.timeEnd();
   }
@@ -219,7 +239,11 @@ export class PixiRenderer implements IRenderer {
       this.pointerDown = false;
     });
 
-    this.clickArea.on("pointermove", this.handleClick, this);
+    this.clickArea.on("pointermove", (e) => {
+      if( useGameState().csi.value === null ) {
+        this.handleClick(e);
+      }
+    }, this);
   }
 
   getSitesFromCanvasXY(x: number, y: number, size: number = 1): Site[] {
@@ -255,11 +279,28 @@ export class PixiRenderer implements IRenderer {
   }
 
   handleClick(e:FederatedPointerEvent) {
+
+    const { currentResources, csi, deselectResource } = useGameState();
+    const selectedType = this.curSelectedElementFunction().TYPE.name;
+
+    if( csi.value && currentResources.value[csi.value].count <= 0 ) {
+      return;
+    }
+
     if (this.mouseEnabled && this.pointerDown && e.target) {
       let p: Point = (this.pixiApplication.stage).toLocal(e.global);//e.data.getLocalPosition(this.pixiApplication.stage);
       let sites: Site[] = this.getSitesFromCanvasXY(p.x, p.y, this.brushSize);
       sites.forEach((site) => {
         this.addAtom(site);
+
+        if( csi.value !== null ) {
+          currentResources.value[csi.value].count--;
+
+          if( currentResources.value[csi.value].count <= 0 ) {
+            deselectResource();
+          }
+        }
+        
       });
     }
   }
