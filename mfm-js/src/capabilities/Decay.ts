@@ -16,6 +16,7 @@ export class Decay {
 
   static DECAY(ew: EventWindow, self: Element, lifeSpan: number, deathChance: number = 1): boolean {
     const { age } = self.state;
+      
 
     if (age > lifeSpan) {
       if (EventWindow.oneIn(deathChance)) {

@@ -42,3 +42,4 @@ export { HardCell3 } from "./elements/agents/HardCell3";
 export { SwapWorm } from "./elements/agents/SwapWorm";
 export { WormTrap } from "./elements/components/WormTrap";
 export { MeshNet } from "./elements/agents/MeshNet";
+export { Signal } from "./elements/agents/Signal";

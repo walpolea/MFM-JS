@@ -1,3 +1,4 @@
+import { Perception } from "../../capabilities/Perception";
 import { Repel } from "../../capabilities/Repel";
 import { Wayfinding } from "../../capabilities/Wayfinding";
 import { Element, IElementType } from "../../mfm/Element";
@@ -58,6 +59,8 @@ export class Wanderer extends Element {
       this.state.color = this.state.colorMap[this.state.heading] ?? 0x557700;
     }
 
+    this.state.senseCount = 0;
+
   }
 
   behave(ew: EventWindow) {
@@ -81,6 +84,22 @@ export class Wanderer extends Element {
       // if (Repel.MAKE_REPELLER(["MOVABLE"], front, others)(ew, this)) {
       //   return;
       // }
+
+      const foundWall = Perception.SENSE(ew, "WALL", EventWindow.ADJACENT8WAY);
+      if( foundWall ) {
+        this.state.senseCount++;
+        if( this.state.senseCount > 10 ) {
+          Perception.SIGNAL( ew, "BECKON", { senderType: this.type, signalType: "BECKON", message: "hey" });
+          this.state.senseCount = 0;
+        }
+        return;
+      }
+
+      const message = Perception.RECEIVE_SIGNAL(ew, EventWindow.LAYER4);
+      if( message ) {
+        console.log( message );
+        this.state.heading = message.signalDirection;
+      }
 
       const front = Wayfinder.getInFront(this.state.heading)[0];
       if (ew.is(front, "MOVABLE")) {
