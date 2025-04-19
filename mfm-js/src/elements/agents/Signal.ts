@@ -7,7 +7,7 @@ import { AntiForkBomb } from "../core/AntiForkBomb";
 
 export class Signal extends Element {
   //VARIANTS
-  static CREATE = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0x46215c, classifications: ["DIRECTIONAL", "DECAYABLE"], groups: ["MFM"] });
+  static CREATE = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0x46215c, classifications: ["DIRECTIONAL", "DECAYABLE", "MOVABLE"], groups: ["MFM"] });
 
   static N = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0xa414ff, classifications: ["DIRECTIONAL", "DECAYABLE"], groups: [] }, { heading: "N" });
   static NE = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0xa414ff, classifications: ["DIRECTIONAL", "DECAYABLE"], groups: [] }, { heading: "NE" });
@@ -30,7 +30,7 @@ export class Signal extends Element {
     super.behave(ew);
 
     if(ew.selfIs("DECAYABLE")) {
-      Decay.DECAY(ew, this, this.state.lifeSpan ?? 40, 2);
+      Decay.DECAY(ew, this, this.state.lifeSpan ?? 50, 2);
     }
 
     if (!this.state.heading) {

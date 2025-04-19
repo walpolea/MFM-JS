@@ -25,6 +25,7 @@ export interface IElement {
 }
 export declare abstract class Element implements IElement {
     static CREATOR(typeDefinition: IElementType, state?: any): (_typeDefinition?: IElementTypePartial, _state?: any) => Element;
+    static UID: (length?: number) => string;
     TYPE: IElementType;
     state: any;
     classes: Set<string>;

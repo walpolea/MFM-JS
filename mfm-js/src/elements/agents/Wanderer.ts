@@ -89,13 +89,13 @@ export class Wanderer extends Element {
       if( foundWall ) {
         this.state.senseCount++;
         if( this.state.senseCount > 10 ) {
-          Perception.SIGNAL( ew, "BECKON", { senderType: this.type, signalType: "BECKON", message: "hey" });
+          Perception.SIGNAL( ew, "BECKON", { senderId: this.state.uid, senderType: this.TYPE, signalType: "BECKON", message: "hey" });
           this.state.senseCount = 0;
         }
         return;
       }
 
-      const message = Perception.RECEIVE_SIGNAL(ew, EventWindow.LAYER4);
+      const message = Perception.RECEIVE_SIGNAL(ew, this, EventWindow.ALLADJACENT);
       if( message ) {
         console.log( message );
         this.state.heading = message.signalDirection;

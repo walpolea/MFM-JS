@@ -6,10 +6,11 @@ import { Direction } from "../mfm/Wayfinder";
 
 export type SignalType = "WARN" | "INFORM" | "BECKON";
 export type Message = {
+  senderId: string;
   senderType: IElementType | string;
   signalType: SignalType;
   message: string;
-  signalDirection: Direction;
+  signalDirection?: Direction;
 };
 
 export class Perception {
@@ -23,25 +24,23 @@ export class Perception {
   }
 
   static SIGNAL(ew: EventWindow, signalType: SignalType, message: Message): void {
-    // EventWindow.RANDOM([1, 2, 3, 4, 5 ,6 , 7, 8]).forEach((d) => {
-      const d = EventWindow.RANDOM([1, 2, 3, 4, 5 ,6 , 7, 8]);
-      const signal = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0x46215c, classifications: ["DIRECTIONAL", "DECAYABLE"], groups: ["MFM"] }, { heading: Wayfinder.indexToDirection(d), signalType, message });
-      if( ew.is(d, "EMPTY") ) {
-        ew.mutate(d, signal);
-      }
-    // })
+    const d = EventWindow.RANDOM(EventWindow.LAYER3);
+    const signal = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0xff0000, classifications: ["DIRECTIONAL", "DECAYABLE"], groups: ["MFM"] }, { heading: Wayfinder.indexToDirection(d), signalType, message });
+    if( ew.is(d, "EMPTY") ) {
+      ew.mutate(d, signal);
+    }
   }
 
-  static RECEIVE_SIGNAL(ew:EventWindow, indexes: EWIndex[]): Message | null {
+  static RECEIVE_SIGNAL(ew:EventWindow, self: Element, indexes: EWIndex[] = EventWindow.ALLADJACENT): Message | null {
     const signalIndex = ew.filter(indexes, "SIGNAL", true)?.[0];
     if (!signalIndex) return null;
-
+    
     const signal = ew.getSite(signalIndex)?.atom;
     const message = signal.state.message;
+    if( message.senderId === self.state.uid ) return null;
     const signalDirection = Wayfinder.reverse( signal.state.heading );
-    if(message) {
-      // ew.destroy(signalIndex);
-    }
+
+    ew.destroy(signalIndex);
     return { ...message, signalDirection };
   }
 }

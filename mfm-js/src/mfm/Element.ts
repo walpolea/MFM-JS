@@ -48,6 +48,10 @@ export abstract class Element implements IElement {
     return CREATE;
   }
 
+  static UID = (length: number = 8): string => {
+    return Math.random().toString(36).slice(-length);
+  }
+
   TYPE: IElementType;
   state: any;
   classes: Set<string>;
@@ -69,6 +73,7 @@ export abstract class Element implements IElement {
     this.state = {};
     this.wr("age", state.age ?? 0);
     this.wr("color", this.TYPE.color ?? 0xffffff);
+    this.wr("uid", Element.UID());
     this.state = state ? { ...this.state, ...state } : { ...this.state };
   }
 
