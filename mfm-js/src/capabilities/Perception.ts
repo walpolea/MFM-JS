@@ -25,9 +25,8 @@ export class Perception {
 
   static SIGNAL(ew: EventWindow, signalType: SignalType, message: Message): void {
     const d = EventWindow.RANDOM(EventWindow.LAYER3);
-    const signal = Signal.CREATOR({ name: "SIGNAL", class: Signal, color: 0xff0000, classifications: ["DIRECTIONAL", "DECAYABLE"], groups: ["MFM"] }, { heading: Wayfinder.indexToDirection(d), signalType, message });
     if( ew.is(d, "EMPTY") ) {
-      ew.mutate(d, signal);
+      ew.mutate(d, Signal.CREATE, [{}, { heading: Wayfinder.indexToDirection(d), signalType, message }]);
     }
   }
 

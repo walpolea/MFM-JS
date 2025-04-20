@@ -13,6 +13,7 @@ export class Wanderer extends Element {
   static FLY = Wanderer.CREATOR({ name: "FLY", class: Wanderer, color: 0xccaaff, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
   static MOSQUITO = Wanderer.CREATOR({ name: "MOSQUITO", class: Wanderer, color: 0xccff55, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
   static BIRD = Wanderer.CREATOR({ name: "BIRD", class: Wanderer, color: 0x4a9bef, classifications: ["DIRECTIONAL", "DIRECTABLE"], groups: ["Life"] });
+  static FLOCKER = Wanderer.CREATOR({ name: "FLOCKER", class: Wanderer, color: 0x4a9bef, classifications: ["DIRECTIONAL", "DIRECTABLE", "MOVABLE"], groups: ["Life"] });
 
   static SWAMPDATA = Wanderer.CREATOR({
     name: "SWAMP DATA",
@@ -67,39 +68,8 @@ export class Wanderer extends Element {
     super.behave(ew);
 
     if (this.state.heading) {
-      // const front = [Wayfinder.getInFront(this.state.heading)[0]];
-      // const others = [...Wayfinder.getBehind(this.state.heading), Wayfinder.getLeft(this.state.heading)[0], Wayfinder.getRight(this.state.heading)[0]];
-
-      // if (!ew.is(front[0], "EMPTY")) {
-      //   const move = Wayfinder.veerRandom(this.state.heading);
-      //   const moveSite = Wayfinder.getDirectionalMove(move, true);
-
-      //   if (ew.is(moveSite, "EMPTY")) {
-      //     this.state.heading = move;
-      //   } else if (Repel.MAKE_REPELLER(["MOVABLE"], front, [9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36])(ew, this)) {
-      //     return;
-      //   }
-      // }
-
-      // if (Repel.MAKE_REPELLER(["MOVABLE"], front, others)(ew, this)) {
-      //   return;
-      // }
-
-      const foundWall = Perception.SENSE(ew, "WALL", EventWindow.ADJACENT8WAY);
-      if( foundWall ) {
-        this.state.senseCount++;
-        if( this.state.senseCount > 10 ) {
-          Perception.SIGNAL( ew, "BECKON", { senderId: this.state.uid, senderType: this.TYPE, signalType: "BECKON", message: "hey" });
-          this.state.senseCount = 0;
-        }
-        return;
-      }
-
-      const message = Perception.RECEIVE_SIGNAL(ew, this, EventWindow.ALLADJACENT);
-      if( message ) {
-        console.log( message );
-        this.state.heading = message.signalDirection;
-      }
+      
+    
 
       const front = Wayfinder.getInFront(this.state.heading)[0];
       if (ew.is(front, "MOVABLE")) {
@@ -115,12 +85,30 @@ export class Wanderer extends Element {
       this.behaveAsBird(ew);
     } else if (ew.selfIs("SWAMP DATA")) {
       this.behaveAsSwampData(ew);
+    } else if (ew.selfIs("FLOCKER")) {
+      this.behaveAsFlocker(ew);
     } else {
 
       // No heading, set it.
       if (!this.state.heading) {
         Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
         return;
+      }
+
+      const foundWall = Perception.SENSE(ew, "WALL", EventWindow.ADJACENT8WAY);
+      if( foundWall ) {
+        this.state.senseCount++;
+        if( this.state.senseCount > 1 ) {
+          Perception.SIGNAL( ew, "BECKON", { senderId: this.state.uid, senderType: this.TYPE, signalType: "BECKON", message: "hey" });
+          this.state.senseCount = 0;
+        }
+        return;
+      }
+
+      const message = Perception.RECEIVE_SIGNAL(ew, this, EventWindow.ALLADJACENT);
+      if( message ) {
+        console.log( message );
+        this.state.heading = message.signalDirection;
       }
       
       //At the edge of the universe, uni-reverse!
@@ -130,28 +118,11 @@ export class Wanderer extends Element {
         return;
       }
 
-      //Be guided by the front
-      const frontWanderer = ew.filter(Wayfinder.getInFront(this.state.heading, true), "WANDERER", true)?.[0];
-      if( frontWanderer ) {
-        this.state.heading = ew.getSite(frontWanderer).atom.state.heading;
-      } else if( EventWindow.oneIn(100) ) {
-        Wayfinding.SLIGHT_RANDOMLY(this);
-      }
-
-      //Lead the back
-      const neighborWanderers = ew.filter(Wayfinder.getBehind(this.state.heading, true), "WANDERER", false);
-      if (neighborWanderers.length > 0) {
-        neighborWanderers.forEach((neighborWanderer) => {
-          ew.getSite(neighborWanderer).atom.state.heading = this.state.heading;
-        });
-      }
-
       //Move!
       if(!Wayfinding.MOVE_DIRECTIONALLY(ew, this)) {
         Wayfinding.SLIGHT_RANDOMLY(this);
       }
 
-      this.state.setColor();
     }
   }
 
@@ -204,6 +175,45 @@ export class Wanderer extends Element {
         Wayfinding.SLIGHT_RANDOMLY(this);
       }
     }
+  }
+
+  behaveAsFlocker(ew: EventWindow) {
+    console.log('flocker');
+    // No heading, set it.
+    if (!this.state.heading) {
+      Wayfinding.SET_DIRECTION(this, Wayfinder.RANDOM());
+      return;
+    }
+    
+    //At the edge of the universe, uni-reverse!
+    if( !ew.exists(Wayfinder.getInFront(this.state.heading)[0]) ) {
+      Wayfinding.REVERSE(this);
+      Wayfinding.SLIGHT_RANDOMLY(this);
+      return;
+    }
+
+    //Be guided by the front
+    const frontWanderer = ew.filter(Wayfinder.getInFront(this.state.heading, true), "FLCOKER", true)?.[0];
+    if( frontWanderer ) {
+      this.state.heading = ew.getSite(frontWanderer).atom.state.heading;
+    } else if( EventWindow.oneIn(100) ) {
+      Wayfinding.SLIGHT_RANDOMLY(this);
+    }
+
+    //Lead the back
+    const neighborWanderers = ew.filter(Wayfinder.getBehind(this.state.heading, true), "FLOCKER", false);
+    if (neighborWanderers.length > 0) {
+      neighborWanderers.forEach((neighborWanderer) => {
+        ew.getSite(neighborWanderer).atom.state.heading = this.state.heading;
+      });
+    }
+
+    //Move!
+    if(!Wayfinding.MOVE_DIRECTIONALLY(ew, this)) {
+      Wayfinding.SLIGHT_RANDOMLY(this);
+    }
+
+    this.state.setColor();
   }
 
   behaveAsSwampData(ew: EventWindow) {
